@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { HashRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { store } from './app/store';
 import Navbar from './components/Navbar';
@@ -12,7 +12,7 @@ import MapPage from './features/map/MapPage';
 const App: React.FC = () => {
   return (
     <Provider store={store}>
-      <BrowserRouter>
+      <HashRouter>
         <Navbar />
         <main className="app-main">
           <Routes>
@@ -24,7 +24,7 @@ const App: React.FC = () => {
             <Route path="/profile" element={<ProfilePage />} />
           </Routes>
         </main>
-      </BrowserRouter>
+      </HashRouter>
     </Provider>
   );
 };
