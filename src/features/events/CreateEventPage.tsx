@@ -1,8 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { MapContainer, TileLayer, Marker, useMapEvents, useMap } from 'react-leaflet';
+import L from 'leaflet';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { createEvent } from './eventsSlice';
 import type { ProvidedItem, RecommendedItem } from '../../types';
+
+// Fix Leaflet icon issue
+import iconUrl from 'leaflet/dist/images/marker-icon.png';
+import iconRetinaUrl from 'leaflet/dist/images/marker-icon-2x.png';
+import shadowUrl from 'leaflet/dist/images/marker-shadow.png';
+delete (L.Icon.Default.prototype as any)._getIconUrl;
+L.Icon.Default.mergeOptions({ iconUrl, iconRetinaUrl, shadowUrl });
 
 const DIFFICULTY_OPTIONS = ['easy', 'moderate', 'challenging', 'expert'] as const;
 
@@ -21,7 +30,46 @@ const RECOMMENDED_SUGGESTIONS = [
   'Towel', 'Camera', 'Notepad',
 ];
 
-// ProvidedItem and RecommendedItem helpers used inline
+// Geocoding result from Nominatim
+interface GeoResult {
+  displayName: string;
+  lat: number;
+  lng: number;
+}
+
+/** Inner component: handles map clicks, fires callback */
+const LocationMarker: React.FC<{
+  position: [number, number] | null;
+  onMove: (lat: number, lng: number) => void;
+}> = ({ position, onMove }) => {
+  useMapEvents({
+    click(e) {
+      onMove(e.latlng.lat, e.latlng.lng);
+    },
+  });
+  return position ? <Marker position={position} draggable eventHandlers={{
+    dragend: (e) => {
+      const p = e.target.getLatLng();
+      onMove(p.lat, p.lng);
+    },
+  }} /> : null;
+};
+
+/** Centers the map when location changes programmatically */
+const FlyToCenter: React.FC<{ center: [number, number] | null }> = ({ center }) => {
+  const map = useMap();
+  const prev = useRef<string | null>(null);
+  useEffect(() => {
+    if (center) {
+      const key = `${center[0].toFixed(4)},${center[1].toFixed(4)}`;
+      if (key !== prev.current) {
+        map.flyTo(center, Math.max(map.getZoom(), 13), { duration: 0.5 });
+        prev.current = key;
+      }
+    }
+  }, [center, map]);
+  return null;
+};
 
 const CreateEventPage: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -52,9 +100,82 @@ const CreateEventPage: React.FC = () => {
   const [providedItems, setProvidedItems] = useState<ProvidedItem[]>([]);
   const [recommendedItems, setRecommendedItems] = useState<RecommendedItem[]>([]);
 
+  // Location picker state
+  const [mapCenter, setMapCenter] = useState<[number, number]>([39.7392, -104.9903]); // Denver default
+  const [markerPos, setMarkerPos] = useState<[number, number] | null>(null);
+  const [geoQuery, setGeoQuery] = useState('');
+  const [geoResults, setGeoResults] = useState<GeoResult[]>([]);
+  const [geoLoading, setGeoLoading] = useState(false);
+  const geoTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+
   useEffect(() => {
     if (!user) navigate('/auth');
   }, [user, navigate]);
+
+  // Sync lat/lng inputs → map when user types
+  const handleLatChange = (val: string) => {
+    setLat(val);
+    const n = parseFloat(val);
+    if (!isNaN(n)) {
+      setMarkerPos([n, parseFloat(lng) || mapCenter[1]]);
+      setMapCenter([n, parseFloat(lng) || mapCenter[1]]);
+    }
+  };
+  const handleLngChange = (val: string) => {
+    setLng(val);
+    const n = parseFloat(val);
+    if (!isNaN(n)) {
+      setMarkerPos([parseFloat(lat) || mapCenter[0], n]);
+      setMapCenter([parseFloat(lat) || mapCenter[0], n]);
+    }
+  };
+
+  // Sync map marker → lat/lng inputs
+  const handleMapMove = useCallback((newLat: number, newLng: number) => {
+    setLat(newLat.toFixed(6));
+    setLng(newLng.toFixed(6));
+    setMarkerPos([newLat, newLng]);
+  }, []);
+
+  // Geocoding search with debounce
+  const doSearch = useCallback(async (q: string) => {
+    if (!q.trim()) { setGeoResults([]); return; }
+    setGeoLoading(true);
+    try {
+      const res = await fetch(
+        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(q)}&limit=5`,
+        { headers: { 'Accept-Language': 'en' } }
+      );
+      const data = await res.json();
+      setGeoResults(
+        data.map((r: any) => ({
+          displayName: r.display_name,
+          lat: parseFloat(r.lat),
+          lng: parseFloat(r.lon),
+        }))
+      );
+    } catch {
+      setGeoResults([]);
+    } finally {
+      setGeoLoading(false);
+    }
+  }, []);
+
+  const handleGeoQueryChange = (val: string) => {
+    setGeoQuery(val);
+    if (geoTimeout.current) clearTimeout(geoTimeout.current);
+    geoTimeout.current = setTimeout(() => doSearch(val), 400);
+  };
+
+  const selectGeoResult = (r: GeoResult) => {
+    setLocationName(r.displayName.split(',')[0].trim());
+    setLat(r.lat.toFixed(6));
+    setLng(r.lng.toFixed(6));
+    setMarkerPos([r.lat, r.lng]);
+    setMapCenter([r.lat, r.lng]);
+    setGeoResults([]);
+    setGeoQuery(r.displayName.split(',')[0].trim());
+  };
 
   const toggleProvided = (name: string) => {
     setProvidedItems((prev) => {
@@ -182,19 +303,72 @@ const CreateEventPage: React.FC = () => {
             <label>Location Name *</label>
             <input type="text" value={locationName} onChange={(e) => setLocationName(e.target.value)} placeholder="e.g. Phil's World Trailhead Parking Lot" required />
           </div>
+
+          {/* Search / Geocoder */}
+          <div className="geo-search">
+            <label>Search for a place on the map</label>
+            <div className="geo-search-input-wrap">
+              <input
+                type="text"
+                value={geoQuery}
+                onChange={(e) => handleGeoQueryChange(e.target.value)}
+                placeholder="Search trailhead, town, or address…"
+              />
+              {geoLoading && <span className="geo-spinner" />}
+            </div>
+            {geoResults.length > 0 && (
+              <ul className="geo-results">
+                {geoResults.map((r, i) => (
+                  <li key={i} onClick={() => selectGeoResult(r)}>
+                    <span className="geo-result-name">{r.displayName.split(',')[0]}</span>
+                    <span className="geo-result-detail">{r.displayName.split(',').slice(1).join(',').trim()}</span>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+
+          {/* Coord inputs */}
           <div className="form-row">
             <div className="form-group flex-1">
               <label>Latitude *</label>
-              <input type="number" step="any" value={lat} onChange={(e) => setLat(e.target.value)} placeholder="37.7749" required />
+              <input type="number" step="any" value={lat} onChange={(e) => handleLatChange(e.target.value)} placeholder="37.7749" required />
             </div>
             <div className="form-group flex-1">
               <label>Longitude *</label>
-              <input type="number" step="any" value={lng} onChange={(e) => setLng(e.target.value)} placeholder="-122.4194" required />
+              <input type="number" step="any" value={lng} onChange={(e) => handleLngChange(e.target.value)} placeholder="-122.4194" required />
             </div>
           </div>
+
+          {/* Location picker map */}
+          <div className="location-picker-map">
+            <MapContainer
+              center={mapCenter}
+              zoom={10}
+              style={{ width: '100%', height: '100%' }}
+            >
+              <TileLayer
+                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              />
+              <LocationMarker position={markerPos} onMove={handleMapMove} />
+              <FlyToCenter center={markerPos} />
+            </MapContainer>
+            {!markerPos && (
+              <div className="map-click-hint">
+                Click the map or enter coordinates
+              </div>
+            )}
+            {markerPos && (
+              <div className="map-coords-display">
+                📍 {markerPos[0].toFixed(4)}, {markerPos[1].toFixed(4)}
+              </div>
+            )}
+          </div>
+
           <div className="form-group">
             <label>Parking Notes</label>
-            <textarea value={parkingNotes} onChange={(e) => setParkingNotes(e.target.value)} rows={2} placeholder="Where to park, carpool info, shuttle details..." />
+            <textarea value={parkingNotes} onChange={(e) => setParkingNotes(e.target.value)} rows={2} placeholder="Where to park, carpool info, shuttle details…" />
           </div>
           <div className="form-group">
             <label>Weather Notes</label>

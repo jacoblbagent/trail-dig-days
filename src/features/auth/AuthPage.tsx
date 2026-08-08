@@ -10,9 +10,9 @@ const AuthPage: React.FC = () => {
   const { isAuthenticated, loading } = useAppSelector((s) => s.auth);
 
   const [isLogin, setIsLogin] = useState(true);
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [displayName, setDisplayName] = useState('');
+  const [email, setEmail] = useState('demo@trailbuilder.com');
+  const [password, setPassword] = useState('demo1234');
+  const [displayName, setDisplayName] = useState('Trail Builder');
   const [error, setError] = useState('');
 
   useEffect(() => {
@@ -87,7 +87,18 @@ const AuthPage: React.FC = () => {
         </form>
         <p className="auth-toggle">
           {isLogin ? "Don't have an account?" : 'Already have an account?'}{' '}
-          <button className="link-btn" onClick={() => setIsLogin(!isLogin)}>
+          <button className="link-btn" onClick={() => {
+            setIsLogin(!isLogin);
+            if (isLogin) {
+              setDisplayName('Trail Builder');
+              setEmail('builder@trail.com');
+              setPassword('password123');
+            } else {
+              setEmail('demo@trailbuilder.com');
+              setPassword('demo1234');
+            }
+            setError('');
+          }}>
             {isLogin ? 'Sign Up' : 'Sign In'}
           </button>
         </p>

@@ -203,6 +203,53 @@ input, select, textarea, button { font-family: inherit; font-size: inherit; }
 .form-section h2 { font-size: 1rem; margin-bottom: 12px; color: var(--stone-700); }
 .provided-note input { width: 100%; margin-top: 4px; padding: 6px 10px; border: 1px solid var(--stone-300); border-radius: var(--radius-sm); font-size: .85rem; }
 
+/* ── Geo Search (Location Picker) ── */
+.geo-search { margin-bottom: 12px; }
+.geo-search label { display: block; font-size: .85rem; font-weight: 600; color: var(--stone-600); margin-bottom: 4px; }
+.geo-search-input-wrap { position: relative; }
+.geo-search input {
+  width: 100%; padding: 8px 12px; border: 1px solid var(--stone-300);
+  border-radius: var(--radius-sm); font-size: .9rem; outline: none;
+}
+.geo-search input:focus { border-color: var(--green-600); box-shadow: 0 0 0 2px var(--green-100); }
+.geo-spinner {
+  position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
+  width: 16px; height: 16px; border: 2px solid var(--stone-300);
+  border-top-color: var(--green-600); border-radius: 50%; animation: spin .5s linear infinite;
+}
+@keyframes spin { to { transform: translateY(-50%) rotate(360deg); } }
+.geo-results {
+  list-style: none; background: #fff; border: 1px solid var(--stone-200);
+  border-radius: var(--radius-sm); margin-top: 4px; max-height: 200px; overflow-y: auto;
+  box-shadow: var(--shadow);
+}
+.geo-results li {
+  padding: 8px 12px; cursor: pointer; border-bottom: 1px solid var(--stone-100);
+  display: flex; flex-direction: column; gap: 1px;
+}
+.geo-results li:last-child { border-bottom: none; }
+.geo-results li:hover { background: var(--green-50); }
+.geo-result-name { font-weight: 600; color: var(--stone-700); font-size: .9rem; }
+.geo-result-detail { font-size: .8rem; color: var(--stone-400); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+/* ── Location Picker Map ── */
+.location-picker-map {
+  position: relative; height: 280px; border-radius: var(--radius);
+  overflow: hidden; border: 2px solid var(--stone-200); margin-bottom: 12px;
+}
+.location-picker-map .leaflet-container { border-radius: var(--radius); }
+.map-click-hint {
+  position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%);
+  background: rgba(0,0,0,.65); color: #fff; padding: 6px 16px;
+  border-radius: 100px; font-size: .85rem; pointer-events: none; z-index: 1000;
+  white-space: nowrap;
+}
+.map-coords-display {
+  position: absolute; top: 12px; right: 12px;
+  background: rgba(0,0,0,.65); color: #fff; padding: 4px 12px;
+  border-radius: 100px; font-size: .8rem; pointer-events: none; z-index: 1000;
+}
+
 /* ── Event Detail Page ── */
 .event-detail-page { max-width: 1100px; margin: 0 auto; padding: 32px 20px; }
 .event-detail-header { margin-bottom: 24px; }
