@@ -424,7 +424,6 @@ const CreateEventPage: React.FC = () => {
             })}
           </div>
           {providedItems.map((pi) => (
-            pi.description !== '' ||
             <div key={pi.name} className="provided-note">
               <input
                 type="text"
