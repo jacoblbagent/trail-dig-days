@@ -841,7 +841,7 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
 }
 .calendar-section-header:hover { background: var(--stone-50); }
 .calendar-section-arrow { font-size: .7rem; color: var(--stone-400); }
-.calendar-grid-wrap { display: flex; flex-direction: column; gap: 8px; padding: 0; }
+.calendar-grid-wrap { display: flex; flex-direction: column; gap: 8px; padding: 0; border-radius: 0 0 12px 12px; }
 .calendar-separator { border: none; border-top: 1px solid var(--stone-200); margin: 0 20px; }
 .calendar-nav { display: flex; align-items: center; justify-content: space-between; padding: 0 4px; }
 .calendar-nav strong { font-size: 1rem; color: var(--stone-700); }
