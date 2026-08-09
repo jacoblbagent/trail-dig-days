@@ -112,11 +112,13 @@ const MapPage: React.FC = () => {
 
   const center = searchCenter || userLocation || [39.7392, -104.9903]; // Denver fallback
 
-  // Filter events by distance
+  // Filter events by distance — max radius = show all
   const filtered = useMemo(() => {
+    const radius = parseFloat(radiusInput) || 250;
+    if (radius >= 250) return items;
     if (!searchCenter && !userLocation) return items;
     const c = searchCenter || userLocation!;
-    return items.filter((e) => haversine(c, e.coordinates) <= parseFloat(radiusInput || '50'));
+    return items.filter((e) => haversine(c, e.coordinates) <= radius);
   }, [items, searchCenter, userLocation, radiusInput]);
 
   const handleRadiusChange = (e: React.ChangeEvent<HTMLInputElement>) => {
