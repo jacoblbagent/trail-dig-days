@@ -145,16 +145,6 @@ input, select, textarea, button { font-family: inherit; font-size: inherit; }
   background: #fff; border-radius: var(--radius); box-shadow: 0 8px 32px rgba(0,0,0,.15);
   width: 340px; max-height: calc(100vh - 84px); overflow-y: auto;
 }
-.user-modal-tabs {
-  display: flex; border-bottom: 1px solid var(--stone-200);
-}
-.user-modal-tabs .tab-btn {
-  flex: 1; padding: 10px; border: none; background: none;
-  font-size: .875rem; font-weight: 600; color: var(--stone-500);
-  cursor: pointer; border-bottom: 2px solid transparent; transition: all .15s;
-}
-.user-modal-tabs .tab-btn.active { color: var(--accent, var(--green-700)); border-bottom-color: var(--accent, var(--green-700)); }
-.user-modal-tabs .tab-btn:hover { color: var(--stone-700); }
 .user-modal-body { padding: 20px; display: flex; flex-direction: column; align-items: center; }
 .um-avatar img,
 .um-avatar-placeholder {
@@ -186,6 +176,16 @@ input, select, textarea, button { font-family: inherit; font-size: inherit; }
 .settings-group input[type="color"] { width: 48px; height: 30px; padding: 2px; border: 1px solid var(--stone-300); border-radius: var(--radius-sm); cursor: pointer; }
 .settings-group textarea { resize: vertical; }
 .settings-body .check-group label { font-weight: 400; font-size: .85rem; }
+
+/* ── Settings Page ── */
+.settings-page { max-width: 640px; margin: 0 auto; padding: 32px 20px; }
+.settings-page-header { display: flex; align-items: center; gap: 16px; margin-bottom: 32px; }
+.settings-page-header h1 { font-size: 1.4rem; color: var(--stone-800); margin: 0; }
+.settings-section { margin-bottom: 32px; }
+.settings-section h2 { font-size: 1rem; color: var(--stone-600); margin-bottom: 16px; padding-bottom: 8px; border-bottom: 1px solid var(--stone-200); }
+.color-input-wrap { display: flex; align-items: center; gap: 10px; }
+.color-hex { font-size: .85rem; color: var(--stone-500); font-family: monospace; }
+.page-message { max-width: 400px; margin: 80px auto; text-align: center; color: var(--stone-500); }
 .nav-user { font-size: .875rem; color: var(--stone-500); }
 
 /* ── Auth Page ── */

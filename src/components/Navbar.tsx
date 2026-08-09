@@ -2,7 +2,6 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
 import { logout } from '../features/auth/authSlice';
-import { updateProfile } from '../features/profile/profileSlice';
 import type { UserProfile } from '../types';
 
 const Navbar: React.FC = () => {
@@ -13,7 +12,6 @@ const Navbar: React.FC = () => {
   const profile: UserProfile | undefined = user ? profiles[user.id] : undefined;
 
   const [showModal, setShowModal] = useState(false);
-  const [tab, setTab] = useState<'profile' | 'settings'>('profile');
   const modalRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -60,113 +58,34 @@ const Navbar: React.FC = () => {
       {showModal && (
         <div className="modal-overlay">
           <div className="user-modal" ref={modalRef}>
-            <div className="user-modal-tabs">
-              <button
-                className={`tab-btn ${tab === 'profile' ? 'active' : ''}`}
-                onClick={() => setTab('profile')}
-              >Profile</button>
-              <button
-                className={`tab-btn ${tab === 'settings' ? 'active' : ''}`}
-                onClick={() => setTab('settings')}
-              >Settings</button>
-            </div>
-
-            {tab === 'profile' && (
-              <div className="user-modal-body">
-                <div className="um-avatar">
-                  {profile?.avatarUrl ? (
-                    <img src={profile.avatarUrl} alt="" />
-                  ) : (
-                    <div className="um-avatar-placeholder">
-                      {user?.displayName.charAt(0).toUpperCase()}
-                    </div>
-                  )}
-                </div>
-                <h2 className="um-name">{user?.displayName}</h2>
-                <p className="um-email">{user?.email}</p>
-                {profile?.location && <p className="um-location"> {profile.location}</p>}
-                <Link to="/profile" className="btn btn-sm btn-ghost um-full-profile" onClick={() => setShowModal(false)}>
-                  Full Profile →
-                </Link>
-                <hr className="um-divider" />
-                <button className="btn btn-sm btn-ghost um-signout" onClick={() => { dispatch(logout()); setShowModal(false); }}>
-                  Sign Out
-                </button>
+            <div className="user-modal-body">
+              <div className="um-avatar">
+                {profile?.avatarUrl ? (
+                  <img src={profile.avatarUrl} alt="" />
+                ) : (
+                  <div className="um-avatar-placeholder">
+                    {user?.displayName.charAt(0).toUpperCase()}
+                  </div>
+                )}
               </div>
-            )}
-
-            {tab === 'settings' && profile && (
-              <ProfileSettings
-                profile={profile}
-                userId={user!.id}
-                dispatch={dispatch}
-              />
-            )}
+              <h2 className="um-name">{user?.displayName}</h2>
+              <p className="um-email">{user?.email}</p>
+              {profile?.location && <p className="um-location">{profile.location}</p>}
+              <Link to="/profile" className="btn btn-sm btn-ghost um-full-profile" onClick={() => setShowModal(false)}>
+                Full Profile →
+              </Link>
+              <Link to="/settings" className="btn btn-sm btn-ghost um-settings-btn" onClick={() => setShowModal(false)}>
+                Settings
+              </Link>
+              <hr className="um-divider" />
+              <button className="btn btn-sm btn-ghost um-signout" onClick={() => { dispatch(logout()); setShowModal(false); }}>
+                Sign Out
+              </button>
+            </div>
           </div>
         </div>
       )}
     </>
-  );
-};
-
-const ProfileSettings: React.FC<{
-  profile: UserProfile;
-  userId: string;
-  dispatch: ReturnType<typeof useAppDispatch>;
-}> = ({ profile, userId, dispatch }) => {
-  const save = (updates: Partial<UserProfile>) => {
-    dispatch(updateProfile({ userId, updates }));
-  };
-
-  return (
-    <div className="user-modal-body settings-body">
-      <div className="settings-group">
-        <label>Bio</label>
-        <textarea
-          value={profile.bio || ''}
-          onChange={(e) => save({ bio: e.target.value })}
-          placeholder="Tell the trail community about yourself..."
-          rows={3}
-        />
-      </div>
-
-      <div className="settings-group">
-        <label>Location</label>
-        <input
-          type="text"
-          value={profile.location || ''}
-          onChange={(e) => save({ location: e.target.value })}
-          placeholder="City, State"
-        />
-      </div>
-
-      <div className="settings-group">
-        <label>Accent Color</label>
-        <input
-          type="color"
-          value={profile.theme.accentColor}
-          onChange={(e) => save({ theme: { ...profile.theme, accentColor: e.target.value } })}
-        />
-      </div>
-
-      <div className="settings-group">
-        <label>Layout</label>
-        <select
-          value={profile.theme.layout}
-          onChange={(e) => save({ theme: { ...profile.theme, layout: e.target.value as any } })}
-        >
-          <option value="standard">Standard</option>
-          <option value="compact">Compact</option>
-          <option value="hero">Hero</option>
-        </select>
-      </div>
-
-      <div className="settings-group check-group">
-        <label><input type="checkbox" checked={profile.theme.showStats} onChange={(e) => save({ theme: { ...profile.theme, showStats: e.target.checked } })} /> Show Stats</label>
-        <label><input type="checkbox" checked={profile.theme.showGear} onChange={(e) => save({ theme: { ...profile.theme, showGear: e.target.checked } })} /> Show Gear</label>
-        <label><input type="checkbox" checked={profile.theme.showSocial} onChange={(e) => save({ theme: { ...profile.theme, showSocial: e.target.checked } })} /> Show Social Links</label>
-      </div>
-    </div>
   );
 };
 
