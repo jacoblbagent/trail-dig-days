@@ -106,6 +106,8 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
 .btn-ghost { background: transparent; color: var(--stone-600); border: 1px solid var(--stone-200); }
 .btn-ghost:hover { background: var(--stone-100); }
 .btn-sm { padding: 4px 12px; font-size: .875rem; }
+.btn.btn-primary.btn-sm { background: var(--green-100); color: var(--green-700); }
+.btn.btn-primary.btn-sm:hover { background: var(--green-200); }
 .btn-lg { padding: 12px 28px; }
 .btn-block { width: 100%; justify-content: center; }
 .btn-icon { background: none; border: none; cursor: pointer; padding: 4px 8px; color: var(--stone-400); }
