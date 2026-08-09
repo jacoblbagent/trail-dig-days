@@ -208,7 +208,7 @@ input, select, textarea, button { font-family: inherit; font-size: inherit; }
 /* ── Map Page ── */
 .map-page { display: flex; height: calc(100vh - 56px); }
 .map-sidebar {
-  width: 380px; min-width: 380px;
+  min-width: 0;
   display: flex; flex-direction: column;
   background: #fff; border-right: 1px solid var(--stone-200);
 }
@@ -245,6 +245,40 @@ input, select, textarea, button { font-family: inherit; font-size: inherit; }
 .list-card-meta { display: flex; justify-content: space-between; font-size: .8rem; color: var(--stone-400); margin-top: 8px; }
 .creator-name { color: var(--green-700); }
 .map-container { flex: 1; position: relative; }
+
+/* ── Sidebar Resizer ── */
+.sidebar-resizer {
+  width: 8px; cursor: col-resize; position: relative; display: flex;
+  align-items: center; justify-content: center; flex-shrink: 0;
+  background: var(--stone-100); transition: background .15s;
+}
+.sidebar-resizer:hover { background: var(--stone-200); }
+.sidebar-resizer:active,
+.sidebar-resizer.active { background: var(--accent, var(--green-600)); }
+.resizer-grip {
+  width: 3px; height: 32px; border-radius: 2px;
+  background: var(--stone-300); transition: background .15s;
+}
+.sidebar-resizer:hover .resizer-grip { background: var(--stone-500); }
+.sidebar-resizer:active .resizer-grip,
+.sidebar-resizer.active .resizer-grip { background: #fff; }
+.resizer-limits {
+  position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none; overflow: hidden;
+}
+.limit-indicator {
+  position: absolute; top: 50%; transform: translateY(-50%); opacity: 0;
+  transition: opacity .2s; font-size: .65rem; font-weight: 700;
+  color: var(--stone-400); white-space: nowrap;
+}
+.limit-indicator:first-child { left: -50px; }
+.limit-indicator:last-child { right: -50px; }
+.limit-indicator.visible { opacity: 1; }
+/* Visual cues on sidebar itself */
+.map-sidebar.at-min { border-right-color: #e11d48; }
+.map-sidebar.at-min .map-sidebar-header h1 { color: #e11d48; }
+.map-sidebar.at-max { border-right-color: #2563eb; }
+.map-sidebar.at-max .map-sidebar-header h1 { color: #2563eb; }
 .map-locate-btn {
   position: absolute; top: 12px; right: 12px; z-index: 1000;
   width: 36px; height: 36px; border-radius: 8px;
@@ -320,6 +354,24 @@ input, select, textarea, button { font-family: inherit; font-size: inherit; }
   background: rgba(0,0,0,.65); color: #fff; padding: 4px 12px;
   border-radius: 100px; font-size: .8rem; pointer-events: none; z-index: 1000;
 }
+
+/* ── Trail Search (Overpass) ── */
+.trail-search { margin: 8px 0; }
+.trail-search .btn { font-size: .85rem; }
+.trail-search-error { font-size: .8rem; color: var(--stone-400); margin-top: 4px; }
+.trail-results {
+  list-style: none; margin: 6px 0 0; padding: 0;
+  border: 1px solid var(--stone-200); border-radius: var(--radius-sm);
+  max-height: 200px; overflow-y: auto; background: #fff;
+}
+.trail-results li {
+  padding: 8px 12px; cursor: pointer; display: flex; flex-direction: column;
+  border-bottom: 1px solid var(--stone-100); transition: background .1s;
+}
+.trail-results li:last-child { border-bottom: none; }
+.trail-results li:hover { background: var(--stone-50); }
+.trail-name { font-size: .85rem; font-weight: 600; color: var(--stone-800); }
+.trail-system { font-size: .75rem; color: var(--stone-400); }
 
 /* ── Event Detail Page ── */
 .event-detail-page { max-width: 1100px; margin: 0 auto; padding: 32px 20px; }

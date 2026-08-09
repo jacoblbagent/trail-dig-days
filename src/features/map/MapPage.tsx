@@ -57,12 +57,41 @@ const MapPage: React.FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { user } = useAppSelector((s) => s.auth);
-  const { items, searchRadius, searchCenter } = useAppSelector((s) => s.events);
+  const { items, searchCenter } = useAppSelector((s) => s.events);
   const { profiles } = useAppSelector((s) => s.profile);
 
   const [userLocation, setUserLocation] = useState<[number, number] | null>(null);
   const [locError, setLocError] = useState('');
-  const [radiusInput, setRadiusInput] = useState(searchRadius.toString());
+  const [radiusInput, setRadiusInput] = useState('250');
+  const [sidebarWidth, setSidebarWidth] = useState(380);
+  const widthRef = useRef(380);
+  const SIDEBAR_MIN = 240;
+  const SIDEBAR_MAX = 600;
+
+  const handleResizeStart = (e: React.MouseEvent) => {
+    e.preventDefault();
+    const startX = e.clientX;
+    const startW = widthRef.current;
+
+    const onMove = (me: MouseEvent) => {
+      const newW = Math.max(SIDEBAR_MIN, Math.min(SIDEBAR_MAX, startW + (me.clientX - startX)));
+      widthRef.current = newW;
+      setSidebarWidth(newW);
+    };
+    const onUp = () => {
+      document.removeEventListener('mousemove', onMove);
+      document.removeEventListener('mouseup', onUp);
+      document.body.style.cursor = '';
+      document.body.style.userSelect = '';
+    };
+    document.addEventListener('mousemove', onMove);
+    document.addEventListener('mouseup', onUp);
+    document.body.style.cursor = 'col-resize';
+    document.body.style.userSelect = 'none';
+  };
+
+  const nearMin = sidebarWidth <= SIDEBAR_MIN + 20;
+  const nearMax = sidebarWidth >= SIDEBAR_MAX - 20;
 
   useEffect(() => {
     if (!user) { navigate('/auth'); return; }
@@ -98,7 +127,7 @@ const MapPage: React.FC = () => {
 
   return (
     <div className="map-page">
-      <div className="map-sidebar">
+      <div className={`map-sidebar ${nearMin ? 'at-min' : ''} ${nearMax ? 'at-max' : ''}`} style={{ width: sidebarWidth }}>
         <div className="map-sidebar-header">
           <h1>Dig Days</h1>
           <Link to="/events/create" className="btn btn-primary btn-sm">+ New Dig Day</Link>
@@ -164,6 +193,14 @@ const MapPage: React.FC = () => {
               );
             })
           )}
+        </div>
+      </div>
+
+      <div className="sidebar-resizer" onMouseDown={handleResizeStart}>
+        <div className="resizer-grip" />
+        <div className="resizer-limits">
+          <span className={`limit-indicator ${nearMin ? 'visible' : ''}`}>{SIDEBAR_MIN}px</span>
+          <span className={`limit-indicator ${nearMax ? 'visible' : ''}`}>{SIDEBAR_MAX}px</span>
         </div>
       </div>
 

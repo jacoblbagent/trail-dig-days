@@ -71,6 +71,91 @@ const FlyToCenter: React.FC<{ center: [number, number] | null }> = ({ center }) 
   return null;
 };
 
+/** Queries OpenStreetMap Overpass API for named trails near coordinates */
+const TrailSearch: React.FC<{
+  coords: [number, number] | null;
+  onSelect: (trailName: string, trailSystem: string) => void;
+}> = ({ coords, onSelect }) => {
+  const [results, setResults] = useState<{ name: string; system: string; id: string }[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [show, setShow] = useState(false);
+  const mounted = useRef(true);
+
+  useEffect(() => { mounted.current = true; return () => { mounted.current = false; }; }, []);
+
+  const search = async () => {
+    if (!coords) return;
+    setLoading(true);
+    setError('');
+    setResults([]);
+    setShow(true);
+    try {
+      const query = `
+        [out:json][timeout:10];
+        (
+          way(around:1000,${coords[0]},${coords[1]})[highway~"path|track|footway"][name];
+          way(around:1000,${coords[0]},${coords[1]})[highway=cycleway][name];
+          relation(around:1000,${coords[0]},${coords[1]})[route~"hiking|mtb|bicycle"][name];
+        );
+        out center qt 30;
+      `;
+      const res = await fetch('https://overpass-api.de/api/interpreter', {
+        method: 'POST',
+        body: query,
+        headers: { 'Content-Type': 'text/plain' },
+      });
+      if (!res.ok) throw new Error(`Overpass returned ${res.status}`);
+      const data = await res.json();
+      if (!mounted.current) return;
+
+      const seen = new Set<string>();
+      const parsed: { name: string; system: string; id: string }[] = [];
+
+      for (const el of data.elements || []) {
+        const name = el.tags?.name;
+        if (!name || seen.has(name)) continue;
+        seen.add(name);
+        parsed.push({
+          name,
+          system: el.tags?.operator || el.tags?.network || el.tags?.area || '',
+          id: `${el.type}/${el.id}`,
+        });
+      }
+      setResults(parsed.slice(0, 10));
+      if (parsed.length === 0) setError('No named trails found near this location.');
+    } catch (err: any) {
+      if (mounted.current) setError(err.message || 'Search failed');
+    } finally {
+      if (mounted.current) setLoading(false);
+    }
+  };
+
+  return (
+    <div className="trail-search">
+      <button
+        type="button"
+        className="btn btn-sm btn-ghost"
+        onClick={search}
+        disabled={!coords || loading}
+      >
+        {loading ? 'Searching…' : 'Find Trails Here'}
+      </button>
+      {error && <p className="trail-search-error">{error}</p>}
+      {results.length > 0 && show && (
+        <ul className="trail-results">
+          {results.map((t) => (
+            <li key={t.id} onClick={() => { onSelect(t.name, t.system); setShow(false); }}>
+              <span className="trail-name">{t.name}</span>
+              {t.system && <span className="trail-system">{t.system}</span>}
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+};
+
 const CreateEventPage: React.FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -365,6 +450,12 @@ const CreateEventPage: React.FC = () => {
               </div>
             )}
           </div>
+
+          {/* Search nearby trails via Overpass API */}
+          <TrailSearch
+            coords={markerPos}
+            onSelect={(name, system) => { setTrailName(name); if (system) setTrailSystem(system); }}
+          />
 
           <div className="form-group">
             <label>Parking Notes</label>

@@ -22,7 +22,7 @@ const initialState: EventsState = {
   items: loadEvents(),
   myEvents: [],
   loading: false,
-  searchRadius: 50,
+  searchRadius: 250,
   searchCenter: null,
 };
 
