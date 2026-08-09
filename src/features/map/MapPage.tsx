@@ -191,7 +191,7 @@ const MapPage: React.FC = () => {
     <>
       <div className={`map-sidebar ${nearMin ? 'at-min' : ''} ${nearMax ? 'at-max' : ''}`} style={{ width: sidebarWidth }}>
         <div className="map-sidebar-header">
-          <h1>Dig Days</h1>
+          <h1>Home</h1>
           <Link to="/events/create" className="btn btn-primary btn-sm">+ New</Link>
         </div>
 
