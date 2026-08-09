@@ -331,8 +331,7 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
 }
 .map-sidebar-header {
   display: flex; align-items: center; justify-content: space-between;
-  padding: 16px 20px;
-  border-bottom: 1px solid var(--stone-150);
+  padding: 3px 5px; border-bottom: 1px solid var(--stone-150);
 }
 .map-sidebar-header h1 { font-size: 1.2rem; color: var(--stone-800); }
 .search-controls { padding: 14px 20px; border-bottom: 1px solid var(--stone-150); }
@@ -953,7 +952,7 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
   .map-sidebar { max-width: 100%; min-width: 0; }
   .map-container { height: 50vh; }
 
-  .map-sidebar-header { padding: 10px 12px; }
+  .map-sidebar-header { padding: 3px 5px; }
   .map-sidebar-header h1 { font-size: 1rem; }
   .search-controls { padding: 10px 12px; }
   .event-list { padding: 8px; }
@@ -1057,7 +1056,7 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
   .sidebar-btn { width: 38px; height: 38px; padding: 0; justify-content: center; gap: 0; }
   .app-main { height: calc(100vh - 48px); }
   .map-page { height: calc(100vh - 48px); }
-  .map-sidebar-header { padding: 8px 10px; }
+  .map-sidebar-header { padding: 3px 5px; }
   .map-sidebar-header h1 { font-size: .9rem; }
   .search-controls { padding: 8px 10px; }
   .event-list { padding: 6px; }
