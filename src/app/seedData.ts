@@ -4,7 +4,7 @@ import type { UserProfile, DigEvent } from '../types';
 const AUTH_KEY = 'trail-dig-auth';
 const EVENTS_KEY = 'trail-dig-events';
 const PROFILES_KEY = 'trail-dig-profiles';
-const SEEDED_KEY = 'trail-dig-seeded';
+const SEEDED_KEY = 'trail-dig-seeded-v2';
 
 // Matthews, NC  /  Brevard, NC
 const MATTHEWS: [number, number] = [35.1168, -80.7237];
@@ -1989,23 +1989,22 @@ const seedEvents: DigEvent[] = [
 
 export const ensureSeedData = () => {
   if (localStorage.getItem(SEEDED_KEY)) {
-    // Already seeded — dedup by content fingerprint (title|date|locationName)
-    // to purge old random-ID duplicates while preserving user-created events
+    // Already seeded — dedup by seed event ID to avoid ballooning from
+    // day()-relative dates. User-created events (UUIDs) pass through.
     const existing: DigEvent[] = JSON.parse(localStorage.getItem(EVENTS_KEY) || '[]');
-    const seedFingerprints = new Set(seedEvents.map((e) => `${e.title}|${e.date}|${e.locationName}`));
+    const seedIds = new Set(seedEvents.map((e) => e.id));
     const seen = new Set<string>();
     const cleaned: DigEvent[] = [];
     for (const e of existing) {
-      const fp = `${e.title}|${e.date}|${e.locationName}`;
-      if (seedFingerprints.has(fp)) {
-        if (seen.has(fp)) continue; // skip duplicates of seed events
-        seen.add(fp);
+      if (seedIds.has(e.id)) {
+        if (seen.has(e.id)) continue; // skip duplicates of seed events
+        seen.add(e.id);
       }
       cleaned.push(e);
     }
     // Ensure all current seed events are present (may have been missing if user deleted one)
-    const existingFps = new Set(cleaned.map((e) => `${e.title}|${e.date}|${e.locationName}`));
-    const missing = seedEvents.filter((e) => !existingFps.has(`${e.title}|${e.date}|${e.locationName}`));
+    const existingIds = new Set(cleaned.map((e) => e.id));
+    const missing = seedEvents.filter((e) => !existingIds.has(e.id));
     if (missing.length > 0 || cleaned.length !== existing.length) {
       localStorage.setItem(EVENTS_KEY, JSON.stringify([...cleaned, ...missing]));
     }
