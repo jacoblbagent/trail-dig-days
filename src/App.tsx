@@ -16,7 +16,7 @@ import MapPage from './features/map/MapPage';
 const App: React.FC = () => {
   return (
     <Provider store={store}>
-      <BrowserRouter basename="/trail-dig-days">
+      <BrowserRouter basename={import.meta.env.BASE_URL.replace(/\/$/, '')}>
         <div className="app-layout">
           <Sidebar />
           <main className="app-main">
