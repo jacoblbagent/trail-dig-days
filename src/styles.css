@@ -276,11 +276,6 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
 }
 .notif-dismiss:hover { background: var(--green-200); }
 
-@media (max-width: 768px) {
-  .sidebar { width: 48px; }
-  .sidebar-btn { width: 36px; height: 36px; }
-}
-
 /* ── Auth Page ── */
 .settings-group { margin-bottom: 12px; }
 .settings-group label { display: block; font-size: .8rem; font-weight: 600; color: var(--stone-600); margin-bottom: 4px; }
@@ -923,11 +918,12 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
 /* ── Responsive: Tablets & Small Screens ── */
 @media (max-width: 768px) {
   .app-layout { flex-direction: column-reverse; }
-  .sidebar {
-    width: 100%; flex-direction: row; padding: 0 8px;
+  .sidebar { width: 100%; flex-direction: row; padding: 0 8px;
     border-right: none; border-top: 1px solid var(--stone-150);
     height: 52px; gap: 0;
   }
+  .sidebar.expanded { width: 100%; align-items: center; padding-left: 0; }
+  .sidebar.expanded .sidebar-btn { width: 44px; justify-content: center; gap: 0; }
   .sidebar-top,
   .sidebar-bottom {
     flex-direction: row; align-items: center; gap: 0;
