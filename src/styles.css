@@ -331,7 +331,7 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
 }
 .map-sidebar-header {
   display: flex; align-items: center; justify-content: space-between;
-  padding: 3px 5px; border-bottom: 1px solid var(--stone-150);
+  padding: 3px 5px; border-bottom: 1px solid var(--stone-150); margin-bottom: 10px;
 }
 .map-sidebar-header h1 { font-size: 1.2rem; color: var(--stone-800); }
 .search-controls { padding: 14px 20px; border-bottom: 1px solid var(--stone-150); }
