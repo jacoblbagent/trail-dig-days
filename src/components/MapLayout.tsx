@@ -7,18 +7,17 @@ import TileLoadIndicator from '../features/map/TileLoadIndicator';
 import PageMarkerContent from '../features/map/PageMarkerContent';
 import MapExtras from '../features/map/MapExtras';
 
-const MapCenterUpdater: React.FC = () => {
+const MapCenterUpdater: React.FC<{ loc: [number, number] | null }> = ({ loc }) => {
   const map = useMap();
-  const searchCenter = useAppSelector((s) => s.events.searchCenter);
-  const prevRef = React.useRef(searchCenter);
+  const prevRef = React.useRef(loc);
 
   useEffect(() => {
+    if (!loc) return;
     const prev = prevRef.current;
-    prevRef.current = searchCenter;
-    if (!searchCenter) return;
-    if (prev && prev[0] === searchCenter[0] && prev[1] === searchCenter[1]) return;
-    map.flyTo(searchCenter, map.getZoom(), { duration: 1.2 });
-  }, [searchCenter, map]);
+    prevRef.current = loc;
+    if (prev && prev[0] === loc[0] && prev[1] === loc[1]) return;
+    map.flyTo(loc, map.getZoom(), { duration: 1.2 });
+  }, [loc, map]);
 
   return null;
 };
@@ -47,7 +46,7 @@ const MapLayout: React.FC = () => {
             }
           />
           <MapMoveHandler />
-          <MapCenterUpdater />
+          <MapCenterUpdater loc={searchCenter} />
           <TileLoadIndicator />
           <PageMarkerContent />
           <MapExtras />
