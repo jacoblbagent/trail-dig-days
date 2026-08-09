@@ -52,6 +52,7 @@ export interface CustomField {
 export interface ProfileTheme {
   accentColor: string;
   headerImage: string;
+  coverPosition: number;
   showStats: boolean;
   showGear: boolean;
   showSocial: boolean;
@@ -64,7 +65,7 @@ export type Difficulty = 'easy' | 'moderate' | 'challenging' | 'expert';
 
 export interface ProvidedItem {
   name: string;
-  quantity: number;
+  quantity: 'Few' | 'Plenty';
   description: string;
 }
 

@@ -1,8 +1,52 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { MapContainer, TileLayer, Marker, Popup, Circle } from 'react-leaflet';
+import L from 'leaflet';
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
 import { updateProfile } from './profileSlice';
 import type { UserProfile, CustomField } from '../../types';
+
+// Fix Leaflet icon issue
+import iconUrl from 'leaflet/dist/images/marker-icon.png';
+import iconRetinaUrl from 'leaflet/dist/images/marker-icon-2x.png';
+import shadowUrl from 'leaflet/dist/images/marker-shadow.png';
+delete (L.Icon.Default.prototype as any)._getIconUrl;
+L.Icon.Default.mergeOptions({ iconUrl, iconRetinaUrl, shadowUrl });
+
+const LocationMap: React.FC<{ location: string }> = ({ location }) => {
+  const [coords, setCoords] = useState<[number, number] | null>(null);
+
+  useEffect(() => {
+    if (!location) return;
+    fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(location)}&limit=1`)
+      .then((r) => r.json())
+      .then((data) => {
+        if (data?.[0]) setCoords([parseFloat(data[0].lat), parseFloat(data[0].lon)]);
+      })
+      .catch(() => {});
+  }, [location]);
+
+  if (!coords) return <p className="muted" style={{ fontSize: '.8rem' }}>Loading map...</p>;
+
+  return (
+    <div style={{ height: 180, borderRadius: 'var(--radius)', overflow: 'hidden', marginTop: 8 }}>
+      <MapContainer center={coords} zoom={10} style={{ width: '100%', height: '100%' }}>
+        <TileLayer
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        />
+        <Marker position={coords}>
+          <Popup>{location}</Popup>
+        </Marker>
+        <Circle
+          center={coords}
+          radius={8047}
+          pathOptions={{ color: '#2d6a4f', fillOpacity: 0.08, weight: 2 }}
+        />
+      </MapContainer>
+    </div>
+  );
+};
 
 const DIFF_ICONS: Record<string, string> = {
   easy: 'Easy', moderate: 'Moderate', challenging: 'Challenging', expert: 'Expert',
@@ -74,10 +118,7 @@ const DigDatesTab: React.FC<{ userId: string }> = ({ userId }) => {
                 <span className="ddc-title">{e.title}</span>
                 <span className="ddc-trail">{DIFF_ICONS[e.difficulty]} {e.trailName} · {e.locationName}</span>
               </div>
-              <div className="ddc-right">
-                <span className={`status-dot status-${e.status}`} />
-                <span className="ddc-spots">{e.registeredVolunteers.length}/{e.maxVolunteers}</span>
-              </div>
+              <span className="ddc-spots">{e.registeredVolunteers.length}/{e.maxVolunteers}</span>
             </Link>
           ))}
         </div>
@@ -94,6 +135,9 @@ const ProfilePage: React.FC = () => {
   const profile: UserProfile | undefined = user ? profiles[user.id] : undefined;
   const [editMode, setEditMode] = useState(false);
   const [form, setForm] = useState<UserProfile | null>(null);
+  const [coverPos, setCoverPos] = useState(50);
+  const [dragging, setDragging] = useState(false);
+  const coverRef = useRef<HTMLDivElement>(null);
   const avatarInputRef = useRef<HTMLInputElement>(null);
   const coverInputRef = useRef<HTMLInputElement>(null);
 
@@ -102,7 +146,7 @@ const ProfilePage: React.FC = () => {
   }, [user, navigate]);
 
   useEffect(() => {
-    if (profile && !form) setForm({ ...profile });
+    if (profile && !form) { setForm({ ...profile }); setCoverPos(profile.theme.coverPosition ?? 50); }
   }, [profile, form]);
 
   if (!profile || !form) {
@@ -144,57 +188,126 @@ const ProfilePage: React.FC = () => {
     const file = e.target.files?.[0];
     if (!file) return;
     const dataUrl = await readFileAsDataURL(file);
-    saveField({ theme: { ...form.theme!, headerImage: dataUrl } });
+    saveField({ theme: { ...form.theme, headerImage: dataUrl } });
+    setCoverPos(50);
+  };
+
+  const handleCoverDragStart = (clientY: number) => {
+    setDragging(true);
+    const startY = clientY;
+    const startPos = coverPos;
+    let currentPos = startPos;
+
+    const onMove = (e: MouseEvent | TouchEvent) => {
+      const y = 'touches' in e ? e.touches[0].clientY : e.clientY;
+      const dy = y - startY;
+      const cover = coverRef.current;
+      if (!cover) return;
+      const rect = cover.getBoundingClientRect();
+      const pct = (dy / rect.height) * 100;
+      currentPos = Math.max(0, Math.min(100, Math.round(startPos - pct)));
+      setCoverPos(currentPos);
+    };
+
+    const onUp = () => {
+      setDragging(false);
+      saveField({ theme: { ...form.theme, coverPosition: currentPos } });
+      document.removeEventListener('mousemove', onMove);
+      document.removeEventListener('mouseup', onUp);
+      document.removeEventListener('touchmove', onMove);
+      document.removeEventListener('touchend', onUp);
+    };
+
+    document.addEventListener('mousemove', onMove);
+    document.addEventListener('mouseup', onUp);
+    document.addEventListener('touchmove', onMove, { passive: true });
+    document.addEventListener('touchend', onUp);
   };
 
   const theme = form.theme;
 
+  const hasSocial = Object.entries(form.socialLinks).filter(([, v]) => v).length > 0;
+  const hasCustomFields = form.customFields.filter((f) => f.label && f.value).length > 0;
+
   return (
     <div className="profile-page" style={{ '--accent': theme.accentColor } as React.CSSProperties}>
       <div className={`profile-header ${theme.layout}`}>
-        {theme.headerImage && (
-          <div
-            className="profile-cover"
-            style={{ backgroundImage: `url(${theme.headerImage})` }}
-          />
-        )}
-        <div className="profile-avatar-section">
-          {editMode ? (
+        <div
+          ref={coverRef}
+          className={`profile-cover ${editMode && form.theme.headerImage ? 'draggable' : ''} ${dragging ? 'dragging' : ''}`}
+          style={{
+            background: form.theme.headerImage
+              ? `url(${form.theme.headerImage}) ${coverPos}% / cover no-repeat`
+              : 'linear-gradient(135deg, var(--accent, var(--green-700)) 0%, #1a1a2e 100%)',
+          }}
+          onMouseDown={form.theme.headerImage ? (e) => handleCoverDragStart(e.clientY) : undefined}
+          onTouchStart={form.theme.headerImage ? (e) => handleCoverDragStart(e.touches[0].clientY) : undefined}
+        >
+          {editMode && (
             <>
-              <div className="avatar-upload-wrap">
-                {form.avatarUrl ? (
-                  <img src={form.avatarUrl} alt="" className="profile-avatar" />
-                ) : (
-                  <div className="profile-avatar placeholder">
-                    {profile.displayName.charAt(0).toUpperCase()}
-                  </div>
-                )}
+              <button
+                type="button"
+                className="cover-upload-btn"
+                onClick={() => coverInputRef.current?.click()}
+                title="Change cover photo"
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z" />
+                  <circle cx="12" cy="13" r="4" />
+                </svg>
+              </button>
+              {form.theme.headerImage && (
                 <button
                   type="button"
-                  className="avatar-upload-btn"
-                  onClick={() => avatarInputRef.current?.click()}
-                  title="Upload photo"
+                  className="cover-remove-btn"
+                  onClick={() => saveField({ theme: { ...form.theme, headerImage: '' } })}
+                  title="Remove cover photo"
                 >
-                  
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
+                  </svg>
                 </button>
-                <input
-                  ref={avatarInputRef}
-                  type="file"
-                  accept="image/*"
-                  onChange={handleAvatarUpload}
-                  style={{ display: 'none' }}
-                />
-              </div>
+              )}
               <input
-                type="text"
-                placeholder="Or paste image URL"
-                value={form.avatarUrl || ''}
-                onChange={(e) => saveField({ avatarUrl: e.target.value })}
-                className="input-sm avatar-url-input"
+                ref={coverInputRef}
+                type="file"
+                accept="image/*"
+                onChange={handleCoverUpload}
+                style={{ display: 'none' }}
               />
             </>
-          ) : form.avatarUrl ? (
-            <img src={form.avatarUrl} alt="" className="profile-avatar" />
+          )}
+        </div>
+        <div className="profile-avatar-section">
+          {editMode ? (
+                      <React.Fragment>
+                        <div className="avatar-upload-wrap">
+                          {form.avatarUrl ? (
+                            <img src={form.avatarUrl} alt="" className="profile-avatar" />
+                          ) : (
+                            <div className="profile-avatar placeholder">
+                              {profile.displayName.charAt(0).toUpperCase()}
+                            </div>
+                          )}
+                          <button
+                            type="button"
+                            className="avatar-upload-btn"
+                            onClick={() => avatarInputRef.current?.click()}
+                            title="Upload photo"
+                          >
+                  
+                          </button>
+                          <input
+                            ref={avatarInputRef}
+                            type="file"
+                            accept="image/*"
+                            onChange={handleAvatarUpload}
+                            style={{ display: 'none' }}
+                          />
+                        </div>
+                      </React.Fragment>
+                    ) : form.avatarUrl ? (
+              <img src={form.avatarUrl} alt="" className="profile-avatar" />
           ) : (
             <div className="profile-avatar placeholder">
               {profile.displayName.charAt(0).toUpperCase()}
@@ -216,29 +329,36 @@ const ProfilePage: React.FC = () => {
             <span>Member Since {new Date(user!.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
             {form.location && <><span className="sep">·</span><span>{form.location}</span></>}
           </p>
+          <button
+            className={`profile-edit-btn ${editMode ? 'editing' : ''}`}
+            onClick={() => {
+              if (editMode) {
+                setForm({ ...profile });
+                setEditMode(false);
+              } else {
+                setEditMode(true);
+              }
+            }}
+          >
+            {editMode ? 'Done' : 'Edit'}
+          </button>
         </div>
       </div>
 
       <div className="profile-body">
         {/* Bio */}
+        {form.bio && (
         <section className="profile-section">
           <h3>Bio</h3>
-          {editMode ? (
-            <textarea
-              value={form.bio || ''}
-              onChange={(e) => saveField({ bio: e.target.value })}
-              placeholder="Tell the trail community about yourself..."
-              rows={4}
-            />
-          ) : (
-            <p>{form.bio || 'No bio yet.'}</p>
-          )}
+          <p>{form.bio}</p>
         </section>
+        )}
 
         {/* Dig Dates */}
         <DigDatesTab userId={user!.id} />
 
         {/* Location */}
+        {(editMode || form.location) && (
         <section className="profile-section">
           <h3>Location</h3>
           {editMode ? (
@@ -252,21 +372,16 @@ const ProfilePage: React.FC = () => {
               />
             </div>
           ) : (
-            <p>{form.location || 'Not set'}</p>
+            <div>
+              <p>{form.location}</p>
+              <LocationMap location={form.location} />
+            </div>
           )}
         </section>
-
-        {/* Dig Stats */}
-        {theme.showStats && (
-          <section className="profile-section">
-            <h3>Dig Stats</h3>
-            <div className="stats-grid">
-              <div className="stat-card"><strong>{form.digStats.totalDigs}</strong> Dig Days</div>
-            </div>
-          </section>
         )}
 
         {/* Skills */}
+        {(editMode || form.skills.length > 0) && (
         <section className="profile-section">
           <h3>Skills & Expertise</h3>
           {editMode ? (
@@ -283,12 +398,14 @@ const ProfilePage: React.FC = () => {
             </div>
           ) : (
             <div className="tag-grid">
-              {form.skills.length ? form.skills.map((s) => <span key={s} className="tag active">{s}</span>) : <p className="muted">No skills listed</p>}
+              {form.skills.map((s) => <span key={s} className="tag active">{s}</span>)}
             </div>
           )}
         </section>
+        )}
 
         {/* Certifications */}
+        {(editMode || form.certifications.length > 0) && (
         <section className="profile-section">
           <h3>Certifications</h3>
           {editMode ? (
@@ -305,13 +422,14 @@ const ProfilePage: React.FC = () => {
             </div>
           ) : (
             <div className="tag-grid">
-              {form.certifications.length ? form.certifications.map((c) => <span key={c} className="tag active">{c}</span>) : <p className="muted">None listed</p>}
+              {form.certifications.map((c) => <span key={c} className="tag active">{c}</span>)}
             </div>
           )}
         </section>
+        )}
 
         {/* Gear List */}
-        {theme.showGear && (
+        {theme.showGear && (editMode || form.gearList.length > 0) && (
           <section className="profile-section">
             <h3>My Gear</h3>
             {editMode ? (
@@ -328,14 +446,14 @@ const ProfilePage: React.FC = () => {
               </div>
             ) : (
               <div className="tag-grid">
-                {form.gearList.length ? form.gearList.map((g) => <span key={g} className="tag active">{g}</span>) : <p className="muted">No gear listed</p>}
+                {form.gearList.map((g) => <span key={g} className="tag active">{g}</span>)}
               </div>
             )}
           </section>
         )}
 
         {/* Social Links */}
-        {theme.showSocial && (
+        {theme.showSocial && (editMode || hasSocial) && (
           <section className="profile-section">
             <h3>Social & Links</h3>
             {editMode ? (
@@ -354,21 +472,18 @@ const ProfilePage: React.FC = () => {
               </div>
             ) : (
               <div className="social-links">
-                {Object.entries(form.socialLinks).filter(([, v]) => v).length > 0 ? (
-                  Object.entries(form.socialLinks).filter(([, v]) => v).map(([key, val]) => (
-                    <a key={key} href={val} target="_blank" rel="noreferrer">
-                      {key}
-                    </a>
-                  ))
-                ) : (
-                  <p className="muted">No links added</p>
-                )}
+                {Object.entries(form.socialLinks).filter(([, v]) => v).map(([key, val]) => (
+                  <a key={key} href={val} target="_blank" rel="noreferrer">
+                    {key}
+                  </a>
+                ))}
               </div>
             )}
           </section>
         )}
 
         {/* Custom Fields */}
+        {(editMode || hasCustomFields) && (
         <section className="profile-section">
           <h3>Custom Fields</h3>
           {editMode ? (
@@ -402,123 +517,17 @@ const ProfilePage: React.FC = () => {
             </div>
           ) : (
             <div className="custom-fields">
-              {form.customFields.length > 0 ? (
-                form.customFields.filter((f) => f.label && f.value).map((cf) => (
-                  <div key={cf.id} className="custom-field-row">
-                    <strong>{cf.label}:</strong> {cf.value}
-                  </div>
-                ))
-              ) : (
-                <p className="muted">No custom fields yet</p>
-              )}
-            </div>
-          )}
-        </section>
-
-        {/* Theme Settings */}
-        <section className="profile-section">
-          <h3>Profile Theme</h3>
-          {editMode ? (
-            <div className="theme-edit">
-              <div className="form-row">
-                <label>Accent Color</label>
-                <input
-                  type="color"
-                  value={form.theme?.accentColor || '#2d6a4f'}
-                  onChange={(e) => saveField({ theme: { ...form.theme!, accentColor: e.target.value } })}
-                />
-              </div>
-              <div className="form-row">
-                <label>Cover Photo</label>
-                <div className="cover-upload-row">
-                  <input
-                    type="text"
-                    value={form.theme?.headerImage || ''}
-                    onChange={(e) => saveField({ theme: { ...form.theme!, headerImage: e.target.value } })}
-                    placeholder="https://... or upload below"
-                  />
-                  <input
-                    ref={coverInputRef}
-                    type="file"
-                    accept="image/*"
-                    onChange={handleCoverUpload}
-                    style={{ display: 'none' }}
-                  />
-                  <button
-                    type="button"
-                    className="btn btn-sm btn-ghost"
-                    onClick={() => coverInputRef.current?.click()}
-                  >
-                    Upload
-                  </button>
+              {form.customFields.filter((f) => f.label && f.value).map((cf) => (
+                <div key={cf.id} className="custom-field-row">
+                  <strong>{cf.label}:</strong> {cf.value}
                 </div>
-              </div>
-              <div className="form-row">
-                <label>Layout</label>
-                <select
-                  value={form.theme?.layout || 'standard'}
-                  onChange={(e) => saveField({ theme: { ...form.theme!, layout: e.target.value as any } })}
-                >
-                  <option value="standard">Standard</option>
-                  <option value="compact">Compact</option>
-                  <option value="hero">Hero</option>
-                </select>
-              </div>
-              <div className="check-group">
-                <label>
-                  <input
-                    type="checkbox"
-                    checked={form.theme?.showStats !== false}
-                    onChange={(e) => saveField({ theme: { ...form.theme!, showStats: e.target.checked } })}
-                  />
-                  Show Stats
-                </label>
-                <label>
-                  <input
-                    type="checkbox"
-                    checked={form.theme?.showGear !== false}
-                    onChange={(e) => saveField({ theme: { ...form.theme!, showGear: e.target.checked } })}
-                  />
-                  Show Gear
-                </label>
-                <label>
-                  <input
-                    type="checkbox"
-                    checked={form.theme?.showSocial !== false}
-                    onChange={(e) => saveField({ theme: { ...form.theme!, showSocial: e.target.checked } })}
-                  />
-                  Show Social Links
-                </label>
-              </div>
-              <div className="theme-preview">
-                <span className="badge" style={{ background: theme.accentColor }}>{theme.accentColor}</span>
-              </div>
-            </div>
-          ) : (
-            <div className="theme-preview">
-              <span className="badge" style={{ background: theme.accentColor }}>{theme.accentColor}</span>
-              {theme.headerImage && <span className="badge"> Cover</span>}
-              <span className="badge">{theme.layout}</span>
+              ))}
             </div>
           )}
         </section>
+        )}
 
-        <div className="profile-actions">
-          <button
-            className={`btn ${editMode ? 'btn-primary' : 'btn-ghost'}`}
-            onClick={() => {
-              if (editMode) {
-                setForm({ ...profile });
-                setEditMode(false);
-              } else {
-                setEditMode(true);
-              }
-            }}
-          >
-            {editMode ? 'Done Editing' : 'Edit Profile'}
-          </button>
         </div>
-      </div>
     </div>
   );
 };

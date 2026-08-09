@@ -1,5 +1,5 @@
 import React from 'react';
-import { HashRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { store } from './app/store';
 import Sidebar from './components/Sidebar';
@@ -8,19 +8,20 @@ import ProfilePage from './features/profile/ProfilePage';
 import SettingsPage from './features/profile/SettingsPage';
 import CreateEventPage from './features/events/CreateEventPage';
 import EventDetailPage from './features/events/EventDetailPage';
+import CalendarPage from './features/calendar/CalendarPage';
 import MapPage from './features/map/MapPage';
 
 const App: React.FC = () => {
   return (
     <Provider store={store}>
-      <HashRouter>
+      <BrowserRouter>
         <div className="app-layout">
           <Sidebar />
           <main className="app-main">
             <Routes>
-              <Route path="/" element={<Navigate to="/dig-days" replace />} />
+              <Route path="/" element={<MapPage />} />
+              <Route path="/calendar" element={<CalendarPage />} />
               <Route path="/auth" element={<AuthPage />} />
-              <Route path="/dig-days" element={<MapPage />} />
               <Route path="/events/create" element={<CreateEventPage />} />
               <Route path="/events/:id" element={<EventDetailPage />} />
               <Route path="/profile" element={<ProfilePage />} />
@@ -28,7 +29,7 @@ const App: React.FC = () => {
             </Routes>
           </main>
         </div>
-      </HashRouter>
+      </BrowserRouter>
     </Provider>
   );
 };

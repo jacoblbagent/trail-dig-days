@@ -36,6 +36,7 @@ const defaultProfile = (userId: string, displayName: string): UserProfile => ({
   theme: {
     accentColor: '#2d6a4f',
     headerImage: '',
+    coverPosition: 50,
     showStats: true,
     showGear: true,
     showSocial: true,

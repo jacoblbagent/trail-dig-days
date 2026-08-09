@@ -16,7 +16,7 @@ const AuthPage: React.FC = () => {
   const [error, setError] = useState('');
 
   useEffect(() => {
-    if (isAuthenticated) navigate('/dig-days');
+    if (isAuthenticated) navigate('/');
   }, [isAuthenticated, navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -89,14 +89,6 @@ const AuthPage: React.FC = () => {
           {isLogin ? "Don't have an account?" : 'Already have an account?'}{' '}
           <button className="link-btn" onClick={() => {
             setIsLogin(!isLogin);
-            if (isLogin) {
-              setDisplayName('Trail Builder');
-              setEmail('builder@trail.com');
-              setPassword('password123');
-            } else {
-              setEmail('demo@trailbuilder.com');
-              setPassword('demo1234');
-            }
             setError('');
           }}>
             {isLogin ? 'Sign Up' : 'Sign In'}

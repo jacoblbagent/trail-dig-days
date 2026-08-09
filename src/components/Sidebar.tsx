@@ -9,23 +9,40 @@ const SvgIcon: React.FC<{ d: string; viewBox?: string }> = ({ d, viewBox = '0 0 
   </svg>
 );
 
-const MAP_ICON = 'M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z';
+const MAP_ICON = 'M1 6v16l7-4 8 4 7-4V2l-7 4-8-4-7 4z M8 2v16 M16 6v16';
+const CALENDAR_ICON = 'M3 5a2 2 0 012-2h14a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5z M16 3v4 M8 3v4 M3 11h18 M7 15h.01 M11 15h.01 M15 15h.01 M7 19h.01 M11 19h.01 M15 19h.01';
 const PROFILE_ICON = 'M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2 M12 3a4 4 0 100 8 4 4 0 000-8z';
-const SETTINGS_ICON = 'M12 15a3 3 0 100-6 3 3 0 000 6z M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09z';
+const SETTINGS_ICON = 'M12 15a3 3 0 100-6 3 3 0 000 6z M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 01-2 2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09z';
+const SUN_ICON = 'M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42 M12 7a5 5 0 100 10 5 5 0 000-10z';
+const MOON_ICON = 'M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z';
+const LOGOUT_ICON = 'M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4 M16 17l5-5-5-5 M21 12H9';
 
 const Sidebar: React.FC = () => {
   const dispatch = useAppDispatch();
-  const { isAuthenticated } = useAppSelector((s) => s.auth);
+  const { isAuthenticated, user } = useAppSelector((s) => s.auth);
+  const profile = useAppSelector((s) => (user ? s.profile.profiles[user.id] : undefined));
   const location = useLocation();
   const [dark, setDark] = React.useState(() => {
     const stored = localStorage.getItem('trail-dig-theme');
     return stored === 'dark' || (!stored && window.matchMedia('(prefers-color-scheme: dark)').matches);
   });
+  const [showMenu, setShowMenu] = React.useState(false);
+  const menuRef = React.useRef<HTMLDivElement>(null);
 
   React.useEffect(() => {
     localStorage.setItem('trail-dig-theme', dark ? 'dark' : 'light');
     document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
   }, [dark]);
+
+  React.useEffect(() => {
+    const handleClick = (e: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+        setShowMenu(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClick);
+    return () => document.removeEventListener('mousedown', handleClick);
+  }, []);
 
   const isActive = (path: string) => location.pathname === path;
 
@@ -34,6 +51,7 @@ const Sidebar: React.FC = () => {
       to={to}
       className={`sidebar-btn ${isActive(to) ? 'active' : ''}`}
       title={label}
+      onClick={() => setShowMenu(false)}
     >
       <SvgIcon d={icon} />
     </Link>
@@ -42,9 +60,8 @@ const Sidebar: React.FC = () => {
   return (
     <aside className="sidebar">
       <div className="sidebar-top">
-        {btn('/dig-days', MAP_ICON, 'Map')}
-        {isAuthenticated && btn('/profile', PROFILE_ICON, 'Profile')}
-        {isAuthenticated && btn('/settings', SETTINGS_ICON, 'Settings')}
+        {btn('/', MAP_ICON, 'Map')}
+        {btn('/calendar', CALENDAR_ICON, 'Calendar')}
       </div>
       <div className="sidebar-bottom">
         <button
@@ -52,27 +69,51 @@ const Sidebar: React.FC = () => {
           onClick={() => setDark(!dark)}
           title={dark ? 'Light mode' : 'Dark mode'}
         >
-          {dark ? (
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <circle cx="12" cy="12" r="5" />
-              <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" />
-            </svg>
-          ) : (
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" />
-            </svg>
-          )}
+          {dark ? <SvgIcon d={SUN_ICON} /> : <SvgIcon d={MOON_ICON} />}
         </button>
         {isAuthenticated && (
-          <button
-            className="sidebar-btn sidebar-signout"
-            onClick={() => dispatch(logout())}
-            title="Sign out"
-          >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4 M16 17l5-5-5-5 M21 12H9" />
-            </svg>
-          </button>
+          <div className="profile-menu-wrap" ref={menuRef}>
+            <button
+              className={`sidebar-btn ${isActive('/profile') || isActive('/settings') ? 'active' : ''}`}
+              onClick={() => setShowMenu(!showMenu)}
+              title="Profile menu"
+            >
+              <SvgIcon d={PROFILE_ICON} />
+            </button>
+            {showMenu && (
+              <div className="profile-menu">
+                <div className="profile-menu-header">
+                  <div className="profile-menu-avatar">
+                    {profile?.avatarUrl ? (
+                      <img src={profile.avatarUrl} alt="" />
+                    ) : (
+                      <span>{user!.displayName.charAt(0).toUpperCase()}</span>
+                    )}
+                  </div>
+                  <div className="profile-menu-info">
+                    <strong>{user!.displayName}</strong>
+                    <span>{user!.email}</span>
+                  </div>
+                </div>
+                <div className="profile-menu-divider" />
+                <Link to="/profile" className="profile-menu-item" onClick={() => setShowMenu(false)}>
+                  <SvgIcon d={PROFILE_ICON} />
+                  View Profile
+                </Link>
+                <Link to="/settings" className="profile-menu-item" onClick={() => setShowMenu(false)}>
+                  <SvgIcon d={SETTINGS_ICON} />
+                  Settings
+                </Link>
+                <div className="profile-menu-divider" />
+                <button className="profile-menu-item signout" onClick={() => { setShowMenu(false); dispatch(logout()); }}>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d={LOGOUT_ICON} />
+                  </svg>
+                  Sign Out
+                </button>
+              </div>
+            )}
+          </div>
         )}
       </div>
     </aside>

@@ -25,7 +25,7 @@ const SettingsPage: React.FC = () => {
   return (
     <div className="settings-page">
       <div className="settings-page-header">
-        <Link to="/dig-days" className="btn btn-sm btn-ghost">← Back</Link>
+        <Link to="/" className="btn btn-sm btn-ghost">← Back</Link>
         <h1>Settings</h1>
       </div>
 
@@ -74,19 +74,7 @@ const SettingsPage: React.FC = () => {
               <span className="color-hex">{profile.theme.accentColor}</span>
             </div>
           </div>
-          <div className="settings-group">
-            <label>Layout</label>
-            <select
-              value={profile.theme.layout}
-              onChange={(e) => save({ theme: { ...profile.theme, layout: e.target.value as any } })}
-            >
-              <option value="standard">Standard</option>
-              <option value="compact">Compact</option>
-              <option value="hero">Hero</option>
-            </select>
-          </div>
           <div className="settings-group check-group">
-            <label><input type="checkbox" checked={profile.theme.showStats} onChange={(e) => save({ theme: { ...profile.theme, showStats: e.target.checked } })} /> Show Stats</label>
             <label><input type="checkbox" checked={profile.theme.showGear} onChange={(e) => save({ theme: { ...profile.theme, showGear: e.target.checked } })} /> Show Gear</label>
             <label><input type="checkbox" checked={profile.theme.showSocial} onChange={(e) => save({ theme: { ...profile.theme, showSocial: e.target.checked } })} /> Show Social Links</label>
           </div>

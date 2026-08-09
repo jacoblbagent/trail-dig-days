@@ -43,9 +43,20 @@ const FitBounds: React.FC<{ events: DigEvent[] }> = ({ events }) => {
 const LocateButton: React.FC<{ userLocation: [number, number] | null }> = ({ userLocation }) => {
   const map = useMap();
   return (
-    <div className="map-locate-btn" onClick={() => userLocation && map.flyTo(userLocation, 12, { duration: 1 })}>
-      
-    </div>
+    <button
+      className="map-locate-btn"
+      onClick={() => userLocation && map.flyTo(userLocation, 12, { duration: 1 })}
+      title="Center on your location"
+    >
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="12" cy="12" r="10" />
+        <circle cx="12" cy="12" r="3" />
+        <line x1="12" y1="2" x2="12" y2="6" />
+        <line x1="12" y1="18" x2="12" y2="22" />
+        <line x1="2" y1="12" x2="6" y2="12" />
+        <line x1="18" y1="12" x2="22" y2="12" />
+      </svg>
+    </button>
   );
 };
 
@@ -58,11 +69,10 @@ const MapPage: React.FC = () => {
   const navigate = useNavigate();
   const { user } = useAppSelector((s) => s.auth);
   const { items, searchCenter } = useAppSelector((s) => s.events);
-  const { profiles } = useAppSelector((s) => s.profile);
 
   const [userLocation, setUserLocation] = useState<[number, number] | null>(null);
   const [locError, setLocError] = useState('');
-  const [radiusInput, setRadiusInput] = useState('250');
+  const [radiusInput, setRadiusInput] = useState('25');
   const [sidebarWidth, setSidebarWidth] = useState(380);
   const widthRef = useRef(380);
   const SIDEBAR_MIN = 240;
@@ -132,7 +142,7 @@ const MapPage: React.FC = () => {
       <div className={`map-sidebar ${nearMin ? 'at-min' : ''} ${nearMax ? 'at-max' : ''}`} style={{ width: sidebarWidth }}>
         <div className="map-sidebar-header">
           <h1>Dig Days</h1>
-          <Link to="/events/create" className="btn btn-primary btn-sm">+ New Dig Day</Link>
+          <Link to="/events/create" className="btn btn-primary btn-sm">+ New</Link>
         </div>
 
         <div className="search-controls">
@@ -149,6 +159,7 @@ const MapPage: React.FC = () => {
           {locError && <p className="loc-error">{locError}</p>}
         </div>
 
+        <div className="event-list-count">{filtered.length} result{filtered.length !== 1 ? 's' : ''}</div>
         <div className="event-list">
           {filtered.length === 0 ? (
             <div className="empty-state">
@@ -157,7 +168,6 @@ const MapPage: React.FC = () => {
             </div>
           ) : (
             filtered.map((event) => {
-              const creator = profiles[event.creatorId];
               return (
                 <Link
                   to={`/events/${event.id}`}
@@ -173,7 +183,6 @@ const MapPage: React.FC = () => {
                   <div className="list-card-body">
                     <div className="list-card-header">
                       <h3>{event.title}</h3>
-                      <span className={`status-dot status-${event.status}`} />
                     </div>
                     <p className="list-card-trail">
                       {DIFF_ICONS[event.difficulty]} {event.trailName}
@@ -188,8 +197,7 @@ const MapPage: React.FC = () => {
                     <p className="list-card-location"> {event.locationName}</p>
                     <div className="list-card-meta">
                       <span>{event.registeredVolunteers.length}/{event.maxVolunteers} spots</span>
-                      {creator && <span className="creator-name">by {creator.displayName}</span>}
-                    </div>
+                                             </div>
                   </div>
                 </Link>
               );
