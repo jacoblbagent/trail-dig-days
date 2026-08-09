@@ -32,6 +32,7 @@ const Sidebar: React.FC = () => {
   const unreadCount = notifications.filter((n) => !n.read).length;
   const [showMenu, setShowMenu] = React.useState(false);
   const [showNotifications, setShowNotifications] = React.useState(false);
+  const [collapsed, setCollapsed] = React.useState(false);
   const [radiusInput, setRadiusInput] = React.useState(String(notificationRadius));
   const menuRef = React.useRef<HTMLDivElement>(null);
   const notifRef = React.useRef<HTMLDivElement>(null);
@@ -90,135 +91,143 @@ const Sidebar: React.FC = () => {
   };
 
   return (
-    <aside className={`sidebar${showLabels ? ' expanded' : ''}`}>
-      <div className="sidebar-top">
-        {btn('/', MAP_ICON, 'Map')}
-        {btn('/calendar', CALENDAR_ICON, 'Calendar')}
-        {btn('/events/recurring', RECUR_ICON, 'Repeating')}
-      </div>
-      <div className="sidebar-bottom">
-        <button
-          className="sidebar-btn"
-          onClick={() => dispatch(setTheme(dark ? 'light' : 'dark'))}
-          title={dark ? 'Light mode' : 'Dark mode'}
-        >
-          {dark ? <SvgIcon d={SUN_ICON} /> : <SvgIcon d={MOON_ICON} />}
-          {showLabels && <span className="sidebar-label">{dark ? 'Light' : 'Dark'}</span>}
-        </button>
-        {isAuthenticated && (
-          <div className="notif-wrap" ref={notifRef}>
-            <button
-              className={`sidebar-btn ${showNotifications ? 'active' : ''}`}
-              onClick={() => { setShowNotifications(!showNotifications); setShowMenu(false); }}
-              title="Notifications"
-            >
-              <span className="notif-btn-inner">
-                <SvgIcon d={BELL_ICON} />
-                {unreadCount > 0 && <span className="notif-badge">{unreadCount}</span>}
-              </span>
-              {showLabels && <span className="sidebar-label">Notify</span>}
-            </button>
-            {showNotifications && (
-              <div className="notif-panel">
-                <div className="notif-header">
-                  <span>Notifications</span>
-                  <button className="notif-close" onClick={() => setShowNotifications(false)}>x</button>
-                </div>
-                {notifications.length > 0 ? (
-                  <div className="notif-list">
-                    {notifications.map((n) => (
-                      <div
-                        key={n.id}
-                        className={`notif-item ${n.read ? '' : 'unread'}`}
-                        onClick={() => {
-                          if (!n.read) dispatch(markNotificationRead(n.id));
-                          setShowNotifications(false);
-                          navigate(`/events/${n.eventId}`);
-                        }}
-                      >
-                        <span>{n.message}</span>
-                        <span className="notif-time">{new Date(n.createdAt).toLocaleDateString()}</span>
-                      </div>
-                    ))}
+      <>
+      <aside className={`sidebar${showLabels ? ' expanded' : ''}${collapsed ? ' collapsed' : ''}`}>
+        <div className="sidebar-top">
+          {btn('/', MAP_ICON, 'Map')}
+          {btn('/calendar', CALENDAR_ICON, 'Calendar')}
+          {btn('/events/recurring', RECUR_ICON, 'Repeating')}
+        </div>
+        <div className="sidebar-bottom">
+          <button
+            className="sidebar-btn"
+            onClick={() => dispatch(setTheme(dark ? 'light' : 'dark'))}
+            title={dark ? 'Light mode' : 'Dark mode'}
+          >
+            {dark ? <SvgIcon d={SUN_ICON} /> : <SvgIcon d={MOON_ICON} />}
+            {showLabels && <span className="sidebar-label">{dark ? 'Light' : 'Dark'}</span>}
+          </button>
+          {isAuthenticated && (
+            <div className="notif-wrap" ref={notifRef}>
+              <button
+                className={`sidebar-btn ${showNotifications ? 'active' : ''}`}
+                onClick={() => { setShowNotifications(!showNotifications); setShowMenu(false); }}
+                title="Notifications"
+              >
+                <span className="notif-btn-inner">
+                  <SvgIcon d={BELL_ICON} />
+                  {unreadCount > 0 && <span className="notif-badge">{unreadCount}</span>}
+                </span>
+                {showLabels && <span className="sidebar-label">Notify</span>}
+              </button>
+              {showNotifications && (
+                <div className="notif-panel">
+                  <div className="notif-header">
+                    <span>Notifications</span>
+                    <button className="notif-close" onClick={() => setShowNotifications(false)}>x</button>
                   </div>
-                ) : (
-                  <div className="notif-empty">No notifications yet.</div>
-                )}
-                <div className="notif-divider" />
-                <label className="notif-row">
-                  <input
-                    type="checkbox"
-                    checked={notificationsEnabled}
-                    onChange={(e) => dispatch(setNotificationsEnabled(e.target.checked))}
-                  />
-                  <span>Notify me about new events</span>
-                </label>
-                {notificationsEnabled && (
-                  <div className="notif-row">
-                    <span className="notif-label">Radius:</span>
+                  {notifications.length > 0 ? (
+                    <div className="notif-list">
+                      {notifications.map((n) => (
+                        <div
+                          key={n.id}
+                          className={`notif-item ${n.read ? '' : 'unread'}`}
+                          onClick={() => {
+                            if (!n.read) dispatch(markNotificationRead(n.id));
+                            setShowNotifications(false);
+                            navigate(`/events/${n.eventId}`);
+                          }}
+                        >
+                          <span>{n.message}</span>
+                          <span className="notif-time">{new Date(n.createdAt).toLocaleDateString()}</span>
+                        </div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div className="notif-empty">No notifications yet.</div>
+                  )}
+                  <div className="notif-divider" />
+                  <label className="notif-row">
                     <input
-                      type="range"
-                      min={5}
-                      max={250}
-                      value={radiusInput}
-                      onChange={(e) => handleRadiusChange(e.target.value)}
-                      className="notif-slider"
+                      type="checkbox"
+                      checked={notificationsEnabled}
+                      onChange={(e) => dispatch(setNotificationsEnabled(e.target.checked))}
                     />
-                    <span className="notif-radius-val">{radiusInput} mi</span>
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
-        )}
-        {isAuthenticated && (
-          <div className="profile-menu-wrap" ref={menuRef}>
-            <button
-              className={`sidebar-btn ${isActive('/profile') || isActive('/settings') ? 'active' : cameFrom('/profile') || cameFrom('/settings') ? 'active-referrer' : ''}`}
-              onClick={() => setShowMenu(!showMenu)}
-              title="Profile menu"
-            >
-              <SvgIcon d={PROFILE_ICON} />
-              {showLabels && <span className="sidebar-label">Profile</span>}
-            </button>
-            {showMenu && (
-              <div className="profile-menu">
-                <div className="profile-menu-header">
-                  <div className="profile-menu-avatar">
-                    {profile?.avatarUrl ? (
-                      <img src={profile.avatarUrl} alt="" />
-                    ) : (
-                      <span>{user!.displayName.charAt(0).toUpperCase()}</span>
-                    )}
-                  </div>
-                  <div className="profile-menu-info">
-                    <strong>{user!.displayName}</strong>
-                    <span>{user!.email}</span>
-                  </div>
+                    <span>Notify me about new events</span>
+                  </label>
+                  {notificationsEnabled && (
+                    <div className="notif-row">
+                      <span className="notif-label">Radius:</span>
+                      <input
+                        type="range"
+                        min={5}
+                        max={250}
+                        value={radiusInput}
+                        onChange={(e) => handleRadiusChange(e.target.value)}
+                        className="notif-slider"
+                      />
+                      <span className="notif-radius-val">{radiusInput} mi</span>
+                    </div>
+                  )}
                 </div>
-                <div className="profile-menu-divider" />
-                <Link to="/profile" className="profile-menu-item" onClick={() => setShowMenu(false)}>
-                  <SvgIcon d={PROFILE_ICON} />
-                  View Profile
-                </Link>
-                <Link to="/settings" className="profile-menu-item" onClick={() => setShowMenu(false)}>
-                  <SvgIcon d={SETTINGS_ICON} />
-                  Settings
-                </Link>
-                <div className="profile-menu-divider" />
-                <button className="profile-menu-item signout" onClick={() => { setShowMenu(false); dispatch(logout()); }}>
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d={LOGOUT_ICON} />
-                  </svg>
-                  Sign Out
-                </button>
-              </div>
-            )}
-          </div>
-        )}
-      </div>
-    </aside>
-  );
-};
+              )}
+            </div>
+          )}
+          {isAuthenticated && (
+            <div className="profile-menu-wrap" ref={menuRef}>
+              <button
+                className={`sidebar-btn ${isActive('/profile') || isActive('/settings') ? 'active' : cameFrom('/profile') || cameFrom('/settings') ? 'active-referrer' : ''}`}
+                onClick={() => setShowMenu(!showMenu)}
+                title="Profile menu"
+              >
+                <SvgIcon d={PROFILE_ICON} />
+                {showLabels && <span className="sidebar-label">Profile</span>}
+              </button>
+              {showMenu && (
+                <div className="profile-menu">
+                  <div className="profile-menu-header">
+                    <div className="profile-menu-avatar">
+                      {profile?.avatarUrl ? (
+                        <img src={profile.avatarUrl} alt="" />
+                      ) : (
+                        <span>{user!.displayName.charAt(0).toUpperCase()}</span>
+                      )}
+                    </div>
+                    <div className="profile-menu-info">
+                      <strong>{user!.displayName}</strong>
+                      <span>{user!.email}</span>
+                    </div>
+                  </div>
+                  <div className="profile-menu-divider" />
+                  <Link to="/profile" className="profile-menu-item" onClick={() => setShowMenu(false)}>
+                    <SvgIcon d={PROFILE_ICON} />
+                    View Profile
+                  </Link>
+                  <Link to="/settings" className="profile-menu-item" onClick={() => setShowMenu(false)}>
+                    <SvgIcon d={SETTINGS_ICON} />
+                    Settings
+                  </Link>
+                  <div className="profile-menu-divider" />
+                  <button className="profile-menu-item signout" onClick={() => { setShowMenu(false); dispatch(logout()); }}>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d={LOGOUT_ICON} />
+                    </svg>
+                    Sign Out
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
+          <button className="sidebar-collapse-btn" onClick={() => setCollapsed(!collapsed)} title={collapsed ? 'Show nav' : 'Hide nav'}>
+            <SvgIcon d={collapsed ? 'M5 12l7-7 7 7' : 'M19 12l-7 7-7-7'} />
+          </button>
+        </div>
+      </aside>
+      {collapsed && <button className="sidebar-show-btn" onClick={() => setCollapsed(false)} title="Show nav">
+        <SvgIcon d="M5 12l7-7 7 7" />
+      </button>}
+      </>
+    );
+  };
 
 export default Sidebar;
