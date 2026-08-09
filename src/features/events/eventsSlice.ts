@@ -48,12 +48,22 @@ const saveEvents = (events: DigEvent[]) => {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(events));
 };
 
+const loadLocation = (): [number, number] | null => {
+  try {
+    const raw = localStorage.getItem('trail-dig-location');
+    if (!raw) return null;
+    const parsed = JSON.parse(raw);
+    if (Array.isArray(parsed) && parsed.length === 2) return parsed as [number, number];
+    return null;
+  } catch { return null; }
+};
+
 const initialState: EventsState = {
   items: loadEvents(),
   myEvents: [],
   loading: false,
   searchRadius: 25,
-  searchCenter: null,
+  searchCenter: loadLocation(),
   mapZoom: 10,
   theme: getInitialTheme(),
   hoveredMarkerId: null,
