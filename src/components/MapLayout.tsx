@@ -1,11 +1,27 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
-import { MapContainer, TileLayer, Circle } from 'react-leaflet';
+import { MapContainer, TileLayer, Circle, useMap } from 'react-leaflet';
 import { useAppSelector } from '../app/hooks';
 import MapMoveHandler from '../features/map/MapMoveHandler';
 import TileLoadIndicator from '../features/map/TileLoadIndicator';
 import PageMarkerContent from '../features/map/PageMarkerContent';
 import MapExtras from '../features/map/MapExtras';
+
+const MapCenterUpdater: React.FC = () => {
+  const map = useMap();
+  const searchCenter = useAppSelector((s) => s.events.searchCenter);
+  const prevRef = React.useRef(searchCenter);
+
+  useEffect(() => {
+    const prev = prevRef.current;
+    prevRef.current = searchCenter;
+    if (!searchCenter) return;
+    if (prev && prev[0] === searchCenter[0] && prev[1] === searchCenter[1]) return;
+    map.flyTo(searchCenter, map.getZoom(), { duration: 1.2 });
+  }, [searchCenter, map]);
+
+  return null;
+};
 
 const MapLayout: React.FC = () => {
   const theme = useAppSelector((s) => s.events.theme);
@@ -31,6 +47,7 @@ const MapLayout: React.FC = () => {
             }
           />
           <MapMoveHandler />
+          <MapCenterUpdater />
           <TileLoadIndicator />
           <PageMarkerContent />
           <MapExtras />
