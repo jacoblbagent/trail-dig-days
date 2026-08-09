@@ -1019,6 +1019,11 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
 
   .loc-toggle-row { flex-wrap: wrap; }
   .loc-toggle-btn { flex: 1; text-align: center; }
+  .contact-row { flex-wrap: wrap; }
+  .empty-state { padding: 24px 16px; font-size: .9rem; }
+  .dig-date-card { padding: 10px 14px; }
+  .ddc-date { font-size: .78rem; }
+  .ddc-title { font-size: .85rem; }
 }
 
 /* ── Responsive: Phones ── */
@@ -1118,4 +1123,6 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
   .ddc-title { font-size: .8rem; }
 
   .profile-edit-btn.editing { top: -130px; right: 12px; font-size: .8rem; padding: 4px 12px; }
+  .contact-row { flex-wrap: wrap; }
+  .event-detail-page { padding-top: 16px; }
 }
