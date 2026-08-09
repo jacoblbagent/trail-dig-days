@@ -252,7 +252,7 @@ const CreateEventPage: React.FC = () => {
   return (
     <div className="create-event-page">
       <div className="page-header">
-        <h1>📋 Create a Dig Day</h1>
+        <h1> Create a Dig Day</h1>
         <p>Organize a trail building day and rally the crew</p>
       </div>
 
@@ -361,7 +361,7 @@ const CreateEventPage: React.FC = () => {
             )}
             {markerPos && (
               <div className="map-coords-display">
-                📍 {markerPos[0].toFixed(4)}, {markerPos[1].toFixed(4)}
+                 {markerPos[0].toFixed(4)}, {markerPos[1].toFixed(4)}
               </div>
             )}
           </div>
@@ -395,7 +395,7 @@ const CreateEventPage: React.FC = () => {
         </div>
 
         <div className="form-section">
-          <h2>🛠️ Provided by Crew</h2>
+          <h2> Provided by Crew</h2>
           <p className="section-desc">Select what the dig day organizers provide — tap to toggle</p>
           <div className="tag-grid">
             {PROVIDED_SUGGESTIONS.map((item) => {
@@ -436,7 +436,7 @@ const CreateEventPage: React.FC = () => {
         </div>
 
         <div className="form-section">
-          <h2>🎒 Recommended to Bring</h2>
+          <h2> Recommended to Bring</h2>
           <p className="section-desc">What volunteers are expected or recommended to bring themselves</p>
           <div className="tag-grid">
             {RECOMMENDED_SUGGESTIONS.map((item) => {
@@ -448,7 +448,7 @@ const CreateEventPage: React.FC = () => {
                     className={`tag ${active ? 'active' : ''}`}
                     onClick={() => toggleRecommended(item)}
                   >
-                    {active?.essential ? '⭐ ' : ''}{item}
+                    {active?.essential ? ' ' : ''}{item}
                   </button>
                   {active && (
                     <label className="tag-checkbox">
@@ -518,7 +518,7 @@ const CreateEventPage: React.FC = () => {
         {error && <div className="form-error">{error}</div>}
 
         <div className="form-actions">
-          <button type="submit" className="btn btn-primary btn-lg">🚀 Post Dig Day</button>
+          <button type="submit" className="btn btn-primary btn-lg">Post Dig Day</button>
           <button type="button" className="btn btn-ghost" onClick={() => navigate('/dig-days')}>Cancel</button>
         </div>
       </form>

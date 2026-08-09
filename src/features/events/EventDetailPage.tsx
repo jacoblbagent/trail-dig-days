@@ -38,7 +38,7 @@ const EventDetailPage: React.FC = () => {
   };
 
   const diffLabels: Record<string, string> = {
-    easy: '🟢 Easy', moderate: '🟡 Moderate', challenging: '🟠 Challenging', expert: '🔴 Expert',
+    easy: ' Easy', moderate: ' Moderate', challenging: ' Challenging', expert: ' Expert',
   };
 
   return (
@@ -63,12 +63,12 @@ const EventDetailPage: React.FC = () => {
       <div className="event-detail-grid">
         <div className="event-detail-main">
           <section>
-            <h2>📝 About This Dig Day</h2>
+            <h2>About This Dig Day</h2>
             <p>{event.description}</p>
           </section>
 
           <section className="items-section">
-            <h2>🛠️ Provided by the Crew</h2>
+            <h2>Provided by the Crew</h2>
             {event.providedItems.length > 0 ? (
               <div className="items-grid">
                 {event.providedItems.map((item) => (
@@ -85,13 +85,13 @@ const EventDetailPage: React.FC = () => {
           </section>
 
           <section className="items-section">
-            <h2>🎒 Recommended to Bring</h2>
+            <h2>Recommended to Bring</h2>
             {event.recommendedItems.length > 0 ? (
               <div className="items-grid">
                 {event.recommendedItems.map((item) => (
                   <div key={item.name} className={`item-card rec ${item.essential ? 'essential' : ''}`}>
                     <span className="item-name">
-                      {item.essential ? '⭐ ' : ''}{item.name}
+                      {item.essential ? ' ' : ''}{item.name}
                     </span>
                     {item.essential && <span className="essential-tag">ESSENTIAL</span>}
                     {item.notes && <p className="item-desc">{item.notes}</p>}
@@ -105,7 +105,7 @@ const EventDetailPage: React.FC = () => {
 
           {event.requirements.length > 0 && (
             <section>
-              <h2>📋 Requirements</h2>
+              <h2>Requirements</h2>
               <ul className="requirements-list">
                 {event.requirements.map((r, i) => <li key={i}>{r}</li>)}
               </ul>
@@ -113,7 +113,7 @@ const EventDetailPage: React.FC = () => {
           )}
 
           <section>
-            <h2>📍 Location</h2>
+            <h2>Location</h2>
             <p>{event.locationName}</p>
             <div className="detail-map">
               <MapContainer
@@ -133,12 +133,12 @@ const EventDetailPage: React.FC = () => {
             </div>
             {event.parkingNotes && (
               <div className="notes-card">
-                <strong>🚗 Parking:</strong> {event.parkingNotes}
+                <strong> Parking:</strong> {event.parkingNotes}
               </div>
             )}
             {event.weatherNotes && (
               <div className="notes-card">
-                <strong>🌤️ Weather:</strong> {event.weatherNotes}
+                <strong> Weather:</strong> {event.weatherNotes}
               </div>
             )}
           </section>
@@ -171,7 +171,7 @@ const EventDetailPage: React.FC = () => {
                 className={`btn btn-lg btn-block ${isRegistered ? 'btn-danger' : 'btn-primary'}`}
                 onClick={handleRegister}
               >
-                {isRegistered ? '✕ Unregister' : '✅ Sign Up for Dig Day'}
+                {isRegistered ? ' Unregister' : ' Sign Up for Dig Day'}
               </button>
             )}
 
@@ -184,13 +184,13 @@ const EventDetailPage: React.FC = () => {
 
             {isCreator && (
               <div className="creator-actions">
-                <button className="btn btn-danger" onClick={handleDelete}>🗑️ Delete Event</button>
-                <Link to="/dig-days" className="btn btn-ghost">⬅ Back to Map</Link>
+                <button className="btn btn-danger" onClick={handleDelete}>Delete Event</button>
+                <Link to="/dig-days" className="btn btn-ghost">Back to Map</Link>
               </div>
             )}
 
             {!isCreator && (
-              <Link to="/dig-days" className="btn btn-ghost btn-block">⬅ Browse More Dig Days</Link>
+              <Link to="/dig-days" className="btn btn-ghost btn-block">Browse More Dig Days</Link>
             )}
           </div>
         </div>

@@ -39,8 +39,18 @@ const FitBounds: React.FC<{ events: DigEvent[] }> = ({ events }) => {
   return null;
 };
 
+// Floating locate button on the map
+const LocateButton: React.FC<{ userLocation: [number, number] | null }> = ({ userLocation }) => {
+  const map = useMap();
+  return (
+    <div className="map-locate-btn" onClick={() => userLocation && map.flyTo(userLocation, 12, { duration: 1 })}>
+      
+    </div>
+  );
+};
+
 const DIFF_ICONS: Record<string, string> = {
-  easy: '🟢', moderate: '🟡', challenging: '🟠', expert: '🔴',
+  easy: 'Easy', moderate: 'Moderate', challenging: 'Challenging', expert: 'Expert',
 };
 
 const MapPage: React.FC = () => {
@@ -86,22 +96,11 @@ const MapPage: React.FC = () => {
     dispatch(setSearchRadius(parseFloat(val) || 50));
   };
 
-  const getUserEvents = () => {
-    if (!userLocation) return;
-    if ('geolocation' in navigator) {
-      navigator.geolocation.getCurrentPosition((pos) => {
-        const c: [number, number] = [pos.coords.latitude, pos.coords.longitude];
-        setUserLocation(c);
-        dispatch(setSearchCenter(c));
-      });
-    }
-  };
-
   return (
     <div className="map-page">
       <div className="map-sidebar">
         <div className="map-sidebar-header">
-          <h1>🗺️ Dig Days</h1>
+          <h1>Dig Days</h1>
           <Link to="/events/create" className="btn btn-primary btn-sm">+ New Dig Day</Link>
         </div>
 
@@ -116,11 +115,6 @@ const MapPage: React.FC = () => {
               onChange={handleRadiusChange}
             />
           </div>
-          {userLocation && (
-            <button className="btn btn-sm btn-ghost" onClick={getUserEvents}>
-              📍 Recenter
-            </button>
-          )}
           {locError && <p className="loc-error">{locError}</p>}
         </div>
 
@@ -154,13 +148,13 @@ const MapPage: React.FC = () => {
                       {DIFF_ICONS[event.difficulty]} {event.trailName}
                     </p>
                     <p className="list-card-date">
-                      📅 {new Date(event.date).toLocaleDateString('en-US', {
+                       {new Date(event.date).toLocaleDateString('en-US', {
                         weekday: 'short',
                         month: 'short',
                         day: 'numeric',
                       })} · {event.startTime}
                     </p>
-                    <p className="list-card-location">📍 {event.locationName}</p>
+                    <p className="list-card-location"> {event.locationName}</p>
                     <div className="list-card-meta">
                       <span>{event.registeredVolunteers.length}/{event.maxVolunteers} spots</span>
                       {creator && <span className="creator-name">by {creator.displayName}</span>}
@@ -184,6 +178,7 @@ const MapPage: React.FC = () => {
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
           <FitBounds events={filtered} />
+          <LocateButton userLocation={userLocation} />
           {userLocation && (
             <>
               <Marker position={userLocation}>
