@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import L from 'leaflet';
@@ -21,20 +21,16 @@ const EventDetailPage: React.FC = () => {
   const event = useAppSelector((s) => s.events.items.find((e) => e.id === id));
   const referrerPath = useAppSelector((s) => s.events.referrerPath);
 
-  useEffect(() => {
-    if (!user) navigate('/auth');
-  }, [user, navigate]);
-
   if (!event) return <div className="loading">Event not found.</div>;
-  if (!user) return null;
 
-  const isCreator = event.creatorId === user.id;
-  const isRegistered = event.registeredVolunteers.includes(user.id);
+  const isCreator = user ? event.creatorId === user.id : false;
+  const isRegistered = user ? event.registeredVolunteers.includes(user.id) : false;
   const volCount = event.registeredVolunteers.length;
   const { profiles } = useAppSelector((s) => s.profile);
   const creatorProfile = profiles[event.creatorId];
 
   const handleRegister = () => {
+    if (!user) { navigate('/auth'); return; }
     dispatch(registerForEvent({ eventId: event.id, userId: user.id }));
   };
 
