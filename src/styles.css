@@ -379,7 +379,7 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
 .list-card-img { height: 80px; border-radius: var(--radius-sm); background-size: cover; background-position: center; margin-bottom: 8px; }
 .list-card-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
 .list-card-header h3 { font-size: 1rem; color: var(--stone-800); }
-.recurring-badge { font-size: .7rem; color: var(--stone-500); border: 1px solid var(--stone-300); border-radius: 3px; padding: 1px 5px; white-space: nowrap; flex-shrink: 0; }
+.recurring-badge { font-size: .7rem; color: var(--stone-500); border: 1px solid var(--stone-300); border-left: 3px solid var(--green-600); border-radius: 3px; padding: 1px 5px; white-space: nowrap; flex-shrink: 0; }
 .status-planned { background: var(--amber-500); }
 .status-confirmed { background: var(--green-600); }
 .status-cancelled { background: var(--red-500); }
