@@ -955,6 +955,17 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
   .map-sidebar { max-width: 100%; min-width: 0; }
   .map-container { height: 50vh; }
 
+  .map-sidebar-header { padding: 10px 12px; }
+  .map-sidebar-header h1 { font-size: 1rem; }
+  .search-controls { padding: 10px 12px; }
+  .event-list { padding: 8px; }
+  .event-list-card { padding: 10px; }
+  .list-card-img { height: 56px; }
+  .event-list-header { padding: 2px 12px 0; }
+  .notif-panel { left: auto; right: 0; bottom: 100%; margin-bottom: 6px; }
+
+  .sidebar-resizer { display: none; }
+
   .event-detail-grid { grid-template-columns: 1fr; }
   .location-section { grid-template-columns: 1fr; }
   .items-columns { grid-template-columns: 1fr; }
@@ -1043,6 +1054,16 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
   .sidebar-btn { width: 38px; height: 38px; padding: 0; justify-content: center; gap: 0; }
   .app-main { height: calc(100vh - 48px); }
   .map-page { height: calc(100vh - 48px); }
+  .map-sidebar-header { padding: 8px 10px; }
+  .map-sidebar-header h1 { font-size: .9rem; }
+  .search-controls { padding: 8px 10px; }
+  .event-list { padding: 6px; }
+  .event-list-card { padding: 8px; border-radius: calc(var(--radius) - 2px); margin-bottom: 6px; }
+  .list-card-img { height: 44px; }
+  .list-card-header h3 { font-size: .85rem; }
+  .list-card-trail { font-size: .78rem; }
+  .event-list-header { padding: 2px 10px 0; }
+  .event-list-count { font-size: .72rem; }
 
   .create-event-page { padding: 12px 8px; }
   .form-section { padding: 12px; }
