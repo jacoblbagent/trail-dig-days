@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
+import { setTheme } from '../features/events/eventsSlice';
 import { logout } from '../features/auth/authSlice';
 
 const SvgIcon: React.FC<{ d: string; viewBox?: string }> = ({ d, viewBox = '0 0 24 24' }) => (
@@ -11,6 +12,7 @@ const SvgIcon: React.FC<{ d: string; viewBox?: string }> = ({ d, viewBox = '0 0 
 
 const MAP_ICON = 'M1 6v16l7-4 8 4 7-4V2l-7 4-8-4-7 4z M8 2v16 M16 6v16';
 const CALENDAR_ICON = 'M3 5a2 2 0 012-2h14a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5z M16 3v4 M8 3v4 M3 11h18 M7 15h.01 M11 15h.01 M15 15h.01 M7 19h.01 M11 19h.01 M15 19h.01';
+const RECUR_ICON = 'M1 4v6h6 M23 20v-6h-6 M20.49 9A9 9 0 005.64 5.64L1 10 M22 14l-4.64 4.36A9 9 0 013.51 15';
 const PROFILE_ICON = 'M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2 M12 3a4 4 0 100 8 4 4 0 000-8z';
 const SETTINGS_ICON = 'M12 15a3 3 0 100-6 3 3 0 000 6z M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 01-2 2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09z';
 const SUN_ICON = 'M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42 M12 7a5 5 0 100 10 5 5 0 000-10z';
@@ -22,54 +24,60 @@ const Sidebar: React.FC = () => {
   const { isAuthenticated, user } = useAppSelector((s) => s.auth);
   const profile = useAppSelector((s) => (user ? s.profile.profiles[user.id] : undefined));
   const location = useLocation();
-  const [dark, setDark] = React.useState(() => {
-    const stored = localStorage.getItem('trail-dig-theme');
-    return stored === 'dark' || (!stored && window.matchMedia('(prefers-color-scheme: dark)').matches);
-  });
+  const theme = useAppSelector((s) => s.events.theme);
+  const dark = theme === 'dark';
   const [showMenu, setShowMenu] = React.useState(false);
   const menuRef = React.useRef<HTMLDivElement>(null);
+  const prevPath = React.useRef(location.pathname);
 
   React.useEffect(() => {
-    localStorage.setItem('trail-dig-theme', dark ? 'dark' : 'light');
-    document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
-  }, [dark]);
+    prevPath.current = location.pathname;
+  });
 
   React.useEffect(() => {
-    const handleClick = (e: MouseEvent) => {
+    const onClick = (e: MouseEvent) => {
       if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
         setShowMenu(false);
       }
     };
-    document.addEventListener('mousedown', handleClick);
-    return () => document.removeEventListener('mousedown', handleClick);
+    document.addEventListener('mousedown', onClick);
+    return () => document.removeEventListener('mousedown', onClick);
   }, []);
 
   const isActive = (path: string) => location.pathname === path;
+  const isEventPage = location.pathname.startsWith('/events/') && !location.pathname.startsWith('/events/recurring');
+  const cameFrom = (path: string) => isEventPage && prevPath.current === path;
 
-  const btn = (to: string, icon: string, label: string) => (
-    <Link
-      to={to}
-      className={`sidebar-btn ${isActive(to) ? 'active' : ''}`}
-      title={label}
-      onClick={() => setShowMenu(false)}
-    >
-      <SvgIcon d={icon} />
-    </Link>
-  );
+  const btn = (to: string, icon: string, label: string) => {
+    const cls = isActive(to) ? 'active' : cameFrom(to) ? 'active-referrer' : '';
+    return (
+      <Link
+        to={to}
+        className={`sidebar-btn ${cls}`}
+        title={label}
+        onClick={() => setShowMenu(false)}
+      >
+        <SvgIcon d={icon} />
+        {isEventPage && <span className="sidebar-label">{label}</span>}
+      </Link>
+    );
+  };
 
   return (
-    <aside className="sidebar">
+    <aside className={`sidebar${isEventPage ? ' expanded' : ''}`}>
       <div className="sidebar-top">
         {btn('/', MAP_ICON, 'Map')}
         {btn('/calendar', CALENDAR_ICON, 'Calendar')}
+        {btn('/events/recurring', RECUR_ICON, 'Repeating')}
       </div>
       <div className="sidebar-bottom">
         <button
           className="sidebar-btn"
-          onClick={() => setDark(!dark)}
+          onClick={() => dispatch(setTheme(dark ? 'light' : 'dark'))}
           title={dark ? 'Light mode' : 'Dark mode'}
         >
           {dark ? <SvgIcon d={SUN_ICON} /> : <SvgIcon d={MOON_ICON} />}
+          {isEventPage && <span className="sidebar-label">{dark ? 'Light' : 'Dark'}</span>}
         </button>
         {isAuthenticated && (
           <div className="profile-menu-wrap" ref={menuRef}>
@@ -79,6 +87,7 @@ const Sidebar: React.FC = () => {
               title="Profile menu"
             >
               <SvgIcon d={PROFILE_ICON} />
+              {isEventPage && <span className="sidebar-label">Profile</span>}
             </button>
             {showMenu && (
               <div className="profile-menu">

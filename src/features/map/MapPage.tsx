@@ -1,88 +1,92 @@
-import React, { useEffect, useState, useMemo, useRef } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { MapContainer, TileLayer, Marker, Popup, Circle, useMap } from 'react-leaflet';
-import L from 'leaflet';
+import React, { useState, useMemo, useEffect, useRef, memo } from 'react';
+import { Link } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { setSearchRadius, setSearchCenter } from '../events/eventsSlice';
+import { collapseRecurring } from '../../utils/recurrence';
+import { haversine } from './mapUtils';
 import type { DigEvent } from '../../types';
-
-// Fix Leaflet icon issue
-import iconUrl from 'leaflet/dist/images/marker-icon.png';
-import iconRetinaUrl from 'leaflet/dist/images/marker-icon-2x.png';
-import shadowUrl from 'leaflet/dist/images/marker-shadow.png';
-delete (L.Icon.Default.prototype as any)._getIconUrl;
-L.Icon.Default.mergeOptions({ iconUrl, iconRetinaUrl, shadowUrl });
-
-const haversine = (c1: [number, number], c2: [number, number]): number => {
-  const R = 3958.8; // miles
-  const dLat = ((c2[0] - c1[0]) * Math.PI) / 180;
-  const dLng = ((c2[1] - c1[1]) * Math.PI) / 180;
-  const a =
-    Math.sin(dLat / 2) ** 2 +
-    Math.cos((c1[0] * Math.PI) / 180) *
-      Math.cos((c2[0] * Math.PI) / 180) *
-      Math.sin(dLng / 2) ** 2;
-  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-};
-
-// Component that fits bounds to visible events
-const FitBounds: React.FC<{ events: DigEvent[] }> = ({ events }) => {
-  const map = useMap();
-  const fitted = useRef(false);
-  useEffect(() => {
-    if (events.length > 0 && !fitted.current) {
-      const bounds = L.latLngBounds(events.map((e) => e.coordinates));
-      map.fitBounds(bounds, { padding: [50, 50] });
-      fitted.current = true;
-    }
-  }, [events, map]);
-  return null;
-};
-
-// Floating locate button on the map
-const LocateButton: React.FC<{ userLocation: [number, number] | null }> = ({ userLocation }) => {
-  const map = useMap();
-  return (
-    <button
-      className="map-locate-btn"
-      onClick={() => userLocation && map.flyTo(userLocation, 12, { duration: 1 })}
-      title="Center on your location"
-    >
-      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <circle cx="12" cy="12" r="10" />
-        <circle cx="12" cy="12" r="3" />
-        <line x1="12" y1="2" x2="12" y2="6" />
-        <line x1="12" y1="18" x2="12" y2="22" />
-        <line x1="2" y1="12" x2="6" y2="12" />
-        <line x1="18" y1="12" x2="22" y2="12" />
-      </svg>
-    </button>
-  );
-};
 
 const DIFF_ICONS: Record<string, string> = {
   easy: 'Easy', moderate: 'Moderate', challenging: 'Challenging', expert: 'Expert',
 };
 
+const EventCard = memo(function EventCard({ event }: { event: DigEvent }) {
+  return (
+    <Link
+      to={`/events/${event.id}`}
+      key={event.id}
+      className="event-list-card"
+    >
+      {event.imageUrl && (
+        <div
+          className="list-card-img"
+          style={{ backgroundImage: `url(${event.imageUrl})` }}
+        />
+      )}
+      <div className="list-card-body">
+        <div className="list-card-header">
+          <h3>{event.title}</h3>
+          {event.recurrence && event.recurrence !== 'none' && (
+            <span className="recurring-badge">Recurring</span>
+          )}
+        </div>
+        <p className="list-card-trail">
+          {DIFF_ICONS[event.difficulty]} {event.trailName}
+        </p>
+        <div className="list-card-row">
+          <span className="list-card-location">{event.locationName}</span>
+          <span className="list-card-sep">·</span>
+          <span className="list-card-date">
+            {new Date(event.date).toLocaleDateString('en-US', {
+              weekday: 'short', month: 'short', day: 'numeric',
+            })} {event.startTime}
+          </span>
+          <span className="list-card-spots">{event.registeredVolunteers.length}/{event.maxVolunteers} spots</span>
+        </div>
+      </div>
+    </Link>
+  );
+});
+
 const MapPage: React.FC = () => {
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
-  const { user } = useAppSelector((s) => s.auth);
-  const { items, searchCenter } = useAppSelector((s) => s.events);
+  const items = useAppSelector((s) => s.events.items);
+  const searchCenter = useAppSelector((s) => s.events.searchCenter);
 
-  const [userLocation, setUserLocation] = useState<[number, number] | null>(null);
-  const [locError, setLocError] = useState('');
   const [radiusInput, setRadiusInput] = useState('25');
+  const [addressQuery, setAddressQuery] = useState('');
+  const [sortBy, setSortBy] = useState<'date' | 'distance' | 'spots'>('date');
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
+  const [showSortMenu, setShowSortMenu] = useState(false);
   const [sidebarWidth, setSidebarWidth] = useState(380);
   const widthRef = useRef(380);
+  const sortRef = useRef<HTMLDivElement>(null);
   const SIDEBAR_MIN = 240;
   const SIDEBAR_MAX = 600;
+
+  useEffect(() => {
+    if (sortBy === 'distance' && !searchCenter) {
+      setSortBy('date');
+    }
+  }, [searchCenter, sortBy]);
+
+  useEffect(() => {
+    const onClick = (e: MouseEvent) => {
+      if (sortRef.current && !sortRef.current.contains(e.target as Node)) {
+        setShowSortMenu(false);
+      }
+    };
+    if (showSortMenu) document.addEventListener('mousedown', onClick);
+    return () => document.removeEventListener('mousedown', onClick);
+  }, [showSortMenu]);
+
+  const nearMin = sidebarWidth <= SIDEBAR_MIN + 20;
+  const nearMax = sidebarWidth >= SIDEBAR_MAX - 20;
 
   const handleResizeStart = (e: React.MouseEvent) => {
     e.preventDefault();
     const startX = e.clientX;
     const startW = widthRef.current;
-
     const onMove = (me: MouseEvent) => {
       const newW = Math.max(SIDEBAR_MIN, Math.min(SIDEBAR_MAX, startW + (me.clientX - startX)));
       widthRef.current = newW;
@@ -100,45 +104,53 @@ const MapPage: React.FC = () => {
     document.body.style.userSelect = 'none';
   };
 
-  const nearMin = sidebarWidth <= SIDEBAR_MIN + 20;
-  const nearMax = sidebarWidth >= SIDEBAR_MAX - 20;
+  const collapsed = useMemo(() => collapseRecurring(items), [items]);
 
-  useEffect(() => {
-    if (!user) { navigate('/auth'); return; }
-    if ('geolocation' in navigator) {
-      navigator.geolocation.getCurrentPosition(
-        (pos) => {
-          const center: [number, number] = [pos.coords.latitude, pos.coords.longitude];
-          setUserLocation(center);
-          dispatch(setSearchCenter(center));
-        },
-        () => setLocError('Location access denied — showing all events'),
-        { enableHighAccuracy: true }
-      );
-    } else {
-      setLocError('Geolocation not available');
-    }
-  }, [user, navigate, dispatch]);
-
-  const center = searchCenter || userLocation || [39.7392, -104.9903]; // Denver fallback
-
-  // Filter events by distance — max radius = show all
   const filtered = useMemo(() => {
     const radius = parseFloat(radiusInput) || 250;
-    if (radius >= 250) return items;
-    if (!searchCenter && !userLocation) return items;
-    const c = searchCenter || userLocation!;
-    return items.filter((e) => haversine(c, e.coordinates) <= radius);
-  }, [items, searchCenter, userLocation, radiusInput]);
+    if (radius >= 250) return collapsed;
+    if (!searchCenter) return collapsed;
+    return collapsed.filter((e) => haversine(searchCenter, e.coordinates) <= radius);
+  }, [collapsed, searchCenter, radiusInput]);
+
+  const sorted = useMemo(() => {
+    const dir = sortOrder === 'asc' ? 1 : -1;
+    const c = searchCenter;
+    return [...filtered].sort((a, b) => {
+      if (sortBy === 'date') return dir * (new Date(a.date).getTime() - new Date(b.date).getTime());
+      if (sortBy === 'distance') {
+        if (!c) return 0;
+        return dir * (haversine(c, a.coordinates) - haversine(c, b.coordinates));
+      }
+      const aSpots = a.maxVolunteers - a.registeredVolunteers.length;
+      const bSpots = b.maxVolunteers - b.registeredVolunteers.length;
+      return dir * (aSpots - bSpots);
+    });
+  }, [filtered, sortBy, sortOrder, searchCenter]);
 
   const handleRadiusChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;
     setRadiusInput(val);
-    dispatch(setSearchRadius(parseFloat(val) || 50));
+    dispatch(setSearchRadius(parseFloat(val) || 250));
+  };
+
+  const handleAddressSearch = async (q: string) => {
+    if (!q.trim()) return;
+    try {
+      const res = await fetch(
+        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(q)}&limit=1`
+      );
+      const data = await res.json();
+      if (data.length > 0) {
+        const { lat, lon } = data[0];
+        dispatch(setSearchCenter([parseFloat(lat), parseFloat(lon)]));
+        setAddressQuery(data[0].display_name);
+      }
+    } catch { /* ignore */ }
   };
 
   return (
-    <div className="map-page">
+    <>
       <div className={`map-sidebar ${nearMin ? 'at-min' : ''} ${nearMax ? 'at-max' : ''}`} style={{ width: sidebarWidth }}>
         <div className="map-sidebar-header">
           <h1>Dig Days</h1>
@@ -156,10 +168,34 @@ const MapPage: React.FC = () => {
               onChange={handleRadiusChange}
             />
           </div>
-          {locError && <p className="loc-error">{locError}</p>}
+          <div className="address-search">
+            <input
+              type="text"
+              value={addressQuery}
+              onChange={(e) => setAddressQuery(e.target.value)}
+              onKeyDown={(e) => { if (e.key === 'Enter') handleAddressSearch(addressQuery); }}
+              placeholder="Search address…"
+            />
+            <button type="button" className="btn btn-ghost btn-sm" onClick={() => handleAddressSearch(addressQuery)}>Go</button>
+          </div>
         </div>
 
-        <div className="event-list-count">{filtered.length} result{filtered.length !== 1 ? 's' : ''}</div>
+        <div className="event-list-header">
+          <span className="event-list-count">{filtered.length} result{filtered.length !== 1 ? 's' : ''}</span>
+          <div className="event-list-sort" ref={sortRef}>
+            <span className="event-list-sort-label" onClick={() => setShowSortMenu(!showSortMenu)}>
+              {sortBy === 'date' ? 'Date' : sortBy === 'distance' ? 'Distance' : 'Spots'}
+            </span>
+            {showSortMenu && (
+              <div className="event-list-sort-menu">
+                <button onClick={() => { setSortBy('date'); setShowSortMenu(false); }} className={sortBy === 'date' ? 'active' : ''}>Date</button>
+                <button onClick={() => { setSortBy('distance'); setShowSortMenu(false); }} className={sortBy === 'distance' ? 'active' : ''} disabled={!searchCenter} style={{ opacity: !searchCenter ? 0.4 : 1 }}>Distance</button>
+                <button onClick={() => { setSortBy('spots'); setShowSortMenu(false); }} className={sortBy === 'spots' ? 'active' : ''}>Spots</button>
+              </div>
+            )}
+            <span className="event-list-sort-arrow" onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}>{sortOrder === 'desc' ? '↓' : '↑'}</span>
+          </div>
+        </div>
         <div className="event-list">
           {filtered.length === 0 ? (
             <div className="empty-state">
@@ -167,98 +203,21 @@ const MapPage: React.FC = () => {
               <p>Try expanding your radius or <Link to="/events/create">create one</Link>!</p>
             </div>
           ) : (
-            filtered.map((event) => {
-              return (
-                <Link
-                  to={`/events/${event.id}`}
-                  key={event.id}
-                  className="event-list-card"
-                >
-                  {event.imageUrl && (
-                    <div
-                      className="list-card-img"
-                      style={{ backgroundImage: `url(${event.imageUrl})` }}
-                    />
-                  )}
-                  <div className="list-card-body">
-                    <div className="list-card-header">
-                      <h3>{event.title}</h3>
-                    </div>
-                    <p className="list-card-trail">
-                      {DIFF_ICONS[event.difficulty]} {event.trailName}
-                    </p>
-                    <p className="list-card-date">
-                       {new Date(event.date).toLocaleDateString('en-US', {
-                        weekday: 'short',
-                        month: 'short',
-                        day: 'numeric',
-                      })} · {event.startTime}
-                    </p>
-                    <p className="list-card-location"> {event.locationName}</p>
-                    <div className="list-card-meta">
-                      <span>{event.registeredVolunteers.length}/{event.maxVolunteers} spots</span>
-                                             </div>
-                  </div>
-                </Link>
-              );
-            })
+            sorted.map((event) => (
+              <EventCard event={event} key={event.id} />
+            ))
           )}
         </div>
       </div>
 
-      <div className="sidebar-resizer" onMouseDown={handleResizeStart}>
+      <div className={`sidebar-resizer ${nearMin ? 'at-min' : ''} ${nearMax ? 'at-max' : ''}`} onMouseDown={handleResizeStart}>
         <div className="resizer-grip" />
         <div className="resizer-limits">
           <span className={`limit-indicator ${nearMin ? 'visible' : ''}`}>{SIDEBAR_MIN}px</span>
           <span className={`limit-indicator ${nearMax ? 'visible' : ''}`}>{SIDEBAR_MAX}px</span>
         </div>
       </div>
-
-      <div className="map-container">
-        <MapContainer
-          center={center}
-          zoom={10}
-          style={{ width: '100%', height: '100%' }}
-        >
-          <TileLayer
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          />
-          <FitBounds events={filtered} />
-          <LocateButton userLocation={userLocation} />
-          {userLocation && (
-            <>
-              <Marker position={userLocation}>
-                <Popup>Your location</Popup>
-              </Marker>
-              <Circle
-                center={userLocation}
-                radius={parseFloat(radiusInput) * 1609.34}
-                pathOptions={{ color: '#2d6a4f', fillOpacity: 0.08, weight: 2 }}
-              />
-            </>
-          )}
-          {filtered.map((event) => (
-            <Marker
-              key={event.id}
-              position={event.coordinates}
-              eventHandlers={{
-                click: () => navigate(`/events/${event.id}`),
-              }}
-            >
-              <Popup>
-                <div className="map-popup">
-                  <strong>{event.title}</strong>
-                  <p>{event.trailName}</p>
-                  <p>{new Date(event.date).toLocaleDateString()} · {event.startTime}</p>
-                  <p>{event.registeredVolunteers.length}/{event.maxVolunteers} spots</p>
-                </div>
-              </Popup>
-            </Marker>
-          ))}
-        </MapContainer>
-      </div>
-    </div>
+    </>
   );
 };
 

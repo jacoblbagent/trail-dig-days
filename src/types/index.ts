@@ -75,6 +75,8 @@ export interface RecommendedItem {
   notes: string;
 }
 
+export type RecurrenceType = 'none' | 'weekly' | 'biweekly' | 'monthly';
+
 export interface DigEvent {
   id: string;
   creatorId: string;
@@ -100,6 +102,9 @@ export interface DigEvent {
   contactEmail: string;
   contactPhone: string;
   imageUrl: string;
+  recurrence?: RecurrenceType;
+  recurrenceEnd?: string;
+  recurrenceGroupId?: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -110,6 +115,9 @@ export interface EventsState {
   loading: boolean;
   searchRadius: number; // miles
   searchCenter: [number, number] | null;
+  mapZoom: number;
+  theme: 'light' | 'dark';
+  hoveredMarkerId: string | null;
 }
 
 // ─── Application Root State ───

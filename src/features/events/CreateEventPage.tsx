@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { MapContainer, TileLayer, Marker, useMapEvents, useMap } from 'react-leaflet';
+import MapExtras from '../map/MapExtras';
 import L from 'leaflet';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { createEvent } from './eventsSlice';
@@ -215,6 +216,8 @@ const CreateEventPage: React.FC = () => {
   const [contactPhone, setContactPhone] = useState('');
   const [imageUrl, setImageUrl] = useState('');
   const [requirements, setRequirements] = useState('');
+  const [recurrence, setRecurrence] = useState<'none' | 'weekly' | 'biweekly' | 'monthly'>('none');
+  const [recurrenceEnd, setRecurrenceEnd] = useState('');
   const [error, setError] = useState('');
 
   const [providedItems, setProvidedItems] = useState<ProvidedItem[]>([]);
@@ -331,6 +334,8 @@ const CreateEventPage: React.FC = () => {
           contactEmail,
           contactPhone,
           imageUrl,
+          recurrence,
+          recurrenceEnd,
         })
       ).unwrap();
       navigate('/');
@@ -378,6 +383,23 @@ const CreateEventPage: React.FC = () => {
               <label>End Time *</label>
               <input type="time" value={endTime} onChange={(e) => setEndTime(e.target.value)} required />
             </div>
+          </div>
+          <div className="form-row">
+            <div className="form-group flex-1">
+              <label>Repeats</label>
+              <select value={recurrence} onChange={(e) => setRecurrence(e.target.value as typeof recurrence)}>
+                <option value="none">Does not repeat</option>
+                <option value="weekly">Weekly</option>
+                <option value="biweekly">Every 2 weeks</option>
+                <option value="monthly">Monthly</option>
+              </select>
+            </div>
+            {recurrence !== 'none' && (
+              <div className="form-group flex-1">
+                <label>Repeat until *</label>
+                <input type="date" value={recurrenceEnd} onChange={(e) => setRecurrenceEnd(e.target.value)} />
+              </div>
+            )}
           </div>
           <div className="form-row">
             <div className="form-group">
@@ -442,6 +464,7 @@ const CreateEventPage: React.FC = () => {
               />
               <LocationMarker position={markerPos} onMove={handleMapMove} />
               <FlyToCenter center={markerPos} />
+              <MapExtras />
             </MapContainer>
             {!markerPos && (
               <div className="map-click-hint">

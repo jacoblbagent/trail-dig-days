@@ -3,11 +3,13 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { store } from './app/store';
 import Sidebar from './components/Sidebar';
+import MapLayout from './components/MapLayout';
 import AuthPage from './features/auth/AuthPage';
 import ProfilePage from './features/profile/ProfilePage';
 import SettingsPage from './features/profile/SettingsPage';
 import CreateEventPage from './features/events/CreateEventPage';
 import EventDetailPage from './features/events/EventDetailPage';
+import RecurringEventsPage from './features/events/RecurringEventsPage';
 import CalendarPage from './features/calendar/CalendarPage';
 import MapPage from './features/map/MapPage';
 
@@ -19,8 +21,13 @@ const App: React.FC = () => {
           <Sidebar />
           <main className="app-main">
             <Routes>
-              <Route path="/" element={<MapPage />} />
-              <Route path="/calendar" element={<CalendarPage />} />
+              {/* Map-backed routes share the same MapContainer via MapLayout */}
+              <Route element={<MapLayout />}>
+                <Route path="/" element={<MapPage />} />
+                <Route path="/calendar" element={<CalendarPage />} />
+                <Route path="/events/recurring" element={<RecurringEventsPage />} />
+              </Route>
+              {/* Standalone routes (no map) */}
               <Route path="/auth" element={<AuthPage />} />
               <Route path="/events/create" element={<CreateEventPage />} />
               <Route path="/events/:id" element={<EventDetailPage />} />

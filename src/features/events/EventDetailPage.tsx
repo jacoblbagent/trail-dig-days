@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import MapExtras from '../map/MapExtras';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { registerForEvent, deleteEvent } from './eventsSlice';
 
@@ -21,6 +22,8 @@ const EventDetailPage: React.FC = () => {
   const isCreator = event.creatorId === user.id;
   const isRegistered = event.registeredVolunteers.includes(user.id);
   const volCount = event.registeredVolunteers.length;
+  const { profiles } = useAppSelector((s) => s.profile);
+  const creatorProfile = profiles[event.creatorId];
 
   const handleRegister = () => {
     dispatch(registerForEvent({ eventId: event.id, userId: user.id }));
@@ -36,7 +39,7 @@ const EventDetailPage: React.FC = () => {
   return (
     <div className="event-detail-page">
       <div className="event-detail-inner">
-        <button className="event-detail-page-back" onClick={() => { if (window.history.length > 2) navigate(-1); else navigate('/'); }}>← Back</button>
+        <button className="event-detail-page-back" onClick={() => { if (window.history.length > 2) navigate(-1); else navigate('/'); }}><span className="nav-arrow">←</span> Back</button>
         <div className="event-detail-header">
           {event.imageUrl && (
             <div
@@ -137,15 +140,25 @@ const EventDetailPage: React.FC = () => {
 
               <div className="contact-card">
                 <h4>Contact</h4>
-                <p>{event.contactName}</p>
-                <a href={`mailto:${event.contactEmail}`}>{event.contactEmail}</a>
-                {event.contactPhone && <p>{event.contactPhone}</p>}
+                <div className="contact-row">
+                  {creatorProfile?.avatarUrl ? (
+                    <img src={creatorProfile.avatarUrl} alt="" className="contact-avatar" />
+                  ) : (
+                    <div className="contact-avatar contact-avatar-fallback">
+                      {event.contactName.charAt(0)}
+                    </div>
+                  )}
+                  <div className="contact-info">
+                    <p>{event.contactName}</p>
+                    <a href={`mailto:${event.contactEmail}`}>{event.contactEmail}</a>
+                    {event.contactPhone && <p>{event.contactPhone}</p>}
+                  </div>
+                </div>
               </div>
 
               {isCreator && (
                 <div className="creator-actions">
                   <button className="btn btn-danger" onClick={handleDelete}>Delete Event</button>
-                  <button className="btn btn-ghost" onClick={() => { if (window.history.length > 2) navigate(-1); else navigate('/'); }}>Back</button>
                 </div>
               )}
 
@@ -157,7 +170,7 @@ const EventDetailPage: React.FC = () => {
           <div className="location-section">
             <div className="location-details">
               <h2>Location</h2>
-              <p>{event.locationName}</p>
+              <p>{event.locationName} <span className="coords">{event.coordinates[0].toFixed(4)}, {event.coordinates[1].toFixed(4)}</span></p>
               {event.parkingNotes && (
                 <div className="notes-card">
                   <strong> Parking:</strong> {event.parkingNotes}
@@ -183,6 +196,7 @@ const EventDetailPage: React.FC = () => {
                 <Marker position={event.coordinates}>
                   <Popup>{event.locationName}</Popup>
                 </Marker>
+                <MapExtras />
               </MapContainer>
             </div>
           </div>

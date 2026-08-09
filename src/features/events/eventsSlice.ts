@@ -1,14 +1,35 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { v4 as uuidv4 } from 'uuid';
-import type { DigEvent, EventsState, ProvidedItem, RecommendedItem } from '../../types';
+import type { DigEvent, EventsState, ProvidedItem, RecommendedItem, RecurrenceType } from '../../types';
+
+export interface MapMarker {
+  id: string;
+  position: [number, number];
+  icon: 'green' | 'amber' | 'gray';
+  popup: string;
+}
 
 const STORAGE_KEY = 'trail-dig-events';
+
+const getInitialTheme = (): 'light' | 'dark' => {
+  const stored = localStorage.getItem('trail-dig-theme');
+  const theme = (stored === 'dark' || stored === 'light') ? stored : (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+  document.documentElement.setAttribute('data-theme', theme);
+  return theme;
+};
 
 const loadEvents = (): DigEvent[] => {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
-    return raw ? JSON.parse(raw) : [];
+    if (!raw) return [];
+    const events: DigEvent[] = JSON.parse(raw);
+    return events.map((e) => ({
+      ...e,
+      recurrence: e.recurrence ?? 'none',
+      recurrenceEnd: e.recurrenceEnd ?? '',
+      recurrenceGroupId: e.recurrenceGroupId ?? '',
+    }));
   } catch {
     return [];
   }
@@ -24,6 +45,9 @@ const initialState: EventsState = {
   loading: false,
   searchRadius: 25,
   searchCenter: null,
+  mapZoom: 10,
+  theme: getInitialTheme(),
+  hoveredMarkerId: null,
 };
 
 interface CreateEventPayload {
@@ -48,6 +72,8 @@ interface CreateEventPayload {
   contactEmail: string;
   contactPhone: string;
   imageUrl: string;
+  recurrence: RecurrenceType;
+  recurrenceEnd: string;
 }
 
 export const createEvent = createAsyncThunk<DigEvent, CreateEventPayload>(
@@ -60,6 +86,7 @@ export const createEvent = createAsyncThunk<DigEvent, CreateEventPayload>(
       ...payload,
       status: 'planned',
       registeredVolunteers: [],
+      recurrenceGroupId: payload.recurrence !== 'none' ? uuidv4() : '',
       createdAt: now,
       updatedAt: now,
     };
@@ -124,8 +151,19 @@ const eventsSlice = createSlice({
     setSearchCenter(state, action: PayloadAction<[number, number]>) {
       state.searchCenter = action.payload;
     },
+    setMapViewport(state, action: PayloadAction<number>) {
+      state.mapZoom = action.payload;
+    },
+    setTheme(state, action: PayloadAction<'light' | 'dark'>) {
+      state.theme = action.payload;
+      localStorage.setItem('trail-dig-theme', action.payload);
+      document.documentElement.setAttribute('data-theme', action.payload);
+    },
     clearSearchCenter(state) {
       state.searchCenter = null;
+    },
+    setHoveredMarkerId(state, action: PayloadAction<string | null>) {
+      state.hoveredMarkerId = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -150,5 +188,5 @@ const eventsSlice = createSlice({
   },
 });
 
-export const { setSearchRadius, setSearchCenter, clearSearchCenter } = eventsSlice.actions;
+export const { setSearchRadius, setSearchCenter, setMapViewport, setTheme, clearSearchCenter, setHoveredMarkerId } = eventsSlice.actions;
 export default eventsSlice.reducer;

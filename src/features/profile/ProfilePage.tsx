@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { MapContainer, TileLayer, Marker, Popup, Circle } from 'react-leaflet';
+import MapExtras from '../../features/map/MapExtras';
 import L from 'leaflet';
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
 import { updateProfile } from './profileSlice';
@@ -43,6 +44,7 @@ const LocationMap: React.FC<{ location: string }> = ({ location }) => {
           radius={8047}
           pathOptions={{ color: '#2d6a4f', fillOpacity: 0.08, weight: 2 }}
         />
+        <MapExtras />
       </MapContainer>
     </div>
   );
