@@ -28,7 +28,17 @@ const MapLayout: React.FC = () => {
   const searchRadius = useAppSelector((s) => s.events.searchRadius);
   const mapZoom = useAppSelector((s) => s.events.mapZoom);
 
-  const center = searchCenter || [39.7392, -104.9903];
+  const center = (() => {
+    if (searchCenter) return searchCenter;
+    try {
+      const raw = localStorage.getItem('trail-dig-location');
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (Array.isArray(parsed) && parsed.length === 2) return parsed as [number, number];
+      }
+    } catch {}
+    return [39.7392, -104.9903] as [number, number];
+  })();
   // Use pathname as key so MapContainer remounts ONLY on route changes between map-standalone pages
   // TileLayer key forces tile swap on theme change
 
