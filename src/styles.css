@@ -857,7 +857,8 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
 .cal-has-events .cal-day-num { font-weight: 600; }
 .cal-dot {
   font-size: .65rem; background: var(--accent, var(--green-600)); color: #fff;
-  border-radius: 10px; padding: 0 5px; line-height: 1.3; min-width: 16px; text-align: center;
+  border-radius: var(--radius-sm); padding: 2px 3px; line-height: 1.3;
+  text-align: center; align-self: stretch; margin: 0 3px;
 }
 .cal-day-num { line-height: 1; }
 
@@ -987,7 +988,7 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
 
   .cal-cell { font-size: .7rem; }
   .cal-day-header { font-size: .65rem; padding: 6px 0; }
-  .cal-dot { font-size: .55rem; min-width: 14px; }
+  .cal-dot { font-size: .55rem; }
 
   .calendar-event-link { gap: 4px; }
   .cal-event-date { min-width: 0; }
@@ -1012,7 +1013,7 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
   .calendar-nav strong { font-size: .85rem; }
   .cal-day-header { font-size: .6rem; padding: 4px 0; }
   .cal-cell { font-size: .65rem; }
-  .cal-dot { font-size: .5rem; min-width: 12px; padding: 0 3px; }
+  .cal-dot { font-size: .5rem; }
   .calendar-map { height: 180px; }
   .calendar-list h2 { font-size: .9rem; }
   .cal-event-title { font-size: .8rem; }
