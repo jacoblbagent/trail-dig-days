@@ -22,7 +22,7 @@
   --stone-800: #292524;
   --stone-900: #1c1917;
   --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --radius: 8px;
+  --radius: 5px;
   --radius-sm: 4px;
   --shadow: 0 1px 3px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.06);
   --shadow-lg: 0 10px 15px -3px rgba(0,0,0,.1), 0 4px 6px -2px rgba(0,0,0,.05);
@@ -102,69 +102,37 @@ input, select, textarea, button { font-family: inherit; font-size: inherit; }
 .tag-checkbox { display: flex; align-items: center; gap: 3px; font-size: .75rem; color: var(--stone-500); cursor: pointer; }
 .tag-checkbox input { width: 14px; height: 14px; }
 
-/* ── Navbar ── */
-.navbar {
-  background: #fff; border-bottom: 1px solid var(--stone-200);
-  position: sticky; top: 0; z-index: 1000;
-}
-.nav-inner {
-  max-width: 1440px; margin: 0 auto;
-  display: flex; align-items: center; gap: 24px;
-  padding: 0 20px; height: 56px;
-}
-.nav-brand { font-weight: 700; font-size: 1.1rem; color: var(--green-800); display: flex; align-items: center; gap: 6px; }
-.nav-brand:hover { color: var(--green-900); }
-.nav-icon { font-size: 1.3rem; }
-.nav-links { display: flex; gap: 4px; }
-.nav-link {
-  padding: 6px 14px; border-radius: var(--radius);
-  font-size: .9rem; font-weight: 500; color: var(--stone-600);
-  transition: all .15s;
-}
-.nav-link:hover { background: var(--stone-100); color: var(--stone-800); }
-.nav-link.active { background: var(--green-100); color: var(--green-800); }
-.nav-right { margin-left: auto; display: flex; align-items: center; gap: 12px; }
-.nav-avatar-btn {
-  width: 36px; height: 36px; border-radius: 50%; border: 2px solid var(--stone-200);
-  background: var(--stone-100); cursor: pointer; display: flex; align-items: center;
-  justify-content: center; overflow: hidden; transition: border-color .15s;
-  padding: 0;
-}
-.nav-avatar-btn:hover { border-color: var(--accent, var(--green-600)); }
-.nav-avatar-img { width: 100%; height: 100%; object-fit: cover; }
-.nav-avatar-icon { font-size: 1.1rem; line-height: 1; }
+/* ── App Layout ── */
+.app-layout { display: flex; height: 100vh; }
+.app-main { flex: 1; overflow-y: auto; }
 
-/* ── User Modal ── */
-.modal-overlay {
-  position: fixed; inset: 0; background: rgba(0,0,0,.3);
-  z-index: 2000; display: flex; align-items: flex-start;
-  justify-content: flex-end; padding: 64px 20px 20px;
-  pointer-events: auto;
+/* ── Sidebar ── */
+.sidebar {
+  width: 56px; display: flex; flex-direction: column; align-items: center;
+  background: #fff; border-right: 1px solid var(--stone-200);
+  padding: 12px 0; flex-shrink: 0; gap: 4px;
 }
-.user-modal {
-  background: #fff; border-radius: var(--radius); box-shadow: 0 8px 32px rgba(0,0,0,.15);
-  width: 340px; max-height: calc(100vh - 84px); overflow-y: auto;
+.sidebar-top,
+.sidebar-bottom {
+  display: flex; flex-direction: column; align-items: center; gap: 2px;
 }
-.user-modal-body { padding: 20px; display: flex; flex-direction: column; align-items: center; }
-.um-avatar img,
-.um-avatar-placeholder {
-  width: 64px; height: 64px; border-radius: 50%; object-fit: cover;
+.sidebar-bottom { margin-top: auto; }
+.sidebar-btn {
+  width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;
+  border-radius: var(--radius); border: none; background: none; cursor: pointer;
+  color: var(--stone-400); transition: all .15s;
 }
-.um-avatar-placeholder {
-  background: color-mix(in srgb, var(--accent, #dcfce7) 30%, white);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 1.5rem; font-weight: 700; color: var(--accent, var(--green-700));
-}
-.um-name { font-size: 1.1rem; margin-top: 8px; color: var(--stone-800); }
-.um-email { font-size: .8rem; color: var(--stone-400); }
-.um-location { font-size: .85rem; color: var(--stone-500); margin-top: 4px; }
-.um-full-profile { margin-top: 8px; }
-.um-divider { width: 100%; border: none; border-top: 1px solid var(--stone-200); margin: 12px 0; }
-.um-signout { color: #dc2626; }
-.um-signout:hover { background: #fef2f2; }
+.sidebar-btn:hover { background: var(--stone-100); color: var(--stone-600); }
+.sidebar-btn.active { background: var(--green-100); color: var(--green-700); }
+.sidebar-signout { color: var(--stone-300); }
+.sidebar-signout:hover { color: #dc2626; background: #fef2f2; }
 
-/* ── Settings in Modal ── */
-.settings-body { align-items: stretch; }
+@media (max-width: 768px) {
+  .sidebar { width: 48px; }
+  .sidebar-btn { width: 36px; height: 36px; }
+}
+
+/* ── Auth Page ── */
 .settings-group { margin-bottom: 12px; }
 .settings-group label { display: block; font-size: .8rem; font-weight: 600; color: var(--stone-600); margin-bottom: 4px; }
 .settings-group input[type="text"],
@@ -191,7 +159,7 @@ input, select, textarea, button { font-family: inherit; font-size: inherit; }
 /* ── Auth Page ── */
 .auth-page {
   display: flex; align-items: center; justify-content: center;
-  min-height: calc(100vh - 56px); padding: 40px 20px;
+  min-height: 100vh; padding: 40px 20px;
   background: linear-gradient(135deg, var(--green-50) 0%, var(--earth-50) 100%);
 }
 .auth-card {
@@ -206,7 +174,7 @@ input, select, textarea, button { font-family: inherit; font-size: inherit; }
 .auth-toggle { text-align: center; margin-top: 20px; font-size: .9rem; color: var(--stone-500); }
 
 /* ── Map Page ── */
-.map-page { display: flex; height: calc(100vh - 56px); }
+.map-page { display: flex; height: 100vh; }
 .map-sidebar {
   min-width: 0;
   display: flex; flex-direction: column;
