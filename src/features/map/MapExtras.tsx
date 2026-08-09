@@ -1,10 +1,26 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useMap } from 'react-leaflet';
 import L from 'leaflet';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { setSearchCenter } from '../events/eventsSlice';
 import { expandRecurring } from '../../utils/recurrence';
+
+const LOCATION_KEY = 'trail-dig-location';
+
+const loadCachedLocation = (): [number, number] | null => {
+  try {
+    const raw = localStorage.getItem(LOCATION_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw);
+    if (Array.isArray(parsed) && parsed.length === 2) return parsed as [number, number];
+    return null;
+  } catch { return null; }
+};
+
+const saveLocation = (loc: [number, number]) => {
+  try { localStorage.setItem(LOCATION_KEY, JSON.stringify(loc)); } catch {}
+};
 
 const LocateButton: React.FC<{ userLocation: [number, number] | null }> = ({ userLocation }) => {
   const map = useMap();
@@ -54,22 +70,55 @@ const MapExtras: React.FC = () => {
   const searchCenter = useAppSelector((s) => s.events.searchCenter);
 
   const [userLocation, setUserLocation] = useState<[number, number] | null>(null);
+  const [isDetecting, setIsDetecting] = useState(false);
+  const initRef = useRef(false);
 
+  // On mount: restore cached location, then detect fresh
   useEffect(() => {
+    if (initRef.current) return;
+    initRef.current = true;
+
+    const cached = loadCachedLocation();
+    if (cached && !searchCenter) {
+      setUserLocation(cached);
+      dispatch(setSearchCenter(cached));
+    }
+
     if (!('geolocation' in navigator)) return;
     navigator.geolocation.getCurrentPosition(
       (pos) => {
         const loc: [number, number] = [pos.coords.latitude, pos.coords.longitude];
         setUserLocation(loc);
-        if (!searchCenter) dispatch(setSearchCenter(loc));
+        saveLocation(loc);
+        dispatch(setSearchCenter(loc));
       },
       () => {}
     );
-  }, [searchCenter, dispatch]);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const handleRedetect = useCallback(() => {
+    if (!('geolocation' in navigator)) return;
+    setIsDetecting(true);
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        const loc: [number, number] = [pos.coords.latitude, pos.coords.longitude];
+        setUserLocation(loc);
+        saveLocation(loc);
+        dispatch(setSearchCenter(loc));
+        setIsDetecting(false);
+      },
+      () => { setIsDetecting(false); }
+    );
+  }, [dispatch]);
 
   return (
     <>
       {userLocation && <LocateButton userLocation={userLocation} />}
+      {userLocation && (
+        <button className="map-redetect-btn" onClick={handleRedetect} disabled={isDetecting}>
+          {isDetecting ? 'Detecting…' : 'Re-detect'}
+        </button>
+      )}
       <FitBounds />
     </>
   );

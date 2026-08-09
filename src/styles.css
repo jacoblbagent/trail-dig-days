@@ -463,6 +463,16 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
 @keyframes map-load-spin { to { transform: rotate(360deg); } }
 
 .map-locate-btn:hover { border-color: var(--accent, var(--green-600)); }
+.map-redetect-btn {
+  position: absolute; top: 54px; right: 12px; z-index: 1000;
+  font-size: .7rem; padding: 4px 8px; border-radius: 6px;
+  background: #fff; border: 1px solid var(--stone-200); color: var(--stone-600);
+  cursor: pointer; transition: border-color .15s;
+}
+.map-redetect-btn:hover { border-color: var(--accent, var(--green-600)); color: var(--stone-800); }
+.map-redetect-btn:disabled { opacity: .5; cursor: default; }
+[data-theme="dark"] .map-redetect-btn { background: var(--surface); border-color: #555; color: var(--stone-400); }
+[data-theme="dark"] .map-redetect-btn:hover { border-color: var(--green-600); color: var(--stone-300); }
 .empty-state { text-align: center; padding: 40px 20px; color: var(--stone-400); }
 .map-popup { font-size: .875rem; }
 .map-popup strong { color: var(--stone-800); }
