@@ -2,7 +2,7 @@ import React, { useState, useMemo, useEffect, useRef, memo } from 'react';
 import { Link } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { setSearchRadius, setSearchCenter } from '../events/eventsSlice';
-import { collapseRecurring } from '../../utils/recurrence';
+import { expandRecurring, collapseRecurring } from '../../utils/recurrence';
 import { haversine } from './mapUtils';
 import type { DigEvent } from '../../types';
 
@@ -63,7 +63,6 @@ const MapPage: React.FC = () => {
   const [sortBy, setSortBy] = useState<'date' | 'distance' | 'spots'>('date');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
   const [showSortMenu, setShowSortMenu] = useState(false);
-  const [calOpen, setCalOpen] = useState(false);
   const [sidebarWidth, setSidebarWidth] = useState(380);
   const widthRef = useRef(380);
   const sortRef = useRef<HTMLDivElement>(null);
@@ -72,15 +71,11 @@ const MapPage: React.FC = () => {
 
   const today = new Date();
   const [viewDate, setViewDate] = useState(new Date(today.getFullYear(), today.getMonth(), 1));
+  const [selectedDay, setSelectedDay] = useState<string | null>(null);
   const year = viewDate.getFullYear();
   const month = viewDate.getMonth();
   const firstDay = new Date(year, month, 1).getDay();
   const daysInMonth = new Date(year, month + 1, 0).getDate();
-  const cells: { day: number }[] = [];
-  for (let i = 0; i < firstDay; i++) cells.push({ day: 0 });
-  for (let d = 1; d <= daysInMonth; d++) cells.push({ day: d });
-  while (cells.length % 7 !== 0) cells.push({ day: 0 });
-  const isToday = (d: number) => d === today.getDate() && month === today.getMonth() && year === today.getFullYear();
 
   useEffect(() => {
     if (sortBy === 'distance' && !searchCenter) {
@@ -122,7 +117,19 @@ const MapPage: React.FC = () => {
     document.body.style.userSelect = 'none';
   };
 
+  const expanded = useMemo(() => expandRecurring(items), [items]);
   const collapsed = useMemo(() => collapseRecurring(items), [items]);
+
+  // Calendar: events per day
+  const eventMap = useMemo(() => {
+    const map = new Map<string, typeof expanded>();
+    for (const e of expanded) {
+      const key = e.date.slice(0, 10);
+      if (!map.has(key)) map.set(key, []);
+      map.get(key)!.push(e);
+    }
+    return map;
+  }, [expanded]);
 
   const filtered = useMemo(() => {
     const radius = parseFloat(radiusInput) || 250;
@@ -146,8 +153,8 @@ const MapPage: React.FC = () => {
     });
   }, [filtered, sortBy, sortOrder, searchCenter]);
 
-  const prevMonth = () => setViewDate(new Date(year, month - 1, 1));
-  const nextMonth = () => setViewDate(new Date(year, month + 1, 1));
+  const prevMonth = () => { setViewDate(new Date(year, month - 1, 1)); setSelectedDay(null); };
+  const nextMonth = () => { setViewDate(new Date(year, month + 1, 1)); setSelectedDay(null); };
 
   const handleRadiusChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;
@@ -169,6 +176,16 @@ const MapPage: React.FC = () => {
       }
     } catch { /* ignore */ }
   };
+
+  // Calendar cells
+  const cells: { day: number; events: typeof expanded }[] = [];
+  for (let i = 0; i < firstDay; i++) cells.push({ day: 0, events: [] });
+  for (let d = 1; d <= daysInMonth; d++) {
+    const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+    cells.push({ day: d, events: eventMap.get(dateStr) || [] });
+  }
+  while (cells.length % 7 !== 0) cells.push({ day: 0, events: [] });
+  const isToday = (d: number) => d === today.getDate() && month === today.getMonth() && year === today.getFullYear();
 
   return (
     <>
@@ -199,34 +216,40 @@ const MapPage: React.FC = () => {
             />
             <button type="button" className="btn btn-ghost btn-sm" onClick={() => handleAddressSearch(addressQuery)}>Go</button>
           </div>
+        </div>
 
-          <div className="calendar-section">
-            <div className="calendar-section-header" onClick={() => setCalOpen(!calOpen)}>
-              <span className="calendar-section-title">Calendar</span>
-              <span className="calendar-section-arrow">{calOpen ? '▲' : '▼'}</span>
-            </div>
-            {calOpen && (
-              <div className="calendar-grid-wrap">
-                <div className="calendar-nav">
-                  <button className="btn btn-ghost btn-sm" onClick={prevMonth}><span className="nav-arrow">←</span></button>
-                  <strong>{MONTHS[month]} {year}</strong>
-                  <button className="btn btn-ghost btn-sm" onClick={nextMonth}>→</button>
+        <div className="calendar-grid-wrap">
+          <div className="calendar-nav">
+            <button className="btn btn-ghost btn-sm" onClick={prevMonth}><span className="nav-arrow">←</span></button>
+            <strong>{MONTHS[month]} {year}</strong>
+            <button className="btn btn-ghost btn-sm" onClick={nextMonth}>→</button>
+          </div>
+          <div className="calendar-grid">
+            {DAYS.map((d) => (<div key={d} className="cal-day-header">{d}</div>))}
+            {cells.map((cell, i) => {
+              const dateStr = cell.day
+                ? `${year}-${String(month + 1).padStart(2, '0')}-${String(cell.day).padStart(2, '0')}`
+                : '';
+              return (
+                <div
+                  key={i}
+                  className={`cal-cell ${cell.day === 0 ? 'cal-empty' : ''} ${cell.events.length > 0 ? 'cal-has-events' : ''} ${isToday(cell.day) ? 'cal-today' : ''} ${selectedDay === dateStr ? 'cal-selected' : ''}`}
+                  onClick={() => { if (cell.day > 0) { setSelectedDay(selectedDay === dateStr ? null : dateStr); } }}
+                  title={cell.events.length > 0 ? `${cell.events.length} event${cell.events.length > 1 ? 's' : ''}` : undefined}
+                >
+                  {cell.day > 0 && (
+                    <>
+                      <span className="cal-day-num">{cell.day}</span>
+                      {cell.events.length > 0 && <span className="cal-dot">{cell.events.length}</span>}
+                    </>
+                  )}
                 </div>
-                <div className="calendar-grid">
-                  {DAYS.map((d) => (<div key={d} className="cal-day-header">{d}</div>))}
-                  {cells.map((cell, i) => (
-                    <div
-                      key={i}
-                      className={`cal-cell ${cell.day === 0 ? 'cal-empty' : ''} ${isToday(cell.day) ? 'cal-today' : ''}`}
-                    >
-                      {cell.day > 0 && <span className="cal-day-num">{cell.day}</span>}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
+              );
+            })}
           </div>
         </div>
+
+        <hr className="calendar-separator" />
 
         <div className="event-list-header">
           <span className="event-list-count">{filtered.length} result{filtered.length !== 1 ? 's' : ''}</span>
