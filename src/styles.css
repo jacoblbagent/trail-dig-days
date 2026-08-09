@@ -54,7 +54,7 @@ html { font-size: 16px; }
   --stone-800: #f5f5f4;
   --stone-900: #fafaf9;
   --green-50: #052e16;
-  --green-100: #14532d;
+  --green-100: #1a6b3c;
   --green-200: #166534;
   --green-600: #22c55e;
   --green-700: #4ade80;
@@ -98,6 +98,8 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
 .btn:hover { text-decoration: none; transform: translateY(-1px); }
 .btn:disabled { opacity: .5; cursor: default; transform: none; }
 .btn-primary { background: var(--green-700); color: #fff; }
+[data-theme="dark"] .btn-primary { background: var(--green-600); }
+[data-theme="dark"] .btn-primary:hover { background: var(--green-700); }
 .btn-primary:hover { background: var(--green-800); color: #fff; }
 .btn-danger { background: var(--red-600); color: #fff; }
 .btn-danger:hover { background: var(--red-700); color: #fff; }
@@ -645,6 +647,7 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
   background: var(--green-800); color: #fff; border-radius: var(--radius);
   padding: 12px; margin-bottom: 14px;
 }
+[data-theme="dark"] .date-badge { background: var(--green-600); }
 .date-month { font-size: .8rem; text-transform: uppercase; font-weight: 600; }
 .date-day { font-size: 2rem; font-weight: 800; line-height: 1; }
 .date-year { font-size: .85rem; opacity: .8; }
