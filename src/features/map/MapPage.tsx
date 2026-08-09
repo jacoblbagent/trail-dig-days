@@ -6,6 +6,9 @@ import { collapseRecurring } from '../../utils/recurrence';
 import { haversine } from './mapUtils';
 import type { DigEvent } from '../../types';
 
+const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+const DAYS = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+
 const DIFF_ICONS: Record<string, string> = {
   easy: 'Easy', moderate: 'Moderate', challenging: 'Challenging', expert: 'Expert',
 };
@@ -60,11 +63,24 @@ const MapPage: React.FC = () => {
   const [sortBy, setSortBy] = useState<'date' | 'distance' | 'spots'>('date');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
   const [showSortMenu, setShowSortMenu] = useState(false);
+  const [calOpen, setCalOpen] = useState(false);
   const [sidebarWidth, setSidebarWidth] = useState(380);
   const widthRef = useRef(380);
   const sortRef = useRef<HTMLDivElement>(null);
   const SIDEBAR_MIN = 240;
   const SIDEBAR_MAX = 600;
+
+  const today = new Date();
+  const [viewDate, setViewDate] = useState(new Date(today.getFullYear(), today.getMonth(), 1));
+  const year = viewDate.getFullYear();
+  const month = viewDate.getMonth();
+  const firstDay = new Date(year, month, 1).getDay();
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  const cells: { day: number }[] = [];
+  for (let i = 0; i < firstDay; i++) cells.push({ day: 0 });
+  for (let d = 1; d <= daysInMonth; d++) cells.push({ day: d });
+  while (cells.length % 7 !== 0) cells.push({ day: 0 });
+  const isToday = (d: number) => d === today.getDate() && month === today.getMonth() && year === today.getFullYear();
 
   useEffect(() => {
     if (sortBy === 'distance' && !searchCenter) {
@@ -130,6 +146,9 @@ const MapPage: React.FC = () => {
     });
   }, [filtered, sortBy, sortOrder, searchCenter]);
 
+  const prevMonth = () => setViewDate(new Date(year, month - 1, 1));
+  const nextMonth = () => setViewDate(new Date(year, month + 1, 1));
+
   const handleRadiusChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;
     setRadiusInput(val);
@@ -179,6 +198,33 @@ const MapPage: React.FC = () => {
               placeholder="Search address…"
             />
             <button type="button" className="btn btn-ghost btn-sm" onClick={() => handleAddressSearch(addressQuery)}>Go</button>
+          </div>
+
+          <div className="calendar-section">
+            <div className="calendar-section-header" onClick={() => setCalOpen(!calOpen)}>
+              <span className="calendar-section-title">Calendar</span>
+              <span className="calendar-section-arrow">{calOpen ? '▲' : '▼'}</span>
+            </div>
+            {calOpen && (
+              <div className="calendar-grid-wrap">
+                <div className="calendar-nav">
+                  <button className="btn btn-ghost btn-sm" onClick={prevMonth}><span className="nav-arrow">←</span></button>
+                  <strong>{MONTHS[month]} {year}</strong>
+                  <button className="btn btn-ghost btn-sm" onClick={nextMonth}>→</button>
+                </div>
+                <div className="calendar-grid">
+                  {DAYS.map((d) => (<div key={d} className="cal-day-header">{d}</div>))}
+                  {cells.map((cell, i) => (
+                    <div
+                      key={i}
+                      className={`cal-cell ${cell.day === 0 ? 'cal-empty' : ''} ${isToday(cell.day) ? 'cal-today' : ''}`}
+                    >
+                      {cell.day > 0 && <span className="cal-day-num">{cell.day}</span>}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         </div>
 
