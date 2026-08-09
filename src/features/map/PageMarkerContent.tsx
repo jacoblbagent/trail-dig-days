@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Marker, Popup } from 'react-leaflet';
 import MarkerClusterGroup from 'react-leaflet-cluster';
 import L from 'leaflet';
@@ -30,6 +30,7 @@ const coloredIcon = (inRange: boolean, highlight: boolean) =>
 
 const PageMarkerContent: React.FC = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const events = useAppSelector((s) => s.events.items);
   const searchCenter = useAppSelector((s) => s.events.searchCenter);
   const hoveredId = useAppSelector((s) => s.events.hoveredMarkerId);
@@ -57,10 +58,15 @@ const PageMarkerContent: React.FC = () => {
         const inRange = !inRangeIds || inRangeIds.has(e.id);
         const highlight = hoveredId === e.id;
         return (
-          <Marker key={e.id} position={e.coordinates} icon={isMapPage ? coloredIcon(inRange, highlight) : greenIcon()}>
+          <Marker key={e.id} position={e.coordinates} icon={isMapPage ? coloredIcon(inRange, highlight) : greenIcon()}
+            eventHandlers={{ mouseover: (ev) => ev.target.openPopup() }}
+          >
             <Popup>
               <div className="map-popup">
-                <strong>{e.title}</strong>
+                <a href={`/events/${e.id}`} onClick={(ev) => { ev.preventDefault(); navigate(`/events/${e.id}`); }}
+                  style={{ cursor: 'pointer', textDecoration: 'none', color: 'inherit' }}>
+                  <strong>{e.title}</strong>
+                </a>
                 <p>{diffIcon[e.difficulty] || ''} {e.trailName}</p>
                 <p>{new Date(e.date).toLocaleDateString()} · {e.startTime}</p>
                 <p>{e.locationName}</p>
