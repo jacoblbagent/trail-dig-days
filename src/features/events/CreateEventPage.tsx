@@ -457,6 +457,8 @@ const CreateEventPage: React.FC = () => {
               center={mapCenter}
               zoom={10}
               style={{ width: '100%', height: '100%' }}
+              maxBounds={[[24, -125], [50, -66]]}
+              maxBoundsViscosity={1}
             >
               <TileLayer
                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'

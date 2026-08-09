@@ -1,7 +1,7 @@
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
-import { setTheme } from '../features/events/eventsSlice';
+import { setTheme, setNotificationsEnabled, setNotificationRadius, markNotificationRead, setReferrerPath } from '../features/events/eventsSlice';
 import { logout } from '../features/auth/authSlice';
 
 const SvgIcon: React.FC<{ d: string; viewBox?: string }> = ({ d, viewBox = '0 0 24 24' }) => (
@@ -18,20 +18,30 @@ const SETTINGS_ICON = 'M12 15a3 3 0 100-6 3 3 0 000 6z M19.4 15a1.65 1.65 0 00.3
 const SUN_ICON = 'M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42 M12 7a5 5 0 100 10 5 5 0 000-10z';
 const MOON_ICON = 'M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z';
 const LOGOUT_ICON = 'M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4 M16 17l5-5-5-5 M21 12H9';
+const BELL_ICON = 'M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9 M13.73 21a2 2 0 01-3.46 0';
 
 const Sidebar: React.FC = () => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const { isAuthenticated, user } = useAppSelector((s) => s.auth);
   const profile = useAppSelector((s) => (user ? s.profile.profiles[user.id] : undefined));
   const location = useLocation();
   const theme = useAppSelector((s) => s.events.theme);
+  const { notificationsEnabled, notificationRadius, notifications } = useAppSelector((s) => s.events);
   const dark = theme === 'dark';
+  const unreadCount = notifications.filter((n) => !n.read).length;
   const [showMenu, setShowMenu] = React.useState(false);
+  const [showNotifications, setShowNotifications] = React.useState(false);
+  const [radiusInput, setRadiusInput] = React.useState(String(notificationRadius));
   const menuRef = React.useRef<HTMLDivElement>(null);
+  const notifRef = React.useRef<HTMLDivElement>(null);
   const prevPath = React.useRef(location.pathname);
 
   React.useEffect(() => {
-    prevPath.current = location.pathname;
+    if (!location.pathname.startsWith('/events/') || location.pathname.startsWith('/events/recurring')) {
+      prevPath.current = location.pathname;
+      dispatch(setReferrerPath(location.pathname));
+    }
   });
 
   React.useEffect(() => {
@@ -39,13 +49,21 @@ const Sidebar: React.FC = () => {
       if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
         setShowMenu(false);
       }
+      if (notifRef.current && !notifRef.current.contains(e.target as Node)) {
+        setShowNotifications(false);
+      }
     };
     document.addEventListener('mousedown', onClick);
     return () => document.removeEventListener('mousedown', onClick);
   }, []);
 
+  React.useEffect(() => {
+    setRadiusInput(String(notificationRadius));
+  }, [notificationRadius, showNotifications]);
+
   const isActive = (path: string) => location.pathname === path;
   const isEventPage = location.pathname.startsWith('/events/') && !location.pathname.startsWith('/events/recurring');
+  const showLabels = isEventPage || location.pathname.startsWith('/settings') || location.pathname.startsWith('/profile');
   const cameFrom = (path: string) => isEventPage && prevPath.current === path;
 
   const btn = (to: string, icon: string, label: string) => {
@@ -58,13 +76,21 @@ const Sidebar: React.FC = () => {
         onClick={() => setShowMenu(false)}
       >
         <SvgIcon d={icon} />
-        {isEventPage && <span className="sidebar-label">{label}</span>}
+        {showLabels && <span className="sidebar-label">{label}</span>}
       </Link>
     );
   };
 
+  const handleRadiusChange = (val: string) => {
+    setRadiusInput(val);
+    const parsed = parseFloat(val);
+    if (!isNaN(parsed) && parsed >= 1 && parsed <= 250) {
+      dispatch(setNotificationRadius(parsed));
+    }
+  };
+
   return (
-    <aside className={`sidebar${isEventPage ? ' expanded' : ''}`}>
+    <aside className={`sidebar${showLabels ? ' expanded' : ''}`}>
       <div className="sidebar-top">
         {btn('/', MAP_ICON, 'Map')}
         {btn('/calendar', CALENDAR_ICON, 'Calendar')}
@@ -77,17 +103,83 @@ const Sidebar: React.FC = () => {
           title={dark ? 'Light mode' : 'Dark mode'}
         >
           {dark ? <SvgIcon d={SUN_ICON} /> : <SvgIcon d={MOON_ICON} />}
-          {isEventPage && <span className="sidebar-label">{dark ? 'Light' : 'Dark'}</span>}
+          {showLabels && <span className="sidebar-label">{dark ? 'Light' : 'Dark'}</span>}
         </button>
+        {isAuthenticated && (
+          <div className="notif-wrap" ref={notifRef}>
+            <button
+              className={`sidebar-btn ${showNotifications ? 'active' : ''}`}
+              onClick={() => { setShowNotifications(!showNotifications); setShowMenu(false); }}
+              title="Notifications"
+            >
+              <span className="notif-btn-inner">
+                <SvgIcon d={BELL_ICON} />
+                {unreadCount > 0 && <span className="notif-badge">{unreadCount}</span>}
+              </span>
+              {showLabels && <span className="sidebar-label">Notify</span>}
+            </button>
+            {showNotifications && (
+              <div className="notif-panel">
+                <div className="notif-header">
+                  <span>Notifications</span>
+                  <button className="notif-close" onClick={() => setShowNotifications(false)}>x</button>
+                </div>
+                {notifications.length > 0 ? (
+                  <div className="notif-list">
+                    {notifications.map((n) => (
+                      <div
+                        key={n.id}
+                        className={`notif-item ${n.read ? '' : 'unread'}`}
+                        onClick={() => {
+                          if (!n.read) dispatch(markNotificationRead(n.id));
+                          setShowNotifications(false);
+                          navigate(`/events/${n.eventId}`);
+                        }}
+                      >
+                        <span>{n.message}</span>
+                        <span className="notif-time">{new Date(n.createdAt).toLocaleDateString()}</span>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="notif-empty">No notifications yet.</div>
+                )}
+                <div className="notif-divider" />
+                <label className="notif-row">
+                  <input
+                    type="checkbox"
+                    checked={notificationsEnabled}
+                    onChange={(e) => dispatch(setNotificationsEnabled(e.target.checked))}
+                  />
+                  <span>Notify me about new events</span>
+                </label>
+                {notificationsEnabled && (
+                  <div className="notif-row">
+                    <span className="notif-label">Radius:</span>
+                    <input
+                      type="range"
+                      min={5}
+                      max={250}
+                      value={radiusInput}
+                      onChange={(e) => handleRadiusChange(e.target.value)}
+                      className="notif-slider"
+                    />
+                    <span className="notif-radius-val">{radiusInput} mi</span>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        )}
         {isAuthenticated && (
           <div className="profile-menu-wrap" ref={menuRef}>
             <button
-              className={`sidebar-btn ${isActive('/profile') || isActive('/settings') ? 'active' : ''}`}
+              className={`sidebar-btn ${isActive('/profile') || isActive('/settings') ? 'active' : cameFrom('/profile') || cameFrom('/settings') ? 'active-referrer' : ''}`}
               onClick={() => setShowMenu(!showMenu)}
               title="Profile menu"
             >
               <SvgIcon d={PROFILE_ICON} />
-              {isEventPage && <span className="sidebar-label">Profile</span>}
+              {showLabels && <span className="sidebar-label">Profile</span>}
             </button>
             {showMenu && (
               <div className="profile-menu">

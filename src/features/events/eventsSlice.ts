@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { v4 as uuidv4 } from 'uuid';
-import type { DigEvent, EventsState, ProvidedItem, RecommendedItem, RecurrenceType } from '../../types';
+import type { DigEvent, EventsState, ProvidedItem, RecommendedItem, RecurrenceType, NotificationItem } from '../../types';
 
 export interface MapMarker {
   id: string;
@@ -9,6 +9,15 @@ export interface MapMarker {
   icon: 'green' | 'amber' | 'gray';
   popup: string;
 }
+
+const seedNotifications = (): NotificationItem[] => [
+  { id: 'notif-1', eventId: 'seed-event-043', message: 'New dig day: Galbraith Mountain Dig Day', read: false, createdAt: '2026-08-07T10:00:00' },
+  { id: 'notif-2', eventId: 'seed-event-045', message: 'Demo Forest Flow Trail needs volunteers', read: false, createdAt: '2026-08-06T14:30:00' },
+  { id: 'notif-3', eventId: 'seed-event-046', message: 'Porcupine Rim Trail work session posted', read: false, createdAt: '2026-08-05T09:15:00' },
+  { id: 'notif-4', eventId: 'seed-event-049', message: 'Copper Harbor trail repair this weekend', read: true, createdAt: '2026-08-03T16:00:00' },
+  { id: 'notif-5', eventId: 'seed-event-054', message: 'Buffalo Creek Homestead work day rescheduled', read: true, createdAt: '2026-08-01T11:45:00' },
+  { id: 'notif-6', eventId: 'seed-event-056', message: 'Oak Mountain trail maintenance signup open', read: false, createdAt: '2026-08-08T08:00:00' },
+];
 
 const STORAGE_KEY = 'trail-dig-events';
 
@@ -48,6 +57,10 @@ const initialState: EventsState = {
   mapZoom: 10,
   theme: getInitialTheme(),
   hoveredMarkerId: null,
+  notificationsEnabled: false,
+  notificationRadius: 25,
+  notifications: seedNotifications(),
+  referrerPath: '/',
 };
 
 interface CreateEventPayload {
@@ -165,6 +178,22 @@ const eventsSlice = createSlice({
     setHoveredMarkerId(state, action: PayloadAction<string | null>) {
       state.hoveredMarkerId = action.payload;
     },
+    setNotificationsEnabled(state, action: PayloadAction<boolean>) {
+      state.notificationsEnabled = action.payload;
+    },
+    setNotificationRadius(state, action: PayloadAction<number>) {
+      state.notificationRadius = action.payload;
+    },
+    addNotification(state, action: PayloadAction<NotificationItem>) {
+      state.notifications.unshift(action.payload);
+    },
+    markNotificationRead(state, action: PayloadAction<string>) {
+      const n = state.notifications.find((n) => n.id === action.payload);
+      if (n) n.read = true;
+    },
+    setReferrerPath(state, action: PayloadAction<string>) {
+      state.referrerPath = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -172,6 +201,15 @@ const eventsSlice = createSlice({
       .addCase(createEvent.fulfilled, (state, action) => {
         state.loading = false;
         state.items.push(action.payload);
+        if (state.notificationsEnabled) {
+          state.notifications.unshift({
+            id: uuidv4(),
+            eventId: action.payload.id,
+            message: `New dig day: ${action.payload.title}`,
+            read: false,
+            createdAt: new Date().toISOString(),
+          });
+        }
       })
       .addCase(createEvent.rejected, (state) => { state.loading = false; })
       .addCase(updateEvent.fulfilled, (state, action) => {
@@ -188,5 +226,5 @@ const eventsSlice = createSlice({
   },
 });
 
-export const { setSearchRadius, setSearchCenter, setMapViewport, setTheme, clearSearchCenter, setHoveredMarkerId } = eventsSlice.actions;
+export const { setSearchRadius, setSearchCenter, setMapViewport, setTheme, clearSearchCenter, setHoveredMarkerId, setNotificationsEnabled, setNotificationRadius, addNotification, markNotificationRead, setReferrerPath } = eventsSlice.actions;
 export default eventsSlice.reducer;

@@ -77,6 +77,14 @@ export interface RecommendedItem {
 
 export type RecurrenceType = 'none' | 'weekly' | 'biweekly' | 'monthly';
 
+export interface NotificationItem {
+  id: string;
+  eventId: string;
+  message: string;
+  read: boolean;
+  createdAt: string;
+}
+
 export interface DigEvent {
   id: string;
   creatorId: string;
@@ -118,6 +126,10 @@ export interface EventsState {
   mapZoom: number;
   theme: 'light' | 'dark';
   hoveredMarkerId: string | null;
+  notificationsEnabled: boolean;
+  notificationRadius: number;
+  notifications: NotificationItem[];
+  referrerPath: string;
 }
 
 // ─── Application Root State ───

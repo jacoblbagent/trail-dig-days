@@ -1,16 +1,25 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
+import L from 'leaflet';
 import MapExtras from '../map/MapExtras';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { registerForEvent, deleteEvent } from './eventsSlice';
+
+const MapRefCapture: React.FC<{ mapRef: React.MutableRefObject<L.Map | null> }> = ({ mapRef }) => {
+  const map = useMap();
+  mapRef.current = map;
+  return null;
+};
 
 const EventDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const mapRef = useRef<L.Map | null>(null);
   const { user } = useAppSelector((s) => s.auth);
   const event = useAppSelector((s) => s.events.items.find((e) => e.id === id));
+  const referrerPath = useAppSelector((s) => s.events.referrerPath);
 
   useEffect(() => {
     if (!user) navigate('/auth');
@@ -39,7 +48,7 @@ const EventDetailPage: React.FC = () => {
   return (
     <div className="event-detail-page">
       <div className="event-detail-inner">
-        <button className="event-detail-page-back" onClick={() => { if (window.history.length > 2) navigate(-1); else navigate('/'); }}><span className="nav-arrow">←</span> Back</button>
+        <button className="event-detail-page-back" onClick={() => navigate(referrerPath || '/')}><span className="nav-arrow">←</span> Back</button>
         <div className="event-detail-header">
           {event.imageUrl && (
             <div
@@ -170,7 +179,18 @@ const EventDetailPage: React.FC = () => {
           <div className="location-section">
             <div className="location-details">
               <h2>Location</h2>
-              <p>{event.locationName} <span className="coords">{event.coordinates[0].toFixed(4)}, {event.coordinates[1].toFixed(4)}</span></p>
+              <p>{event.locationName} <span className="coords">{event.coordinates[0].toFixed(4)}, {event.coordinates[1].toFixed(4)}</span>
+                <button className="pin-btn" onClick={() => mapRef.current?.flyTo(event.coordinates, 14, { duration: .8 })} title="Recenter map on event">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <circle cx="12" cy="12" r="10" />
+                    <circle cx="12" cy="12" r="3" />
+                    <line x1="12" y1="2" x2="12" y2="6" />
+                    <line x1="12" y1="18" x2="12" y2="22" />
+                    <line x1="2" y1="12" x2="6" y2="12" />
+                    <line x1="18" y1="12" x2="22" y2="12" />
+                  </svg>
+                </button>
+              </p>
               {event.parkingNotes && (
                 <div className="notes-card">
                   <strong> Parking:</strong> {event.parkingNotes}
@@ -188,6 +208,8 @@ const EventDetailPage: React.FC = () => {
                 zoom={14}
                 scrollWheelZoom={false}
                 style={{ height: '250px', width: '100%', borderRadius: '8px' }}
+                maxBounds={[[24, -125], [50, -66]]}
+                maxBoundsViscosity={1}
               >
                 <TileLayer
                   attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
@@ -196,6 +218,7 @@ const EventDetailPage: React.FC = () => {
                 <Marker position={event.coordinates}>
                   <Popup>{event.locationName}</Popup>
                 </Marker>
+                <MapRefCapture mapRef={mapRef} />
                 <MapExtras />
               </MapContainer>
             </div>

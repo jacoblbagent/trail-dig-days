@@ -10,7 +10,8 @@ const DIFF_ICONS: Record<string, string> = {
   easy: 'Easy', moderate: 'Moderate', challenging: 'Challenging', expert: 'Expert',
 };
 
-const EventCard = memo(function EventCard({ event }: { event: DigEvent }) {
+const EventCard = memo(function EventCard({ event, center }: { event: DigEvent; center: [number, number] | null }) {
+  const dist = center ? haversine(center, event.coordinates) : null;
   return (
     <Link
       to={`/events/${event.id}`}
@@ -43,6 +44,7 @@ const EventCard = memo(function EventCard({ event }: { event: DigEvent }) {
           </span>
           <span className="list-card-spots">{event.registeredVolunteers.length}/{event.maxVolunteers} spots</span>
         </div>
+        {dist !== null && <span className="list-card-dist">{dist < 1 ? dist.toFixed(1) : Math.round(dist)} mi away</span>}
       </div>
     </Link>
   );
@@ -204,7 +206,7 @@ const MapPage: React.FC = () => {
             </div>
           ) : (
             sorted.map((event) => (
-              <EventCard event={event} key={event.id} />
+              <EventCard event={event} key={event.id} center={searchCenter} />
             ))
           )}
         </div>

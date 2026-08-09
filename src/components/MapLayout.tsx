@@ -21,7 +21,7 @@ const MapLayout: React.FC = () => {
     <div className="map-page">
       <Outlet />
       <div className="map-container">
-        <MapContainer center={center} zoom={mapZoom} style={{ width: '100%', height: '100%' }}>
+        <MapContainer center={center} zoom={mapZoom} style={{ width: '100%', height: '100%' }} maxBounds={[[24, -125], [50, -66]]} maxBoundsViscosity={1}>
           <TileLayer
             key={theme}
             attribution='&copy; <a href="https://carto.com/">CARTO</a>'

@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useRef } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
 import { setSearchRadius, setSearchCenter } from '../../features/events/eventsSlice';
 import { expandRecurring } from '../../utils/recurrence';
@@ -13,10 +13,9 @@ const CalendarPage: React.FC = () => {
   const events = useAppSelector((s) => s.events.items);
   const expanded = useMemo(() => expandRecurring(events), [events]);
   const searchCenter = useAppSelector((s) => s.events.searchCenter);
-  const navigate = useNavigate();
   const today = new Date();
   const [viewDate, setViewDate] = useState(new Date(today.getFullYear(), today.getMonth(), 1));
-  const [modalDay, setModalDay] = useState<{ date: string; label: string } | null>(null);
+  const [selectedDay, setSelectedDay] = useState<string | null>(null);
   const [radiusInput, setRadiusInput] = useState('25');
   const [addressQuery, setAddressQuery] = useState('');
   const [sidebarWidth, setSidebarWidth] = useState(380);
@@ -91,8 +90,8 @@ const CalendarPage: React.FC = () => {
     dispatch(setSearchRadius(parseFloat(val) || 50));
   };
 
-  const prevMonth = () => setViewDate(new Date(year, month - 1, 1));
-  const nextMonth = () => setViewDate(new Date(year, month + 1, 1));
+  const prevMonth = () => { setViewDate(new Date(year, month - 1, 1)); setSelectedDay(null); };
+  const nextMonth = () => { setViewDate(new Date(year, month + 1, 1)); setSelectedDay(null); };
 
   const cells: { day: number; events: typeof filtered }[] = [];
   for (let i = 0; i < firstDay; i++) cells.push({ day: 0, events: [] });
@@ -144,8 +143,8 @@ const CalendarPage: React.FC = () => {
               return (
                 <div
                   key={i}
-                  className={`cal-cell ${cell.day === 0 ? 'cal-empty' : ''} ${cell.events.length > 0 ? 'cal-has-events' : ''} ${isToday(cell.day) ? 'cal-today' : ''}`}
-                  onClick={() => { if (cell.events.length > 0) { setModalDay({ date: dateStr, label: `${MONTHS[month]} ${cell.day}, ${year}` }); } }}
+                  className={`cal-cell ${cell.day === 0 ? 'cal-empty' : ''} ${cell.events.length > 0 ? 'cal-has-events' : ''} ${isToday(cell.day) ? 'cal-today' : ''} ${selectedDay === dateStr ? 'cal-selected' : ''}`}
+                  onClick={() => { if (cell.day > 0) { setSelectedDay(selectedDay === dateStr ? null : dateStr); } }}
                   title={cell.events.length > 0 ? `${cell.events.length} event${cell.events.length > 1 ? 's' : ''}` : undefined}
                 >
                   {cell.day > 0 && (
@@ -163,27 +162,56 @@ const CalendarPage: React.FC = () => {
         <hr className="calendar-separator" />
 
         <div className="calendar-list">
-          <h2>Events in {MONTHS[month]} {year}</h2>
-          {filtered.filter((e) => e.date.slice(0, 7) === `${year}-${String(month + 1).padStart(2, '0')}`).length === 0 ? (
-            <p className="muted">No events this month.</p>
+          {selectedDay ? (
+            <>
+              <h2><button className="btn btn-ghost btn-sm cal-back" onClick={() => setSelectedDay(null)}><span className="nav-arrow">←</span></button> Events on {new Date(selectedDay + 'T12:00:00').toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}</h2>
+              {(() => {
+                const dayEvents = eventMap.get(selectedDay) || [];
+                return dayEvents.length === 0 ? (
+                  <p className="muted">No events on this day.</p>
+                ) : (
+                  <ul className="calendar-event-list">
+                    {dayEvents.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()).map((e) => (
+                      <li key={e.id} className="calendar-event-item">
+                        <Link to={`/events/${e.id}`} className="calendar-event-link">
+                          <span className="cal-event-title">{e.title}</span>
+                          <div className="cal-event-meta">
+                            <span className="cal-event-date">{e.date}</span>
+                            <span className="cal-event-location">{e.locationName}</span>
+                            <span className="cal-event-time">{e.startTime}</span>
+                          </div>
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                );
+              })()}
+            </>
           ) : (
-            <ul className="calendar-event-list">
-              {[...filtered]
-                .filter((e) => e.date.slice(0, 7) === `${year}-${String(month + 1).padStart(2, '0')}`)
-                .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-                .map((e) => (
-                  <li key={e.id} className="calendar-event-item">
-                    <Link to={`/events/${e.id}`} className="calendar-event-link">
-                      <span className="cal-event-title">{e.title}</span>
-                      <div className="cal-event-meta">
-                        <span className="cal-event-date">{e.date}</span>
-                        <span className="cal-event-location">{e.locationName}</span>
-                        <span className="cal-event-time">{e.startTime}</span>
-                      </div>
-                    </Link>
-                  </li>
-                ))}
-            </ul>
+            <>
+              <h2>Events in {MONTHS[month]} {year}</h2>
+              {filtered.filter((e) => e.date.slice(0, 7) === `${year}-${String(month + 1).padStart(2, '0')}`).length === 0 ? (
+                <p className="muted">No events this month.</p>
+              ) : (
+                <ul className="calendar-event-list">
+                  {[...filtered]
+                    .filter((e) => e.date.slice(0, 7) === `${year}-${String(month + 1).padStart(2, '0')}`)
+                    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+                    .map((e) => (
+                      <li key={e.id} className="calendar-event-item">
+                        <Link to={`/events/${e.id}`} className="calendar-event-link">
+                          <span className="cal-event-title">{e.title}</span>
+                          <div className="cal-event-meta">
+                            <span className="cal-event-date">{e.date}</span>
+                            <span className="cal-event-location">{e.locationName}</span>
+                            <span className="cal-event-time">{e.startTime}</span>
+                          </div>
+                        </Link>
+                      </li>
+                    ))}
+                </ul>
+              )}
+            </>
           )}
         </div>
       </div>
@@ -196,31 +224,7 @@ const CalendarPage: React.FC = () => {
         </div>
       </div>
 
-      {modalDay && (
-        <div className="cal-modal-overlay" onClick={() => setModalDay(null)}>
-          <div className="cal-modal" onClick={(e) => e.stopPropagation()}>
-            <div className="cal-modal-header">
-              <h3>{modalDay.label}</h3>
-              <button className="cal-modal-close" onClick={() => setModalDay(null)}>×</button>
-            </div>
-            {(() => {
-              const dayEvents = eventMap.get(modalDay.date) || [];
-              return dayEvents.length === 0 ? (
-                <p className="muted">No events on this day.</p>
-              ) : (
-                <ul className="cal-modal-list">
-                  {dayEvents.map((e) => (
-                    <li key={e.id} className="cal-modal-item" onClick={() => { setModalDay(null); navigate(`/events/${e.id}`); }}>
-                      <span className="cal-modal-item-title">{e.title}</span>
-                      <span className="cal-modal-item-meta">{e.startTime} · {e.locationName}</span>
-                    </li>
-                  ))}
-                </ul>
-              );
-            })()}
-          </div>
-        </div>
-      )}
+
     </>
   );
 };
