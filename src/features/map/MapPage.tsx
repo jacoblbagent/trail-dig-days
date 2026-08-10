@@ -122,10 +122,18 @@ const MapPage: React.FC = () => {
   const expanded = useMemo(() => expandRecurring(items), [items]);
   const collapsed = useMemo(() => collapseRecurring(items), [items]);
 
-  // Calendar: events per day
+  // Filter expanded events by radius (for calendar dots)
+  const filteredExpanded = useMemo(() => {
+    const radius = parseFloat(radiusInput) || 250;
+    if (radius >= 250) return expanded;
+    if (!searchCenter) return expanded;
+    return expanded.filter((e) => haversine(searchCenter, e.coordinates) <= radius);
+  }, [expanded, searchCenter, radiusInput]);
+
+  // Calendar: events per day (within radius)
   const eventMap = useMemo(() => {
     const map = new Map<string, typeof expanded>();
-    for (const e of expanded) {
+    for (const e of filteredExpanded) {
       const key = e.date.slice(0, 10);
       if (!map.has(key)) map.set(key, []);
       map.get(key)!.push(e);
