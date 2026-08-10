@@ -8,10 +8,6 @@ import { expandRecurring } from '../../utils/recurrence';
 import { haversine } from './mapUtils';
 import type { DigEvent } from '../../types';
 
-const diffIcon: Record<string, string> = {
-  easy: '🟢', moderate: '🟡', challenging: '🟠', expert: '🔴',
-};
-
 const greenIcon = () =>
   new L.DivIcon({
     className: '',
@@ -67,7 +63,7 @@ const PageMarkerContent: React.FC = () => {
                   style={{ cursor: 'pointer', textDecoration: 'none', color: 'inherit' }}>
                   <strong>{e.title}</strong>
                 </a>
-                <p>{diffIcon[e.difficulty] || ''} {e.trailName}</p>
+                <p>{e.trailName}</p>
                 <p>{new Date(e.date).toLocaleDateString()} · {e.startTime} — {e.locationName}</p>
               </div>
             </Popup>
