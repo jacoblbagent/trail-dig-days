@@ -20,6 +20,7 @@ const formatDate = (d: string | undefined) => {
 
 const RecurringEventsPage: React.FC = () => {
   const events = useAppSelector((s) => s.events.items);
+  const mapSidebarCollapsed = useAppSelector((s) => s.events.mapSidebarCollapsed);
   const recurring = events.filter((e) => e.recurrence && e.recurrence !== 'none');
 
   const [sidebarWidth, setSidebarWidth] = useState(380);
@@ -52,7 +53,7 @@ const RecurringEventsPage: React.FC = () => {
 
   return (
     <>
-      <div className={`map-sidebar ${nearMin ? 'at-min' : ''} ${nearMax ? 'at-max' : ''}`} style={{ width: sidebarWidth }}>
+      <div className={`map-sidebar ${nearMin ? 'at-min' : ''} ${nearMax ? 'at-max' : ''}${mapSidebarCollapsed ? ' collapsed' : ''}`} style={{ width: sidebarWidth }}>
         <div className="map-sidebar-header">
           <h1>Repeating</h1>
           <Link to="/events/create" className="btn btn-primary btn-sm">+ New</Link>
