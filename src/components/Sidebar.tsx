@@ -103,7 +103,7 @@ const Sidebar: React.FC = () => {
             title={dark ? 'Light mode' : 'Dark mode'}
           >
             {dark ? <SvgIcon d={SUN_ICON} /> : <SvgIcon d={MOON_ICON} />}
-            {showLabels && <span className="sidebar-label">{dark ? 'Light' : 'Dark'}</span>}
+            {showLabels && <span className="sidebar-label">{dark ? 'Light Mode' : 'Dark Mode'}</span>}
           </button>
           {!isAuthenticated && (
             <Link to="/auth" className="sidebar-btn" title="Sign In">
@@ -122,7 +122,7 @@ const Sidebar: React.FC = () => {
                   <SvgIcon d={BELL_ICON} />
                   {unreadCount > 0 && <span className="notif-badge">{unreadCount}</span>}
                 </span>
-                {showLabels && <span className="sidebar-label">Notify</span>}
+                {showLabels && <span className="sidebar-label">Notifications</span>}
               </button>
               {showNotifications && (
                 <div className="notif-panel">

@@ -68,8 +68,6 @@ const MapPage: React.FC = () => {
   const [sidebarWidth, setSidebarWidth] = useState(380);
   const widthRef = useRef(380);
   const sortRef = useRef<HTMLDivElement>(null);
-  const SIDEBAR_MIN = 240;
-  const SIDEBAR_MAX = 600;
 
   const today = new Date();
   const [viewDate, setViewDate] = useState(new Date(today.getFullYear(), today.getMonth(), 1));
@@ -95,7 +93,11 @@ const MapPage: React.FC = () => {
     return () => document.removeEventListener('mousedown', onClick);
   }, [showSortMenu]);
 
-  const nearMin = sidebarWidth <= SIDEBAR_MIN + 20;
+  const SIDEBAR_MIN = 240;
+  const SIDEBAR_MAX = 600;
+  const SIDEBAR_DEFAULT = 380;
+
+  const nearMin = sidebarWidth <= SIDEBAR_MIN + 20 && sidebarWidth > 0;
   const nearMax = sidebarWidth >= SIDEBAR_MAX - 20;
 
   const handleResizeStart = (e: React.MouseEvent) => {
@@ -103,7 +105,7 @@ const MapPage: React.FC = () => {
     const startX = e.clientX;
     const startW = widthRef.current;
     const onMove = (me: MouseEvent) => {
-      const newW = Math.max(SIDEBAR_MIN, Math.min(SIDEBAR_MAX, startW + (me.clientX - startX)));
+      const newW = Math.max(0, Math.min(SIDEBAR_MAX, startW + (me.clientX - startX)));
       widthRef.current = newW;
       setSidebarWidth(newW);
     };
@@ -117,6 +119,11 @@ const MapPage: React.FC = () => {
     document.addEventListener('mouseup', onUp);
     document.body.style.cursor = 'col-resize';
     document.body.style.userSelect = 'none';
+  };
+
+  const handleResizerDblClick = () => {
+    widthRef.current = SIDEBAR_DEFAULT;
+    setSidebarWidth(SIDEBAR_DEFAULT);
   };
 
   const expanded = useMemo(() => expandRecurring(items), [items]);
@@ -328,7 +335,7 @@ const MapPage: React.FC = () => {
         )}
       </div>
 
-      <div className={`sidebar-resizer ${nearMin ? 'at-min' : ''} ${nearMax ? 'at-max' : ''}`} onMouseDown={handleResizeStart}>
+      <div className={`sidebar-resizer ${nearMin ? 'at-min' : ''} ${nearMax ? 'at-max' : ''}`} onMouseDown={handleResizeStart} onDoubleClick={handleResizerDblClick}>
         <div className="resizer-grip" />
         <div className="resizer-limits">
           <span className={`limit-indicator ${nearMin ? 'visible' : ''}`}>{SIDEBAR_MIN}px</span>
