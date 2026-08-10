@@ -12,6 +12,7 @@ import CreateEventPage from './features/events/CreateEventPage';
 import EventDetailPage from './features/events/EventDetailPage';
 import RecurringEventsPage from './features/events/RecurringEventsPage';
 import MapPage from './features/map/MapPage';
+import ToastContainer from './components/ToastContainer';
 
 const App: React.FC = () => {
   useEffect(() => { store.dispatch(loadEventsFromStorage()); }, []);
@@ -36,6 +37,7 @@ const App: React.FC = () => {
             </Routes>
           </main>
         </div>
+        <ToastContainer />
       </BrowserRouter>
     </Provider>
   );

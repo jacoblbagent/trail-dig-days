@@ -5,6 +5,7 @@ import MapExtras from '../map/MapExtras';
 import L from 'leaflet';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { createEvent } from './eventsSlice';
+import { addToast } from '../toast/toastSlice';
 import TrailAutocomplete from '../../components/TrailAutocomplete';
 import type { ProvidedItem, RecommendedItem } from '../../types';
 
@@ -339,8 +340,10 @@ const CreateEventPage: React.FC = () => {
         })
       ).unwrap();
       navigate('/');
+      dispatch(addToast({ message: 'Dig day created!', type: 'success' }));
     } catch (err: any) {
       setError(err.message || 'Failed to create event');
+      dispatch(addToast({ message: err.message || 'Failed to create event', type: 'error' }));
     }
   };
 

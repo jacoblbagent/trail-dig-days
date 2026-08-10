@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
 import { setTheme, setNotificationsEnabled, setNotificationRadius, markNotificationRead, setReferrerPath, setMapSidebarCollapsed } from '../features/events/eventsSlice';
 import { logout } from '../features/auth/authSlice';
+import { addToast } from '../features/toast/toastSlice';
 
 const SvgIcon: React.FC<{ d: string; viewBox?: string }> = ({ d, viewBox = '0 0 24 24' }) => (
   <svg width="20" height="20" viewBox={viewBox} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -211,7 +212,7 @@ const Sidebar: React.FC = () => {
                     Settings
                   </Link>
                   <div className="profile-menu-divider" />
-                  <button className="profile-menu-item signout" onClick={() => { setShowMenu(false); dispatch(logout()); }}>
+                  <button className="profile-menu-item signout" onClick={() => { setShowMenu(false); dispatch(logout()); dispatch(addToast({ message: 'Signed out', type: 'info' })); }}>
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <path d={LOGOUT_ICON} />
                     </svg>

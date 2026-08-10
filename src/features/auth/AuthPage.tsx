@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { login, register } from './authSlice';
 import { createProfile } from '../profile/profileSlice';
+import { addToast } from '../toast/toastSlice';
 
 const AuthPage: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -25,6 +26,7 @@ const AuthPage: React.FC = () => {
     try {
       if (isLogin) {
         await dispatch(login({ email, password })).unwrap();
+        dispatch(addToast({ message: 'Signed in', type: 'success' }));
       } else {
         const user = await dispatch(
           register({ email, password, displayName })
@@ -32,9 +34,11 @@ const AuthPage: React.FC = () => {
         await dispatch(
           createProfile({ userId: user.id, displayName })
         ).unwrap();
+        dispatch(addToast({ message: 'Account created', type: 'success' }));
       }
     } catch (err: any) {
       setError(err.message || 'Something went wrong');
+      dispatch(addToast({ message: err.message || 'Something went wrong', type: 'error' }));
     }
   };
 
