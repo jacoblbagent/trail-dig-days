@@ -186,7 +186,7 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
   padding: 12px 0; flex-shrink: 0; gap: 4px;
   transition: width .15s;
 }
-.sidebar.expanded { width: 160px; align-items: flex-start; padding-left: 12px; }
+.sidebar.expanded { width: auto; align-items: flex-start; padding-left: 12px; }
 .sidebar.expanded .sidebar-top,
 .sidebar.expanded .sidebar-bottom { width: 100%; }
 .sidebar-label { font-size: .85rem; color: var(--stone-500); white-space: nowrap; }
