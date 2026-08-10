@@ -619,8 +619,7 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
 .items-section { display: table; width: 100%; }
 .items-grid { list-style: none; padding: 0; margin: 0; }
 .item-card {
-  border: 1px solid var(--stone-200); border-radius: var(--radius);
-  padding: 6px 12px;
+  border-radius: var(--radius);
   margin-bottom: 6px;
 }
 .item-name { font-weight: 500; color: var(--stone-700); font-size: .9rem; }
