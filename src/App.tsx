@@ -9,6 +9,7 @@ import AuthPage from './features/auth/AuthPage';
 import ProfilePage from './features/profile/ProfilePage';
 import SettingsPage from './features/profile/SettingsPage';
 import CreateEventPage from './features/events/CreateEventPage';
+import EditEventPage from './features/events/EditEventPage';
 import EventDetailPage from './features/events/EventDetailPage';
 import RecurringEventsPage from './features/events/RecurringEventsPage';
 import MapPage from './features/map/MapPage';
@@ -31,6 +32,7 @@ const App: React.FC = () => {
               {/* Standalone routes (no map) */}
               <Route path="/auth" element={<AuthPage />} />
               <Route path="/events/create" element={<CreateEventPage />} />
+              <Route path="/events/:id/edit" element={<EditEventPage />} />
               <Route path="/events/:id" element={<EventDetailPage />} />
               <Route path="/profile" element={<ProfilePage />} />
               <Route path="/settings" element={<SettingsPage />} />

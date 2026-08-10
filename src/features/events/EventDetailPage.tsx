@@ -1,10 +1,10 @@
 import React, { useRef } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import MapExtras from '../map/MapExtras';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { registerForEvent, deleteEvent } from './eventsSlice';
+import { registerForEvent } from './eventsSlice';
 import { addToast } from '../toast/toastSlice';
 
 const MapRefCapture: React.FC<{ mapRef: React.MutableRefObject<L.Map | null> }> = ({ mapRef }) => {
@@ -37,13 +37,6 @@ const EventDetailPage: React.FC = () => {
       dispatch(addToast({ message: isRegistered ? 'Unregistered' : 'Signed up!', type: 'success' }));
     } catch (err: any) {
       dispatch(addToast({ message: err.message || 'Failed', type: 'error' }));
-    }
-  };
-
-  const handleDelete = () => {
-    if (window.confirm('Delete this dig day?')) {
-      dispatch(deleteEvent(event.id));
-      navigate('/');
     }
   };
 
@@ -166,7 +159,7 @@ const EventDetailPage: React.FC = () => {
 
               {isCreator && (
                 <div className="creator-actions">
-                  <button className="btn btn-danger" onClick={handleDelete}>Delete Event</button>
+                  <Link to={`/events/${event.id}/edit`} className="btn btn-ghost btn-block">Edit Event</Link>
                 </div>
               )}
 
