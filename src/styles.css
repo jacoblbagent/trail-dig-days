@@ -306,7 +306,7 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
 .auth-page {
   display: flex; align-items: center; justify-content: center;
   padding: 40px 20px;
-  background: linear-gradient(135deg, var(--green-50) 0%, var(--earth-50) 100%);
+  background: var(--green-50);
   min-height: 100vh;
 }
 .auth-card {
