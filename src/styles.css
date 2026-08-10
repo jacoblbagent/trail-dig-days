@@ -472,6 +472,7 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
 [data-theme="dark"] .map-redetect-btn:hover { border-color: var(--green-600); color: var(--stone-300); }
 .empty-state { text-align: center; padding: 40px 20px; color: var(--stone-400); }
 .map-popup { font-size: .875rem; }
+.leaflet-popup-close-button { padding: 2px 2px 0 0 !important; }
 .map-popup strong { color: var(--stone-800); }
 .map-popup p { margin: 2px 0; color: var(--stone-500); }
 
