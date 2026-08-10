@@ -79,7 +79,7 @@ const MyEventsPage: React.FC = () => {
       )}
 
       {myEvents.length === 0 && signedUp.length === 0 && (
-        <p className="muted" style={{ textAlign: 'center', padding: '40px 0' }}>No events yet. Create one or sign up to get started!</p>
+        <p className="muted" style={{ textAlign: 'center', padding: '40px 0' }}>No events yet. Create one to get started!</p>
       )}
     </div>
   );
