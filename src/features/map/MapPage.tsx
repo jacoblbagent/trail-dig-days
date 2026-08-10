@@ -273,14 +273,14 @@ const MapPage: React.FC = () => {
 
         {selectedDay ? (
           <div className="calendar-list">
-            <h2 style={{ padding: '0 20px', fontSize: '.95rem' }}>
+            <h2>
               <button className="btn btn-ghost btn-sm cal-back" onClick={() => setSelectedDay(null)}><span className="nav-arrow">←</span></button>
               {' '}Events on {new Date(selectedDay + 'T12:00:00').toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}
             </h2>
             {(() => {
               const dayEvents = eventMap.get(selectedDay) || [];
               return dayEvents.length === 0 ? (
-                <p className="muted" style={{ padding: '0 20px' }}>No events on this day.</p>
+                <p className="muted">No events on this day.</p>
               ) : (
                 <ul className="calendar-event-list">
                   {[...dayEvents]

@@ -894,15 +894,17 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
 
 .calendar-map { border-radius: var(--radius); overflow: hidden; border: 1px solid var(--stone-150); min-height: 0; }
 
-.calendar-list { display: flex; flex-direction: column; gap: 8px; padding: 12px 20px 16px; }
-.calendar-list h2 { font-size: 1rem; color: var(--stone-700); }
+.calendar-separator { margin: 8px 0; border: none; border-top: 1px solid var(--stone-150); }
+
+.calendar-list { display: flex; flex-direction: column; gap: 6px; padding: 8px 12px 16px; }
+.calendar-list h2 { font-size: .9rem; color: var(--stone-700); margin: 0; font-weight: 500; }
 .calendar-event-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 4px; }
 .calendar-event-item { }
 .calendar-event-link {
   display: flex; flex-direction: column; gap: 2px;
   padding: 8px 10px; border-radius: var(--radius-sm);
   text-decoration: none; transition: background .1s;
-  border: 1px solid var(--stone-150);
+  border: 1px solid var(--stone-150); background: var(--surface);
 }
 .calendar-event-link:hover { background: var(--stone-100); text-decoration: none; }
 .cal-event-meta { display: flex; align-items: center; gap: 0; flex-wrap: wrap; }
