@@ -13,6 +13,7 @@ const SvgIcon: React.FC<{ d: string; viewBox?: string }> = ({ d, viewBox = '0 0 
 
 const MAP_ICON = 'M1 6v16l7-4 8 4 7-4V2l-7 4-8-4-7 4z M8 2v16 M16 6v16';
 const RECUR_ICON = 'M1 4v6h6 M23 20v-6h-6 M20.49 9A9 9 0 005.64 5.64L1 10 M22 14l-4.64 4.36A9 9 0 013.51 15';
+const MYEVENTS_ICON = 'M8 6h13 M8 12h13 M8 18h13 M3 6h.01 M3 12h.01 M3 18h.01';
 const PROFILE_ICON = 'M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2 M12 3a4 4 0 100 8 4 4 0 000-8z';
 const SETTINGS_ICON = 'M12 15a3 3 0 100-6 3 3 0 000 6z M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 01-2 2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09z';
 const SUN_ICON = 'M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42 M12 7a5 5 0 100 10 5 5 0 000-10z';
@@ -62,8 +63,8 @@ const Sidebar: React.FC = () => {
   }, [notificationRadius, showNotifications]);
 
   const isActive = (path: string) => location.pathname === path;
-  const isEventPage = location.pathname.startsWith('/events/') && !location.pathname.startsWith('/events/recurring');
-  const showLabels = isEventPage || location.pathname.startsWith('/settings') || location.pathname.startsWith('/profile');
+  const isEventPage = location.pathname.startsWith('/events/') && !location.pathname.startsWith('/events/recurring') && !location.pathname.startsWith('/my-events');
+  const showLabels = isEventPage || location.pathname.startsWith('/settings') || location.pathname.startsWith('/profile') || location.pathname.startsWith('/my-events');
   const cameFrom = (path: string) => isEventPage && prevPath.current === path;
 
   const btn = (to: string, icon: string, label: string) => {
@@ -95,6 +96,7 @@ const Sidebar: React.FC = () => {
         <div className="sidebar-top">
           {btn('/', MAP_ICON, 'Map')}
           {btn('/events/recurring', RECUR_ICON, 'Repeating')}
+          {isAuthenticated && btn('/my-events', MYEVENTS_ICON, 'My Events')}
         </div>
         <div className="sidebar-bottom">
           <button
