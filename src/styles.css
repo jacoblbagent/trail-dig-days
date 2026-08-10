@@ -856,8 +856,9 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
 .cal-dot {
   font-size: .65rem; background: var(--accent, var(--green-600)); color: #fff;
   border-radius: 2px; padding: 0 3px; line-height: 10px; height: 10px;
-  text-align: center; align-self: stretch; margin: 0 3px;
+  text-align: center; align-self: stretch; margin: 0 4px;
 }
+.calander-event-link {
 .cal-day-num { line-height: 1; }
 
 .calendar-map { border-radius: var(--radius); overflow: hidden; border: 1px solid var(--stone-150); min-height: 0; }
