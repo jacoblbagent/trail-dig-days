@@ -73,6 +73,16 @@ const initialState: EventsState = {
   referrerPath: '/',
 };
 
+// Re-read events from localStorage after seed runs (ES module hoisting means
+// items above may be empty even after ensureSeedData() called it first)
+const reloadEvents = (): DigEvent[] => {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return [];
+    return JSON.parse(raw);
+  } catch { return []; }
+};
+
 interface CreateEventPayload {
   creatorId: string;
   title: string;
@@ -204,6 +214,9 @@ const eventsSlice = createSlice({
     setReferrerPath(state, action: PayloadAction<string>) {
       state.referrerPath = action.payload;
     },
+    loadEventsFromStorage(state) {
+      state.items = reloadEvents();
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -236,5 +249,5 @@ const eventsSlice = createSlice({
   },
 });
 
-export const { setSearchRadius, setSearchCenter, setMapViewport, setTheme, clearSearchCenter, setHoveredMarkerId, setNotificationsEnabled, setNotificationRadius, addNotification, markNotificationRead, setReferrerPath } = eventsSlice.actions;
+export const { setSearchRadius, setSearchCenter, setMapViewport, setTheme, clearSearchCenter, setHoveredMarkerId, setNotificationsEnabled, setNotificationRadius, addNotification, markNotificationRead, setReferrerPath, loadEventsFromStorage } = eventsSlice.actions;
 export default eventsSlice.reducer;

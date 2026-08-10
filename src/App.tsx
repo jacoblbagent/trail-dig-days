@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { store } from './app/store';
+import { loadEventsFromStorage } from './features/events/eventsSlice';
 import Sidebar from './components/Sidebar';
 import MapLayout from './components/MapLayout';
 import AuthPage from './features/auth/AuthPage';
@@ -14,6 +15,7 @@ import CalendarPage from './features/calendar/CalendarPage';
 import MapPage from './features/map/MapPage';
 
 const App: React.FC = () => {
+  useEffect(() => { store.dispatch(loadEventsFromStorage()); }, []);
   return (
     <Provider store={store}>
       <BrowserRouter basename={import.meta.env.BASE_URL.replace(/\/$/, '')}>
