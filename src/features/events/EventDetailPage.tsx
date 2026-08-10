@@ -89,10 +89,7 @@ const EventDetailPage: React.FC = () => {
                   <ul className="items-grid">
                     {event.recommendedItems.map((item) => (
                       <li key={item.name} className={`item-card rec ${item.essential ? 'essential' : ''}`}>
-                        <span className="item-name">
-                          {item.essential ? ' ' : ''}{item.name}
-                        </span>
-                        {item.essential && <span className="essential-tag">ESSENTIAL</span>}
+                        <span className="item-name">{item.name}</span>
                         {item.notes && <p className="item-desc">{item.notes}</p>}
                       </li>
                     ))}
