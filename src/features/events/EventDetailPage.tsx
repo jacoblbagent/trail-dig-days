@@ -67,7 +67,7 @@ const EventDetailPage: React.FC = () => {
 
             <div className="items-columns">
               <section className="items-section">
-                <h2>Provided by the Crew</h2>
+                <h2>Provided:</h2>
                 {event.providedItems.length > 0 ? (
                   <ul className="items-grid">
                     {event.providedItems.map((item) => (
@@ -84,7 +84,7 @@ const EventDetailPage: React.FC = () => {
               </section>
 
               <section className="items-section">
-                <h2>Recommended to Bring</h2>
+                <h2>Bring:</h2>
                 {event.recommendedItems.length > 0 ? (
                   <ul className="items-grid">
                     {event.recommendedItems.map((item) => (

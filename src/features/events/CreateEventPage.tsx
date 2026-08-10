@@ -503,7 +503,7 @@ const CreateEventPage: React.FC = () => {
         </div>
 
         <div className="form-section">
-          <h2> Provided by Crew</h2>
+          <h2>Provided:</h2>
           <p className="section-desc">Select what the dig day organizers provide</p>
           <button
             type="button"
@@ -516,7 +516,7 @@ const CreateEventPage: React.FC = () => {
             <div className="cat-modal-overlay" onClick={() => setShowProvidedCat(false)}>
               <div className="cat-modal" onClick={(e) => e.stopPropagation()}>
                 <div className="cat-modal-header">
-                  <span>Provided by Crew</span>
+                  <span>Provided:</span>
                   <button type="button" className="cat-modal-close" onClick={() => setShowProvidedCat(false)}>×</button>
                 </div>
                 <div className="cat-checklist">
@@ -574,7 +574,7 @@ const CreateEventPage: React.FC = () => {
         </div>
 
         <div className="form-section">
-          <h2> Recommended to Bring</h2>
+          <h2>Bring:</h2>
           <p className="section-desc">What volunteers are expected or recommended to bring themselves</p>
           <button
             type="button"
@@ -587,7 +587,7 @@ const CreateEventPage: React.FC = () => {
             <div className="cat-modal-overlay" onClick={() => setShowRecommendedCat(false)}>
               <div className="cat-modal" onClick={(e) => e.stopPropagation()}>
                 <div className="cat-modal-header">
-                  <span>Recommended to Bring</span>
+                  <span>Bring:</span>
                   <button type="button" className="cat-modal-close" onClick={() => setShowRecommendedCat(false)}>×</button>
                 </div>
                 <div className="cat-checklist">
