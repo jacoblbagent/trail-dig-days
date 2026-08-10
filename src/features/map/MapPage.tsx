@@ -64,6 +64,7 @@ const MapPage: React.FC = () => {
   const [sortBy, setSortBy] = useState<'date' | 'distance' | 'spots'>('date');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
   const [showSortMenu, setShowSortMenu] = useState(false);
+  const [calendarCollapsed, setCalendarCollapsed] = useState(false);
   const [sidebarWidth, setSidebarWidth] = useState(380);
   const widthRef = useRef(380);
   const sortRef = useRef<HTMLDivElement>(null);
@@ -221,10 +222,12 @@ const MapPage: React.FC = () => {
 
         <div className="calendar-grid-wrap">
           <div className="calendar-nav">
+            <button className="btn btn-ghost btn-sm" onClick={() => setCalendarCollapsed(!calendarCollapsed)}>{calendarCollapsed ? '▸' : '▾'}</button>
             <button className="btn btn-ghost btn-sm" onClick={prevMonth}><span className="nav-arrow">←</span></button>
             <strong>{MONTHS[month]} {year}</strong>
             <button className="btn btn-ghost btn-sm" onClick={nextMonth}>→</button>
           </div>
+          {!calendarCollapsed && (
           <div className="calendar-grid">
             {DAYS.map((d) => (<div key={d} className="cal-day-header">{d}</div>))}
             {cells.map((cell, i) => {
@@ -248,6 +251,7 @@ const MapPage: React.FC = () => {
               );
             })}
           </div>
+          )}
         </div>
 
         <hr className="calendar-separator" />
