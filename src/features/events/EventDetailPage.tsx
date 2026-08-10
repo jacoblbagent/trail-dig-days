@@ -5,6 +5,7 @@ import L from 'leaflet';
 import MapExtras from '../map/MapExtras';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { registerForEvent, deleteEvent } from './eventsSlice';
+import { addToast } from '../toast/toastSlice';
 
 const MapRefCapture: React.FC<{ mapRef: React.MutableRefObject<L.Map | null> }> = ({ mapRef }) => {
   const map = useMap();
@@ -29,9 +30,14 @@ const EventDetailPage: React.FC = () => {
   const { profiles } = useAppSelector((s) => s.profile);
   const creatorProfile = profiles[event.creatorId];
 
-  const handleRegister = () => {
+  const handleRegister = async () => {
     if (!user) { navigate('/auth'); return; }
-    dispatch(registerForEvent({ eventId: event.id, userId: user.id }));
+    try {
+      await dispatch(registerForEvent({ eventId: event.id, userId: user.id })).unwrap();
+      dispatch(addToast({ message: isRegistered ? 'Unregistered' : 'Signed up!', type: 'success' }));
+    } catch (err: any) {
+      dispatch(addToast({ message: err.message || 'Failed', type: 'error' }));
+    }
   };
 
   const handleDelete = () => {
