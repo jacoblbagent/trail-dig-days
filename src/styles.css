@@ -617,11 +617,11 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
 .event-detail-page { padding-top: 32px; }
 .event-detail-page-back {
   display: inline-flex; align-items: center; gap: 6px;
-  font-size: .85rem; color: var(--stone-500); margin-bottom: 16px;
+  font-size: .875rem; color: var(--stone-400); margin-bottom: 16px;
   text-decoration: none; cursor: pointer; border: none; background: none;
-  padding: 4px 0; transition: color .15s;
+  padding: 4px 12px; font-weight: 600; border-radius: var(--radius); transition: all .15s;
 }
-.event-detail-page-back:hover { color: var(--stone-800); }
+.event-detail-page-back:hover { background: var(--stone-100); color: var(--stone-600); }
 .event-detail-inner { max-width: 960px; margin: 0 auto; padding: 0 20px 32px; }
 .event-detail-header { margin-bottom: 24px; }
 .event-cover { height: 240px; border-radius: var(--radius); background-size: cover; background-position: center; margin-bottom: 16px; }
