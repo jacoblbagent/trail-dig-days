@@ -412,14 +412,14 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
 }
 .sidebar-resizer:hover { background: var(--stone-200); }
 .sidebar-resizer:active,
-.sidebar-resizer.active { background: var(--accent, var(--green-600)); }
+.sidebar-resizer.active { background: var(--stone-200); }
 .resizer-grip {
   width: 3px; height: 32px; border-radius: 2px;
   background: var(--stone-300); transition: background .15s;
 }
 .sidebar-resizer:hover .resizer-grip { background: var(--stone-500); }
 .sidebar-resizer:active .resizer-grip,
-.sidebar-resizer.active .resizer-grip { background: var(--surface); }
+.sidebar-resizer.active .resizer-grip { background: var(--stone-500); }
 .resizer-limits {
   position: absolute; top: 0; left: 0; right: 0; bottom: 0;
   pointer-events: none; overflow: hidden;
