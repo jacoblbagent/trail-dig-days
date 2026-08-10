@@ -237,6 +237,11 @@ const CreateEventPage: React.FC = () => {
 
   useEffect(() => {
     if (!user) navigate('/auth');
+    else if (user.userType !== 'organization') {
+      navigate('/');
+      dispatch(addToast({ message: 'Only organizations can create events', type: 'error' }));
+      return;
+    }
     // Randomize mock data on page load
     const mock = MOCK_DATASETS[Math.floor(Math.random() * MOCK_DATASETS.length)];
     const d = new Date();

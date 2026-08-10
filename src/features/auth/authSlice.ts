@@ -13,6 +13,7 @@ interface RegisterPayload {
   email: string;
   password: string;
   displayName: string;
+  userType: 'volunteer' | 'organization';
 }
 
 const loadUser = (): User | null => {
@@ -43,6 +44,7 @@ export const register = createAsyncThunk<User, RegisterPayload>(
       email: payload.email,
       displayName: payload.displayName,
       createdAt: new Date().toISOString(),
+      userType: payload.userType,
     };
     existing.push({ ...user, password: payload.password });
     localStorage.setItem('trail-dig-users', JSON.stringify(existing));

@@ -58,6 +58,8 @@ const MapPage: React.FC = () => {
   const items = useAppSelector((s) => s.events.items);
   const searchCenter = useAppSelector((s) => s.events.searchCenter);
   const mapSidebarCollapsed = useAppSelector((s) => s.events.mapSidebarCollapsed);
+  const currentUser = useAppSelector((s) => s.auth.user);
+  const canCreate = currentUser?.userType === 'organization';
 
   const [radiusInput, setRadiusInput] = useState('25');
   const [addressQuery, setAddressQuery] = useState('');
@@ -209,7 +211,7 @@ const MapPage: React.FC = () => {
       <div className={`map-sidebar ${nearMin ? 'at-min' : ''} ${nearMax ? 'at-max' : ''}${mapSidebarCollapsed ? ' collapsed' : ''}`} style={{ width: sidebarWidth }}>
         <div className="map-sidebar-header">
           <h1>Home</h1>
-          <Link to="/events/create" className="btn btn-primary btn-sm">+ New</Link>
+          {canCreate && <Link to="/events/create" className="btn btn-primary btn-sm">+ New</Link>}
         </div>
 
         <div className="search-controls">

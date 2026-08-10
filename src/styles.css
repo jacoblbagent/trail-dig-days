@@ -335,6 +335,14 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
 .auth-card .btn-primary { width: 100%; justify-content: center; margin-top: 8px; }
 .auth-toggle { text-align: center; margin-top: 20px; font-size: .9rem; color: var(--stone-500); }
 
+.user-type-options { display: flex; flex-direction: column; gap: 8px; }
+.user-type-option { display: flex; flex-direction: column; gap: 2px; padding: 10px 14px; border: 1px solid var(--stone-200); border-radius: var(--radius); cursor: pointer; transition: border-color .15s, background .15s; }
+.user-type-option:hover { border-color: var(--green-400); background: var(--green-50); }
+.user-type-option.active { border-color: var(--green-600); background: var(--green-50); }
+.user-type-option input { position: absolute; opacity: 0; pointer-events: none; }
+.uto-label { font-weight: 600; font-size: .9rem; color: var(--stone-700); }
+.uto-desc { font-size: .8rem; color: var(--stone-400); }
+
 /* ── Map Page ── */
 .map-page { display: flex; height: 100vh; }
 .map-sidebar {

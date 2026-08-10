@@ -13,6 +13,8 @@ const CalendarPage: React.FC = () => {
   const events = useAppSelector((s) => s.events.items);
   const expanded = useMemo(() => expandRecurring(events), [events]);
   const searchCenter = useAppSelector((s) => s.events.searchCenter);
+  const currentUser = useAppSelector((s) => s.auth.user);
+  const canCreate = currentUser?.userType === 'organization';
   const today = new Date();
   const [viewDate, setViewDate] = useState(new Date(today.getFullYear(), today.getMonth(), 1));
   const [selectedDay, setSelectedDay] = useState<string | null>(null);
@@ -108,7 +110,7 @@ const CalendarPage: React.FC = () => {
       <div className={`map-sidebar ${nearMin ? 'at-min' : ''} ${nearMax ? 'at-max' : ''}`} style={{ width: sidebarWidth }}>
         <div className="map-sidebar-header">
           <h1>Calendar</h1>
-          <Link to="/events/create" className="btn btn-primary btn-sm">+ New</Link>
+          {canCreate && <Link to="/events/create" className="btn btn-primary btn-sm">+ New</Link>}
         </div>
 
         <div className="search-controls">

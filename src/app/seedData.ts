@@ -14,6 +14,7 @@ const DEMO_USER = {
   email: 'demo@trailbuilder.com',
   displayName: 'Trail Builder',
   createdAt: new Date('2026-04-09').toISOString(),
+  userType: 'organization' as const,
 };
 
 const demoProfile: UserProfile = {

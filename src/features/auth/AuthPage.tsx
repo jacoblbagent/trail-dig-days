@@ -5,6 +5,11 @@ import { login, register } from './authSlice';
 import { createProfile } from '../profile/profileSlice';
 import { addToast } from '../toast/toastSlice';
 
+const USER_TYPES = [
+  { value: 'volunteer' as const, label: 'Volunteer', desc: 'Sign up for dig days and help build trails' },
+  { value: 'organization' as const, label: 'Organization', desc: 'Create and manage dig day events' },
+];
+
 const AuthPage: React.FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -14,6 +19,7 @@ const AuthPage: React.FC = () => {
   const [email, setEmail] = useState('demo@trailbuilder.com');
   const [password, setPassword] = useState('demo1234');
   const [displayName, setDisplayName] = useState('Trail Builder');
+  const [userType, setUserType] = useState<'volunteer' | 'organization'>('volunteer');
   const [error, setError] = useState('');
 
   useEffect(() => {
@@ -29,7 +35,7 @@ const AuthPage: React.FC = () => {
         dispatch(addToast({ message: 'Signed in', type: 'success' }));
       } else {
         const user = await dispatch(
-          register({ email, password, displayName })
+          register({ email, password, displayName, userType })
         ).unwrap();
         await dispatch(
           createProfile({ userId: user.id, displayName })
@@ -52,16 +58,39 @@ const AuthPage: React.FC = () => {
         <form onSubmit={handleSubmit}>
           <h2>{isLogin ? 'Welcome Back' : 'Join the Crew'}</h2>
           {!isLogin && (
-            <div className="form-group">
-              <label>Display Name</label>
-              <input
-                type="text"
-                value={displayName}
-                onChange={(e) => setDisplayName(e.target.value)}
-                placeholder="Your trail name"
-                required
-              />
-            </div>
+            <>
+              <div className="form-group">
+                <label>Display Name</label>
+                <input
+                  type="text"
+                  value={displayName}
+                  onChange={(e) => setDisplayName(e.target.value)}
+                  placeholder="Your trail name or organization"
+                  required
+                />
+              </div>
+              <div className="form-group">
+                <label>Account Type</label>
+                <div className="user-type-options">
+                  {USER_TYPES.map((t) => (
+                    <label
+                      key={t.value}
+                      className={`user-type-option ${userType === t.value ? 'active' : ''}`}
+                    >
+                      <input
+                        type="radio"
+                        name="userType"
+                        value={t.value}
+                        checked={userType === t.value}
+                        onChange={() => setUserType(t.value)}
+                      />
+                      <span className="uto-label">{t.label}</span>
+                      <span className="uto-desc">{t.desc}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+            </>
           )}
           <div className="form-group">
             <label>Email</label>
