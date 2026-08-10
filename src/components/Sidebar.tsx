@@ -104,6 +104,12 @@ const Sidebar: React.FC = () => {
             {dark ? <SvgIcon d={SUN_ICON} /> : <SvgIcon d={MOON_ICON} />}
             {showLabels && <span className="sidebar-label">{dark ? 'Light' : 'Dark'}</span>}
           </button>
+          {!isAuthenticated && (
+            <Link to="/auth" className="sidebar-btn" title="Sign In">
+              <SvgIcon d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4 M10 17l5-5-5-5 M13 12H3" />
+              {showLabels && <span className="sidebar-label">Sign In</span>}
+            </Link>
+          )}
           {isAuthenticated && (
             <div className="notif-wrap" ref={notifRef}>
               <button
