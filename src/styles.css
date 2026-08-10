@@ -934,10 +934,9 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
   .sidebar.expanded .sidebar-bottom { width: auto; align-items: center; }
   .sidebar-top,
   .sidebar-bottom {
-    flex-direction: row; align-items: center; gap: 0; flex-shrink: 0; padding: 0;
-    flex: 1; justify-content: space-evenly;
+    display: contents;
   }
-  .sidebar { justify-content: space-evenly; }
+  .sidebar { justify-content: space-evenly; gap: 0; }
   .sidebar.expanded .sidebar-top { align-items: center; }
   .sidebar-bottom { margin-top: 0; }
   .sidebar.expanded .sidebar-bottom { align-items: center; }
