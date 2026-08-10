@@ -11,7 +11,6 @@ import SettingsPage from './features/profile/SettingsPage';
 import CreateEventPage from './features/events/CreateEventPage';
 import EventDetailPage from './features/events/EventDetailPage';
 import RecurringEventsPage from './features/events/RecurringEventsPage';
-import CalendarPage from './features/calendar/CalendarPage';
 import MapPage from './features/map/MapPage';
 
 const App: React.FC = () => {
@@ -26,7 +25,6 @@ const App: React.FC = () => {
               {/* Map-backed routes share the same MapContainer via MapLayout */}
               <Route element={<MapLayout />}>
                 <Route path="/" element={<MapPage />} />
-                <Route path="/calendar" element={<CalendarPage />} />
                 <Route path="/events/recurring" element={<RecurringEventsPage />} />
               </Route>
               {/* Standalone routes (no map) */}

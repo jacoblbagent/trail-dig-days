@@ -11,7 +11,6 @@ const SvgIcon: React.FC<{ d: string; viewBox?: string }> = ({ d, viewBox = '0 0 
 );
 
 const MAP_ICON = 'M1 6v16l7-4 8 4 7-4V2l-7 4-8-4-7 4z M8 2v16 M16 6v16';
-const CALENDAR_ICON = 'M3 5a2 2 0 012-2h14a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5z M16 3v4 M8 3v4 M3 11h18 M7 15h.01 M11 15h.01 M15 15h.01 M7 19h.01 M11 19h.01 M15 19h.01';
 const RECUR_ICON = 'M1 4v6h6 M23 20v-6h-6 M20.49 9A9 9 0 005.64 5.64L1 10 M22 14l-4.64 4.36A9 9 0 013.51 15';
 const PROFILE_ICON = 'M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2 M12 3a4 4 0 100 8 4 4 0 000-8z';
 const SETTINGS_ICON = 'M12 15a3 3 0 100-6 3 3 0 000 6z M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 01-2 2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09z';
@@ -94,7 +93,6 @@ const Sidebar: React.FC = () => {
       <aside className={`sidebar${showLabels ? ' expanded' : ''}`}>
         <div className="sidebar-top">
           {btn('/', MAP_ICON, 'Map')}
-          {btn('/calendar', CALENDAR_ICON, 'Calendar')}
           {btn('/events/recurring', RECUR_ICON, 'Repeating')}
         </div>
         <div className="sidebar-bottom">
