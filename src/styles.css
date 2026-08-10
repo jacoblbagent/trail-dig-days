@@ -700,6 +700,7 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
 .contact-card p { font-size: .875rem; color: var(--stone-500); }
 .contact-card a { font-size: .875rem; }
 .contact-row { display: flex; align-items: center; gap: 10px; }
+.contact-link { display: contents; color: inherit; text-decoration: none; }
 .contact-avatar { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; flex-shrink: 0; }
 .contact-avatar-fallback { display: flex; align-items: center; justify-content: center; background: var(--green-700); color: #fff; font-size: .85rem; font-weight: 600; }
 .contact-info { min-width: 0; }

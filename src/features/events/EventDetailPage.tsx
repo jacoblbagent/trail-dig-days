@@ -142,6 +142,7 @@ const EventDetailPage: React.FC = () => {
               <div className="contact-card">
                 <h4>Contact</h4>
                 <div className="contact-row">
+                  <Link to={`/profile?userId=${event.creatorId}`} className="contact-link">
                   {creatorProfile?.avatarUrl ? (
                     <img src={creatorProfile.avatarUrl} alt="" className="contact-avatar" />
                   ) : (
@@ -154,6 +155,7 @@ const EventDetailPage: React.FC = () => {
                     <a href={`mailto:${event.contactEmail}`}>{event.contactEmail}</a>
                     {event.contactPhone && <p>{event.contactPhone}</p>}
                   </div>
+                  </Link>
                 </div>
               </div>
 

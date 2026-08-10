@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { MapContainer, TileLayer, Marker, Popup, Circle } from 'react-leaflet';
 import MapExtras from '../../features/map/MapExtras';
 import L from 'leaflet';
@@ -78,7 +78,7 @@ const readFileAsDataURL = (file: File): Promise<string> =>
 
 const DigDatesTab: React.FC<{ userId: string }> = ({ userId }) => {
   const { items } = useAppSelector((s) => s.events);
-  const [tab, setTab] = useState<'upcoming' | 'past'>('upcoming');
+  const [tab, setTab] = useState<'upcoming' | 'past' | 'mine'>('upcoming');
 
   const userEvents = items.filter(
     (e) => e.creatorId === userId || e.registeredVolunteers.includes(userId)
@@ -89,7 +89,8 @@ const DigDatesTab: React.FC<{ userId: string }> = ({ userId }) => {
   const past = userEvents.filter((e) => new Date(e.date) < now)
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
-  const list = tab === 'upcoming' ? upcoming : past;
+  const created = items.filter((e) => e.creatorId === userId);
+  const signedUp = items.filter((e) => e.registeredVolunteers.includes(userId) && e.creatorId !== userId);
 
   return (
     <section className="profile-section">
@@ -100,30 +101,106 @@ const DigDatesTab: React.FC<{ userId: string }> = ({ userId }) => {
         <button className={`tab-btn ${tab === 'past' ? 'active' : ''}`} onClick={() => setTab('past')}>
           Past {!!past.length && <span className="tab-count">{past.length}</span>}
         </button>
+        <button className={`tab-btn ${tab === 'mine' ? 'active' : ''}`} onClick={() => setTab('mine')}>
+          My Events
+        </button>
       </div>
 
-      {list.length === 0 ? (
-        <p className="muted" style={{ textAlign: 'center', padding: '24px 0' }}>
-          {tab === 'upcoming' ? 'No upcoming dig dates.' : 'No past dig dates yet.'}
-        </p>
+      {tab === 'mine' ? (
+        <>
+          {created.length === 0 && signedUp.length === 0 ? (
+            <p className="muted" style={{ textAlign: 'center', padding: '24px 0' }}>No events yet.</p>
+          ) : (
+            <>
+              {created.length > 0 && (
+                <section className="profile-section">
+                  <h3 style={{ color: 'var(--stone-600)', fontSize: '.85rem', fontWeight: 600, margin: '0 0 8px' }}>Created by You</h3>
+                  <div className="dig-date-list">
+                    {created.map((e) => (
+                      <Link to={`/events/${e.id}/edit`} key={e.id} className="dig-date-card">
+                        <div className="ddc-left">
+                          <span className="ddc-date">{new Date(e.date).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}</span>
+                          <span className="ddc-time">{e.startTime}</span>
+                        </div>
+                        <div className="ddc-mid">
+                          <span className="ddc-title">{e.title}</span>
+                          <span className="ddc-trail">{e.trailName} · {e.locationName}</span>
+                        </div>
+                        <span className="ddc-spots">{e.registeredVolunteers.length}/{e.maxVolunteers}</span>
+                      </Link>
+                    ))}
+                  </div>
+                </section>
+              )}
+              {signedUp.length > 0 && (
+                <section className="profile-section">
+                  <h3 style={{ color: 'var(--stone-600)', fontSize: '.85rem', fontWeight: 600, margin: '0 0 8px' }}>Signed Up</h3>
+                  <div className="dig-date-list">
+                    {signedUp.map((e) => (
+                      <Link to={`/events/${e.id}`} key={e.id} className="dig-date-card">
+                        <div className="ddc-left">
+                          <span className="ddc-date">{new Date(e.date).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}</span>
+                          <span className="ddc-time">{e.startTime}</span>
+                        </div>
+                        <div className="ddc-mid">
+                          <span className="ddc-title">{e.title}</span>
+                          <span className="ddc-trail">{e.trailName} · {e.locationName}</span>
+                        </div>
+                        <span className="ddc-spots">{e.registeredVolunteers.length}/{e.maxVolunteers}</span>
+                      </Link>
+                    ))}
+                  </div>
+                </section>
+              )}
+            </>
+          )}
+        </>
       ) : (
-        <div className="dig-date-list">
-          {list.slice(0, 10).map((e) => (
-            <Link to={`/events/${e.id}`} key={e.id} className="dig-date-card">
-              <div className="ddc-left">
-                <span className="ddc-date">
-                  {new Date(e.date).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}
-                </span>
-                <span className="ddc-time">{e.startTime}</span>
-              </div>
-              <div className="ddc-mid">
-                <span className="ddc-title">{e.title}</span>
-                <span className="ddc-trail">{DIFF_ICONS[e.difficulty]} {e.trailName} · {e.locationName}</span>
-              </div>
-              <span className="ddc-spots">{e.registeredVolunteers.length}/{e.maxVolunteers}</span>
-            </Link>
-          ))}
-        </div>
+        tab === 'upcoming' ? (
+          upcoming.length === 0 ? (
+            <p className="muted" style={{ textAlign: 'center', padding: '24px 0' }}>No upcoming dig dates.</p>
+          ) : (
+            <div className="dig-date-list">
+              {upcoming.slice(0, 10).map((e) => (
+                <Link to={`/events/${e.id}`} key={e.id} className="dig-date-card">
+                  <div className="ddc-left">
+                    <span className="ddc-date">
+                      {new Date(e.date).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}
+                    </span>
+                    <span className="ddc-time">{e.startTime}</span>
+                  </div>
+                  <div className="ddc-mid">
+                    <span className="ddc-title">{e.title}</span>
+                    <span className="ddc-trail">{DIFF_ICONS[e.difficulty]} {e.trailName} · {e.locationName}</span>
+                  </div>
+                  <span className="ddc-spots">{e.registeredVolunteers.length}/{e.maxVolunteers}</span>
+                </Link>
+              ))}
+            </div>
+          )
+        ) : (
+          past.length === 0 ? (
+            <p className="muted" style={{ textAlign: 'center', padding: '24px 0' }}>No past dig dates yet.</p>
+          ) : (
+            <div className="dig-date-list">
+              {past.slice(0, 10).map((e) => (
+                <Link to={`/events/${e.id}`} key={e.id} className="dig-date-card">
+                  <div className="ddc-left">
+                    <span className="ddc-date">
+                      {new Date(e.date).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}
+                    </span>
+                    <span className="ddc-time">{e.startTime}</span>
+                  </div>
+                  <div className="ddc-mid">
+                    <span className="ddc-title">{e.title}</span>
+                    <span className="ddc-trail">{DIFF_ICONS[e.difficulty]} {e.trailName} · {e.locationName}</span>
+                  </div>
+                  <span className="ddc-spots">{e.registeredVolunteers.length}/{e.maxVolunteers}</span>
+                </Link>
+              ))}
+            </div>
+          )
+        )
       )}
     </section>
   );
@@ -181,10 +258,13 @@ const MyEventsSection: React.FC<{ userId: string }> = ({ userId }) => {
 
 const ProfilePage: React.FC = () => {
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const viewUserId = searchParams.get('userId');
   const { user } = useAppSelector((s) => s.auth);
   const { profiles } = useAppSelector((s) => s.profile);
-  const profile: UserProfile | undefined = user ? profiles[user.id] : undefined;
+  const targetId = viewUserId || user?.id;
+  const profile: UserProfile | undefined = targetId ? profiles[targetId] : undefined;
+  const isOwnProfile = !viewUserId || viewUserId === user?.id;
   const [editMode, setEditMode] = useState(false);
   const [form, setForm] = useState<UserProfile | null>(null);
   const [coverPos, setCoverPos] = useState(50);
@@ -194,21 +274,18 @@ const ProfilePage: React.FC = () => {
   const coverInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    if (!user) navigate('/auth');
-  }, [user, navigate]);
-
-  useEffect(() => {
     if (profile && !form) { setForm({ ...profile }); setCoverPos(profile.theme.coverPosition ?? 50); }
   }, [profile, form]);
 
   if (!profile || !form) {
-    return <div className="profile-page"><p className="muted">Loading profile...</p></div>;
+    return <div className="profile-page"><p className="muted">Profile not found.</p></div>;
   }
 
   const saveField = (partial: Partial<UserProfile>) => {
+    if (!isOwnProfile || !user) return;
     const updated = { ...form, ...partial };
     setForm(updated);
-    dispatch(updateProfile({ userId: user!.id, updates: updated }));
+    dispatch(updateProfile({ userId: user.id, updates: updated }));
   };
 
   const toggleArrayItem = (
@@ -381,6 +458,7 @@ const ProfilePage: React.FC = () => {
             <span>Member Since {new Date(user!.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
             {form.location && <><span className="sep">·</span><span>{form.location}</span></>}
           </p>
+          {isOwnProfile && (
           <button
             className={`profile-edit-btn ${editMode ? 'editing' : ''}`}
             onClick={() => {
@@ -394,6 +472,7 @@ const ProfilePage: React.FC = () => {
           >
             {editMode ? 'Done' : 'Edit'}
           </button>
+          )}
         </div>
       </div>
 
@@ -407,10 +486,10 @@ const ProfilePage: React.FC = () => {
         )}
 
         {/* My Events */}
-        <MyEventsSection userId={user!.id} />
+        {targetId && <MyEventsSection userId={targetId!} />}
 
         {/* Dig Dates */}
-        <DigDatesTab userId={user!.id} />
+        {targetId && <DigDatesTab userId={targetId!} />}
 
         {/* Location */}
         {(editMode || form.location) && (
