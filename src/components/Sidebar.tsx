@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
-import { setTheme, setNotificationsEnabled, setNotificationRadius, markNotificationRead, setReferrerPath } from '../features/events/eventsSlice';
+import { setTheme, setNotificationsEnabled, setNotificationRadius, markNotificationRead, setReferrerPath, setMapSidebarCollapsed } from '../features/events/eventsSlice';
 import { logout } from '../features/auth/authSlice';
 
 const SvgIcon: React.FC<{ d: string; viewBox?: string }> = ({ d, viewBox = '0 0 24 24' }) => (
@@ -27,12 +27,11 @@ const Sidebar: React.FC = () => {
   const profile = useAppSelector((s) => (user ? s.profile.profiles[user.id] : undefined));
   const location = useLocation();
   const theme = useAppSelector((s) => s.events.theme);
-  const { notificationsEnabled, notificationRadius, notifications } = useAppSelector((s) => s.events);
+  const { notificationsEnabled, notificationRadius, notifications, mapSidebarCollapsed } = useAppSelector((s) => s.events);
   const dark = theme === 'dark';
   const unreadCount = notifications.filter((n) => !n.read).length;
   const [showMenu, setShowMenu] = React.useState(false);
   const [showNotifications, setShowNotifications] = React.useState(false);
-  const [collapsed, setCollapsed] = React.useState(false);
   const [radiusInput, setRadiusInput] = React.useState(String(notificationRadius));
   const menuRef = React.useRef<HTMLDivElement>(null);
   const notifRef = React.useRef<HTMLDivElement>(null);
@@ -92,7 +91,7 @@ const Sidebar: React.FC = () => {
 
   return (
       <>
-      <aside className={`sidebar${showLabels ? ' expanded' : ''}${collapsed ? ' collapsed' : ''}`}>
+      <aside className={`sidebar${showLabels ? ' expanded' : ''}`}>
         <div className="sidebar-top">
           {btn('/', MAP_ICON, 'Map')}
           {btn('/calendar', CALENDAR_ICON, 'Calendar')}
@@ -218,13 +217,13 @@ const Sidebar: React.FC = () => {
               )}
             </div>
           )}
-          <button className="sidebar-collapse-btn" onClick={() => setCollapsed(!collapsed)} title={collapsed ? 'Show nav' : 'Hide nav'}>
-            <SvgIcon d={collapsed ? 'M5 12l7-7 7 7' : 'M19 12l-7 7-7-7'} />
-          </button>
-        </div>
-      </aside>
-      {collapsed && <button className="sidebar-show-btn" onClick={() => setCollapsed(false)} title="Show nav">
-        <SvgIcon d="M5 12l7-7 7 7" />
+          <button className="sidebar-collapse-btn" onClick={() => dispatch(setMapSidebarCollapsed(!mapSidebarCollapsed))} title={mapSidebarCollapsed ? 'Show panel' : 'Hide panel'}>
+                    <SvgIcon d={mapSidebarCollapsed ? 'M5 12l7-7 7 7' : 'M19 12l-7 7-7-7'} />
+                  </button>
+                </div>
+              </aside>
+                {mapSidebarCollapsed && <button className="sidebar-show-btn" onClick={() => dispatch(setMapSidebarCollapsed(false))} title="Show panel">
+                  <SvgIcon d="M5 12l7-7 7 7" />
       </button>}
       </>
     );

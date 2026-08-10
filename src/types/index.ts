@@ -130,6 +130,7 @@ export interface EventsState {
   notificationRadius: number;
   notifications: NotificationItem[];
   referrerPath: string;
+  mapSidebarCollapsed: boolean;
 }
 
 // ─── Application Root State ───

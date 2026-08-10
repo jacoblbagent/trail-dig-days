@@ -57,6 +57,7 @@ const MapPage: React.FC = () => {
   const dispatch = useAppDispatch();
   const items = useAppSelector((s) => s.events.items);
   const searchCenter = useAppSelector((s) => s.events.searchCenter);
+  const mapSidebarCollapsed = useAppSelector((s) => s.events.mapSidebarCollapsed);
 
   const [radiusInput, setRadiusInput] = useState('25');
   const [addressQuery, setAddressQuery] = useState('');
@@ -189,7 +190,7 @@ const MapPage: React.FC = () => {
 
   return (
     <>
-      <div className={`map-sidebar ${nearMin ? 'at-min' : ''} ${nearMax ? 'at-max' : ''}`} style={{ width: sidebarWidth }}>
+      <div className={`map-sidebar ${nearMin ? 'at-min' : ''} ${nearMax ? 'at-max' : ''}${mapSidebarCollapsed ? ' collapsed' : ''}`} style={{ width: sidebarWidth }}>
         <div className="map-sidebar-header">
           <h1>Home</h1>
           <Link to="/events/create" className="btn btn-primary btn-sm">+ New</Link>
