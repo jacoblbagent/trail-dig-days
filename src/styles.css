@@ -273,7 +273,7 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
 .notif-item:hover { background: var(--stone-50); }
 .notif-item.unread { background: none; }
 .notif-item.unread::before {
-  content: ''; position: absolute; right: 4px; bottom: 8px;
+  content: ''; position: absolute; right: 8px; bottom: 8px;
   width: 6px; height: 6px; border-radius: 50%; background: var(--green-600);
 }
 .notif-item.unread:hover { background: var(--stone-50); }
