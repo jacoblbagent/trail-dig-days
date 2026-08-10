@@ -950,9 +950,9 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
 
   .profile-menu { left: auto; right: 0; bottom: 100%; margin-bottom: 4px; }
 
-  .map-page { flex-direction: column; height: 100vh; padding-bottom: 52px; box-sizing: border-box; }
-  .map-sidebar { max-width: 100%; min-width: 0; width: 100% !important; overflow-y: auto; }
-  .map-container { flex: none; height: 50vh; }
+  .map-page { position: relative; flex-direction: column; height: 100vh; padding-bottom: 52px; box-sizing: border-box; }
+  .map-sidebar { position: absolute; inset: 0; z-index: 10; max-width: 100%; min-width: 0; width: 100% !important; overflow-y: auto; background: var(--surface); }
+  .map-container { flex: 1; height: auto; }
 
   .map-sidebar-header { padding: 3px 5px; }
   .map-sidebar-header h1 { font-size: 1rem; }
