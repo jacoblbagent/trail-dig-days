@@ -63,7 +63,6 @@ const PageMarkerContent: React.FC = () => {
                   style={{ cursor: 'pointer', textDecoration: 'none', color: 'inherit' }}>
                   <strong>{e.title}</strong>
                 </a>
-                <p>{e.trailName}</p>
                 <p>{new Date(e.date).toLocaleDateString()} · {e.startTime} — {e.locationName}</p>
               </div>
             </Popup>
