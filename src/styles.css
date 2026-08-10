@@ -616,7 +616,7 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
 }
 
 .items-columns { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 28px; }
-.items-section { display: table; width: 100%; }
+.items-section { display: table; width: 100%; margin: 6px; }
 .items-grid { list-style: none; padding: 0; margin: 0; }
 .item-card {
   border-radius: var(--radius);
