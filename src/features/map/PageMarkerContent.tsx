@@ -68,8 +68,7 @@ const PageMarkerContent: React.FC = () => {
                   <strong>{e.title}</strong>
                 </a>
                 <p>{diffIcon[e.difficulty] || ''} {e.trailName}</p>
-                <p>{new Date(e.date).toLocaleDateString()} · {e.startTime}</p>
-                <p>{e.locationName}</p>
+                <p>{new Date(e.date).toLocaleDateString()} · {e.startTime} — {e.locationName}</p>
               </div>
             </Popup>
           </Marker>
