@@ -129,6 +129,56 @@ const DigDatesTab: React.FC<{ userId: string }> = ({ userId }) => {
   );
 };
 
+const MyEventsSection: React.FC<{ userId: string }> = ({ userId }) => {
+  const { items } = useAppSelector((s) => s.events);
+  const created = items.filter((e) => e.creatorId === userId);
+  const signedUp = items.filter((e) => e.registeredVolunteers.includes(userId) && e.creatorId !== userId);
+  return (
+    <>
+      {created.length > 0 && (
+        <section className="profile-section">
+          <h3>Created by You</h3>
+          <div className="dig-date-list">
+            {created.map((e) => (
+              <Link to={`/events/${e.id}/edit`} key={e.id} className="dig-date-card">
+                <div className="ddc-left">
+                  <span className="ddc-date">{new Date(e.date).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}</span>
+                  <span className="ddc-time">{e.startTime}</span>
+                </div>
+                <div className="ddc-mid">
+                  <span className="ddc-title">{e.title}</span>
+                  <span className="ddc-trail">{e.trailName} · {e.locationName}</span>
+                </div>
+                <span className="ddc-spots">{e.registeredVolunteers.length}/{e.maxVolunteers}</span>
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
+      {signedUp.length > 0 && (
+        <section className="profile-section">
+          <h3>Signed Up</h3>
+          <div className="dig-date-list">
+            {signedUp.map((e) => (
+              <Link to={`/events/${e.id}`} key={e.id} className="dig-date-card">
+                <div className="ddc-left">
+                  <span className="ddc-date">{new Date(e.date).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}</span>
+                  <span className="ddc-time">{e.startTime}</span>
+                </div>
+                <div className="ddc-mid">
+                  <span className="ddc-title">{e.title}</span>
+                  <span className="ddc-trail">{e.trailName} · {e.locationName}</span>
+                </div>
+                <span className="ddc-spots">{e.registeredVolunteers.length}/{e.maxVolunteers}</span>
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
+    </>
+  );
+};
+
 const ProfilePage: React.FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -355,6 +405,9 @@ const ProfilePage: React.FC = () => {
           <p>{form.bio}</p>
         </section>
         )}
+
+        {/* My Events */}
+        <MyEventsSection userId={user!.id} />
 
         {/* Dig Dates */}
         <DigDatesTab userId={user!.id} />
