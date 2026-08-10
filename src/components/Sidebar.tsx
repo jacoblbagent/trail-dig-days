@@ -221,7 +221,7 @@ const Sidebar: React.FC = () => {
               )}
             </div>
           )}
-          <button className="sidebar-collapse-btn" onClick={() => dispatch(setMapSidebarCollapsed(!mapSidebarCollapsed))} title={mapSidebarCollapsed ? 'Show panel' : 'Hide panel'}>
+          <button className={`sidebar-btn sidebar-collapse-btn${mapSidebarCollapsed ? ' active' : ''}`} onClick={() => dispatch(setMapSidebarCollapsed(!mapSidebarCollapsed))} title={mapSidebarCollapsed ? 'Show panel' : 'Hide panel'}>
                     <SvgIcon d={mapSidebarCollapsed ? 'M5 12l7-7 7 7' : 'M19 12l-7 7-7-7'} />
                   </button>
                 </div>

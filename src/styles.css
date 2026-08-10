@@ -945,7 +945,7 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
   .sidebar-label { display: none; }
   .app-layout { display: block; }
   .app-main { padding-bottom: 52px; }
-  .sidebar-collapse-btn { display: flex; align-items: center; justify-content: center; position: absolute; left: 8px; bottom: 0; z-index: 2; width: 32px; height: 32px; border: none; background: none; color: var(--stone-400); cursor: pointer; border-radius: var(--radius); flex-shrink: 0; }
+  .sidebar-collapse-btn { display: flex; align-items: center; justify-content: center; position: absolute; left: 8px; bottom: 0; z-index: 2; width: 32px; height: 32px; border: none; cursor: pointer; border-radius: var(--radius); flex-shrink: 0; }
   .sidebar-show-btn { position: fixed; bottom: 8px; left: 50%; transform: translateX(-50%); z-index: 200; width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--stone-200); background: var(--surface); box-shadow: var(--shadow-lg); color: var(--stone-500); cursor: pointer; display: flex; align-items: center; justify-content: center; }
   .map-sidebar.collapsed { display: none; }
 
