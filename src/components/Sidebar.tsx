@@ -94,7 +94,7 @@ const Sidebar: React.FC = () => {
       <aside className={`sidebar${showLabels ? ' expanded' : ''}`}>
         <div className="sidebar-top">
           {btn('/', MAP_ICON, 'Map')}
-          {btn('/events/recurring', RECUR_ICON, 'Repeating')}
+          {btn('/events/recurring', RECUR_ICON, 'Recurring')}
         </div>
         <div className="sidebar-bottom">
           <button

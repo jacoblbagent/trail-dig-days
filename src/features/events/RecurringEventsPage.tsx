@@ -57,7 +57,7 @@ const RecurringEventsPage: React.FC = () => {
     <>
       <div className={`map-sidebar ${nearMin ? 'at-min' : ''} ${nearMax ? 'at-max' : ''}${mapSidebarCollapsed ? ' collapsed' : ''}`} style={{ width: sidebarWidth }}>
         <div className="map-sidebar-header">
-          <h1>Repeating</h1>
+          <h1>Recurring</h1>
           {canCreate && <Link to="/events/create" className="btn btn-primary btn-sm">+ New</Link>}
         </div>
 
