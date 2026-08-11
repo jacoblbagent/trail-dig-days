@@ -9,10 +9,6 @@ import type { DigEvent } from '../../types';
 const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
 const DAYS = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 
-const DIFF_ICONS: Record<string, string> = {
-  easy: 'Easy', moderate: 'Moderate', challenging: 'Challenging', expert: 'Expert',
-};
-
 const EventCard = memo(function EventCard({ event, center }: { event: DigEvent; center: [number, number] | null }) {
   const dist = center ? haversine(center, event.coordinates) : null;
   return (
@@ -34,9 +30,7 @@ const EventCard = memo(function EventCard({ event, center }: { event: DigEvent; 
             <span className="recurring-badge">Recurring</span>
           )}
         </div>
-        <p className="list-card-trail">
-          {DIFF_ICONS[event.difficulty]} {event.trailName}
-        </p>
+        <p className="list-card-trail">{event.trailName}</p>
         <div className="list-card-row">
           <span className="list-card-location">{event.locationName}</span>
           <span className="list-card-sep">·</span>
