@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { HashRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { store } from './app/store';
 import { loadEventsFromStorage } from './features/events/eventsSlice';
@@ -20,7 +20,7 @@ const App: React.FC = () => {
   useEffect(() => { store.dispatch(loadEventsFromStorage()); }, []);
   return (
     <Provider store={store}>
-      <HashRouter>
+      <BrowserRouter basename={import.meta.env.BASE_URL.replace(/\/$/, '')}>
         <div className="app-layout">
           <Sidebar />
           <main className="app-main">
@@ -42,7 +42,7 @@ const App: React.FC = () => {
           </main>
         </div>
         <ToastContainer />
-      </HashRouter>
+      </BrowserRouter>
     </Provider>
   );
 };

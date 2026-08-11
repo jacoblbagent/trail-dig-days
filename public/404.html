@@ -4,10 +4,9 @@
   <meta charset="utf-8">
   <title>Trail Dig Days</title>
   <script>
-    // SPA redirect for GitHub Pages — preserve the path
-    sessionStorage.redirect = location.href;
+    sessionStorage.redirect = location.pathname + location.search + location.hash;
+    location.replace('/trail-dig-days/');
   </script>
-  <meta http-equiv="refresh" content="0;URL='/trail-dig-days/'">
 </head>
 <body></body>
 </html>
