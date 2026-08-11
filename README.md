@@ -39,3 +39,5 @@ The app runs entirely client-side -- all state is in Redux with localStorage per
 **Deploy:** `npx gh-pages -d dist`
 
 Uses HashRouter for GitHub Pages compatibility. Vite base `/trail-dig-days/`.
+
+Routes now use hash-style URLs: `https://jacoblbagent.github.io/trail-dig-days/#/events/create`
