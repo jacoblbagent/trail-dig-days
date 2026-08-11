@@ -208,8 +208,7 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
 .sidebar-btn:hover .sidebar-label { color: var(--stone-600); }
 .sidebar-btn.active { background: var(--green-100); color: var(--green-700); }
 .sidebar-btn.active-referrer { background: color-mix(in srgb, var(--green-100) 50%, transparent); color: color-mix(in srgb, var(--green-700) 50%, transparent); }
-.sidebar-collapse-btn,
-.sidebar-show-btn { display: none; }
+.sidebar-collapse-btn { display: none; }
 
 .profile-menu-wrap { position: relative; }
 .profile-menu {
@@ -1017,7 +1016,6 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
   .app-layout { display: block; }
   .app-main { padding-bottom: 52px; }
   .sidebar-collapse-btn { display: flex; align-items: center; justify-content: center; position: absolute; left: 8px; bottom: 0; z-index: 2; width: 32px; height: 32px; border: none; cursor: pointer; border-radius: var(--radius); flex-shrink: 0; }
-  .sidebar-show-btn { position: fixed; bottom: 8px; left: 50%; transform: translateX(-50%); z-index: 200; width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--stone-200); background: var(--surface); box-shadow: var(--shadow-lg); color: var(--stone-500); cursor: pointer; display: flex; align-items: center; justify-content: center; }
   .map-sidebar.collapsed { display: none; }
 
   .profile-menu { left: auto; right: 0; bottom: 100%; margin-bottom: 4px; }
@@ -1129,7 +1127,6 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
   .sidebar { height: 48px; }
   .sidebar-btn { width: 38px; height: 38px; justify-content: center; gap: 0; }
   .sidebar-collapse-btn { width: 28px; height: 28px; left: 6px; }
-  .sidebar-show-btn { bottom: 6px; width: 36px; height: 36px; }
   .app-main { padding-bottom: 48px; }
   .map-page { padding-bottom: 48px; }
   .map-sidebar { bottom: 48px; }

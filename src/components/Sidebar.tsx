@@ -90,7 +90,7 @@ const Sidebar: React.FC = () => {
   };
 
   return (
-      <>
+      <div>
       <aside className={`sidebar${showLabels ? ' expanded' : ''}`}>
         <div className="sidebar-top">
           {btn('/', MAP_ICON, 'Map')}
@@ -227,10 +227,7 @@ const Sidebar: React.FC = () => {
                   </button>
                 </div>
               </aside>
-                {mapSidebarCollapsed && <button className="sidebar-show-btn" onClick={() => dispatch(setMapSidebarCollapsed(false))} title="Show panel">
-                  <SvgIcon d="M5 12l7-7 7 7" />
-      </button>}
-      </>
+            </div>
     );
   };
 
