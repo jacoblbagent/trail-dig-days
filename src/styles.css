@@ -993,7 +993,7 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
 @media (max-width: 768px) {
   .sidebar {
     position: fixed; bottom: 0; left: 0; right: 0; z-index: 200;
-    width: 100%; flex-direction: row; padding: 0 8px 0 44px;
+    width: 100%; flex-direction: row; padding: 0 8px;
     border-right: none; border-top: 1px solid var(--stone-150);
     height: 52px; gap: 0; align-items: center;
     background: var(--surface);
@@ -1001,7 +1001,9 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
   }
   .sidebar.expanded { width: 100%; align-items: center; padding: 0; }
   .sidebar.expanded .sidebar-btn,
-  .sidebar-btn { width: 44px; height: 44px; justify-content: center; gap: 0; flex-shrink: 0; }
+  .sidebar-btn { background: none; border: none; color: var(--stone-500); cursor: pointer; padding: 0; gap: 0; width: auto; height: auto; flex-shrink: 0; }
+  .sidebar.expanded .sidebar-btn:hover,
+  .sidebar-btn:hover { background: none; color: var(--stone-700); }
   .sidebar.expanded .sidebar-top,
   .sidebar.expanded .sidebar-bottom { width: auto; align-items: center; }
   .sidebar-top,
@@ -1015,7 +1017,7 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
   .sidebar-label { display: none; }
   .app-layout { display: block; }
   .app-main { padding-bottom: 52px; }
-  .sidebar-collapse-btn { display: flex; align-items: center; justify-content: center; position: absolute; left: 8px; bottom: 0; z-index: 2; width: 32px; height: 32px; border: none; cursor: pointer; border-radius: var(--radius); flex-shrink: 0; }
+  .sidebar-collapse-btn { display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; border: none; cursor: pointer; border-radius: var(--radius); flex-shrink: 0; }
   .map-sidebar.collapsed { display: none; }
 
   .profile-menu { left: auto; right: 0; bottom: 100%; margin-bottom: 4px; }
@@ -1125,8 +1127,9 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
   .cal-modal-item { padding: 8px 10px; }
 
   .sidebar { height: 48px; }
-  .sidebar-btn { width: 38px; height: 38px; justify-content: center; gap: 0; }
-  .sidebar-collapse-btn { width: 28px; height: 28px; left: 6px; }
+  .sidebar-btn { background: none; border: none; color: var(--stone-500); cursor: pointer; padding: 0; gap: 0; width: auto; height: auto; flex-shrink: 0; }
+  .sidebar-btn:hover { background: none; color: var(--stone-700); }
+  .sidebar-collapse-btn { width: 28px; height: 28px; }
   .app-main { padding-bottom: 48px; }
   .map-page { padding-bottom: 48px; }
   .map-sidebar { bottom: 48px; }
