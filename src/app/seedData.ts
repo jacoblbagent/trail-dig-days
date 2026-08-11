@@ -2138,13 +2138,15 @@ export const ensureSeedData = () => {
     // Already seeded — dedup by seed event ID to avoid ballooning from
     // day()-relative dates. User-created events (UUIDs) pass through.
     const existing: DigEvent[] = JSON.parse(localStorage.getItem(EVENTS_KEY) || '[]');
-    const seedIds = new Set(seedEvents.map((e) => e.id));
     const seen = new Set<string>();
     const cleaned: DigEvent[] = [];
+    const seedMap = new Map(seedEvents.map((e) => [e.id, e]));
     for (const e of existing) {
-      if (seedIds.has(e.id)) {
+      if (seedMap.has(e.id)) {
         if (seen.has(e.id)) continue;
         seen.add(e.id);
+        cleaned.push(seedMap.get(e.id)!);
+        continue;
       }
       cleaned.push(e);
     }
