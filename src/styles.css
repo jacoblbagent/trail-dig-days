@@ -797,7 +797,7 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
   box-shadow: var(--shadow); transition: transform .15s;
 }
 .avatar-upload-btn:hover { transform: scale(1.1); }
-.profile-crew { color: var(--accent, var(--green-700)); font-weight: 500; font-size: .95rem; }
+.profile-crew { font-weight: 500; font-size: .95rem; }
 .profile-name { font-size: 1.5rem; margin-top: 8px; color: var(--stone-800); }
 .profile-metrics { margin-top: 8px; font-size: .8rem; color: var(--stone-400); display: flex; gap: 6px; flex-wrap: wrap; }
 .profile-metrics .sep { color: var(--stone-300); }
