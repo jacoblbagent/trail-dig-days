@@ -21,10 +21,29 @@ const AuthPage: React.FC = () => {
   const [displayName, setDisplayName] = useState('Trail Builder');
   const [userType, setUserType] = useState<'volunteer' | 'organization'>('volunteer');
   const [error, setError] = useState('');
+  const [demoMode, setDemoMode] = useState<'volunteer' | 'organization'>('organization');
+
+  const fillDemo = (mode: 'volunteer' | 'organization') => {
+    setDemoMode(mode);
+    if (isLogin) {
+      setEmail('demo@trailbuilder.com');
+      setPassword('demo1234');
+    } else {
+      setEmail('demo@trailbuilder.com');
+      setPassword('demo1234');
+      setDisplayName(mode === 'organization' ? 'Trail Builder' : 'Trail Hiker');
+      setUserType(mode);
+    }
+  };
 
   useEffect(() => {
     if (isAuthenticated) navigate('/');
   }, [isAuthenticated, navigate]);
+
+  // Re-fill demo fields when switching login/sign-up
+  useEffect(() => {
+    fillDemo(demoMode);
+  }, [isLogin]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -118,6 +137,21 @@ const AuthPage: React.FC = () => {
             {loading ? '...' : isLogin ? 'Sign In' : 'Create Account'}
           </button>
         </form>
+        <div className="demo-section">
+          <p className="demo-label">This is a demo</p>
+          <div className="demo-toggles">
+            <button
+              className={`demo-btn ${demoMode === 'organization' ? 'active' : ''}`}
+              onClick={() => fillDemo('organization')}
+              type="button"
+            >Organization</button>
+            <button
+              className={`demo-btn ${demoMode === 'volunteer' ? 'active' : ''}`}
+              onClick={() => fillDemo('volunteer')}
+              type="button"
+            >Volunteer</button>
+          </div>
+        </div>
         <p className="auth-toggle">
           {isLogin ? "Don't have an account?" : 'Already have an account?'}{' '}
           <button className="link-btn" onClick={() => {
