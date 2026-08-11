@@ -691,8 +691,6 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
 .item-qty { margin-left: 6px; font-size: .8rem; font-weight: 600; padding: 1px 6px; border-radius: var(--radius-sm); }
 .item-qty.qty-few { color: var(--amber-700); background: var(--yellow-50); }
 .item-qty.qty-plenty { color: var(--green-700); background: var(--green-50); }
-.item-desc { font-size: .8rem; color: var(--stone-400); margin-top: 3px; }
-
 .requirements-list { list-style: disc; padding-left: 20px; }
 .requirements-list li { margin-bottom: 4px; color: var(--stone-600); }
 

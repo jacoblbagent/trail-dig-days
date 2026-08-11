@@ -86,7 +86,6 @@ const EventDetailPage: React.FC = () => {
                       <li key={item.name} className="item-card provided">
                         <span className="item-name">{item.name}</span>
                         <span className={`item-qty qty-${String(item.quantity).toLowerCase()}`}>{item.quantity}</span>
-                        {item.description && <p className="item-desc">{item.description}</p>}
                       </li>
                     ))}
                   </ul>
@@ -102,7 +101,6 @@ const EventDetailPage: React.FC = () => {
                     {event.recommendedItems.map((item) => (
                       <li key={item.name} className={`item-card rec ${item.essential ? 'essential' : ''}`}>
                         <span className="item-name">{item.name}</span>
-                        {item.notes && <p className="item-desc">{item.notes}</p>}
                       </li>
                     ))}
                   </ul>
