@@ -385,7 +385,7 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
 .event-list-sort { display: flex; align-items: center; gap: 4px; position: relative; }
 .event-list-sort-label { font-size: .8rem; color: var(--stone-400); cursor: pointer; user-select: none; }
 .event-list-sort-label:hover { color: var(--stone-600); }
-.event-list-sort-arrow { font-size: .8rem; color: var(--stone-400); cursor: pointer; user-select: none; }
+.event-list-sort-arrow { font-size: .8rem; color: var(--stone-400); cursor: pointer; user-select: none; padding: 4px 10px; min-width: 28px; text-align: center; }
 .event-list-sort-arrow:hover { color: var(--stone-600); }
 .event-list-sort-menu {
   position: absolute; top: 100%; right: 0; z-index: 10;
