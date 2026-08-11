@@ -990,7 +990,7 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
 
 
 /* ── Responsive: Tablets & Small Screens ── */
-@media (max-width: 768px) {
+@media (max-width: 640px) {
   .sidebar {
     position: fixed; bottom: 0; left: 0; right: 0; z-index: 200;
     width: 100%; flex-direction: row; padding: 0 8px;
@@ -1100,7 +1100,7 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
 }
 
 /* ── Responsive: Phones ── */
-@media (max-width: 480px) {
+@media (max-width: 400px) {
   .search-controls { padding: 10px 12px; }
   .address-search input { height: 30px; font-size: .8rem; }
   .radius-control label { font-size: .8rem; }
