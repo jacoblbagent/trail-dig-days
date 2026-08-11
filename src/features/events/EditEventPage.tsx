@@ -102,7 +102,7 @@ const EditEventPage: React.FC = () => {
   const [markerPos, setMarkerPos] = useState<[number, number] | null>(null);
 
   useEffect(() => {
-    if (!user) { navigate('/auth'); return; }
+    if (!user) { navigate('/auth'); dispatch(addToast({ message: 'Please sign in to edit events', type: 'info' })); return; }
     if (!event) return;
     if (event.creatorId !== user.id) { navigate('/'); return; }
     setTitle(event.title);
