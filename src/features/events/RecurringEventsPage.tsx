@@ -21,8 +21,6 @@ const formatDate = (d: string | undefined) => {
 const RecurringEventsPage: React.FC = () => {
   const events = useAppSelector((s) => s.events.items);
   const mapSidebarCollapsed = useAppSelector((s) => s.events.mapSidebarCollapsed);
-  const currentUser = useAppSelector((s) => s.auth.user);
-  const canCreate = currentUser?.userType === 'organization';
   const recurring = events.filter((e) => e.recurrence && e.recurrence !== 'none');
 
   const [sidebarWidth, setSidebarWidth] = useState(380);
@@ -56,12 +54,8 @@ const RecurringEventsPage: React.FC = () => {
   return (
     <>
       <div className={`map-sidebar ${nearMin ? 'at-min' : ''} ${nearMax ? 'at-max' : ''}${mapSidebarCollapsed ? ' collapsed' : ''}`} style={{ width: sidebarWidth }}>
-        <div className="map-sidebar-header">
-          <h1>Recurring</h1>
-          {canCreate && <Link to="/events/create" className="btn btn-primary btn-sm">+ New</Link>}
-        </div>
 
-        <div className="sidebar-content">
+              <div className="sidebar-content">
           {recurring.length === 0 ? (
             <div className="empty-state">
               <p>No recurring events yet.</p>
