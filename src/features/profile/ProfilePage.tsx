@@ -76,7 +76,7 @@ const readFileAsDataURL = (file: File): Promise<string> =>
     reader.readAsDataURL(file);
   });
 
-const DigDatesTab: React.FC<{ userId: string }> = ({ userId }) => {
+const DigDatesTab: React.FC<{ userId: string; displayName?: string }> = ({ userId, displayName }) => {
   const { items } = useAppSelector((s) => s.events);
   const [tab, setTab] = useState<'upcoming' | 'past' | 'mine'>('upcoming');
 
@@ -114,7 +114,7 @@ const DigDatesTab: React.FC<{ userId: string }> = ({ userId }) => {
             <>
               {created.length > 0 && (
                 <section className="profile-section">
-                  <h3 style={{ color: 'var(--stone-600)', fontSize: '.85rem', fontWeight: 600, margin: '0 0 8px' }}>Created by You</h3>
+                  <h3 style={{ color: 'var(--stone-600)', fontSize: '.85rem', fontWeight: 600, margin: '0 0 8px' }}>{displayName ? `Created by ${displayName}` : 'Created by You'}</h3>
                   <div className="dig-date-list">
                     {created.map((e) => (
                       <Link to={`/events/${e.id}/edit`} key={e.id} className="dig-date-card">
@@ -206,7 +206,7 @@ const DigDatesTab: React.FC<{ userId: string }> = ({ userId }) => {
   );
 };
 
-const MyEventsSection: React.FC<{ userId: string }> = ({ userId }) => {
+const MyEventsSection: React.FC<{ userId: string; displayName?: string }> = ({ userId, displayName }) => {
   const { items } = useAppSelector((s) => s.events);
   const created = items.filter((e) => e.creatorId === userId);
   const signedUp = items.filter((e) => e.registeredVolunteers.includes(userId) && e.creatorId !== userId);
@@ -214,7 +214,7 @@ const MyEventsSection: React.FC<{ userId: string }> = ({ userId }) => {
     <>
       {created.length > 0 && (
         <section className="profile-section">
-          <h3>Created by You</h3>
+          <h3>{displayName ? `Created by ${displayName}` : 'Created by You'}</h3>
           <div className="dig-date-list">
             {created.map((e) => (
               <Link to={`/events/${e.id}/edit`} key={e.id} className="dig-date-card">
@@ -486,10 +486,10 @@ const ProfilePage: React.FC = () => {
         )}
 
         {/* My Events */}
-        {targetId && <MyEventsSection userId={targetId!} />}
+        {targetId && <MyEventsSection userId={targetId!} displayName={profile?.displayName} />}
 
         {/* Dig Dates */}
-        {targetId && <DigDatesTab userId={targetId!} />}
+        {targetId && <DigDatesTab userId={targetId!} displayName={profile?.displayName} />}
 
         {/* Location */}
         {(editMode || form.location) && (
