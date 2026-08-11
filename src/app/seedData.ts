@@ -1988,6 +1988,87 @@ const seedEvents: DigEvent[] = [
 
 ];
 
+
+// ── Other creator profiles ─────────────────────────────────────────
+const OTHER_PROFILES: Record<string, UserProfile> = {
+  'other-creator-1': {
+    userId: 'other-creator-1',
+    displayName: 'Galbraith Crew',
+    bio: 'Dedicated trail crew maintaining and building sustainable singletrack in the Pacific Northwest.',
+    avatarUrl: '',
+    location: 'Bellingham, WA',
+    coordinates: [48.7596, -122.4868],
+    trailCrew: 'Galbraith Mountain Trail Crew',
+    trailCrewUrl: '',
+    skills: ['Bench Cutting', 'Rock Work', 'Bridge Building', 'Erosion Control'],
+    certifications: ['Trail Crew Leader', 'Sawyer Level 1', 'First Aid / CPR'],
+    favoriteTrails: [],
+    digStats: { totalDigs: 47, totalHours: 380, totalMiles: 0 },
+    socialLinks: { instagram: '', strava: '', facebook: '', website: '' },
+    gearList: ['McLeod', 'Pick Mattock', 'Shovel', 'Pulaski', 'Crosscut Saw'],
+    availability: [],
+    customFields: [],
+    theme: { accentColor: '#2563eb', headerImage: '', coverPosition: 50, showStats: true, showGear: true, showSocial: false, layout: 'standard' },
+  },
+  'other-creator-2': {
+    userId: 'other-creator-2',
+    displayName: 'UMWELD Training Staff',
+    bio: 'US Forest Service trail training and education.',
+    avatarUrl: '',
+    location: 'Pisgah National Forest, NC',
+    coordinates: [35.3024, -82.4512],
+    trailCrew: 'US Forest Service',
+    trailCrewUrl: '',
+    skills: ['Trail Design', 'Crew Training', 'Erosion Control', 'Saw Operations'],
+    certifications: ['Sawyer Level 2', 'Trail Crew Leader', 'First Aid / CPR', 'Wilderness First Responder'],
+    favoriteTrails: [],
+    digStats: { totalDigs: 89, totalHours: 720, totalMiles: 0 },
+    socialLinks: { instagram: '', strava: '', facebook: '', website: 'https://www.fs.usda.gov' },
+    gearList: ['McLeod', 'Shovel', 'Pulaski', 'Crosscut Saw', 'Chainsaw'],
+    availability: [],
+    customFields: [],
+    theme: { accentColor: '#1a5276', headerImage: '', coverPosition: 50, showStats: true, showGear: true, showSocial: false, layout: 'standard' },
+  },
+  'other-creator-3': {
+    userId: 'other-creator-3',
+    displayName: 'Moab Trail Alliance',
+    bio: "Keeping Moab's world-class trails rideable year-round.",
+    avatarUrl: '',
+    location: 'Moab, UT',
+    coordinates: [38.5733, -109.5498],
+    trailCrew: 'Moab Trail Alliance',
+    trailCrewUrl: '',
+    skills: ['Rock Work', 'Trail Design', 'Erosion Control', 'Signage'],
+    certifications: ['Trail Crew Leader', 'First Aid / CPR'],
+    favoriteTrails: [],
+    digStats: { totalDigs: 62, totalHours: 510, totalMiles: 0 },
+    socialLinks: { instagram: '', strava: '', facebook: '', website: 'https://moabtrailalliance.org' },
+    gearList: ['Rock Bar', 'McLeod', 'Shovel', 'Pick Mattock', 'Gloves'],
+    availability: [],
+    customFields: [],
+    theme: { accentColor: '#b45309', headerImage: '', coverPosition: 50, showStats: true, showGear: true, showSocial: false, layout: 'standard' },
+  },
+  'other-creator-4': {
+    userId: 'other-creator-4',
+    displayName: 'Carolina Trail Crew',
+    bio: 'Volunteer organization dedicated to building and maintaining mountain bike trails across the Carolinas.',
+    avatarUrl: '',
+    location: 'Charlotte, NC',
+    coordinates: [35.2271, -80.8431],
+    trailCrew: 'Tarheel Trailblazers',
+    trailCrewUrl: '',
+    skills: ['Bench Cutting', 'Rock Work', 'Trail Maintenance', 'Crew Leadership'],
+    certifications: ['Trail Crew Leader', 'First Aid / CPR'],
+    favoriteTrails: [],
+    digStats: { totalDigs: 35, totalHours: 280, totalMiles: 0 },
+    socialLinks: { instagram: '', strava: '', facebook: '', website: '' },
+    gearList: ['McLeod', 'Shovel', 'Pick Mattock', 'Pulaski', 'Gloves'],
+    availability: [],
+    customFields: [],
+    theme: { accentColor: '#15803d', headerImage: '', coverPosition: 50, showStats: true, showGear: true, showSocial: false, layout: 'standard' },
+  },
+};
+
 export const ensureSeedData = () => {
   if (localStorage.getItem(SEEDED_KEY)) {
     // Already seeded — dedup by seed event ID to avoid ballooning from
@@ -1998,17 +2079,30 @@ export const ensureSeedData = () => {
     const cleaned: DigEvent[] = [];
     for (const e of existing) {
       if (seedIds.has(e.id)) {
-        if (seen.has(e.id)) continue; // skip duplicates of seed events
+        if (seen.has(e.id)) continue;
         seen.add(e.id);
       }
       cleaned.push(e);
     }
-    // Ensure all current seed events are present (may have been missing if user deleted one)
     const existingIds = new Set(cleaned.map((e) => e.id));
     const missing = seedEvents.filter((e) => !existingIds.has(e.id));
     if (missing.length > 0 || cleaned.length !== existing.length) {
       localStorage.setItem(EVENTS_KEY, JSON.stringify([...cleaned, ...missing]));
     }
+
+    // Ensure other-creator profiles exist (may not exist from earlier seeds)
+    const storedProfiles = JSON.parse(localStorage.getItem(PROFILES_KEY) || '{}');
+    let profilesChanged = false;
+    for (const key of Object.keys(OTHER_PROFILES)) {
+      if (!storedProfiles[key]) {
+        storedProfiles[key] = OTHER_PROFILES[key];
+        profilesChanged = true;
+      }
+    }
+    if (profilesChanged) {
+      localStorage.setItem(PROFILES_KEY, JSON.stringify(storedProfiles));
+    }
+
     return;
   }
 
@@ -2022,6 +2116,7 @@ export const ensureSeedData = () => {
   // Seed profile
   const profiles: Record<string, UserProfile> = {};
   profiles[DEMO_USER.id] = demoProfile;
+  Object.assign(profiles, OTHER_PROFILES);
   localStorage.setItem(PROFILES_KEY, JSON.stringify(profiles));
 
   // Seed events
