@@ -1,10 +1,11 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import MapExtras from '../map/MapExtras';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { registerForEvent } from './eventsSlice';
+import { loadEventsFromStorage } from './eventsSlice';
 import { addToast } from '../toast/toastSlice';
 
 const MapRefCapture: React.FC<{ mapRef: React.MutableRefObject<L.Map | null> }> = ({ mapRef }) => {
@@ -21,6 +22,7 @@ const EventDetailPage: React.FC = () => {
   const { user } = useAppSelector((s) => s.auth);
   const event = useAppSelector((s) => s.events.items.find((e) => e.id === id));
   const referrerPath = useAppSelector((s) => s.events.referrerPath);
+  const [refreshing, setRefreshing] = useState(false);
 
   if (!event) return <div className="loading">Event not found.</div>;
 
@@ -38,6 +40,13 @@ const EventDetailPage: React.FC = () => {
     } catch (err: any) {
       dispatch(addToast({ message: err.message || 'Failed', type: 'error' }));
     }
+  };
+
+  const handleRefresh = async () => {
+    setRefreshing(true);
+    dispatch(loadEventsFromStorage());
+    await new Promise((r) => setTimeout(r, 400));
+    setRefreshing(false);
   };
 
   return (
@@ -127,7 +136,15 @@ const EventDetailPage: React.FC = () => {
                     style={{ width: `${Math.min(100, (volCount / event.maxVolunteers) * 100)}%` }}
                   />
                 </div>
-                <p>{volCount} / {event.maxVolunteers} registered</p>
+                <p>{volCount} / {event.maxVolunteers} registered
+                  <button className="refresh-btn" onClick={handleRefresh} disabled={refreshing} title="Refresh registration count">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className={refreshing ? 'spin' : ''}>
+                      <polyline points="23 4 23 10 17 10" />
+                      <polyline points="1 20 1 14 7 14" />
+                      <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15" />
+                    </svg>
+                  </button>
+                </p>
               </div>
 
               {!isCreator && (

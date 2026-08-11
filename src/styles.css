@@ -715,6 +715,11 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
 .vol-progress { height: 8px; background: var(--stone-200); border-radius: 100px; overflow: hidden; margin-bottom: 6px; }
 .vol-progress-bar { height: 100%; background: var(--green-600); border-radius: 100px; transition: width .3s; }
 .volunteer-info p { font-size: .85rem; color: var(--stone-500); }
+.refresh-btn { background: none; border: none; cursor: pointer; color: var(--stone-400); padding: 2px; vertical-align: middle; margin-left: 6px; line-height: 0; transition: color .15s; }
+.refresh-btn:hover { color: var(--stone-600); }
+.refresh-btn:disabled { opacity: .4; cursor: not-allowed; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.refresh-btn .spin { animation: spin .6s linear infinite; }
 .contact-card { margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--stone-150); }
 .contact-card h4 { font-size: .9rem; color: var(--stone-600); margin-bottom: 6px; }
 .contact-card p { font-size: .875rem; color: var(--stone-500); }
