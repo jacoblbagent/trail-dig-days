@@ -63,7 +63,7 @@ const Sidebar: React.FC = () => {
 
   const isActive = (path: string) => location.pathname === path;
   const isEventPage = location.pathname.startsWith('/events/') && !location.pathname.startsWith('/events/recurring') && !location.pathname.startsWith('/my-events');
-  const showLabels = isEventPage || location.pathname.startsWith('/settings') || location.pathname.startsWith('/profile') || location.pathname.startsWith('/my-events');
+  const showLabels = isEventPage || location.pathname.startsWith('/settings') || location.pathname.startsWith('/profile') || location.pathname.startsWith('/my-events') || location.pathname.startsWith('/auth');
   const cameFrom = (path: string) => isEventPage && prevPath.current === path;
 
   const btn = (to: string, icon: string, label: string) => {
