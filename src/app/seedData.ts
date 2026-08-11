@@ -628,7 +628,7 @@ const seedEvents: DigEvent[] = [
   {
     id: 'seed-event-016',
     creatorId: "other-creator-3",
-    title: "Step Construction \u2014 Kanuga Trail",
+    title: "Step Construction",
     description: "Join us for a full day of trail work on Kanuga Trail. We'll be doing tread work, clearing drains, and improving drainage.",
     trailName: "Kanuga Trail",
     trailSystem: "Dupont State Forest",
@@ -702,7 +702,7 @@ const seedEvents: DigEvent[] = [
   {
     id: 'seed-event-018',
     creatorId: "other-creator-1",
-    title: "Step Construction \u2014 Little River Trail",
+    title: "Step Construction",
     description: "Help us maintain Little River Trail \u2014 one of the most popular trails in the region. Brushing, drain clearing, and tread repair.",
     trailName: "Little River Trail",
     trailSystem: "Dupont State Forest",
@@ -777,7 +777,7 @@ const seedEvents: DigEvent[] = [
   {
     id: 'seed-event-020',
     creatorId: "other-creator-3",
-    title: "Trail Maintenance \u2014 Foothills Trail",
+    title: "Trail Maintenance",
     description: "Help us maintain Foothills Trail \u2014 one of the most popular trails in the region. Brushing, drain clearing, and tread repair.",
     trailName: "Foothills Trail",
     trailSystem: "Sumter National Forest",
@@ -814,7 +814,7 @@ const seedEvents: DigEvent[] = [
   {
     id: 'seed-event-021',
     creatorId: "demo-user-1",
-    title: "Trail Maintenance \u2014 Fisher Farm Trail",
+    title: "Trail Maintenance",
     description: "Join us for a full day of trail work on Fisher Farm Trail. We'll be doing tread work, clearing drains, and improving drainage.",
     trailName: "Fisher Farm Trail",
     trailSystem: "Fisher Farm Park",
@@ -1039,7 +1039,7 @@ const seedEvents: DigEvent[] = [
   {
     id: 'seed-event-027',
     creatorId: "other-creator-1",
-    title: "Step Construction \u2014 Ridgeline Trail",
+    title: "Step Construction",
     description: "Help us maintain Ridgeline Trail \u2014 one of the most popular trails in the region. Brushing, drain clearing, and tread repair.",
     trailName: "Ridgeline Trail",
     trailSystem: "Dupont State Forest",
@@ -1264,7 +1264,7 @@ const seedEvents: DigEvent[] = [
   {
     id: 'seed-event-033',
     creatorId: "other-creator-2",
-    title: "Trail Maintenance \u2014 Little River Trail",
+    title: "Trail Maintenance",
     description: "Monthly work party on Little River Trail. All skill levels welcome. Tools and lunch provided.",
     trailName: "Little River Trail",
     trailSystem: "Dupont State Forest",
@@ -1339,7 +1339,7 @@ const seedEvents: DigEvent[] = [
   {
     id: 'seed-event-035',
     creatorId: "demo-user-1",
-    title: "Trail Maintenance \u2014 Kitsuma Trail",
+    title: "Trail Maintenance",
     description: "Stewardship day at Kitsuma Trail. We'll be clearing blowdown, refreshing trail markers, and doing erosion control.",
     trailName: "Kitsuma Trail",
     trailSystem: "Pisgah National Forest",
