@@ -827,7 +827,7 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
   background: var(--stone-50); text-decoration: none;
   transition: background .15s;
 }
-.dig-date-card:hover { background: var(--stone-100); }
+.dig-date-card:hover { background: var(--stone-100); text-decoration: none; }
 .ddc-left { display: flex; flex-direction: column; min-width: 70px; }
 .ddc-date { font-size: .78rem; font-weight: 600; color: var(--stone-700); line-height: 1.2; }
 .ddc-time { font-size: .72rem; color: var(--stone-400); }
