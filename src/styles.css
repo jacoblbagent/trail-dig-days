@@ -203,7 +203,7 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
   color: var(--stone-400); transition: all .15s; padding: 3px;
   flex-shrink: 0;
 }
-.sidebar.expanded .sidebar-btn { width: 100%; justify-content: flex-start; gap: 10px; padding: 3px 5px; }
+.sidebar.expanded .sidebar-btn { width: 100%; justify-content: flex-start; gap: 10px; padding: 3px 12px 3px 6px; }
 .sidebar-btn:hover { background: var(--stone-100); color: var(--stone-600); }
 .sidebar-btn:hover .sidebar-label { color: var(--stone-600); }
 .sidebar-btn.active { background: var(--green-100); color: var(--green-700); }
