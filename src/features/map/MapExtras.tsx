@@ -22,13 +22,17 @@ const saveLocation = (loc: [number, number]) => {
   try { localStorage.setItem(LOCATION_KEY, JSON.stringify(loc)); } catch {}
 };
 
-const LocateButton: React.FC<{ userLocation: [number, number] | null }> = ({ userLocation }) => {
+const LocateButton: React.FC<{ userLocation: [number, number] | null; onLocate: () => void; isDetecting: boolean }> = ({ userLocation, onLocate, isDetecting }) => {
   const map = useMap();
   return (
     <button
       className="map-locate-btn"
-      onClick={() => userLocation && map.flyTo(userLocation, 12, { duration: 1 })}
-      title="Center on your location"
+      onClick={() => {
+        if (userLocation) map.flyTo(userLocation, 12, { duration: 1 });
+        else onLocate();
+      }}
+      disabled={isDetecting}
+      title="Find my location"
     >
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <circle cx="12" cy="12" r="3" />
@@ -113,7 +117,7 @@ const MapExtras: React.FC = () => {
 
   return (
     <>
-      {userLocation && <LocateButton userLocation={userLocation} />}
+      <LocateButton userLocation={userLocation} onLocate={handleRedetect} isDetecting={isDetecting} />
       {userLocation && (
         <button className="map-redetect-btn" onClick={handleRedetect} disabled={isDetecting}>
           {isDetecting ? 'Detecting…' : 'Re-detect'}
