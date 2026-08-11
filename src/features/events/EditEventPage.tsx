@@ -207,9 +207,12 @@ const EditEventPage: React.FC = () => {
   return (
     <div className="create-event-page">
       <div className="page-header">
-        <h1>Edit Dig Day</h1>
-        <p>Update your event details</p>
-      </div>
+                <div className="page-header-left">
+                  <button className="page-back-btn" onClick={() => navigate(-1)}><span className="nav-arrow">←</span> Back</button>
+                  <h1>Edit Dig Day</h1>
+                </div>
+                <p>Update your event details</p>
+              </div>
 
       <form onSubmit={handleSubmit} className="event-form">
         <div className="form-section">
