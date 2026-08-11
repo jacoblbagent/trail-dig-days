@@ -14,6 +14,7 @@ import MyEventsPage from './features/events/MyEventsPage';
 import EventDetailPage from './features/events/EventDetailPage';
 import RecurringEventsPage from './features/events/RecurringEventsPage';
 import MapPage from './features/map/MapPage';
+import NotFoundPage from './pages/NotFoundPage';
 import ToastContainer from './components/ToastContainer';
 
 const App: React.FC = () => {
@@ -38,6 +39,7 @@ const App: React.FC = () => {
               <Route path="/events/:id" element={<EventDetailPage />} />
               <Route path="/profile" element={<ProfilePage />} />
               <Route path="/settings" element={<SettingsPage />} />
+              <Route path="*" element={<NotFoundPage />} />
             </Routes>
           </main>
         </div>
