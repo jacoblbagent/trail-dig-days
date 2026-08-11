@@ -971,7 +971,7 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
     background: var(--surface);
     transition: none;
   }
-  .sidebar.expanded { width: 100%; align-items: center; padding-left: 0; }
+  .sidebar.expanded { width: 100%; align-items: center; padding: 0; }
   .sidebar.expanded .sidebar-btn,
   .sidebar-btn { width: 44px; height: 44px; padding: 0; justify-content: center; gap: 0; flex-shrink: 0; }
   .sidebar.expanded .sidebar-top,
