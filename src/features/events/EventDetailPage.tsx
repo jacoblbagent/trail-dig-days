@@ -156,7 +156,7 @@ const EventDetailPage: React.FC = () => {
                   className={`btn btn-lg btn-block ${isRegistered ? 'btn-danger' : 'btn-primary'}`}
                   onClick={handleRegister}
                 >
-                  {isRegistered ? ' Unregister' : ' Sign Up for Dig Day'}
+                  {isRegistered ? ' Unregister' : " I'll be there"}
                 </button>
               )}
 
