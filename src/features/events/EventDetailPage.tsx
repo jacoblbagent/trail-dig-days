@@ -23,6 +23,7 @@ const EventDetailPage: React.FC = () => {
   const event = useAppSelector((s) => s.events.items.find((e) => e.id === id));
   const referrerPath = useAppSelector((s) => s.events.referrerPath);
   const [refreshing, setRefreshing] = useState(false);
+  const [showContent, setShowContent] = useState(false);
 
   if (!event) return <div className="loading">Event not found.</div>;
 
@@ -67,7 +68,10 @@ const EventDetailPage: React.FC = () => {
         </div>
 
         <div className="event-detail-grid">
-          <div className="event-detail-main">
+          <div className={`event-detail-main${showContent ? '' : ' collapsed-mobile'}`}>
+            <button className="content-toggle-btn" onClick={() => setShowContent(!showContent)}>
+              <span className="nav-arrow">{showContent ? '▼' : '▶'}</span> {showContent ? 'Hide Details' : 'Show Details'}
+            </button>
             <section>
               <h2>About This Dig Day</h2>
               <p>{event.description}</p>

@@ -662,6 +662,7 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
 
 .event-detail-grid { display: grid; grid-template-columns: 1fr 320px; gap: 32px; }
 .event-detail-main { min-width: 0; padding-bottom: 40px; }
+.content-toggle-btn { display: none; }
 .event-detail-main section { margin-bottom: 28px; }
 .event-detail-main h2 { font-size: 1.1rem; color: var(--stone-700); margin-bottom: 12px; }
 .event-detail-main p { color: var(--stone-600); line-height: 1.7; }
@@ -1038,6 +1039,9 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
   .sidebar-resizer { display: none; }
 
   .event-detail-grid { grid-template-columns: 1fr; }
+  .event-detail-main.collapsed-mobile section,
+  .event-detail-main.collapsed-mobile .items-columns { display: none; }
+  .content-toggle-btn { display: flex; align-items: center; gap: 6px; width: 100%; padding: 10px 12px; border: none; background: var(--stone-50); cursor: pointer; font-size: .9rem; color: var(--stone-600); border-radius: var(--radius); margin-bottom: 12px; }
   .location-section { grid-template-columns: 1fr; }
   .items-columns { grid-template-columns: 1fr; }
   .form-row { flex-direction: column; gap: 8px; }
