@@ -2155,11 +2155,22 @@ export const ensureSeedData = () => {
     }
 
     // Ensure other-creator profiles exist (may not exist from earlier seeds)
+    // and backfill createdAt on profiles that were seeded before the field existed
     const storedProfiles = JSON.parse(localStorage.getItem(PROFILES_KEY) || '{}');
     let profilesChanged = false;
+
+    // Backfill createdAt on demo profile
+    if (storedProfiles[DEMO_USER.id] && !storedProfiles[DEMO_USER.id].createdAt) {
+      storedProfiles[DEMO_USER.id].createdAt = demoProfile.createdAt;
+      profilesChanged = true;
+    }
+
     for (const key of Object.keys(OTHER_PROFILES)) {
       if (!storedProfiles[key]) {
         storedProfiles[key] = OTHER_PROFILES[key];
+        profilesChanged = true;
+      } else if (!storedProfiles[key].createdAt) {
+        storedProfiles[key].createdAt = OTHER_PROFILES[key].createdAt;
         profilesChanged = true;
       }
     }
