@@ -181,9 +181,9 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
 
 /* ── Sidebar ── */
 .sidebar {
-  width: 56px; display: flex; flex-direction: column; align-items: center;
+  display: flex; flex-direction: column; align-items: center;
   background: var(--surface); border-right: 1px solid var(--stone-150);
-  padding: 12px 0; flex-shrink: 0; gap: 4px;
+  flex-shrink: 0; gap: 4px;
   transition: width .15s;
 }
 .sidebar.expanded { width: auto; align-items: flex-start; padding: 0; }
@@ -200,10 +200,10 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
 .sidebar-btn {
   width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;
   border-radius: var(--radius); border: none; background: none; cursor: pointer;
-  color: var(--stone-400); transition: all .15s; padding: 3px;
+  color: var(--stone-400); transition: all .15s; padding: 3px 12px;
   flex-shrink: 0;
 }
-.sidebar.expanded .sidebar-btn { width: 100%; justify-content: flex-start; gap: 10px; padding: 3px 12px 3px 6px; }
+.sidebar.expanded .sidebar-btn { width: 100%; justify-content: flex-start; gap: 10px; }
 .sidebar-btn:hover { background: var(--stone-100); color: var(--stone-600); }
 .sidebar-btn:hover .sidebar-label { color: var(--stone-600); }
 .sidebar-btn.active { background: var(--green-100); color: var(--green-700); }
@@ -973,7 +973,7 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
   }
   .sidebar.expanded { width: 100%; align-items: center; padding: 0; }
   .sidebar.expanded .sidebar-btn,
-  .sidebar-btn { width: 44px; height: 44px; padding: 0; justify-content: center; gap: 0; flex-shrink: 0; }
+  .sidebar-btn { width: 44px; height: 44px; justify-content: center; gap: 0; flex-shrink: 0; }
   .sidebar.expanded .sidebar-top,
   .sidebar.expanded .sidebar-bottom { width: auto; align-items: center; }
   .sidebar-top,
@@ -1098,7 +1098,7 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
   .cal-modal-item { padding: 8px 10px; }
 
   .sidebar { height: 48px; }
-  .sidebar-btn { width: 38px; height: 38px; padding: 0; justify-content: center; gap: 0; }
+  .sidebar-btn { width: 38px; height: 38px; justify-content: center; gap: 0; }
   .sidebar-collapse-btn { width: 28px; height: 28px; left: 6px; }
   .sidebar-show-btn { bottom: 6px; width: 36px; height: 36px; }
   .app-main { padding-bottom: 48px; }
