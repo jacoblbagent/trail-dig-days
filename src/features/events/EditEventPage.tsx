@@ -208,7 +208,7 @@ const EditEventPage: React.FC = () => {
     <div className="create-event-page">
       <div className="page-header">
                 <div className="page-header-left">
-                  <button className="page-back-btn" onClick={() => navigate(-1)}><span className="nav-arrow">←</span> Back</button>
+                  <button className="page-back-btn" onClick={() => navigate(`/events/${id}`)}><span className="nav-arrow">←</span> Back</button>
                   <h1>Edit Dig Day</h1>
                 </div>
                 <p>Update your event details</p>
