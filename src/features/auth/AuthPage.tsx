@@ -25,15 +25,10 @@ const AuthPage: React.FC = () => {
 
   const fillDemo = (mode: 'volunteer' | 'organization') => {
     setDemoMode(mode);
-    if (isLogin) {
-      setEmail('demo@trailbuilder.com');
-      setPassword('demo1234');
-    } else {
-      setEmail('demo@trailbuilder.com');
-      setPassword('demo1234');
-      setDisplayName(mode === 'organization' ? 'Trail Builder' : 'Trail Hiker');
-      setUserType(mode);
-    }
+    setEmail(mode === 'organization' ? 'demo@trailbuilder.com' : 'demo@hiker.com');
+    setPassword('demo1234');
+    setDisplayName(mode === 'organization' ? 'Trail Builder' : 'Trail Hiker');
+    if (!isLogin) setUserType(mode);
   };
 
   useEffect(() => {
