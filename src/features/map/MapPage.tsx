@@ -239,10 +239,10 @@ const MapPage: React.FC = () => {
 
         <div className="calendar-grid-wrap">
           <div className="calendar-nav">
-            <button className="btn btn-ghost btn-sm" onClick={() => setCalendarCollapsed(!calendarCollapsed)}>{calendarCollapsed ? '▸' : '▾'}</button>
             <button className="btn btn-ghost btn-sm" onClick={prevMonth}><span className="nav-arrow">←</span></button>
             <strong>{MONTHS[month]} {year}</strong>
             <button className="btn btn-ghost btn-sm" onClick={nextMonth}>→</button>
+            <button className="btn btn-ghost btn-sm cal-collapse-btn" onClick={() => setCalendarCollapsed(!calendarCollapsed)}>{calendarCollapsed ? '▸' : '▾'}</button>
           </div>
           {!calendarCollapsed && (
           <div className="calendar-grid">
