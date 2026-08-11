@@ -90,7 +90,7 @@ const Sidebar: React.FC = () => {
   };
 
   return (
-      <div>
+      <>
       <aside className={`sidebar${showLabels ? ' expanded' : ''}`}>
         <div className="sidebar-top">
           {btn('/', MAP_ICON, 'Map')}
@@ -227,7 +227,7 @@ const Sidebar: React.FC = () => {
                   </button>
                 </div>
               </aside>
-            </div>
+            </>
     );
   };
 
