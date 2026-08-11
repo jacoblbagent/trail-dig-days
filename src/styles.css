@@ -636,6 +636,11 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
 .event-detail-title-group { margin-bottom: 0; }
 .event-detail-title-group h1 { font-size: 1.8rem; color: var(--stone-800); }
 .trail-name { color: var(--stone-500); font-size: 1rem; margin-top: 4px; }
+.private-badge {
+  display: inline-block; font-size: .7rem; font-weight: 600; text-transform: uppercase;
+  letter-spacing: .5px; background: var(--stone-200); color: var(--stone-600);
+  padding: 2px 8px; border-radius: 4px; vertical-align: middle; margin-left: 8px;
+}
 
 .event-detail-grid { display: grid; grid-template-columns: 1fr 320px; gap: 32px; }
 .event-detail-main { min-width: 0; padding-bottom: 40px; }

@@ -50,7 +50,7 @@ const PageMarkerContent: React.FC = () => {
 
   return (
     <MarkerClusterGroup chunkedLoading spiderfyOnMaxZoom={false} showCoverageOnHover={false} maxClusterRadius={10} disableClusteringAtZoom={4}>
-      {expanded.map((e: DigEvent) => {
+      {expanded.filter((e: DigEvent) => !e.isPrivate).map((e: DigEvent) => {
         const inRange = !inRangeIds || inRangeIds.has(e.id);
         const highlight = hoveredId === e.id;
         return (

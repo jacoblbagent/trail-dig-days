@@ -222,6 +222,7 @@ const CreateEventPage: React.FC = () => {
   const [requirements, setRequirements] = useState('');
   const [recurrence, setRecurrence] = useState<'none' | 'weekly' | 'biweekly' | 'monthly'>('none');
   const [recurrenceEnd, setRecurrenceEnd] = useState('');
+  const [isPrivate, setIsPrivate] = useState(false);
   const [error, setError] = useState('');
 
   const [providedItems, setProvidedItems] = useState<ProvidedItem[]>([]);
@@ -377,6 +378,7 @@ const CreateEventPage: React.FC = () => {
           contactEmail,
           contactPhone,
           imageUrl,
+          isPrivate,
           recurrence,
           recurrenceEnd,
         })
@@ -706,6 +708,14 @@ const CreateEventPage: React.FC = () => {
         </div>
 
         {error && <div className="form-error">{error}</div>}
+
+        <div className="form-group">
+          <label className="check-group">
+            <input type="checkbox" checked={isPrivate} onChange={(e) => setIsPrivate(e.target.checked)} />
+            Private dig day
+          </label>
+          <p className="muted" style={{ fontSize: '.8rem', margin: '4px 0 0 0' }}>Not shown on the map, but anyone with the link can still view it.</p>
+        </div>
 
                 <div className="form-actions">
           <button type="submit" className="btn btn-primary btn-lg">Post Dig Day</button>

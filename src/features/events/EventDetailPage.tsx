@@ -52,7 +52,7 @@ const EventDetailPage: React.FC = () => {
             />
           )}
           <div className="event-detail-title-group">
-            <h1>{event.title}</h1>
+            <h1>{event.title} {event.isPrivate && <span className="private-badge">Private</span>}</h1>
             <p className="trail-name">{event.trailName}{event.trailSystem ? ` · ${event.trailSystem}` : ''}</p>
           </div>
         </div>

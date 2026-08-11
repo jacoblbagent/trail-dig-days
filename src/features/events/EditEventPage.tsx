@@ -88,6 +88,7 @@ const EditEventPage: React.FC = () => {
   const [requirements, setRequirements] = useState('');
   const [recurrence, setRecurrence] = useState<'none' | 'weekly' | 'biweekly' | 'monthly'>('none');
   const [recurrenceEnd, setRecurrenceEnd] = useState('');
+  const [isPrivate, setIsPrivate] = useState(false);
   const [error, setError] = useState('');
 
   const [providedItems, setProvidedItems] = useState<ProvidedItem[]>([]);
@@ -126,6 +127,7 @@ const EditEventPage: React.FC = () => {
     setRequirements(Array.isArray(event.requirements) ? event.requirements.join('\n') : '');
     setRecurrence(event.recurrence || 'none');
     setRecurrenceEnd(event.recurrenceEnd || '');
+    setIsPrivate(event.isPrivate ?? false);
     setProvidedItems(event.providedItems);
     setRecommendedItems(event.recommendedItems);
     const coords: [number, number] = [event.coordinates[0], event.coordinates[1]];
@@ -191,7 +193,7 @@ const EditEventPage: React.FC = () => {
           providedItems, recommendedItems,
           requirements: requirements.split('\n').filter(Boolean),
           parkingNotes, weatherNotes, contactName, contactEmail, contactPhone,
-          imageUrl, recurrence, recurrenceEnd,
+          imageUrl, isPrivate, recurrence, recurrenceEnd,
         },
       })).unwrap();
       navigate(`/events/${id}`);
@@ -451,6 +453,14 @@ const EditEventPage: React.FC = () => {
         </div>
 
         {error && <div className="form-error">{error}</div>}
+
+        <div className="form-group">
+          <label className="check-group">
+            <input type="checkbox" checked={isPrivate} onChange={(e) => setIsPrivate(e.target.checked)} />
+            Private dig day
+          </label>
+          <p className="muted" style={{ fontSize: '.8rem', margin: '4px 0 0 0' }}>Not shown on the map, but anyone with the link can still view it.</p>
+        </div>
 
         <div className="form-actions" style={{ justifyContent: 'space-between' }}>
           <div style={{ display: 'flex', gap: '12px' }}>

@@ -106,6 +106,7 @@ interface CreateEventPayload {
   contactEmail: string;
   contactPhone: string;
   imageUrl: string;
+  isPrivate: boolean;
   recurrence: RecurrenceType;
   recurrenceEnd: string;
 }

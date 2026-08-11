@@ -112,6 +112,7 @@ export interface DigEvent {
   contactEmail: string;
   contactPhone: string;
   imageUrl: string;
+  isPrivate: boolean;
   recurrence?: RecurrenceType;
   recurrenceEnd?: string;
   recurrenceGroupId?: string;
