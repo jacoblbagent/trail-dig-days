@@ -109,7 +109,7 @@ const DigDatesTab: React.FC<{ userId: string; displayName?: string; isOwnProfile
       {tab === 'mine' ? (
         <>
           {created.length === 0 && signedUp.length === 0 ? (
-            <p className="muted" style={{ textAlign: 'center', padding: '24px 0' }}>No events yet.</p>
+            <p className="muted" style={{ padding: '24px 0' }}>No events yet.</p>
           ) : (
             <>
               {created.length > 0 && (
