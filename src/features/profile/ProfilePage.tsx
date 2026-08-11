@@ -455,7 +455,7 @@ const ProfilePage: React.FC = () => {
           <p className="profile-metrics">
             <span>{form.digStats.totalDigs} Dig Days</span>
             <span className="sep">·</span>
-            <span>Member Since {new Date(user!.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
+            <span>Member Since {form.createdAt ? new Date(form.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : ''}</span>
             {form.location && <><span className="sep">·</span><span>{form.location}</span></>}
           </p>
           {isOwnProfile && (

@@ -26,6 +26,7 @@ export interface UserProfile {
   skills: string[];
   certifications: string[];
   favoriteTrails: string[];
+  createdAt?: string;
   digStats: {
     totalDigs: number;
     totalHours: number;
