@@ -686,7 +686,7 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
 }
 .item-name { font-weight: 500; color: var(--stone-700); font-size: .9rem; }
 .item-qty { margin-left: 6px; font-size: .8rem; font-weight: 600; padding: 1px 6px; border-radius: var(--radius-sm); }
-.item-qty.qty-few { color: var(--amber-700); background: var(--amber-50); }
+.item-qty.qty-few { color: var(--amber-700); background: var(--yellow-50); }
 .item-qty.qty-plenty { color: var(--green-700); background: var(--green-50); }
 .item-desc { font-size: .8rem; color: var(--stone-400); margin-top: 3px; }
 
