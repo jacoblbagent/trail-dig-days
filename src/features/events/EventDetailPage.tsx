@@ -73,7 +73,6 @@ const EventDetailPage: React.FC = () => {
               <span className="nav-arrow">{showContent ? '▼' : '▶'}</span> {showContent ? 'Hide Details' : 'Show Details'}
             </button>
             <section>
-              <h2>About This Dig Day</h2>
               <p>{event.description}</p>
             </section>
 
