@@ -1,119 +1,41 @@
-# ⛰️ Trail Dig Days
+# Trail Dig Days
 
-A web app for trail building volunteers to **find, organize, and sign up** for volunteer dig days. Built with React, TypeScript, Redux, and Leaflet maps.
+A trail building volunteer event management SPA. Browse, create, and join trail work days with interactive maps, calendar views, and customizable profiles.
 
-**[🌐 Live App](https://jacoblbagent.github.io/trail-dig-days)**
-
----
+**Stack:** Vite + React + TypeScript + Redux Toolkit + Leaflet  
+**Deployed:** [jacoblbagent.github.io/trail-dig-days](https://jacoblbagent.github.io/trail-dig-days/)
 
 ## Features
 
-### 🗺️ Map-Based Discovery
-- Interactive Leaflet map showing all dig day events
-- **Radius search** — find events within 5–250 miles of your location
-- Geolocation auto-detect with visual search radius overlay
-- Click markers for quick event info
+- **Map view** -- Browse events by location with search radius filtering
+- **Calendar view** -- See events on a monthly calendar with day-dot indicators
+- **Event management** -- Create, edit, and manage dig day events (organization accounts)
+- **Profile system** -- Customizable user profiles with bio, skills, gear, and social links
+- **Repeating events** -- Support for recurring work party schedules
+- **Auth** -- Sign-up/login with volunteer/organization account types
+- **Notifications** -- In-app notification panel with radius-based event filtering
+- **Theme** -- Light/dark mode toggle
 
-### 👤 Customizable Profiles
-- Bio, location, trail crew affiliation
-- **Skills & certifications** — toggle from 12 trail-building expertise tags
-- **Dig stats** — track total dig days, hours, and trail miles
-- **Gear list** — show what equipment you bring
-- **Custom fields** — add any label/value pair to your profile
-- **Profile theme** — accent color picker, header image, layout (standard/compact/hero), toggle visibility of stats/gear/social
-
-### 🛠️ Organizing Dig Days
-Create detailed events specifying:
-- Trail name, system, location (lat/lng), date/time
-- Physical difficulty level
-- **Provided by crew** — toggle from 18 common items (shovels, McLeods, water, gloves, PPE, snacks) with quantity and notes
-- **Recommended to bring** — toggle from 16 essentials, mark each as ⭐ essential with optional notes
-- Requirements (one per line), parking & weather notes
-- Volunteer capacity with live progress bar
-- Contact info displayed to registrants
-
-### 📋 Event Management
-- Sign up / unregister for dig days
-- Volunteer count with progress bar
-- Event detail page with location map, items grids, and requirements list
-- Creators can delete their events
-
----
-
-## Tech Stack
-
-| Layer | Technology |
-|-------|-----------|
-| **UI** | React 18 + TypeScript |
-| **State** | Redux Toolkit |
-| **Routing** | React Router v6 |
-| **Map** | Leaflet + react-leaflet |
-| **Build** | Vite |
-| **Deploy** | GitHub Pages (via Actions) |
-
----
-
-## Getting Started
+## Quick Start
 
 ```bash
-# Clone
-git clone https://github.com/jacoblbagent/trail-dig-days.git
-cd trail-dig-days
-
-# Install
 npm install
-
-# Dev server
-npm run dev        # http://localhost:5173
-
-# Production build
-npm run build
-npm run preview    # http://localhost:4173
+npm run dev     # starts on port 5174
+npm run build   # tsc -b && vite build
 ```
 
----
+The app runs entirely client-side -- all state is in Redux with localStorage persistence. Seed data (59+ events, demo user, creator profiles) loads automatically on first visit.
 
-## Project Structure
+## Demo Login
 
-```
-src/
-├── app/
-│   ├── store.ts          # Redux store configuration
-│   └── hooks.ts          # Typed hooks (useAppDispatch, useAppSelector)
-├── types/
-│   └── index.ts          # All TypeScript interfaces
-├── features/
-│   ├── auth/
-│   │   ├── authSlice.ts  # Auth state + register/login thunks
-│   │   └── AuthPage.tsx  # Login / signup form
-│   ├── profile/
-│   │   ├── profileSlice.ts  # Profile CRUD + custom fields
-│   │   └── ProfilePage.tsx  # Heavily customizable profile editor
-│   ├── events/
-│   │   ├── eventsSlice.ts  # Events CRUD + volunteer registration
-│   │   ├── CreateEventPage.tsx  # Dig day creation form
-│   │   └── EventDetailPage.tsx  # Full event view
-│   └── map/
-│       └── MapPage.tsx    # Split-panel map + event list
-├── components/
-│   └── Navbar.tsx         # Top navigation bar
-├── styles.css             # All styles
-├── App.tsx                # Router + app shell
-└── main.tsx               # Entry point
-```
+- **Email:** demo@trailbuilder.com
+- **Password:** demo1234
+- **Account type:** Organization (can create events)
 
----
+## Development
 
-## Data Storage
+**Dev server:** `http://localhost:5174/trail-dig-days/`
+**Build:** `npm run build`
+**Deploy:** `npx gh-pages -d dist`
 
-All data is persisted to **localStorage** — no backend server required:
-- `trail-dig-auth` — current user session
-- `trail-dig-users` — all registered accounts
-- `trail-dig-profiles` — user profiles
-- `trail-dig-events` — dig day events
-
----
-
-## License
-
-MIT
+Uses HashRouter for GitHub Pages compatibility. Vite base `/trail-dig-days/`.
