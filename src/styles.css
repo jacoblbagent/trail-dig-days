@@ -857,10 +857,7 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
 .ddc-title { font-size: .85rem; font-weight: 600; color: var(--stone-800); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .ddc-trail { font-size: .75rem; color: var(--stone-500); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .ddc-spots { font-size: .72rem; color: var(--stone-400); }
-.profile-section {
-  background: var(--surface); border: 1px solid var(--stone-200);
-  border-radius: var(--radius); padding: 20px; margin-bottom: 16px;
-}
+.profile-section { padding: 20px 0; margin-bottom: 16px; }
 .profile-section h3 { font-size: .9rem; color: var(--stone-600); margin-bottom: 12px; text-transform: uppercase; letter-spacing: .5px; }
 .profile-section p { color: var(--stone-600); line-height: 1.6; }
 .profile-section textarea { width: 100%; padding: 10px; border: 1px solid var(--stone-200); border-radius: var(--radius); resize: vertical; }
@@ -1063,7 +1060,7 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
   .profile-avatar-section { margin: -32px 16px 12px; }
   .profile-body { padding: 0 16px; }
   .profile-name { font-size: 1.2rem; }
-  .profile-section { padding: 16px; }
+  .profile-section { padding: 16px 0; }
 
   .settings-page { padding: 20px 12px; }
   .auth-page { padding: 20px 12px; }
@@ -1166,7 +1163,7 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
   .profile-avatar-section { margin: -28px 12px 10px; }
   .profile-body { padding: 0 12px; }
   .profile-name { font-size: 1rem; }
-  .profile-section { padding: 12px; }
+  .profile-section { padding: 12px 0; }
 
   .settings-page { padding: 12px 8px; }
   .settings-page-header { margin-bottom: 20px; }
