@@ -79,7 +79,8 @@ const CalendarPage: React.FC = () => {
   const today = new Date();
   const [viewDate, setViewDate] = useState(new Date(today.getFullYear(), today.getMonth(), 1));
   const [selectedDay, setSelectedDay] = useState<string | null>(null);
-  const [radiusInput, setRadiusInput] = useState('10');
+  const searchRadius = useAppSelector((s) => s.events.searchRadius);
+  const [radiusInput, setRadiusInput] = useState(() => String(searchRadius));
   const [sidebarWidth, setSidebarWidth] = useState(380);
   const [calendarCollapsed, setCalendarCollapsed] = useState(true);
   const [searchTab, setSearchTab] = useState<'country' | 'nearme'>('country');

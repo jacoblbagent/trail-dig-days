@@ -118,7 +118,8 @@ const MapPage: React.FC = () => {
   const currentUser = useAppSelector((s) => s.auth.user);
   const canCreate = currentUser?.userType === 'organization';
 
-  const [radiusInput, setRadiusInput] = useState('10');
+  const searchRadius = useAppSelector((s) => s.events.searchRadius);
+  const [radiusInput, setRadiusInput] = useState(() => String(searchRadius));
   const [sortBy, setSortBy] = useState<'date' | 'distance' | 'spots'>('date');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
   const [showSortMenu, setShowSortMenu] = useState(false);
