@@ -652,7 +652,6 @@ input[type="time"]::-webkit-calendar-picker-indicator { filter: invert(0.55); cu
 .image-drop-zone.has-image { border: 1px solid var(--stone-200); padding: 4px; min-height: auto; }
 .image-drop-placeholder { display: flex; flex-direction: column; align-items: center; gap: 8px; color: var(--stone-400); font-size: .9rem; }
 .image-drop-preview { max-height: 200px; max-width: 100%; border-radius: var(--radius-sm); object-fit: contain; }
-[data-theme="dark"] .image-drop-zone { border-color: var(--stone-600); }
 [data-theme="dark"] .image-drop-zone:hover, [data-theme="dark"] .image-drop-zone.drag-over { border-color: var(--green-600); background: var(--stone-100); }
 
 .trail-results {
