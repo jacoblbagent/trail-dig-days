@@ -228,10 +228,11 @@ const MapLayout: React.FC = () => {
                   dispatch(setSearchCenter(US_STATE_COORDS[selectedState]));
                   dispatch(setSearchRadius(100));
                 }
-              } else if (pendingCenter) {
-                dispatch(setSearchCenter(pendingCenter));
+              } else {
+                const c = pendingCenter || searchCenter || center;
+                dispatch(setSearchCenter(c));
                 dispatch(setSearchRadius(parseFloat(radiusInput) || 10));
-                setPendingCenter(null);
+                if (pendingCenter) setPendingCenter(null);
               }
             }}>Search</button>
           </div>
