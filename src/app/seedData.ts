@@ -2169,6 +2169,29 @@ const seedComments = (): Comment[] => [
   // Event 010 — Sherman Branch Trail
   { id: 'seed-cmt-022', eventId: 'seed-event-010', userId: 'demo-user-1', parentId: null, text: 'Signed up! I can bring a truckload of tools from the club shed.', createdAt: '2026-08-11T16:00:00' as string, votes: { 'other-creator-3': 'up' } },
   { id: 'seed-cmt-023', eventId: 'seed-event-010', userId: 'other-creator-3', parentId: 'seed-cmt-022', text: 'That would save us a lot of hauling. Let me know if you need help loading up.', createdAt: '2026-08-11T17:00:00' as string, votes: {} },
+
+  // Event 005 — Dupont Forest Saturday Ride
+  { id: 'seed-cmt-024', eventId: 'seed-event-005', userId: 'other-creator-1', parentId: null, text: 'The Cedar Rock trail has some serious erosion issues near the top. Glad this is being addressed!', createdAt: '2026-08-05T08:00:00' as string, votes: { 'demo-user-1': 'up' } },
+  { id: 'seed-cmt-025', eventId: 'seed-event-005', userId: 'demo-user-1', parentId: 'seed-cmt-024', text: 'Yes, the water bars need rebuilding in several spots. We will focus on that section first.', createdAt: '2026-08-05T09:00:00' as string, votes: { 'other-creator-1': 'up' } },
+
+  // Event 006 — Uwharrie Trail Building
+  { id: 'seed-cmt-026', eventId: 'seed-event-006', userId: 'other-creator-3', parentId: null, text: 'I have never worked on Uwharrie before. What should I bring?', createdAt: '2026-08-06T10:00:00' as string, votes: {} },
+  { id: 'seed-cmt-027', eventId: 'seed-event-006', userId: 'demo-user-1', parentId: 'seed-cmt-026', text: 'Bring sturdy boots, gloves, and plenty of water. We will have tools on site.', createdAt: '2026-08-06T11:00:00' as string, votes: { 'other-creator-3': 'up' } },
+  { id: 'seed-cmt-028', eventId: 'seed-event-006', userId: 'other-creator-4', parentId: null, text: 'The Dutchman Creek trail is one of my favorites. Happy to help maintain it.', createdAt: '2026-08-07T09:00:00' as string, votes: { 'demo-user-1': 'up' } },
+
+  // Event 007 — Lake James Trail Run
+  { id: 'seed-cmt-029', eventId: 'seed-event-007', userId: 'other-creator-2', parentId: null, text: 'The Paddy Creek loop could use some new trail markers. I can bring a staple gun and signs.', createdAt: '2026-08-08T07:00:00' as string, votes: { 'demo-user-1': 'up', 'other-creator-3': 'up' } },
+  { id: 'seed-cmt-030', eventId: 'seed-event-007', userId: 'demo-user-1', parentId: 'seed-cmt-029', text: 'That would be fantastic! The markers at the west junction have been missing for months.', createdAt: '2026-08-08T08:00:00' as string, votes: { 'other-creator-2': 'up' } },
+
+  // Event 008 — Hanging Rock Trail Day
+  { id: 'seed-cmt-031', eventId: 'seed-event-008', userId: 'other-creator-3', parentId: null, text: 'I can bring a crew of volunteers from the local high school trail club.', createdAt: '2026-08-09T10:00:00' as string, votes: { 'demo-user-1': 'up' } },
+  { id: 'seed-cmt-032', eventId: 'seed-event-008', userId: 'demo-user-1', parentId: 'seed-cmt-031', text: 'That is wonderful! We will make sure to have enough tools for everyone.', createdAt: '2026-08-09T11:00:00' as string, votes: { 'other-creator-3': 'up' } },
+  { id: 'seed-cmt-033', eventId: 'seed-event-008', userId: 'other-creator-1', parentId: null, text: 'Is there a plan for lunch? I can coordinate food if needed.', createdAt: '2026-08-10T08:00:00' as string, votes: { 'demo-user-1': 'up', 'other-creator-3': 'up' } },
+  { id: 'seed-cmt-034', eventId: 'seed-event-008', userId: 'demo-user-1', parentId: 'seed-cmt-033', text: 'Yes, we usually provide lunch for volunteers. I will have the BBQ trailer there by noon.', createdAt: '2026-08-10T09:00:00' as string, votes: { 'other-creator-1': 'up' } },
+
+  // Event 009 — Crowders Mountain Trail Work
+  { id: 'seed-cmt-035', eventId: 'seed-event-009', userId: 'other-creator-2', parentId: null, text: 'The Backside Trail has some slick rock sections that could use diagonal carving for traction.', createdAt: '2026-08-11T07:00:00' as string, votes: { 'demo-user-1': 'up' } },
+  { id: 'seed-cmt-036', eventId: 'seed-event-009', userId: 'demo-user-1', parentId: 'seed-cmt-035', text: 'Good point. We will add that to the work order for the day.', createdAt: '2026-08-11T08:00:00' as string, votes: { 'other-creator-2': 'up' } },
 ];
 
 export { seedComments };
