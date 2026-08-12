@@ -178,7 +178,6 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
 
 /* Desktop collapsed sidebar */
 .map-sidebar.collapsed { width: 0 !important; overflow: hidden; flex-shrink: 0; padding: 0; border: none; }
-.map-sidebar.collapsed ~ .sidebar-resizer { display: none; }
 .map-sidebar.collapsed .search-controls { display: none; }
 .map-sidebar.collapsed .sidebar-body { display: none; }
 .app-layout { display: flex; height: 100vh; padding-top: 48px; box-sizing: border-box; }
