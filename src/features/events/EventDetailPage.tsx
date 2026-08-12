@@ -4,9 +4,9 @@ import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import MapExtras from '../map/MapExtras';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { registerForEvent } from './eventsSlice';
-import { loadEventsFromStorage } from './eventsSlice';
+import { registerForEvent, loadEventsFromStorage } from './eventsSlice';
 import { addToast } from '../toast/toastSlice';
+import CommentSection from '../comments/CommentSection';
 
 const MapRefCapture: React.FC<{ mapRef: React.MutableRefObject<L.Map | null> }> = ({ mapRef }) => {
   const map = useMap();
@@ -238,6 +238,9 @@ const EventDetailPage: React.FC = () => {
             </div>
           </div>
         </div>
+
+        <CommentSection eventId={event.id} eventCreatorId={event.creatorId} />
+
       </div>
     </div>
   );

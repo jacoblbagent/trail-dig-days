@@ -11,12 +11,12 @@ export interface MapMarker {
 }
 
 const seedNotifications = (): NotificationItem[] => [
-  { id: 'notif-1', eventId: 'seed-event-043', message: 'New dig day: Galbraith Mountain Dig Day', read: false, createdAt: '2026-08-07T10:00:00' },
-  { id: 'notif-2', eventId: 'seed-event-045', message: 'Demo Forest Flow Trail needs volunteers', read: false, createdAt: '2026-08-06T14:30:00' },
-  { id: 'notif-3', eventId: 'seed-event-046', message: 'Porcupine Rim Trail work session posted', read: false, createdAt: '2026-08-05T09:15:00' },
-  { id: 'notif-4', eventId: 'seed-event-049', message: 'Copper Harbor trail repair this weekend', read: true, createdAt: '2026-08-03T16:00:00' },
-  { id: 'notif-5', eventId: 'seed-event-054', message: 'Buffalo Creek Homestead work day rescheduled', read: true, createdAt: '2026-08-01T11:45:00' },
-  { id: 'notif-6', eventId: 'seed-event-056', message: 'Oak Mountain trail maintenance signup open', read: false, createdAt: '2026-08-08T08:00:00' },
+  { id: 'notif-1', eventId: 'seed-event-043', type: 'event', message: 'New dig day: Galbraith Mountain Dig Day', read: false, createdAt: '2026-08-07T10:00:00' },
+  { id: 'notif-2', eventId: 'seed-event-045', type: 'event', message: 'Demo Forest Flow Trail needs volunteers', read: false, createdAt: '2026-08-06T14:30:00' },
+  { id: 'notif-3', eventId: 'seed-event-046', type: 'event', message: 'Porcupine Rim Trail work session posted', read: false, createdAt: '2026-08-05T09:15:00' },
+  { id: 'notif-4', eventId: 'seed-event-049', type: 'event', message: 'Copper Harbor trail repair this weekend', read: true, createdAt: '2026-08-03T16:00:00' },
+  { id: 'notif-5', eventId: 'seed-event-054', type: 'event', message: 'Buffalo Creek Homestead work day rescheduled', read: true, createdAt: '2026-08-01T11:45:00' },
+  { id: 'notif-6', eventId: 'seed-event-056', type: 'event', message: 'Oak Mountain trail maintenance signup open', read: false, createdAt: '2026-08-08T08:00:00' },
 ];
 
 const STORAGE_KEY = 'trail-dig-events';
@@ -234,6 +234,7 @@ const eventsSlice = createSlice({
           state.notifications.unshift({
             id: uuidv4(),
             eventId: action.payload.id,
+            type: 'event',
             message: `New dig day: ${action.payload.title}`,
             read: false,
             createdAt: new Date().toISOString(),

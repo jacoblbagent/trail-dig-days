@@ -1228,3 +1228,109 @@ input[type="time"]::-webkit-calendar-picker-indicator { filter: invert(0.55); cu
   .contact-row { flex-wrap: wrap; }
   .event-detail-page { padding-top: 16px; }
 }
+
+/* ── Comments ── */
+.comments-section {
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid var(--stone-300);
+}
+.comments-section h2 {
+  font-size: 1.1rem;
+  margin-bottom: 16px;
+}
+.comment-form { margin-bottom: 24px; }
+.comment-input {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid var(--stone-300);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: inherit;
+  font-family: inherit;
+  font-size: .88rem;
+  resize: vertical;
+}
+.comment-input:focus { outline: none; border-color: var(--stone-500); }
+.comment-form-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 6px;
+}
+.comment {
+  padding: 12px 0;
+  border-bottom: 1px solid var(--stone-150);
+}
+.comment-reply {
+  margin-left: 32px;
+  border-bottom: none;
+  padding: 8px 0;
+}
+.comment-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+.comment-author {
+  font-weight: 600;
+  font-size: .85rem;
+  color: var(--stone-700);
+  text-decoration: none;
+}
+.comment-author:hover { text-decoration: underline; }
+.comment-time {
+  font-size: .75rem;
+  color: var(--stone-400);
+}
+.comment-text {
+  font-size: .88rem;
+  line-height: 1.45;
+  margin-bottom: 6px;
+  white-space: pre-wrap;
+}
+.comment-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.comment-votes {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.vote-btn {
+  background: none;
+  border: 1px solid var(--stone-300);
+  border-radius: var(--radius-sm);
+  font-size: .65rem;
+  padding: 2px 5px;
+  cursor: pointer;
+  color: var(--stone-500);
+  line-height: 1;
+}
+.vote-btn:hover { background: var(--stone-100); }
+.vote-btn.voted { background: var(--stone-200); color: var(--stone-700); }
+.vote-score {
+  font-size: .8rem;
+  font-weight: 600;
+  min-width: 20px;
+  text-align: center;
+  color: var(--stone-500);
+}
+.vote-score.pos { color: var(--green-700); }
+.vote-score.neg { color: var(--red-600); }
+.comment-reply-btn {
+  background: none;
+  border: none;
+  font-size: .8rem;
+  color: var(--stone-500);
+  cursor: pointer;
+  padding: 2px 6px;
+}
+.comment-reply-btn:hover { color: var(--stone-700); }
+.comment-reply-form {
+  margin-top: 8px;
+  margin-left: 32px;
+}
+.comments-list { margin-top: 8px; }

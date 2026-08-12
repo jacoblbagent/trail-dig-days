@@ -79,12 +79,32 @@ export interface RecommendedItem {
 
 export type RecurrenceType = 'none' | 'weekly' | 'biweekly' | 'monthly';
 
+// ─── Comments ───
+export interface Comment {
+  id: string;
+  eventId: string;
+  userId: string;
+  parentId: string | null;
+  text: string;
+  createdAt: string;
+  votes: Record<string, 'up' | 'down'>;
+}
+
+export interface CommentsState {
+  items: Comment[];
+  loading: boolean;
+}
+
+// ─── Notifications ───
 export interface NotificationItem {
   id: string;
   eventId: string;
+  type: 'event' | 'comment' | 'reply' | 'vote';
   message: string;
   read: boolean;
   createdAt: string;
+  fromUserId?: string;
+  commentId?: string;
 }
 
 export interface DigEvent {
@@ -141,6 +161,7 @@ export interface RootState {
   auth: AuthState;
   profile: ProfileState;
   events: EventsState;
+  comments: CommentsState;
 }
 
 export interface ProfileState {
