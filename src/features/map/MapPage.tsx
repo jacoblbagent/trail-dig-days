@@ -304,7 +304,45 @@ const MapPage: React.FC = () => {
         </div>
 
         <div className="sidebar-body">
+          <div className="sidebar-col sidebar-col-cal">
+            <div className="calendar-grid-wrap">
+              <div className="calendar-nav">
+                <button className="btn btn-ghost btn-sm" onClick={prevMonth}><span className="nav-arrow">←</span></button>
+                <strong>{MONTHS[month]} {year}</strong>
+                <button className="btn btn-ghost btn-sm" onClick={nextMonth}>→</button>
+                <button className="btn btn-ghost btn-sm cal-collapse-btn" onClick={() => setCalendarCollapsed(!calendarCollapsed)}>{calendarCollapsed ? '▸' : '▾'}</button>
+              </div>
+              {!calendarCollapsed && (
+              <div className="calendar-grid">
+                {DAYS.map((d) => (<div key={d} className="cal-day-header">{d}</div>))}
+                {cells.map((cell, i) => {
+                  const dateStr = cell.day
+                    ? `${year}-${String(month + 1).padStart(2, '0')}-${String(cell.day).padStart(2, '0')}`
+                    : '';
+                  return (
+                    <div
+                      key={i}
+                      className={`cal-cell ${cell.day === 0 ? 'cal-empty' : ''} ${cell.events.length > 0 ? 'cal-has-events' : ''} ${isToday(cell.day) ? 'cal-today' : ''} ${selectedDay === dateStr ? 'cal-selected' : ''}`}
+                      onClick={() => { if (cell.day > 0) { setSelectedDay(selectedDay === dateStr ? null : dateStr); } }}
+                      title={cell.events.length > 0 ? `${cell.events.length} event${cell.events.length > 1 ? 's' : ''}` : undefined}
+                    >
+                      {cell.day > 0 && (
+                        <>
+                          <span className="cal-day-num">{cell.day}</span>
+                          {cell.events.length > 0 && <span className="cal-dot">{cell.events.length}</span>}
+                        </>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+              )}
+            </div>
+          </div>
+
           <div className="sidebar-col sidebar-col-list">
+            <hr className="calendar-separator" />
+
             {selectedDay ? (
               <div className="calendar-list">
                 <h2>
@@ -376,42 +414,6 @@ const MapPage: React.FC = () => {
         <div className="resizer-limits">
           <span className={`limit-indicator ${nearMin ? 'visible' : ''}`}>{SIDEBAR_MIN}px</span>
           <span className={`limit-indicator ${nearMax ? 'visible' : ''}`}>{SIDEBAR_MAX}px</span>
-        </div>
-      </div>
-
-      <div className="calendar-floating">
-        <div className="calendar-grid-wrap">
-          <div className="calendar-nav">
-            <button className="btn btn-ghost btn-sm" onClick={prevMonth}><span className="nav-arrow">←</span></button>
-            <strong>{MONTHS[month]} {year}</strong>
-            <button className="btn btn-ghost btn-sm" onClick={nextMonth}>→</button>
-            <button className="btn btn-ghost btn-sm cal-collapse-btn" onClick={() => setCalendarCollapsed(!calendarCollapsed)}>{calendarCollapsed ? '▸' : '▾'}</button>
-          </div>
-          {!calendarCollapsed && (
-          <div className="calendar-grid">
-            {DAYS.map((d) => (<div key={d} className="cal-day-header">{d}</div>))}
-            {cells.map((cell, i) => {
-              const dateStr = cell.day
-                ? `${year}-${String(month + 1).padStart(2, '0')}-${String(cell.day).padStart(2, '0')}`
-                : '';
-              return (
-                <div
-                  key={i}
-                  className={`cal-cell ${cell.day === 0 ? 'cal-empty' : ''} ${cell.events.length > 0 ? 'cal-has-events' : ''} ${isToday(cell.day) ? 'cal-today' : ''} ${selectedDay === dateStr ? 'cal-selected' : ''}`}
-                  onClick={() => { if (cell.day > 0) { setSelectedDay(selectedDay === dateStr ? null : dateStr); } }}
-                  title={cell.events.length > 0 ? `${cell.events.length} event${cell.events.length > 1 ? 's' : ''}` : undefined}
-                >
-                  {cell.day > 0 && (
-                    <>
-                      <span className="cal-day-num">{cell.day}</span>
-                      {cell.events.length > 0 && <span className="cal-dot">{cell.events.length}</span>}
-                    </>
-                  )}
-                </div>
-              );
-            })}
-          </div>
-          )}
         </div>
       </div>
     </>
