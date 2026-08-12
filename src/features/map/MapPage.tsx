@@ -124,11 +124,12 @@ const MapPage: React.FC = () => {
   const [showSortMenu, setShowSortMenu] = useState(false);
   const [calendarCollapsed, setCalendarCollapsed] = useState(false);
   const [showRecurring, setShowRecurring] = useState(false);
-  const [sidebarWidth, setSidebarWidth] = useState(380);
+  const [rightWidth, setRightWidth] = useState(380);
+  const leftWidth = 380;
   const [searchTab, setSearchTab] = useState<'country' | 'nearme'>('nearme');
   const [selectedState, setSelectedState] = useState('');
   const [pendingCenter, setPendingCenter] = useState<[number, number] | null>(null);
-  const widthRef = useRef(380);
+  const rightWidthRef = useRef(380);
   const sortRef = useRef<HTMLDivElement>(null);
 
   const today = new Date();
@@ -155,21 +156,21 @@ const MapPage: React.FC = () => {
     return () => document.removeEventListener('mousedown', onClick);
   }, [showSortMenu]);
 
-  const SIDEBAR_MIN = 240;
-  const SIDEBAR_MAX = 600;
-  const SIDEBAR_DEFAULT = 380;
+  const RIGHT_SIDEBAR_MIN = 240;
+  const RIGHT_SIDEBAR_MAX = 600;
+  const RIGHT_SIDEBAR_DEFAULT = 380;
 
-  const nearMin = sidebarWidth <= SIDEBAR_MIN + 20 && sidebarWidth > 0;
-  const nearMax = sidebarWidth >= SIDEBAR_MAX - 20;
+  const nearMin = rightWidth <= RIGHT_SIDEBAR_MIN + 20 && rightWidth > 0;
+  const nearMax = rightWidth >= RIGHT_SIDEBAR_MAX - 20;
 
   const handleResizeStart = (e: React.MouseEvent) => {
     e.preventDefault();
     const startX = e.clientX;
-    const startW = widthRef.current;
+    const startW = rightWidthRef.current;
     const onMove = (me: MouseEvent) => {
-      const newW = Math.max(0, Math.min(SIDEBAR_MAX, startW - (me.clientX - startX)));
-      widthRef.current = newW;
-      setSidebarWidth(newW);
+      const newW = Math.max(RIGHT_SIDEBAR_MIN, Math.min(RIGHT_SIDEBAR_MAX, startW - (me.clientX - startX)));
+      rightWidthRef.current = newW;
+      setRightWidth(newW);
     };
     const onUp = () => {
       document.removeEventListener('mousemove', onMove);
@@ -184,8 +185,8 @@ const MapPage: React.FC = () => {
   };
 
   const handleResizerDblClick = () => {
-    widthRef.current = SIDEBAR_DEFAULT;
-    setSidebarWidth(SIDEBAR_DEFAULT);
+    rightWidthRef.current = RIGHT_SIDEBAR_DEFAULT;
+    setRightWidth(RIGHT_SIDEBAR_DEFAULT);
   };
 
   const expanded = useMemo(() => expandRecurring(items), [items]);
@@ -269,7 +270,7 @@ const MapPage: React.FC = () => {
 
   return (
     <>
-      <div className={`map-sidebar ${nearMin ? 'at-min' : ''} ${nearMax ? 'at-max' : ''}${mapSidebarCollapsed ? ' collapsed' : ''}`} style={{ width: sidebarWidth }}>
+      <div className={`map-sidebar ${nearMin ? 'at-min' : ''} ${nearMax ? 'at-max' : ''}${mapSidebarCollapsed ? ' collapsed' : ''}`} style={{ width: leftWidth }}>
 
               <div className="search-controls">
           <div className="search-tabs">
@@ -355,12 +356,12 @@ const MapPage: React.FC = () => {
       <div className={`sidebar-resizer ${nearMin ? 'at-min' : ''} ${nearMax ? 'at-max' : ''}`} onMouseDown={handleResizeStart} onDoubleClick={handleResizerDblClick} style={{ order: 2 }}>
         <div className="resizer-grip" />
         <div className="resizer-limits">
-          <span className={`limit-indicator ${nearMin ? 'visible' : ''}`}>{SIDEBAR_MIN}px</span>
-          <span className={`limit-indicator ${nearMax ? 'visible' : ''}`}>{SIDEBAR_MAX}px</span>
+          <span className={`limit-indicator ${nearMin ? 'visible' : ''}`}>{RIGHT_SIDEBAR_MIN}px</span>
+          <span className={`limit-indicator ${nearMax ? 'visible' : ''}`}>{RIGHT_SIDEBAR_MAX}px</span>
         </div>
       </div>
 
-      <div className="sidebar-col sidebar-col-list" style={{ width: sidebarWidth, order: 2 }}>
+      <div className="sidebar-col sidebar-col-list" style={{ width: rightWidth, order: 2 }}>
 
         {selectedDay ? (
           <div className="calendar-list">
