@@ -69,6 +69,7 @@ const App: React.FC = () => {
     <Provider store={store}>
       <BrowserRouter basename={import.meta.env.BASE_URL.replace(/\/$/, '')}>
         <RedirectHandler>
+          <header className="top-nav">Dig Days</header>
           <div className="app-layout">
             <Sidebar />
             <main className="app-main">

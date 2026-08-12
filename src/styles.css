@@ -166,7 +166,13 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
 .tag-checkbox input { width: 14px; height: 14px; }
 
 /* ── App Layout ── */
-.app-layout { display: flex; height: 100vh; }
+.top-nav {
+  position: fixed; top: 0; left: 0; width: 100%; height: 48px; z-index: 1100;
+  display: flex; align-items: center; padding: 0 16px;
+  background: var(--surface); border-bottom: 1px solid var(--stone-150);
+  font-size: 1.05rem; font-weight: 600; color: var(--stone-800);
+}
+.app-layout { display: flex; height: 100vh; padding-top: 48px; box-sizing: border-box; }
 .app-main { flex: 1; overflow-y: auto; }
 
 /* ── Toast Messages ── */
@@ -359,7 +365,7 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
 .uto-desc { font-size: .8rem; color: var(--stone-400); }
 
 /* ── Map Page ── */
-.map-page { display: flex; height: 100vh; }
+.map-page { display: flex; height: 100%; }
 .map-sidebar {
   min-width: 0;
   display: flex; flex-direction: column;
@@ -914,7 +920,7 @@ input[type="time"]::-webkit-calendar-picker-indicator { filter: invert(0.55); cu
 
 
 /* ── Calendar Page ── */
-.calendar-page { padding: 24px 20px 40px; height: 100vh; display: flex; flex-direction: column; }
+.calendar-page { padding: 24px 20px 40px; height: 100%; display: flex; flex-direction: column; }
 .calendar-header { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
 .calendar-header h1 { font-size: 1.4rem; color: var(--stone-800); }
 .calendar-layout {
@@ -1065,7 +1071,7 @@ input[type="time"]::-webkit-calendar-picker-indicator { filter: invert(0.55); cu
 
   .profile-menu { left: auto; right: 0; bottom: 100%; margin-bottom: 4px; }
 
-  .map-page { position: relative; flex-direction: column; height: 100vh; padding-bottom: 52px; box-sizing: border-box; }
+  .map-page { position: relative; flex-direction: column; height: 100%; padding-bottom: 52px; box-sizing: border-box; }
   .map-sidebar { position: absolute; top: 0; left: 0; right: 0; bottom: 52px; z-index: 10; max-width: 100%; min-width: 0; width: 100% !important; overflow-y: auto; background: var(--surface); }
   .map-container { flex: 1; height: auto; position: relative; overflow: hidden; z-index: 0; }
 
