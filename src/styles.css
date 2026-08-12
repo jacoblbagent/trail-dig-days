@@ -721,7 +721,7 @@ input[type="time"]::-webkit-calendar-picker-indicator { filter: invert(0.55); cu
 }
 .event-detail-page-back:hover { background: var(--stone-100); color: var(--stone-600); border-color: var(--stone-300); }
 .event-detail-inner { max-width: 960px; margin: 0 auto; padding: 0 20px 32px; }
-.event-detail-header { margin-bottom: 24px; }
+.event-detail-header { margin-bottom: 12px; }
 .event-cover { height: 240px; border-radius: var(--radius); background-size: cover; background-position: center; margin-bottom: 16px; }
 .event-detail-title-group { margin-bottom: 0; }
 .event-detail-title-group h1 { font-size: 1.8rem; color: var(--stone-800); }
