@@ -201,13 +201,6 @@ const CalendarPage: React.FC = () => {
           }}>Search</button>
         </div>
 
-        <div className="filter-sections">
-          <button className="filter-btn">Difficulty</button>
-          <button className="filter-btn">Trail Type</button>
-          <button className="filter-btn">Distance</button>
-          <button className="filter-btn">Elevation</button>
-        </div>
-
         <button className="cal-collapse-btn" style={{ margin: '4px 0' }} onClick={() => setCalendarCollapsed(!calendarCollapsed)}>
           {calendarCollapsed ? '▶' : '▼'} Calendar
         </button>

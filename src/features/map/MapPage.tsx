@@ -311,13 +311,6 @@ const MapPage: React.FC = () => {
         </label>
       </div>
 
-        <div className="filter-sections">
-          <button className="filter-btn">Difficulty</button>
-          <button className="filter-btn">Trail Type</button>
-          <button className="filter-btn">Distance</button>
-          <button className="filter-btn">Elevation</button>
-        </div>
-
         <div className="sidebar-body">
           <div className="sidebar-col sidebar-col-cal">
             <div className="calendar-grid-wrap">
