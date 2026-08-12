@@ -216,7 +216,6 @@ const EditEventPage: React.FC = () => {
 
       <form onSubmit={handleSubmit} className="event-form">
         <div className="form-section">
-          <h2>Event Details</h2>
           <div className="form-group">
             <label>Event Title *</label>
             <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="e.g. Upper Ridge Reroute Dig Day" required />
