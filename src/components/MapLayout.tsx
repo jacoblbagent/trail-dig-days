@@ -72,6 +72,18 @@ const MapResizeWatcher: React.FC = () => {
   return null;
 };
 
+const PanelPopupCloser: React.FC<{ showPanel: string | null }> = ({ showPanel }) => {
+  const map = useMap();
+  const prevRef = React.useRef(showPanel);
+  useEffect(() => {
+    if (prevRef.current !== showPanel) {
+      prevRef.current = showPanel;
+      map.closePopup();
+    }
+  }, [showPanel, map]);
+  return null;
+};
+
 const FilterCalendar: React.FC<{ onClose: () => void }> = ({ onClose }) => {
   const dispatch = useAppDispatch();
   const items = useAppSelector((s) => s.events.items);
@@ -264,6 +276,7 @@ const MapLayout: React.FC = () => {
           />
           <MapMoveHandler />
           <MapResizeWatcher />
+          <PanelPopupCloser showPanel={showPanel} />
           <MapCenterUpdater loc={searchCenter} />
           <TileLoadIndicator />
           <PageMarkerContent />
