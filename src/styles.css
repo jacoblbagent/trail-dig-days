@@ -384,6 +384,7 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
 .search-select:disabled { opacity: .6; cursor: not-allowed; }
 .search-select:focus { outline: none; border-color: var(--green-600); }
 .search-nearme { display: flex; flex-direction: column; gap: 8px; }
+.btn-search { width: 100%; }
 .radius-map-wrap { border: 1px solid var(--stone-200); border-radius: var(--radius); overflow: hidden; height: 200px; }
 .radius-map { width: 100%; height: 100%; }
 .radius-locate-btn {

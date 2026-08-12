@@ -129,6 +129,7 @@ const CalendarPage: React.FC = () => {
               <SearchRadiusMap center={searchCenter || [39.7392, -104.9903]} radius={parseFloat(radiusInput) || 25} onCenterChange={(c) => dispatch(setSearchCenter(c))} />
             </div>
           )}
+          <button className="btn btn-primary btn-search">Search</button>
         </div>
 
         <div className="calendar-grid-wrap">
