@@ -177,12 +177,10 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
 .sidebar-collapse-btn:hover { background: var(--stone-100); color: var(--stone-800); }
 
 /* Desktop collapsed sidebar */
-.map-sidebar.collapsed { width: 40px !important; overflow: hidden; flex-shrink: 0; }
-.map-sidebar.collapsed ~ .sidebar-col-list { display: none; }
+.map-sidebar.collapsed { width: 0 !important; overflow: hidden; flex-shrink: 0; padding: 0; border: none; }
 .map-sidebar.collapsed ~ .sidebar-resizer { display: none; }
 .map-sidebar.collapsed .search-controls { display: none; }
 .map-sidebar.collapsed .sidebar-body { display: none; }
-.sidebar-col-list.collapsed { display: none; }
 .app-layout { display: flex; height: 100vh; padding-top: 48px; box-sizing: border-box; }
 .app-main { flex: 1; overflow-y: auto; }
 
