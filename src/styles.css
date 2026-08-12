@@ -372,11 +372,6 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
   background: var(--surface); border-right: 1px solid var(--stone-150);
 }
 .search-controls { padding: 14px 20px; border-bottom: 1px solid var(--stone-150); }
-.map-sidebar-header {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 12px; border-bottom: 1px solid var(--stone-150); margin-bottom: 10px;
-}
-.map-sidebar-header h1 { font-size: 1.2rem; color: var(--stone-800); }
 .radius-control { margin-bottom: 8px; }
 .radius-control label { font-size: .85rem; color: var(--stone-600); }
 .radius-control input[type="range"] { width: 100%; margin-top: 4px; accent-color: var(--green-700); }
@@ -1076,8 +1071,6 @@ input[type="time"]::-webkit-calendar-picker-indicator { filter: invert(0.55); cu
   .map-container { flex: 1; height: auto; position: relative; overflow: hidden; z-index: 0; }
 
   .search-controls { padding: 10px 12px; }
-  .map-sidebar-header { padding: 3px 5px; }
-  .map-sidebar-header h1 { font-size: 1rem; }
   .event-list { padding: 8px; }
   .event-list-card { padding: 10px; }
   .list-card-img { height: 56px; }
@@ -1184,8 +1177,6 @@ input[type="time"]::-webkit-calendar-picker-indicator { filter: invert(0.55); cu
   .map-sidebar { bottom: 48px; }
   .sidebar-body { flex-direction: column; }
   .search-controls { padding: 8px 10px; }
-  .map-sidebar-header { padding: 3px 5px; }
-  .map-sidebar-header h1 { font-size: .9rem; }
   .event-list { padding: 6px; }
   .event-list-card { padding: 8px; border-radius: calc(var(--radius) - 2px); margin-bottom: 6px; }
   .list-card-img { height: 44px; }

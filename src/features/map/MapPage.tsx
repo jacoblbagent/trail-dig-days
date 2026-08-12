@@ -257,9 +257,6 @@ const MapPage: React.FC = () => {
   return (
     <>
       <div className={`map-sidebar ${nearMin ? 'at-min' : ''} ${nearMax ? 'at-max' : ''}${mapSidebarCollapsed ? ' collapsed' : ''}`} style={{ width: sidebarWidth }}>
-        <div className="map-sidebar-header">
-          <h1>Dig Days</h1>
-        </div>
 
               <div className="search-controls">
           <div className="search-tabs">
