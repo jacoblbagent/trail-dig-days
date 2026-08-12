@@ -355,7 +355,7 @@ const CreateEventPage: React.FC = () => {
     ];
 
     try {
-      await dispatch(
+      const event = await dispatch(
         createEvent({
           creatorId: user.id,
           title,
@@ -383,7 +383,7 @@ const CreateEventPage: React.FC = () => {
           recurrenceEnd,
         })
       ).unwrap();
-      navigate('/');
+      navigate(`/events/${event.id}`);
       dispatch(addToast({ message: 'Dig day created!', type: 'success' }));
     } catch (err: any) {
       setError(err.message || 'Failed to create event');
