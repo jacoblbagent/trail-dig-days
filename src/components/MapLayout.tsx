@@ -8,6 +8,9 @@ import MapResizeHandler from '../features/map/MapResizeHandler';
 import TileLoadIndicator from '../features/map/TileLoadIndicator';
 import PageMarkerContent from '../features/map/PageMarkerContent';
 import MapExtras from '../features/map/MapExtras';
+import SearchRadiusMap from '../features/calendar/SearchRadiusMap';
+
+const DEFAULT_CENTER: [number, number] = [39.7392, -104.9903];
 
 const US_STATES = [
   'Alabama','Alaska','Arizona','Arkansas','California','Colorado','Connecticut','Delaware',
@@ -158,6 +161,7 @@ const MapLayout: React.FC = () => {
                   <label>Search radius: <strong>{radiusInput} mi</strong></label>
                   <input type="range" min={5} max={100} value={radiusInput} onChange={(e) => setRadiusInput(e.target.value)} />
                 </div>
+                <SearchRadiusMap center={pendingCenter || searchCenter || DEFAULT_CENTER} radius={parseFloat(radiusInput) || 10} onCenterChange={setPendingCenter} onLocate={(c) => { dispatch(setSearchCenter(c)); setPendingCenter(null); }} />
               </div>
             )}
             <button className="btn btn-search" disabled={locTab === 'country' ? !selectedState : !pendingCenter && parseFloat(radiusInput) === searchRadius} onClick={() => {
