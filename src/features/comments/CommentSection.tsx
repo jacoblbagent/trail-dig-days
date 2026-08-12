@@ -20,6 +20,7 @@ const CommentSection: React.FC<Props> = ({ eventId, eventCreatorId }) => {
   const [replyTo, setReplyTo] = useState<string | null>(null);
   const [replyText, setReplyText] = useState('');
   const [collapsed, setCollapsed] = useState<Set<string>>(new Set());
+  const [hoveredId, setHoveredId] = useState<string | null>(null);
 
   const topLevel = comments.filter((c) => !c.parentId);
   const getReplies = (parentId: string) => comments.filter((c) => c.parentId === parentId);
@@ -113,21 +114,24 @@ const CommentSection: React.FC<Props> = ({ eventId, eventCreatorId }) => {
     });
   };
 
-  const renderComment = (c: Comment, depth = 0) => {
+  const renderComment = (c: Comment, depth = 0, ancestors: string[] = []) => {
     const votes = netVotes(c);
     const my = myVote(c);
     const replies = getReplies(c.id);
     const threadCount = countThread(c.id);
     const isCollapsed = collapsed.has(c.id);
+    const isHovered = hoveredId !== null && ancestors.includes(hoveredId);
 
     return (
       <div key={c.id} className="comment">
         <div
-          className="comment-indent"
+          className={`comment-indent ${isHovered ? 'hvr' : ''}`}
           onClick={() => threadCount > 0 && toggleCollapse(c.id)}
+          onMouseEnter={() => setHoveredId(c.id)}
+          onMouseLeave={() => setHoveredId(null)}
           style={{ paddingLeft: depth > 0 ? `${depth * 20}px` : 0 }}
         >
-          {depth > 0 && <div className="indent-line" />}
+          {depth > 0 && <div className={`indent-line ${isHovered ? 'hvr' : ''}`} />}
         </div>
         <div className="comment-body">
           <div className="comment-header">
@@ -179,7 +183,7 @@ const CommentSection: React.FC<Props> = ({ eventId, eventCreatorId }) => {
                   </div>
                 </div>
               )}
-              {replies.map((r) => renderComment(r, depth + 1))}
+              {replies.map((r) => renderComment(r, depth + 1, [...ancestors, c.id]))}
             </>
           ) : (
             <div className="comment-collapsed" onClick={() => toggleCollapse(c.id)}>
