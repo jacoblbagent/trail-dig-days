@@ -35,7 +35,7 @@ const EventDetailPage: React.FC = () => {
   const creatorProfile = profiles[event.creatorId];
 
   const handleRegister = async () => {
-    if (!user) { navigate('/auth'); dispatch(addToast({ message: 'Please sign in to register for dig days', type: 'info' })); return; }
+    if (!user) { navigate('/auth'); dispatch(addToast({ message: 'Please sign in to register for dig days', type: 'warning' })); return; }
     try {
       await dispatch(registerForEvent({ eventId: event.id, userId: user.id })).unwrap();
       dispatch(addToast({ message: isRegistered ? 'Unregistered' : 'Signed up!', type: 'success' }));

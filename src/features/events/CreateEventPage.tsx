@@ -239,7 +239,7 @@ const CreateEventPage: React.FC = () => {
   useEffect(() => {
     if (!user) {
       navigate('/auth');
-      dispatch(addToast({ message: 'Please sign in to create events', type: 'info' }));
+      dispatch(addToast({ message: 'Please sign in to create events', type: 'warning' }));
       return;
     }
     if (user.userType !== 'organization') {

@@ -5,7 +5,7 @@ import { v4 as uuidv4 } from 'uuid';
 export interface Toast {
   id: string;
   message: string;
-  type: 'success' | 'error' | 'info';
+  type: 'success' | 'error' | 'info' | 'warning';
 }
 
 interface ToastState {
