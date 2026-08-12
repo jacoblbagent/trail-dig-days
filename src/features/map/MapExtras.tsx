@@ -48,23 +48,17 @@ const FitBounds: React.FC = () => {
   const events = useAppSelector((s) => s.events.items);
 
   const isCalendarPage = location.pathname.startsWith('/calendar');
-  const isRecurringPage = location.pathname.startsWith('/events/recurring');
 
   useEffect(() => {
-    if (!isCalendarPage && !isRecurringPage) return;
+    if (!isCalendarPage) return;
 
-    let target = events;
-    if (isRecurringPage) {
-      target = events.filter((e) => e.recurrence && e.recurrence !== 'none');
-    }
-
-    const expanded = expandRecurring(target);
+    const expanded = expandRecurring(events);
     if (expanded.length === 0) return;
 
     const coords = expanded.map((e) => e.coordinates);
     const bounds = L.latLngBounds(coords);
     map.fitBounds(bounds, { padding: [40, 40], maxZoom: 12 });
-  }, [events, isCalendarPage, isRecurringPage, map]);
+  }, [events, isCalendarPage, map]);
 
   return null;
 };

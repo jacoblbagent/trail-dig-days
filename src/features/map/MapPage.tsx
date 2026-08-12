@@ -123,6 +123,7 @@ const MapPage: React.FC = () => {
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
   const [showSortMenu, setShowSortMenu] = useState(false);
   const [calendarCollapsed, setCalendarCollapsed] = useState(false);
+  const [showRecurring, setShowRecurring] = useState(false);
   const [sidebarWidth, setSidebarWidth] = useState(380);
   const [searchTab, setSearchTab] = useState<'country' | 'nearme'>('nearme');
   const [selectedState, setSelectedState] = useState('');
@@ -193,10 +194,16 @@ const MapPage: React.FC = () => {
   // Filter expanded events by radius (for calendar dots)
   const filteredExpanded = useMemo(() => {
     const radius = searchRadius || 100;
-    if (radius >= 100) return expanded;
-    const c = searchCenter || DEFAULT_CENTER;
-    return expanded.filter((e) => haversine(c, e.coordinates) <= radius);
-  }, [expanded, searchCenter, searchRadius]);
+    let result = expanded;
+    if (radius < 100) {
+      const c = searchCenter || DEFAULT_CENTER;
+      result = expanded.filter((e) => haversine(c, e.coordinates) <= radius);
+    }
+    if (showRecurring) {
+      result = result.filter((e) => e.recurrence && e.recurrence !== 'none');
+    }
+    return result;
+  }, [expanded, searchCenter, searchRadius, showRecurring]);
 
   // Calendar: events per day (within radius)
   const eventMap = useMemo(() => {
@@ -211,10 +218,16 @@ const MapPage: React.FC = () => {
 
   const filtered = useMemo(() => {
     const radius = searchRadius || 100;
-    if (radius >= 100) return collapsed;
-    const c = searchCenter || DEFAULT_CENTER;
-    return collapsed.filter((e) => haversine(c, e.coordinates) <= radius);
-  }, [collapsed, searchCenter, searchRadius]);
+    let result = collapsed;
+    if (radius < 100) {
+      const c = searchCenter || DEFAULT_CENTER;
+      result = collapsed.filter((e) => haversine(c, e.coordinates) <= radius);
+    }
+    if (showRecurring) {
+      result = result.filter((e) => e.recurrence && e.recurrence !== 'none');
+    }
+    return result;
+  }, [collapsed, searchCenter, searchRadius, showRecurring]);
 
   const sorted = useMemo(() => {
     const dir = sortOrder === 'asc' ? 1 : -1;
@@ -294,7 +307,11 @@ const MapPage: React.FC = () => {
               setPendingCenter(null);
             }
           }}>Search</button>
-        </div>
+        <label className="recurring-toggle">
+          <input type="checkbox" checked={showRecurring} onChange={() => setShowRecurring(!showRecurring)} />
+          Show recurring only
+        </label>
+      </div>
 
         <div className="sidebar-body">
           <div className="sidebar-col sidebar-col-cal">

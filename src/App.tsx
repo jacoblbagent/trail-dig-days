@@ -13,7 +13,6 @@ import CreateEventPage from './features/events/CreateEventPage';
 import EditEventPage from './features/events/EditEventPage';
 import MyEventsPage from './features/events/MyEventsPage';
 import EventDetailPage from './features/events/EventDetailPage';
-import RecurringEventsPage from './features/events/RecurringEventsPage';
 import MapPage from './features/map/MapPage';
 import NotFoundPage from './pages/NotFoundPage';
 import ToastContainer from './components/ToastContainer';
@@ -49,7 +48,7 @@ const RedirectHandler: React.FC<{ children: React.ReactNode }> = ({ children }) 
 };
 
 const ROUTES = [
-  '/', '/auth', '/my-events', '/events/create', '/events/recurring',
+  '/', '/auth', '/my-events', '/events/create',
   '/profile', '/settings',
 ];
 
@@ -67,7 +66,6 @@ const AppRoutes: React.FC = () => {
     <Routes>
       <Route element={<MapLayout />}>
         <Route path="/" element={<MapPage />} />
-        <Route path="/events/recurring" element={<RecurringEventsPage />} />
       </Route>
       <Route path="/auth" element={<AuthPage />} />
       <Route path="/my-events" element={<MyEventsPage />} />

@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Marker, Popup } from 'react-leaflet';
 import MarkerClusterGroup from 'react-leaflet-cluster';
 import L from 'leaflet';
@@ -25,22 +25,16 @@ const coloredIcon = (inRange: boolean, highlight: boolean) =>
   });
 
 const PageMarkerContent: React.FC = () => {
-  const location = useLocation();
   const navigate = useNavigate();
   const events = useAppSelector((s) => s.events.items);
   const searchCenter = useAppSelector((s) => s.events.searchCenter);
   const hoveredId = useAppSelector((s) => s.events.hoveredMarkerId);
 
-  const isMapPage = location.pathname === '/';
-  const isRecurringPage = location.pathname.startsWith('/events/recurring');
+  const isMapPage = true;
 
   const expanded = useMemo(() => {
-    if (isRecurringPage) {
-      const recurring = events.filter((e) => e.recurrence && e.recurrence !== 'none');
-      return expandRecurring(recurring);
-    }
     return expandRecurring(events);
-  }, [events, isRecurringPage]);
+  }, [events]);
 
   const inRangeIds = useMemo(() => {
     if (!isMapPage || !searchCenter) return null;

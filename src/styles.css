@@ -198,6 +198,12 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
 .toast-close:hover { opacity: 1; }
 @keyframes toast-in { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
 
+.recurring-toggle {
+  display: flex; align-items: center; gap: 6px; padding: 4px 0 0;
+  font-size: .85rem; color: var(--stone-600); cursor: pointer;
+}
+.recurring-toggle input { accent-color: var(--green-600); cursor: pointer; }
+
 /* ── Sidebar ── */
 .sidebar {
   display: flex; flex-direction: column; align-items: center;
