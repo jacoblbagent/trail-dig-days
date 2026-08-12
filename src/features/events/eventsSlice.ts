@@ -163,6 +163,7 @@ export const registerForEvent = createAsyncThunk<
   const events = loadEvents();
   const event = events.find((e) => e.id === eventId);
   if (!event) throw new Error('Event not found');
+  if (new Date(event.date) < new Date(new Date().toDateString())) throw new Error('Event has already passed');
   if (event.registeredVolunteers.includes(userId)) {
     event.registeredVolunteers = event.registeredVolunteers.filter((id) => id !== userId);
   } else {

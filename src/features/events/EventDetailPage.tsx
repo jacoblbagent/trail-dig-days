@@ -29,6 +29,7 @@ const EventDetailPage: React.FC = () => {
 
   const isCreator = user ? event.creatorId === user.id : false;
   const isRegistered = user ? event.registeredVolunteers.includes(user.id) : false;
+  const isPast = new Date(event.date) < new Date(new Date().toDateString());
   const volCount = event.registeredVolunteers.length;
   const { profiles } = useAppSelector((s) => s.profile);
   const creatorProfile = profiles[event.creatorId];
@@ -149,10 +150,12 @@ const EventDetailPage: React.FC = () => {
 
               {!isCreator && (
                 <button
+                  disabled={isPast}
+                  style={{ opacity: isPast ? 0.5 : 1, cursor: isPast ? 'not-allowed' : 'pointer' }}
                   className={`btn btn-lg btn-block ${isRegistered ? 'btn-danger' : 'btn-primary'}`}
                   onClick={handleRegister}
                 >
-                  {isRegistered ? ' Unregister' : " I'll be there"}
+                  {isPast ? 'Event has passed' : isRegistered ? ' Unregister' : " I'll be there"}
                 </button>
               )}
 
