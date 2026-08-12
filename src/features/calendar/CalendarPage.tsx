@@ -4,6 +4,16 @@ import { useAppSelector, useAppDispatch } from '../../app/hooks';
 import { setSearchRadius, setSearchCenter } from '../../features/events/eventsSlice';
 import { expandRecurring } from '../../utils/recurrence';
 import { haversine } from '../../features/map/mapUtils';
+import SearchRadiusMap from './SearchRadiusMap';
+
+const US_STATES = [
+  'Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia',
+  'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland',
+  'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire',
+  'New Jersey', 'New Mexico', 'New York', 'North Carolina', 'North Dakota', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania',
+  'Rhode Island', 'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington',
+  'West Virginia', 'Wisconsin', 'Wyoming',
+];
 
 const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 const DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
@@ -17,9 +27,10 @@ const CalendarPage: React.FC = () => {
   const [viewDate, setViewDate] = useState(new Date(today.getFullYear(), today.getMonth(), 1));
   const [selectedDay, setSelectedDay] = useState<string | null>(null);
   const [radiusInput, setRadiusInput] = useState('25');
-  const [addressQuery, setAddressQuery] = useState('');
   const [sidebarWidth, setSidebarWidth] = useState(380);
   const [calendarCollapsed, setCalendarCollapsed] = useState(true);
+  const [searchTab, setSearchTab] = useState<'country' | 'nearme'>('country');
+  const [selectedState, setSelectedState] = useState('');
   const widthRef = useRef(380);
   const SIDEBAR_MIN = 240;
   const SIDEBAR_MAX = 600;
@@ -71,20 +82,6 @@ const CalendarPage: React.FC = () => {
     return map;
   }, [filtered]);
 
-  const handleAddressSearch = async (q: string) => {
-    if (!q.trim()) return;
-    try {
-      const res = await fetch(
-        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(q)}&limit=1`,
-        { headers: { 'Accept-Language': 'en' } }
-      );
-      const data = await res.json();
-      if (data.length > 0) {
-        dispatch(setSearchCenter([parseFloat(data[0].lat), parseFloat(data[0].lon)]));
-      }
-    } catch {}
-  };
-
   const handleRadiusChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;
     setRadiusInput(val);
@@ -109,20 +106,31 @@ const CalendarPage: React.FC = () => {
       <div className={`map-sidebar ${nearMin ? 'at-min' : ''} ${nearMax ? 'at-max' : ''}`} style={{ width: sidebarWidth }}>
 
               <div className="search-controls">
-          <div className="radius-control">
-            <label>Search radius: <strong>{radiusInput} mi</strong></label>
-            <input type="range" min={5} max={250} value={radiusInput} onChange={handleRadiusChange} />
+          <div className="search-tabs">
+            <button className={`search-tab ${searchTab === 'country' ? 'active' : ''}`} onClick={() => setSearchTab('country')}>Country</button>
+            <button className={`search-tab ${searchTab === 'nearme' ? 'active' : ''}`} onClick={() => setSearchTab('nearme')}>Near Me</button>
           </div>
-          <div className="address-search">
-            <input
-              type="text"
-              value={addressQuery}
-              onChange={(e) => setAddressQuery(e.target.value)}
-              onKeyDown={(e) => { if (e.key === 'Enter') handleAddressSearch(addressQuery); }}
-              placeholder="Search address…"
-            />
-            <button type="button" className="btn btn-ghost btn-sm" onClick={() => handleAddressSearch(addressQuery)}>Go</button>
-          </div>
+          {searchTab === 'country' ? (
+            <div className="search-country">
+              <select className="search-select" disabled>
+                <option>United States</option>
+              </select>
+              <select className="search-select" value={selectedState} onChange={(e) => setSelectedState(e.target.value)}>
+                <option value="">Select a state...</option>
+                {US_STATES.map((s) => <option key={s} value={s}>{s}</option>)}
+              </select>
+            </div>
+          ) : (
+            <div className="search-nearme">
+              <div className="radius-control">
+                <label>Search radius: <strong>{radiusInput} mi</strong></label>
+                <input type="range" min={5} max={250} value={radiusInput} onChange={handleRadiusChange} />
+              </div>
+              <div className="radius-map-wrap">
+                <SearchRadiusMap center={searchCenter || [39.7392, -104.9903]} radius={parseFloat(radiusInput) || 25} onCenterChange={(c) => dispatch(setSearchCenter(c))} />
+              </div>
+            </div>
+          )}
         </div>
 
         <div className="calendar-grid-wrap">

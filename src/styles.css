@@ -374,11 +374,18 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
 .radius-control { margin-bottom: 8px; }
 .radius-control label { font-size: .85rem; color: var(--stone-600); }
 .radius-control input[type="range"] { width: 100%; margin-top: 4px; accent-color: var(--green-700); }
-.search-controls { display: flex; flex-direction: column; gap: 12px; align-items: stretch; }
-.address-search { display: flex; gap: 4px; }
-.address-search input { flex: 1; height: 34px; padding: 0 8px; border: 1px solid var(--stone-200); border-radius: var(--radius-sm); font-size: .85rem; background: var(--surface); color: var(--stone-800); }
-.address-search input::placeholder { color: var(--stone-400); }
-.address-search button { white-space: nowrap; }
+.search-controls { display: flex; flex-direction: column; gap: 10px; align-items: stretch; }
+.search-tabs { display: flex; gap: 2px; border-bottom: 1px solid var(--stone-200); }
+.search-tab { flex: 1; padding: 8px; border: none; background: none; cursor: pointer; font-size: .85rem; color: var(--stone-500); border-bottom: 2px solid transparent; transition: all .15s; }
+.search-tab:hover { color: var(--stone-700); }
+.search-tab.active { color: var(--green-700); border-bottom-color: var(--green-700); font-weight: 500; }
+.search-country { display: flex; flex-direction: column; gap: 6px; }
+.search-select { width: 100%; height: 34px; padding: 0 8px; border: 1px solid var(--stone-200); border-radius: var(--radius-sm); font-size: .85rem; background: var(--surface); color: var(--stone-800); cursor: pointer; }
+.search-select:disabled { opacity: .6; cursor: not-allowed; }
+.search-select:focus { outline: none; border-color: var(--green-600); }
+.search-nearme { display: flex; flex-direction: column; gap: 8px; }
+.radius-map-wrap { border: 1px solid var(--stone-200); border-radius: var(--radius); overflow: hidden; height: 200px; }
+.radius-map { width: 100%; height: 100%; }
 .loc-error { color: var(--earth-500); font-size: .8rem; margin-top: 4px; }
 .event-list-header { display: flex; align-items: center; justify-content: space-between; padding: 4px 20px 0; }
 .event-list-count { font-size: .8rem; color: var(--stone-400); }
@@ -1077,9 +1084,6 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
   .cat-modal { min-width: 0; width: 92%; max-width: 92%; }
   .location-picker-map { height: 200px; }
 
-  .search-controls { flex-direction: column; gap: 8px; }
-  .address-search { max-width: 100%; }
-
   .cal-cell { font-size: .7rem; }
   .cal-day-header { font-size: .65rem; padding: 6px 0; }
   .cal-dot { font-size: .55rem; }
@@ -1102,8 +1106,6 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
 /* ── Responsive: Phones ── */
 @media (max-width: 400px) {
   .search-controls { padding: 10px 12px; }
-  .address-search input { height: 30px; font-size: .8rem; }
-  .radius-control label { font-size: .8rem; }
   
   .calendar-page { padding: 12px 8px 32px; }
   .calendar-header { margin-bottom: 12px; }
