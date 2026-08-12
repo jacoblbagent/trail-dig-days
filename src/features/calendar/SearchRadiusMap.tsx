@@ -73,15 +73,19 @@ const SearchRadiusMap: React.FC<Props> = ({ center, radius, onCenterChange }) =>
     });
 
     map.on('move', () => {
+      if (suppressMove.current) return;
       const c = map.getCenter();
       marker.setLatLng(c);
       circle.setLatLng(c);
     });
 
-    map.on('moveend', () => {
-      if (suppressMove.current) return;
+    map.on('dragend', () => {
       const c = map.getCenter();
       onCenterChange([c.lat, c.lng]);
+    });
+
+    map.on('moveend', () => {
+      if (suppressMove.current) return;
     });
 
     mapInstance.current = map;
