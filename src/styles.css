@@ -461,7 +461,7 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
 .map-container { flex: 1; position: relative; overflow: hidden; z-index: 0; padding-top: 44px; }
 .map-toolbar {
   position: absolute; top: 0; left: 0; right: 0; height: 44px;
-  background: color-mix(in srgb, var(--surface) 80%, transparent);
+  background: color-mix(in srgb, var(--surface) 60%, transparent);
   border-bottom: 1px solid var(--stone-150);
   z-index: 1100; display: flex; align-items: center; gap: 2px; padding: 0 8px;
 }
