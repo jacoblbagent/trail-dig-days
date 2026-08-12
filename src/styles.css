@@ -1257,10 +1257,10 @@ input[type="time"]::-webkit-calendar-picker-indicator { filter: invert(0.55); cu
   gap: 8px;
   margin-top: 6px;
 }
-.comment-row {
+.comment {
   display: flex;
 }
-.comment-thread {
+.comment-indent {
   flex-shrink: 0;
   cursor: pointer;
   display: flex;
@@ -1268,8 +1268,8 @@ input[type="time"]::-webkit-calendar-picker-indicator { filter: invert(0.55); cu
   padding-right: 8px;
   position: relative;
 }
-.comment-thread:hover { background: var(--stone-50); }
-.thread-vline {
+.comment-indent:hover { background: var(--stone-50); }
+.indent-line {
   width: 2px;
   background: var(--stone-300);
   border-radius: 1px;
@@ -1289,26 +1289,18 @@ input[type="time"]::-webkit-calendar-picker-indicator { filter: invert(0.55); cu
 .thread-toggle {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   background: none;
   border: none;
   cursor: pointer;
   padding: 0;
+  width: 14px;
   font-size: .7rem;
   color: var(--stone-400);
   line-height: 1;
   flex-shrink: 0;
 }
 .thread-toggle:hover { color: var(--stone-600); }
-.thread-icon {
-  display: inline-block;
-  width: 14px;
-  text-align: center;
-  font-size: .7rem;
-  line-height: 1;
-  color: var(--stone-400);
-  transition: transform .1s;
-}
-.thread-icon.col { color: var(--stone-400); }
 .comment-author {
   font-weight: 600;
   font-size: .85rem;

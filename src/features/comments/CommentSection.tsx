@@ -121,21 +121,19 @@ const CommentSection: React.FC<Props> = ({ eventId, eventCreatorId }) => {
     const isCollapsed = collapsed.has(c.id);
 
     return (
-      <div key={c.id} className="comment-row">
+      <div key={c.id} className="comment">
         <div
-          className="comment-thread"
+          className="comment-indent"
           onClick={() => threadCount > 0 && toggleCollapse(c.id)}
           style={{ width: `${16 + depth * 20}px` }}
         >
-          {depth > 0 && <div className="thread-vline" />}
+          {depth > 0 && <div className="indent-line" />}
         </div>
         <div className="comment-body">
           <div className="comment-header">
             {threadCount > 0 && (
               <button className="thread-toggle" onClick={() => toggleCollapse(c.id)}>
-                <span className={`thread-icon ${isCollapsed ? 'col' : ''}`}>
-                  {isCollapsed ? '▸' : '▾'}
-                </span>
+                {isCollapsed ? '▸' : '▾'}
               </button>
             )}
             <Link to={`/profile?userId=${c.userId}`} className="comment-author">
@@ -185,7 +183,7 @@ const CommentSection: React.FC<Props> = ({ eventId, eventCreatorId }) => {
             </>
           ) : (
             <div className="comment-collapsed" onClick={() => toggleCollapse(c.id)}>
-              <span className="thread-icon col">▸</span>
+              <span className="thread-toggle">▸</span>
               <span className="comment-collapsed-text">{threadCount} more repl{threadCount !== 1 ? 'ies' : 'y'}</span>
             </div>
           )}
