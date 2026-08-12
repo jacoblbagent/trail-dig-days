@@ -170,16 +170,6 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
 }
 .top-nav-title { font-size: 1.05rem; font-weight: 600; color: var(--stone-800); margin-right: auto; }
 
-.sidebar-collapse-btn {
-  background: none; border: none; cursor: pointer; padding: 4px 6px;
-  font-size: 1rem; color: var(--stone-500); line-height: 1; border-radius: 4px;
-}
-.sidebar-collapse-btn:hover { background: var(--stone-100); color: var(--stone-800); }
-
-/* Desktop collapsed sidebar */
-.map-sidebar.collapsed { width: 0 !important; overflow: hidden; flex-shrink: 0; padding: 0; border: none; }
-.map-sidebar.collapsed .search-controls { display: none; }
-.map-sidebar.collapsed .sidebar-body { display: none; }
 .app-layout { display: flex; height: 100vh; padding-top: 48px; box-sizing: border-box; }
 .app-main { flex: 1; overflow-y: auto; }
 
@@ -239,7 +229,6 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
 .sidebar-btn:hover { background: var(--stone-100); color: var(--stone-600); }
 .sidebar-btn:hover .sidebar-label { color: var(--stone-600); }
 .sidebar-btn.active { background: var(--green-100); color: var(--green-700); }
-.sidebar-collapse-btn { display: flex; }
 
 .profile-menu-wrap { position: relative; }
 .profile-menu {
@@ -391,11 +380,6 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
 
 /* ── Map Page ── */
 .map-page { display: flex; height: 100%; }
-.map-sidebar {
-  min-width: 0;
-  display: flex; flex-direction: column;
-  background: var(--surface); border-right: 1px solid var(--stone-150);
-}
 .search-controls { padding: 14px 20px; border-bottom: 1px solid var(--stone-150); }
 .radius-control { margin-bottom: 8px; }
 .radius-control label { font-size: .85rem; color: var(--stone-600); }
@@ -1013,15 +997,8 @@ input[type="time"]::-webkit-calendar-picker-indicator { filter: invert(0.55); cu
 .calendar-map { border-radius: var(--radius); overflow: hidden; border: 1px solid var(--stone-150); min-height: 0; }
 
 .radius-locate-btn:active { background: #f0f0f0; }
-
-.sidebar-body {
-  display: flex; flex: 1; min-height: 0; overflow: hidden;
-}
 .sidebar-col {
   display: flex; flex-direction: column; overflow-y: auto;
-}
-.sidebar-col-cal {
-  flex: 0 0 auto; min-width: 260px;
 }
 .sidebar-col-list {
   min-width: 0; display: flex; flex-direction: column; overflow-y: auto;
@@ -1111,13 +1088,10 @@ input[type="time"]::-webkit-calendar-picker-indicator { filter: invert(0.55); cu
   .sidebar-label { display: none; }
   .app-layout { display: block; }
   .app-main { padding-bottom: 52px; }
-  .sidebar-collapse-btn { display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; border: none; cursor: pointer; border-radius: var(--radius); flex-shrink: 0; }
-  .map-sidebar.collapsed { display: none; }
 
   .profile-menu { left: auto; right: 0; bottom: 100%; margin-bottom: 4px; }
 
   .map-page { position: relative; flex-direction: column; height: 100%; padding-bottom: 52px; box-sizing: border-box; }
-  .map-sidebar { position: absolute; top: 0; left: 0; right: 0; bottom: 52px; z-index: 10; max-width: 100%; min-width: 0; width: 100% !important; overflow-y: auto; background: var(--surface); }
   .map-container { flex: 1; height: auto; position: relative; overflow: hidden; z-index: 0; }
 
   .search-controls { padding: 10px 12px; }
@@ -1221,11 +1195,9 @@ input[type="time"]::-webkit-calendar-picker-indicator { filter: invert(0.55); cu
   .sidebar { height: 48px; }
   .sidebar-btn { background: none; border: none; color: var(--stone-500); cursor: pointer; padding: 0; gap: 0; width: auto; height: auto; flex-shrink: 0; }
   .sidebar-btn:hover { background: none; color: var(--stone-700); }
-  .sidebar-collapse-btn { width: 28px; height: 28px; }
   .app-main { padding-bottom: 48px; }
   .map-page { padding-bottom: 48px; }
-  .map-sidebar { bottom: 48px; }
-  .sidebar-body { flex-direction: column; }
+  .create-event-page { padding: 12px 8px; }
   .search-controls { padding: 8px 10px; }
   .event-list { padding: 6px; }
   .event-list-card { padding: 8px; border-radius: calc(var(--radius) - 2px); margin-bottom: 6px; }

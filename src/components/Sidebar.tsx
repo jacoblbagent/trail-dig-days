@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
-import { setTheme, setNotificationsEnabled, setNotificationRadius, markNotificationRead, setMapSidebarCollapsed } from '../features/events/eventsSlice';
+import { setTheme, setNotificationsEnabled, setNotificationRadius, markNotificationRead } from '../features/events/eventsSlice';
 import { logout } from '../features/auth/authSlice';
 import { addToast } from '../features/toast/toastSlice';
 
@@ -26,7 +26,7 @@ const Sidebar: React.FC = () => {
   const profile = useAppSelector((s) => (user ? s.profile.profiles[user.id] : undefined));
   const location = useLocation();
   const theme = useAppSelector((s) => s.events.theme);
-  const { notificationsEnabled, notificationRadius, notifications, mapSidebarCollapsed } = useAppSelector((s) => s.events);
+  const { notificationsEnabled, notificationRadius, notifications } = useAppSelector((s) => s.events);
   const dark = theme === 'dark';
   const unreadCount = notifications.filter((n) => !n.read).length;
   const [showMenu, setShowMenu] = React.useState(false);
@@ -83,10 +83,6 @@ const Sidebar: React.FC = () => {
       <>
       <aside className={`sidebar${showLabels ? ' expanded' : ''}`}>
         <div className="sidebar-top">
-          <button className={`sidebar-btn sidebar-collapse-btn${mapSidebarCollapsed ? ' active' : ''}`} onClick={() => dispatch(setMapSidebarCollapsed(!mapSidebarCollapsed))} title={mapSidebarCollapsed ? 'Show panel' : 'Hide panel'}>
-            <SvgIcon d="M3 12h18 M3 6h18 M3 18h18" />
-            {showLabels && <span className="sidebar-label">Menu</span>}
-          </button>
           {btn('/', MAP_ICON, 'Map')}
         </div>
         <div className="sidebar-bottom">

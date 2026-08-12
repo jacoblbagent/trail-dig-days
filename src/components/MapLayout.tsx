@@ -4,7 +4,6 @@ import { MapContainer, TileLayer, Circle, useMap } from 'react-leaflet';
 import { useAppSelector, useAppDispatch } from '../app/hooks';
 import { setSearchRadius, setSearchCenter } from '../features/events/eventsSlice';
 import MapMoveHandler from '../features/map/MapMoveHandler';
-import MapResizeHandler from '../features/map/MapResizeHandler';
 import TileLoadIndicator from '../features/map/TileLoadIndicator';
 import PageMarkerContent from '../features/map/PageMarkerContent';
 import MapExtras from '../features/map/MapExtras';
@@ -202,7 +201,6 @@ const MapLayout: React.FC = () => {
             }
           />
           <MapMoveHandler />
-          <MapResizeHandler />
           <MapCenterUpdater loc={searchCenter} />
           <TileLoadIndicator />
           <PageMarkerContent />
