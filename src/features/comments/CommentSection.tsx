@@ -142,7 +142,7 @@ const CommentSection: React.FC<Props> = ({ eventId, eventCreatorId }) => {
             </div>
           </div>
         )}
-        {!isReply && getReplies(c.id).map((r) => renderComment(r, true))}
+        {getReplies(c.id).map((r) => renderComment(r, true))}
       </div>
     );
   };
