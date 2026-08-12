@@ -302,11 +302,10 @@ const MapPage: React.FC = () => {
             }
           }}>Search</button>
         </div>
-      </div>
 
-      <div className="sidebar-body">
-        <div className="sidebar-col sidebar-col-cal">
-          <div className="calendar-grid-wrap">
+        <div className="sidebar-body">
+          <div className="sidebar-col sidebar-col-cal">
+            <div className="calendar-grid-wrap">
               <div className="calendar-nav">
                 <button className="btn btn-ghost btn-sm" onClick={prevMonth}><span className="nav-arrow">←</span></button>
                 <strong>{MONTHS[month]} {year}</strong>
@@ -408,6 +407,7 @@ const MapPage: React.FC = () => {
             )}
           </div>
         </div>
+      </div>
 
       <div className={`sidebar-resizer ${nearMin ? 'at-min' : ''} ${nearMax ? 'at-max' : ''}`} onMouseDown={handleResizeStart} onDoubleClick={handleResizerDblClick}>
         <div className="resizer-grip" />
