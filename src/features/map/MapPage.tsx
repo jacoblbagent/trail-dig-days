@@ -285,7 +285,7 @@ const MapPage: React.FC = () => {
                 <label>Search radius: <strong>{radiusInput} mi</strong></label>
                 <input type="range" min={5} max={100} value={radiusInput} onChange={handleRadiusChange} />
               </div>
-              <SearchRadiusMap center={pendingCenter || searchCenter || [39.7392, -104.9903]} radius={parseFloat(radiusInput) || 10} onCenterChange={setPendingCenter} />
+              <SearchRadiusMap center={pendingCenter || searchCenter || [39.7392, -104.9903]} radius={parseFloat(radiusInput) || 10} onCenterChange={setPendingCenter} onLocate={(c) => { dispatch(setSearchCenter(c)); setPendingCenter(null); }} />
             </div>
           )}
           <button className="btn btn-search" disabled={searchTab === 'country' ? !selectedState : !pendingCenter} onClick={() => {

@@ -5,9 +5,10 @@ interface Props {
   center: [number, number];
   radius: number;
   onCenterChange: (c: [number, number]) => void;
+  onLocate?: (c: [number, number]) => void;
 }
 
-const SearchRadiusMap: React.FC<Props> = ({ center, radius, onCenterChange }) => {
+const SearchRadiusMap: React.FC<Props> = ({ center, radius, onCenterChange, onLocate }) => {
   const mapRef = useRef<HTMLDivElement>(null);
   const mapInstance = useRef<L.Map | null>(null);
   const circleRef = useRef<L.Circle | null>(null);
@@ -28,13 +29,32 @@ const SearchRadiusMap: React.FC<Props> = ({ center, radius, onCenterChange }) =>
         if (markerRef.current) markerRef.current.setLatLng(c);
         if (circleRef.current) circleRef.current.setLatLng(c);
         onCenterChange(c);
+        onLocate?.(c);
         setLocating(false);
         setTimeout(() => { suppressMove.current = false; }, 50);
       },
-      () => setLocating(false),
+      () => {
+        setLocating(false);
+        // Retry without high accuracy
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(
+            (pos) => {
+              const c2: [number, number] = [pos.coords.latitude, pos.coords.longitude];
+              if (mapInstance.current) { suppressMove.current = true; mapInstance.current.setView(c2, 10, { animate: false }); }
+              if (markerRef.current) markerRef.current.setLatLng(c2);
+              if (circleRef.current) circleRef.current.setLatLng(c2);
+              onCenterChange(c2);
+              onLocate?.(c2);
+              setTimeout(() => { suppressMove.current = false; }, 50);
+            },
+            () => {},
+            { timeout: 5000 }
+          );
+        }
+      },
       { enableHighAccuracy: true, timeout: 8000 }
     );
-  }, [onCenterChange]);
+  }, [onCenterChange, onLocate]);
 
   useEffect(() => {
     if (!mapRef.current || mapInstance.current) return;
