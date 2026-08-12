@@ -230,7 +230,6 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
 .sidebar-btn:hover { background: var(--stone-100); color: var(--stone-600); }
 .sidebar-btn:hover .sidebar-label { color: var(--stone-600); }
 .sidebar-btn.active { background: var(--green-100); color: var(--green-700); }
-.sidebar-btn.active-referrer { background: color-mix(in srgb, var(--green-100) 50%, transparent); color: color-mix(in srgb, var(--green-700) 50%, transparent); }
 .sidebar-collapse-btn { display: flex; }
 
 .profile-menu-wrap { position: relative; }

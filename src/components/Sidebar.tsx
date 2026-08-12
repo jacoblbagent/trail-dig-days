@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
-import { setTheme, setNotificationsEnabled, setNotificationRadius, markNotificationRead, setReferrerPath, setMapSidebarCollapsed } from '../features/events/eventsSlice';
+import { setTheme, setNotificationsEnabled, setNotificationRadius, markNotificationRead, setMapSidebarCollapsed } from '../features/events/eventsSlice';
 import { logout } from '../features/auth/authSlice';
 import { addToast } from '../features/toast/toastSlice';
 
@@ -34,14 +34,6 @@ const Sidebar: React.FC = () => {
   const [radiusInput, setRadiusInput] = React.useState(String(notificationRadius));
   const menuRef = React.useRef<HTMLDivElement>(null);
   const notifRef = React.useRef<HTMLDivElement>(null);
-  const prevPath = React.useRef(location.pathname);
-
-  React.useEffect(() => {
-    if (!location.pathname.startsWith('/events/')) {
-      prevPath.current = location.pathname;
-      dispatch(setReferrerPath(location.pathname));
-    }
-  });
 
   React.useEffect(() => {
     const onClick = (e: MouseEvent) => {
@@ -63,10 +55,9 @@ const Sidebar: React.FC = () => {
   const isActive = (path: string) => location.pathname === path;
   const isEventPage = location.pathname.startsWith('/events/') && !location.pathname.startsWith('/my-events');
   const showLabels = isEventPage || location.pathname.startsWith('/settings') || location.pathname.startsWith('/profile') || location.pathname.startsWith('/my-events') || location.pathname.startsWith('/auth');
-  const cameFrom = (path: string) => isEventPage && prevPath.current === path;
 
   const btn = (to: string, icon: string, label: string) => {
-    const cls = isActive(to) ? 'active' : cameFrom(to) ? 'active-referrer' : '';
+    const cls = isActive(to) ? 'active' : '';
     return (
       <Link
         to={to}
@@ -182,7 +173,7 @@ const Sidebar: React.FC = () => {
           {isAuthenticated && (
             <div className="profile-menu-wrap" ref={menuRef}>
               <button
-                className={`sidebar-btn ${isActive('/profile') || isActive('/settings') ? 'active' : cameFrom('/profile') || cameFrom('/settings') ? 'active-referrer' : ''}`}
+                className={`sidebar-btn ${isActive('/profile') || isActive('/settings') ? 'active' : ''}`}
                 onClick={() => setShowMenu(!showMenu)}
                 title="Profile menu"
               >
