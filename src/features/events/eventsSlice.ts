@@ -17,6 +17,14 @@ const seedNotifications = (): NotificationItem[] => [
   { id: 'notif-4', eventId: 'seed-event-049', type: 'event', message: 'Copper Harbor trail repair this weekend', read: true, createdAt: '2026-08-03T16:00:00' },
   { id: 'notif-5', eventId: 'seed-event-054', type: 'event', message: 'Buffalo Creek Homestead work day rescheduled', read: true, createdAt: '2026-08-01T11:45:00' },
   { id: 'notif-6', eventId: 'seed-event-056', type: 'event', message: 'Oak Mountain trail maintenance signup open', read: false, createdAt: '2026-08-08T08:00:00' },
+  // Comment & reply notifications
+  { id: 'notif-cmt-1', eventId: 'seed-event-001', type: 'comment', message: 'Galbraith Crew commented on Church Street Trail Build', read: false, createdAt: '2026-08-09T14:30:00', fromUserId: 'other-creator-1', commentId: 'seed-cmt-001' },
+  { id: 'notif-cmt-2', eventId: 'seed-event-001', type: 'reply', message: 'Trail Builder replied to your comment on Church Street Trail Build', read: false, createdAt: '2026-08-09T15:00:00', fromUserId: 'demo-user-1', commentId: 'seed-cmt-002' },
+  { id: 'notif-cmt-3', eventId: 'seed-event-001', type: 'reply', message: 'Galbraith Crew replied to your comment on Church Street Trail Build', read: false, createdAt: '2026-08-09T16:15:00', fromUserId: 'other-creator-1', commentId: 'seed-cmt-003' },
+  { id: 'notif-cmt-4', eventId: 'seed-event-003', type: 'comment', message: 'Galbraith Crew commented on Pisgah Trail Day — Bennett Gap', read: false, createdAt: '2026-08-07T06:00:00', fromUserId: 'other-creator-1', commentId: 'seed-cmt-011' },
+  { id: 'notif-cmt-5', eventId: 'seed-event-003', type: 'reply', message: 'Trail Builder replied to your comment on Pisgah Trail Day — Bennett Gap', read: true, createdAt: '2026-08-07T07:00:00', fromUserId: 'demo-user-1', commentId: 'seed-cmt-012' },
+  { id: 'notif-cmt-6', eventId: 'seed-event-003', type: 'reply', message: 'Galbraith Crew replied to your comment on Pisgah Trail Day — Bennett Gap', read: false, createdAt: '2026-08-07T08:00:00', fromUserId: 'other-creator-1', commentId: 'seed-cmt-013' },
+  { id: 'notif-cmt-7', eventId: 'seed-event-001', type: 'comment', message: 'UMWELD Training Staff commented on Church Street Trail Build', read: false, createdAt: '2026-08-10T11:00:00', fromUserId: 'other-creator-2', commentId: 'seed-cmt-006' },
 ];
 
 const STORAGE_KEY = 'trail-dig-events';

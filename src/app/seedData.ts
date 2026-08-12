@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
-import type { UserProfile, DigEvent } from '../types';
+import type { UserProfile, DigEvent, Comment } from '../types';
 
 const AUTH_KEY = 'trail-dig-auth';
 const EVENTS_KEY = 'trail-dig-events';
@@ -2133,6 +2133,45 @@ const OTHER_PROFILES: Record<string, UserProfile> = {
   },
 };
 
+// ── Seed Comments ──────────────────────────────────────────────
+const COMMENTS_KEY = 'trail-dig-comments';
+const seedComments = (): Comment[] => [
+  // Event 001 — Church Street Trail Build
+  { id: 'seed-cmt-001', eventId: 'seed-event-001', userId: 'other-creator-3', parentId: null, text: 'I can bring a crew of 4 from the Tarheel Trail Blazers. We have McLeods and shovels.', createdAt: '2026-08-09T14:30:00' as string, votes: { 'demo-user-1': 'up', 'other-creator-2': 'up' } },
+  { id: 'seed-cmt-002', eventId: 'seed-event-001', userId: 'demo-user-1', parentId: 'seed-cmt-001', text: 'That would be great! We could use extra hands on the drain dips section.', createdAt: '2026-08-09T15:00:00' as string, votes: { 'other-creator-3': 'up' } },
+  { id: 'seed-cmt-003', eventId: 'seed-event-001', userId: 'other-creator-3', parentId: 'seed-cmt-002', text: 'Perfect. We will be there by 7:30 to help set up.', createdAt: '2026-08-09T16:15:00' as string, votes: {} },
+  { id: 'seed-cmt-004', eventId: 'seed-event-001', userId: 'other-creator-1', parentId: null, text: 'Any chance we could extend the work area to the lower section near the creek? It needs some love too.', createdAt: '2026-08-10T09:00:00' as string, votes: { 'demo-user-1': 'up' } },
+  { id: 'seed-cmt-005', eventId: 'seed-event-001', userId: 'demo-user-1', parentId: 'seed-cmt-004', text: 'Good idea. Let me scout it this afternoon and add it to the plan.', createdAt: '2026-08-10T10:30:00' as string, votes: { 'other-creator-1': 'up' } },
+  { id: 'seed-cmt-006', eventId: 'seed-event-001', userId: 'other-creator-2', parentId: null, text: 'I can provide a chainsaw for any blowdown clearing if needed.', createdAt: '2026-08-10T11:00:00' as string, votes: { 'demo-user-1': 'up', 'other-creator-3': 'up' } },
+
+  // Event 002 — Rock Garden Rehab
+  { id: 'seed-cmt-007', eventId: 'seed-event-002', userId: 'demo-user-1', parentId: null, text: 'I rode this trail last weekend — the rock garden is definitely due for some love. The entrance line has shifted pretty badly.', createdAt: '2026-08-08T08:00:00' as string, votes: {} },
+  { id: 'seed-cmt-008', eventId: 'seed-event-002', userId: 'other-creator-3', parentId: 'seed-cmt-007', text: 'Agreed. I noticed the same thing. We should flag the entrance before the work day so everyone knows where to focus.', createdAt: '2026-08-08T09:15:00' as string, votes: { 'demo-user-1': 'up' } },
+  { id: 'seed-cmt-009', eventId: 'seed-event-002', userId: 'demo-user-1', parentId: 'seed-cmt-008', text: 'Great idea. I will go by Thursday evening and mark it with pin flags.', createdAt: '2026-08-08T10:00:00' as string, votes: { 'other-creator-3': 'up' } },
+  { id: 'seed-cmt-010', eventId: 'seed-event-002', userId: 'other-creator-4', parentId: null, text: 'I have a rock bar and a pick mattock I can bring. Also happy to bring extra gloves.', createdAt: '2026-08-09T07:30:00' as string, votes: {} },
+
+  // Event 003 — Pisgah Trail Day (deep thread)
+  { id: 'seed-cmt-011', eventId: 'seed-event-003', userId: 'other-creator-1', parentId: null, text: 'Bennett Gap is riding rough this season. Really glad someone is organizing this. I can lead a brushing crew.', createdAt: '2026-08-07T06:00:00' as string, votes: { 'demo-user-1': 'up', 'other-creator-2': 'up', 'other-creator-3': 'up' } },
+  { id: 'seed-cmt-012', eventId: 'seed-event-003', userId: 'demo-user-1', parentId: 'seed-cmt-011', text: 'Thanks! A brushing crew would be hugely helpful. The rhododendron is really encroaching near the top.', createdAt: '2026-08-07T07:00:00' as string, votes: { 'other-creator-1': 'up' } },
+  { id: 'seed-cmt-013', eventId: 'seed-event-003', userId: 'other-creator-1', parentId: 'seed-cmt-012', text: 'I will bring loppers and a hand saw. How many folks do you need for that section?', createdAt: '2026-08-07T08:00:00' as string, votes: {} },
+  { id: 'seed-cmt-014', eventId: 'seed-event-003', userId: 'demo-user-1', parentId: 'seed-cmt-013', text: 'Three or four should be enough for the brushing. The real bottleneck will be the drain clearing on the lower half.', createdAt: '2026-08-07T09:00:00' as string, votes: { 'other-creator-1': 'up' } },
+  { id: 'seed-cmt-015', eventId: 'seed-event-003', userId: 'other-creator-1', parentId: 'seed-cmt-014', text: 'Got it. I will round up 2 more for the brushing crew and send the rest your way for drains.', createdAt: '2026-08-07T10:00:00' as string, votes: { 'demo-user-1': 'up' } },
+  { id: 'seed-cmt-016', eventId: 'seed-event-003', userId: 'other-creator-2', parentId: null, text: 'I have a chainsaw certification if you need help with any larger blowdowns.', createdAt: '2026-08-08T11:00:00' as string, votes: { 'demo-user-1': 'up' } },
+  { id: 'seed-cmt-017', eventId: 'seed-event-003', userId: 'demo-user-1', parentId: 'seed-cmt-016', text: 'Absolutely, bring it! There is a big fallen oak about halfway down that needs to be cleared.', createdAt: '2026-08-08T12:00:00' as string, votes: {} },
+
+  // Event 004 — Sycamore Cycles Shop Ride
+  { id: 'seed-cmt-018', eventId: 'seed-event-004', userId: 'other-creator-3', parentId: null, text: 'The ride-then-work format is the best. Count me in! Do I need to bring my own bike or will there be demos?', createdAt: '2026-08-10T13:00:00' as string, votes: { 'demo-user-1': 'up' } },
+  { id: 'seed-cmt-019', eventId: 'seed-event-004', userId: 'demo-user-1', parentId: 'seed-cmt-018', text: 'Sycamore usually has a few demo bikes available, but I would recommend bringing your own if you have one.', createdAt: '2026-08-10T14:00:00' as string, votes: {} },
+  { id: 'seed-cmt-020', eventId: 'seed-event-004', userId: 'other-creator-4', parentId: null, text: 'I can help with the post-ride trail work. I am good with a McLeod.', createdAt: '2026-08-11T09:00:00' as string, votes: {} },
+  // Reply to a top-level that itself has replies
+  { id: 'seed-cmt-021', eventId: 'seed-event-004', userId: 'demo-user-1', parentId: 'seed-cmt-020', text: 'Great, we can always use more McLeod work. The Ridgeline trail has some berms that need reshaping.', createdAt: '2026-08-11T10:00:00' as string, votes: { 'other-creator-4': 'up' } },
+
+  // Event 010 — Sherman Branch Trail
+  { id: 'seed-cmt-022', eventId: 'seed-event-010', userId: 'demo-user-1', parentId: null, text: 'Signed up! I can bring a truckload of tools from the club shed.', createdAt: '2026-08-11T16:00:00' as string, votes: { 'other-creator-3': 'up' } },
+  { id: 'seed-cmt-023', eventId: 'seed-event-010', userId: 'other-creator-3', parentId: 'seed-cmt-022', text: 'That would save us a lot of hauling. Let me know if you need help loading up.', createdAt: '2026-08-11T17:00:00' as string, votes: {} },
+];
+
+export { seedComments };
 export const ensureSeedData = () => {
   if (localStorage.getItem(SEEDED_KEY)) {
     // Already seeded — dedup by seed event ID to avoid ballooning from
@@ -2180,6 +2219,12 @@ export const ensureSeedData = () => {
       localStorage.setItem(PROFILES_KEY, JSON.stringify(storedProfiles));
     }
 
+    // Seed comments (dedup by seed comment ID)
+    const existingComments = JSON.parse(localStorage.getItem(COMMENTS_KEY) || '[]');
+    const seedCommentIds = new Set(seedComments().map((c) => c.id));
+    const filteredComments = existingComments.filter((c: Comment) => !seedCommentIds.has(c.id));
+    localStorage.setItem(COMMENTS_KEY, JSON.stringify([...filteredComments, ...seedComments()]));
+
     return;
   }
 
@@ -2198,6 +2243,9 @@ export const ensureSeedData = () => {
 
   // Seed events
   localStorage.setItem(EVENTS_KEY, JSON.stringify(seedEvents));
+
+  // Seed comments
+  localStorage.setItem(COMMENTS_KEY, JSON.stringify(seedComments()));
 
   localStorage.setItem(SEEDED_KEY, 'true');
 };
