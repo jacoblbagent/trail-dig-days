@@ -202,14 +202,14 @@ const CalendarPage: React.FC = () => {
           }}>Search</button>
         </div>
 
-        <div className="calendar-grid-wrap">
+        <button className="cal-collapse-btn" style={{ margin: '4px 0' }} onClick={() => setCalendarCollapsed(!calendarCollapsed)}>
+          {calendarCollapsed ? '▶' : '▼'} Calendar
+        </button>
+        <div className="calendar-grid-wrap" style={{ display: calendarCollapsed ? 'none' : '' }}>
           <div className="calendar-nav">
             <button className="btn btn-ghost btn-sm" onClick={prevMonth} disabled={calendarCollapsed}><span className="nav-arrow">←</span></button>
             <strong>{MONTHS[month]} {year}</strong>
             <button className="btn btn-ghost btn-sm" onClick={nextMonth} disabled={calendarCollapsed}>→</button>
-            <button className="cal-collapse-btn" onClick={() => setCalendarCollapsed(!calendarCollapsed)}>
-              {calendarCollapsed ? '▶' : '▼'} Calendar
-            </button>
           </div>
           {!calendarCollapsed && <div className="calendar-grid">
             {DAYS.map((d) => (<div key={d} className="cal-day-header">{d}</div>))}
