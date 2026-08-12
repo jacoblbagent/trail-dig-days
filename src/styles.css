@@ -179,6 +179,7 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
 /* Desktop collapsed sidebar */
 .map-sidebar.collapsed { width: 0 !important; overflow: hidden; flex-shrink: 0; padding: 0; border: none; }
 .map-sidebar.collapsed .search-controls { display: none; }
+.map-sidebar.collapsed .filter-sections { display: none; }
 .map-sidebar.collapsed .sidebar-body { display: none; }
 .app-layout { display: flex; height: 100vh; padding-top: 48px; box-sizing: border-box; }
 .app-main { flex: 1; overflow-y: auto; }
@@ -200,6 +201,16 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
   font-size: .85rem; color: var(--stone-600); cursor: pointer;
 }
 .recurring-toggle input { accent-color: var(--green-600); cursor: pointer; }
+
+.filter-sections {
+  display: flex; flex-wrap: wrap; gap: 4px; padding: 6px 12px 4px;
+  border-bottom: 1px solid var(--stone-150);
+}
+.filter-btn {
+  background: var(--stone-100); border: none; border-radius: 6px;
+  padding: 0 10px; height: 28px; font-size: .75rem; font-weight: 600;
+  color: var(--stone-600); cursor: default; letter-spacing: .01em;
+}
 
 /* ── Sidebar ── */
 .sidebar {
