@@ -73,6 +73,7 @@ const initialState: EventsState = {
   notifications: seedNotifications(),
   referrerPath: '/',
   selectedDay: null as string | null,
+  showRecurring: false,
 };
 
 // Re-read events from localStorage after seed runs (ES module hoisting means
@@ -221,6 +222,9 @@ const eventsSlice = createSlice({
     setSelectedDay(state, action: PayloadAction<string | null>) {
       state.selectedDay = action.payload;
     },
+    setShowRecurring(state, action: PayloadAction<boolean>) {
+      state.showRecurring = action.payload;
+    },
     loadEventsFromStorage(state) {
       state.items = reloadEvents();
     },
@@ -257,5 +261,5 @@ const eventsSlice = createSlice({
   },
 });
 
-export const { setSearchRadius, setSearchCenter, setMapViewport, setTheme, clearSearchCenter, setHoveredMarkerId, setNotificationsEnabled, setNotificationRadius, addNotification, markNotificationRead, setReferrerPath, setSelectedDay, loadEventsFromStorage } = eventsSlice.actions;
+export const { setSearchRadius, setSearchCenter, setMapViewport, setTheme, clearSearchCenter, setHoveredMarkerId, setNotificationsEnabled, setNotificationRadius, addNotification, markNotificationRead, setReferrerPath, setSelectedDay, setShowRecurring, loadEventsFromStorage } = eventsSlice.actions;
 export default eventsSlice.reducer;

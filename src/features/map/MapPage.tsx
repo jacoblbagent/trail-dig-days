@@ -52,11 +52,11 @@ const MapPage: React.FC = () => {
   const searchCenter = useAppSelector((s) => s.events.searchCenter);
   const searchRadius = useAppSelector((s) => s.events.searchRadius);
   const selectedDay = useAppSelector((s) => s.events.selectedDay);
+  const showRecurring = useAppSelector((s) => s.events.showRecurring);
   const [radiusInput] = useState(() => String(searchRadius));
   const [sortBy, setSortBy] = useState<'date' | 'distance' | 'spots'>('date');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
   const [showSortMenu, setShowSortMenu] = useState(false);
-  const [showRecurring] = useState(false);
   const [rightWidth, setRightWidth] = useState(380);
   const rightWidthRef = useRef(380);
   const sortRef = useRef<HTMLDivElement>(null);

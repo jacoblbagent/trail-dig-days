@@ -154,6 +154,7 @@ export interface EventsState {
   notifications: NotificationItem[];
   referrerPath: string;
   selectedDay: string | null;
+  showRecurring: boolean;
 }
 
 // ─── Application Root State ───

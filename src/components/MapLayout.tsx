@@ -2,7 +2,7 @@ import React, { useState, useMemo, useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
 import { MapContainer, TileLayer, Circle, useMap } from 'react-leaflet';
 import { useAppSelector, useAppDispatch } from '../app/hooks';
-import { setSearchRadius, setSearchCenter, setSelectedDay } from '../features/events/eventsSlice';
+import { setSearchRadius, setSearchCenter, setSelectedDay, setShowRecurring } from '../features/events/eventsSlice';
 import { expandRecurring } from '../utils/recurrence';
 import { haversine } from '../features/map/mapUtils';
 import MapMoveHandler from '../features/map/MapMoveHandler';
@@ -181,7 +181,7 @@ const MapLayout: React.FC = () => {
   const [pendingCenter, setPendingCenter] = useState<[number, number] | null>(null);
 
   // Recurring panel state
-  const [showRecurring, setShowRecurring] = useState(false);
+  const showRecurring = useAppSelector((s) => s.events.showRecurring);
 
   const togglePanel = (name: 'location' | 'time' | 'recurring') => {
     setShowPanel((prev) => (prev === name ? null : name));
@@ -259,7 +259,7 @@ const MapLayout: React.FC = () => {
         {showPanel === 'recurring' && (
           <div className="filter-panel filter-panel--recurring">
             <label className="recurring-toggle">
-              <input type="checkbox" checked={showRecurring} onChange={() => setShowRecurring(!showRecurring)} />
+              <input type="checkbox" checked={showRecurring} onChange={() => dispatch(setShowRecurring(!showRecurring))} />
               Show recurring only
             </label>
           </div>
