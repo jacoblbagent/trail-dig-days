@@ -114,7 +114,7 @@ const CommentSection: React.FC<Props> = ({ eventId, eventCreatorId }) => {
     });
   };
 
-  const renderComment = (c: Comment, depth = 0) => {
+  const renderComment = (c: Comment, depth = 0, parentId?: string) => {
     const votes = netVotes(c);
     const my = myVote(c);
     const replies = getReplies(c.id);
@@ -127,7 +127,7 @@ const CommentSection: React.FC<Props> = ({ eventId, eventCreatorId }) => {
         {depth > 0 && (
         <div
           className={`comment-indent ${isHoveredLine ? 'hvr' : ''}`}
-          onClick={() => toggleCollapse(c.id)}
+          onClick={() => toggleCollapse(parentId!)}
           onMouseEnter={() => setHoveredDepth(depth)}
           onMouseLeave={() => setHoveredDepth(null)}
           >
@@ -184,12 +184,12 @@ const CommentSection: React.FC<Props> = ({ eventId, eventCreatorId }) => {
                   </div>
                 </div>
               )}
-              {replies.map((r) => renderComment(r, depth + 1))}
+              {replies.map((r) => renderComment(r, depth + 1, c.id))}
             </>
           ) : (
             <div className="comment-collapsed" onClick={() => toggleCollapse(c.id)}>
               <span className="thread-toggle">▸</span>
-              <span className="comment-collapsed-text">{threadCount} more repl{threadCount !== 1 ? 'ies' : 'y'}</span>
+              <span className="comment-collapsed-text">{threadCount} repl{threadCount !== 1 ? 'ies' : 'y'} hidden</span>
             </div>
           )}
         </div>
