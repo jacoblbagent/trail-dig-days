@@ -29,7 +29,10 @@ const EventCard = memo(function EventCard({ event, center }: { event: DigEvent; 
             <span className="recurring-badge">Recurring</span>
           )}
         </div>
-        <p className="list-card-trail">{event.trailName}</p>
+        <p className="list-card-trail">
+            {event.trailName}
+            {dist !== null && <span className="list-card-dist"> ({dist < 1 ? dist.toFixed(1) : Math.round(dist)} mi)</span>}
+          </p>
         <div className="list-card-row">
           <span className="list-card-location">{event.locationName}</span>
           <span className="list-card-sep">·</span>
