@@ -20,6 +20,7 @@ const CommentSection: React.FC<Props> = ({ eventId, eventCreatorId }) => {
   const [replyTo, setReplyTo] = useState<string | null>(null);
   const [replyText, setReplyText] = useState('');
   const [collapsed, setCollapsed] = useState<Set<string>>(new Set());
+  const [hoveredDepth, setHoveredDepth] = useState<number | null>(null);
 
   const topLevel = comments.filter((c) => !c.parentId);
   const getReplies = (parentId: string) => comments.filter((c) => c.parentId === parentId);
@@ -119,15 +120,18 @@ const CommentSection: React.FC<Props> = ({ eventId, eventCreatorId }) => {
     const replies = getReplies(c.id);
     const threadCount = countThread(c.id);
     const isCollapsed = collapsed.has(c.id);
+    const isHoveredLine = hoveredDepth !== null && depth === hoveredDepth && depth > 0;
 
     return (
       <div key={c.id} className="comment">
         <div
-          className="comment-indent"
+          className={`comment-indent ${isHoveredLine ? 'hvr' : ''}`}
           onClick={() => threadCount > 0 && toggleCollapse(c.id)}
+          onMouseEnter={() => setHoveredDepth(depth)}
+          onMouseLeave={() => setHoveredDepth(null)}
           style={{ paddingLeft: depth > 0 ? `${depth * 20}px` : 0 }}
         >
-          {depth > 0 && <div className="indent-line" />}
+          {depth > 0 && <div className={`indent-line ${isHoveredLine ? 'hvr' : ''}`} />}
         </div>
         <div className="comment-body">
           <div className="comment-header">

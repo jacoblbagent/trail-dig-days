@@ -1269,7 +1269,7 @@ input[type="time"]::-webkit-calendar-picker-indicator { filter: invert(0.55); cu
   position: relative;
 }
 .comment-indent:hover { background: var(--stone-50); }
-.comment-indent:hover .indent-line { background: var(--stone-500); }
+.comment-indent:hover .indent-line, .indent-line.hvr { background: var(--stone-500); }
 .indent-line {
   width: 2px;
   background: var(--stone-300);
