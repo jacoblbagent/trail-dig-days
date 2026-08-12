@@ -768,6 +768,7 @@ input[type="time"]::-webkit-calendar-picker-indicator { filter: invert(0.55); cu
 .date-month { font-size: .8rem; text-transform: uppercase; font-weight: 600; }
 .date-day { font-size: 2rem; font-weight: 800; line-height: 1; }
 .date-year { font-size: .85rem; opacity: .8; }
+.date-time { font-size: .85rem; margin-top: 2px; }
 .time-info { text-align: center; font-size: 1.1rem; font-weight: 600; color: var(--stone-700); margin-bottom: 16px; }
 .volunteer-info { margin-bottom: 16px; }
 .volunteer-info h3 { font-size: .9rem; color: var(--stone-600); margin-bottom: 6px; }

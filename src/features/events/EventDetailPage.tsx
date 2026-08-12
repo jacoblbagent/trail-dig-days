@@ -121,13 +121,11 @@ const EventDetailPage: React.FC = () => {
 
           <div className="event-detail-sidebar">
             <div className="sidebar-card">
-              <div className="date-badge time-info">
+              <div className="date-badge">
                 <span className="date-month">{new Date(event.date).toLocaleString('default', { month: 'short' })}</span>
                 <span className="date-day">{new Date(event.date).getDate()}</span>
                 <span className="date-year">{new Date(event.date).getFullYear()}</span>
-              </div>
-              <div className="time-info">
-                {event.startTime} – {event.endTime}
+                <span className="date-time">{event.startTime} – {event.endTime}</span>
               </div>
 
               <div className="volunteer-info">
