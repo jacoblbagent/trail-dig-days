@@ -208,7 +208,7 @@ const MapPage: React.FC = () => {
       map.get(key)!.push(e);
     }
     return map;
-  }, [expanded]);
+  }, [filteredExpanded]);
 
   const filtered = useMemo(() => {
     const radius = parseFloat(radiusInput) || 100;

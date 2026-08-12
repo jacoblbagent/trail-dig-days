@@ -130,9 +130,9 @@ const CalendarPage: React.FC = () => {
 
   const filtered = useMemo(() => {
     const radius = parseFloat(radiusInput) || 100;
-    if (radius >= 100) return expanded;
+    if (radius >= 100 || !searchCenter) return expanded;
     return expanded.filter((e) => haversine(center, e.coordinates) <= radius);
-  }, [expanded, radiusInput, center]);
+  }, [expanded, radiusInput, center, searchCenter]);
 
   const eventMap = useMemo(() => {
     const map = new Map<string, typeof filtered>();
