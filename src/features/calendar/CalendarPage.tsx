@@ -118,9 +118,6 @@ const CalendarPage: React.FC = () => {
     document.body.style.userSelect = 'none';
   };
 
-  const nearMin = sidebarWidth <= SIDEBAR_MIN + 20;
-  const nearMax = sidebarWidth >= SIDEBAR_MAX - 20;
-
   const center = searchCenter || [39.7392, -104.9903];
   const year = viewDate.getFullYear();
   const month = viewDate.getMonth();
@@ -164,7 +161,7 @@ const CalendarPage: React.FC = () => {
 
   return (
     <>
-      <div className={`map-sidebar ${nearMin ? 'at-min' : ''} ${nearMax ? 'at-max' : ''}`} style={{ width: sidebarWidth }}>
+      <div className="map-sidebar" style={{ width: sidebarWidth }}>
 
               <div className="search-controls">
           <div className="search-tabs">
@@ -295,11 +292,9 @@ const CalendarPage: React.FC = () => {
         </div>
       </div>
 
-      <div className={`sidebar-resizer ${nearMin ? 'at-min' : ''} ${nearMax ? 'at-max' : ''}`} onMouseDown={handleResizeStart}>
+      <div className="sidebar-resizer" onMouseDown={handleResizeStart}>
         <div className="resizer-grip" />
         <div className="resizer-limits">
-          <span className={`limit-indicator ${nearMin ? 'visible' : ''}`}>{SIDEBAR_MIN}px</span>
-          <span className={`limit-indicator ${nearMax ? 'visible' : ''}`}>{SIDEBAR_MAX}px</span>
         </div>
       </div>
 

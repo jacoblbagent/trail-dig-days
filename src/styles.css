@@ -491,19 +491,8 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
   position: absolute; top: 0; left: 0; right: 0; bottom: 0;
   pointer-events: none; overflow: hidden;
 }
-.limit-indicator {
-  position: absolute; top: 50%; transform: translateY(-50%); opacity: 0;
-  transition: opacity .2s; font-size: .65rem; font-weight: 700;
-  color: var(--stone-400); white-space: nowrap;
-}
-.limit-indicator:first-child { left: -50px; }
-.limit-indicator:last-child { right: -50px; }
-.limit-indicator.visible { opacity: 1; }
-/* Visual cues on sidebar itself */
-.map-sidebar.at-min { border-right-color: var(--red-600); }
-.map-sidebar.at-max { border-right-color: var(--blue-600); }
+.resizer-limits { position: relative; }
 .map-locate-btn {
-  position: absolute; top: 12px; right: 12px; z-index: 1000;
   width: 36px; height: 36px; border-radius: 8px;
   background: #fff; border: 1px solid var(--stone-200);
   cursor: pointer; color: var(--stone-500); box-shadow: 0 2px 6px rgba(0,0,0,.1);

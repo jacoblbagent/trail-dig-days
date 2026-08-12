@@ -160,9 +160,6 @@ const MapPage: React.FC = () => {
   const RIGHT_SIDEBAR_MAX = 600;
   const RIGHT_SIDEBAR_DEFAULT = 380;
 
-  const nearMin = rightWidth <= RIGHT_SIDEBAR_MIN + 20 && rightWidth > 0;
-  const nearMax = rightWidth >= RIGHT_SIDEBAR_MAX - 20;
-
   const handleResizeStart = (e: React.MouseEvent) => {
     e.preventDefault();
     const startX = e.clientX;
@@ -270,7 +267,7 @@ const MapPage: React.FC = () => {
 
   return (
     <>
-      <div className={`map-sidebar ${nearMin ? 'at-min' : ''} ${nearMax ? 'at-max' : ''}${mapSidebarCollapsed ? ' collapsed' : ''}`} style={{ width: leftWidth }}>
+      <div className={`map-sidebar${mapSidebarCollapsed ? ' collapsed' : ''}`} style={{ width: leftWidth }}>
 
               <div className="search-controls">
           <div className="search-tabs">
@@ -353,11 +350,9 @@ const MapPage: React.FC = () => {
         </div>
       </div>
 
-      <div className={`sidebar-resizer ${nearMin ? 'at-min' : ''} ${nearMax ? 'at-max' : ''}`} onMouseDown={handleResizeStart} onDoubleClick={handleResizerDblClick} style={{ order: 2 }}>
+      <div className="sidebar-resizer" onMouseDown={handleResizeStart} onDoubleClick={handleResizerDblClick} style={{ order: 2 }}>
         <div className="resizer-grip" />
         <div className="resizer-limits">
-          <span className={`limit-indicator ${nearMin ? 'visible' : ''}`}>{RIGHT_SIDEBAR_MIN}px</span>
-          <span className={`limit-indicator ${nearMax ? 'visible' : ''}`}>{RIGHT_SIDEBAR_MAX}px</span>
         </div>
       </div>
 
