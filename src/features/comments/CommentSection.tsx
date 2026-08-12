@@ -208,7 +208,7 @@ const CommentSection: React.FC<Props> = ({ eventId, eventCreatorId }) => {
                       <button className="comment-edit-btn" onClick={() => handleEdit(c)}>Edit</button>
                     )}
                     <button className="comment-reply-btn" onClick={() => setReplyTo(replyTo === c.id ? null : c.id)}>
-                      {threadCount > 0 ? `${threadCount} reply${threadCount !== 1 ? 's' : ''}` : 'Reply'}
+                      {threadCount > 0 ? `${threadCount} repl${threadCount !== 1 ? 'ies' : 'y'}` : 'Reply'}
                     </button>
                   </>
                 )}
