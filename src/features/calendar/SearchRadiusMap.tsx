@@ -102,17 +102,10 @@ const SearchRadiusMap: React.FC<Props> = ({ center, radius, onCenterChange }) =>
     };
   }, []);
 
-  // Fit bounds when radius changes (slider)
+  // Fit bounds when radius changes (slider) — just update radius, don't re-center
   useEffect(() => {
     if (circleRef.current) {
       circleRef.current.setRadius(radius * 1609.34);
-    }
-    if (mapInstance.current && circleRef.current) {
-      suppressMove.current = true;
-      mapInstance.current.fitBounds(circleRef.current.getBounds(), {
-        padding: [20, 20], maxZoom: 10, animate: false,
-      });
-      setTimeout(() => { suppressMove.current = false; }, 50);
     }
   }, [radius]);
 
