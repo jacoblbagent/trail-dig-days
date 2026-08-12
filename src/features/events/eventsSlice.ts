@@ -62,7 +62,7 @@ const initialState: EventsState = {
   items: loadEvents(),
   myEvents: [],
   loading: false,
-  searchRadius: 25,
+  searchRadius: 10,
   searchCenter: loadLocation(),
   mapZoom: 10,
   theme: getInitialTheme(),

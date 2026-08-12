@@ -79,7 +79,7 @@ const CalendarPage: React.FC = () => {
   const today = new Date();
   const [viewDate, setViewDate] = useState(new Date(today.getFullYear(), today.getMonth(), 1));
   const [selectedDay, setSelectedDay] = useState<string | null>(null);
-  const [radiusInput, setRadiusInput] = useState('25');
+  const [radiusInput, setRadiusInput] = useState('10');
   const [sidebarWidth, setSidebarWidth] = useState(380);
   const [calendarCollapsed, setCalendarCollapsed] = useState(true);
   const [searchTab, setSearchTab] = useState<'country' | 'nearme'>('country');
@@ -146,7 +146,7 @@ const CalendarPage: React.FC = () => {
   const handleRadiusChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;
     setRadiusInput(val);
-    dispatch(setSearchRadius(parseFloat(val) || 50));
+    dispatch(setSearchRadius(parseFloat(val) || 10));
   };
 
   const prevMonth = () => { setViewDate(new Date(year, month - 1, 1)); setSelectedDay(null); };
@@ -187,7 +187,7 @@ const CalendarPage: React.FC = () => {
                 <label>Search radius: <strong>{radiusInput} mi</strong></label>
                 <input type="range" min={5} max={100} value={radiusInput} onChange={handleRadiusChange} />
               </div>
-              <SearchRadiusMap center={pendingCenter || searchCenter || [39.7392, -104.9903]} radius={parseFloat(radiusInput) || 25} onCenterChange={setPendingCenter} />
+              <SearchRadiusMap center={pendingCenter || searchCenter || [39.7392, -104.9903]} radius={parseFloat(radiusInput) || 10} onCenterChange={setPendingCenter} />
             </div>
           )}
           <button className="btn btn-search" onClick={() => {

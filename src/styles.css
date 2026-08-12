@@ -385,7 +385,7 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
 .search-select:focus { outline: none; border-color: var(--green-600); }
 .search-nearme { display: flex; flex-direction: column; gap: 8px; }
 .btn-search {
-  display: block; margin: 4px auto 0; padding: 4px 20px;
+  display: block; margin: 4px 0 0; padding: 4px 20px;
   font-size: .8rem; line-height: 1.6;
   background: var(--stone-100); color: var(--stone-700);
   border: 1px solid var(--stone-300); border-radius: var(--radius-sm, 4px);

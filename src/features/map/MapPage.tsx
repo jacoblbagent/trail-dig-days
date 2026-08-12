@@ -118,7 +118,7 @@ const MapPage: React.FC = () => {
   const currentUser = useAppSelector((s) => s.auth.user);
   const canCreate = currentUser?.userType === 'organization';
 
-  const [radiusInput, setRadiusInput] = useState('25');
+  const [radiusInput, setRadiusInput] = useState('10');
   const [sortBy, setSortBy] = useState<'date' | 'distance' | 'spots'>('date');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
   const [showSortMenu, setShowSortMenu] = useState(false);
@@ -237,7 +237,7 @@ const MapPage: React.FC = () => {
   const handleRadiusChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;
     setRadiusInput(val);
-    dispatch(setSearchRadius(parseFloat(val) || 100));
+    dispatch(setSearchRadius(parseFloat(val) || 10));
 
   // When a state is selected from Country tab, update pending center
   useEffect(() => {
@@ -285,7 +285,7 @@ const MapPage: React.FC = () => {
                 <label>Search radius: <strong>{radiusInput} mi</strong></label>
                 <input type="range" min={5} max={100} value={radiusInput} onChange={handleRadiusChange} />
               </div>
-              <SearchRadiusMap center={pendingCenter || searchCenter || [39.7392, -104.9903]} radius={parseFloat(radiusInput) || 25} onCenterChange={setPendingCenter} />
+              <SearchRadiusMap center={pendingCenter || searchCenter || [39.7392, -104.9903]} radius={parseFloat(radiusInput) || 10} onCenterChange={setPendingCenter} />
             </div>
           )}
           <button className="btn btn-search" onClick={() => {
