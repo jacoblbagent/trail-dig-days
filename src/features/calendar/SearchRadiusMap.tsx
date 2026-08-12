@@ -23,12 +23,13 @@ const SearchRadiusMap: React.FC<Props> = ({ center, radius, onCenterChange }) =>
         const c: [number, number] = [pos.coords.latitude, pos.coords.longitude];
         if (mapInstance.current) {
           suppressMove.current = true;
-          mapInstance.current.setView(c, 10, { animate: true });
+          mapInstance.current.setView(c, 10, { animate: false });
         }
         if (markerRef.current) markerRef.current.setLatLng(c);
         if (circleRef.current) circleRef.current.setLatLng(c);
         onCenterChange(c);
         setLocating(false);
+        setTimeout(() => { suppressMove.current = false; }, 50);
       },
       () => setLocating(false),
       { enableHighAccuracy: true, timeout: 8000 }
