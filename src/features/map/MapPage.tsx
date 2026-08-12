@@ -352,7 +352,15 @@ const MapPage: React.FC = () => {
         </div>
       </div>
 
-      <div className="sidebar-col sidebar-col-list" style={{ width: sidebarWidth }}>
+      <div className={`sidebar-resizer ${nearMin ? 'at-min' : ''} ${nearMax ? 'at-max' : ''}`} onMouseDown={handleResizeStart} onDoubleClick={handleResizerDblClick} style={{ order: 2 }}>
+        <div className="resizer-grip" />
+        <div className="resizer-limits">
+          <span className={`limit-indicator ${nearMin ? 'visible' : ''}`}>{SIDEBAR_MIN}px</span>
+          <span className={`limit-indicator ${nearMax ? 'visible' : ''}`}>{SIDEBAR_MAX}px</span>
+        </div>
+      </div>
+
+      <div className="sidebar-col sidebar-col-list" style={{ width: sidebarWidth, order: 2 }}>
 
         {selectedDay ? (
           <div className="calendar-list">
@@ -416,14 +424,6 @@ const MapPage: React.FC = () => {
             </div>
           </>
         )}
-      </div>
-
-      <div className={`sidebar-resizer ${nearMin ? 'at-min' : ''} ${nearMax ? 'at-max' : ''}`} onMouseDown={handleResizeStart} onDoubleClick={handleResizerDblClick}>
-        <div className="resizer-grip" />
-        <div className="resizer-limits">
-          <span className={`limit-indicator ${nearMin ? 'visible' : ''}`}>{SIDEBAR_MIN}px</span>
-          <span className={`limit-indicator ${nearMax ? 'visible' : ''}`}>{SIDEBAR_MAX}px</span>
-        </div>
       </div>
     </>
   );
