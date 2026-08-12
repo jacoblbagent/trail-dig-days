@@ -55,7 +55,7 @@ const Sidebar: React.FC = () => {
   const showLabels = isEventPage || location.pathname.startsWith('/settings') || location.pathname.startsWith('/profile') || location.pathname.startsWith('/my-events') || location.pathname.startsWith('/auth');
 
   const btn = (to: string, icon: string, label: string) => {
-    const cls = isActive(to) ? 'active' : '';
+    const cls = isActive(to) ? 'active' : isEventPage && to === '/' ? 'partial' : '';
     return (
       <Link
         to={to}

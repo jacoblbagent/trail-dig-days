@@ -229,6 +229,8 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
 .sidebar-btn:hover { background: var(--stone-100); color: var(--stone-600); }
 .sidebar-btn:hover .sidebar-label { color: var(--stone-600); }
 .sidebar-btn.active { background: var(--green-100); color: var(--green-700); }
+.sidebar-btn.partial { background: var(--stone-100); color: var(--stone-500); }
+.sidebar-btn.partial .sidebar-label { color: var(--stone-500); }
 
 .profile-menu-wrap { position: relative; }
 .profile-menu {
