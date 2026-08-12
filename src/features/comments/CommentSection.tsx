@@ -121,10 +121,11 @@ const CommentSection: React.FC<Props> = ({ eventId, eventCreatorId }) => {
     const isCollapsed = collapsed.has(c.id);
 
     return (
-      <div key={c.id} className="comment" style={{ marginLeft: depth > 0 ? `${depth * 20}px` : 0 }}>
+      <div key={c.id} className="comment">
         <div
           className="comment-indent"
           onClick={() => threadCount > 0 && toggleCollapse(c.id)}
+          style={{ paddingLeft: depth > 0 ? `${depth * 20}px` : 0 }}
         >
           {depth > 0 && <div className="indent-line" />}
         </div>
