@@ -544,6 +544,7 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
 [data-theme="dark"] .leaflet-control-zoom a { background: var(--surface); color: var(--stone-400); border-color: #444; }
 [data-theme="dark"] .leaflet-control-zoom a:hover { color: var(--stone-200); }
 .leaflet-control-zoom-in { display: none; }
+.leaflet-control-zoom a { text-decoration: none; }
 [data-theme="dark"] .leaflet-control-attribution { background: rgba(28,25,23,.8); color: #777; }
 [data-theme="dark"] .leaflet-control-attribution a { color: #999; }
 [data-theme="dark"] .leaflet-popup-content-wrapper { background: var(--surface); color: var(--stone-200); }
