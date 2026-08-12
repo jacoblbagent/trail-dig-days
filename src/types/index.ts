@@ -87,6 +87,7 @@ export interface Comment {
   parentId: string | null;
   text: string;
   createdAt: string;
+  edited?: boolean;
   votes: Record<string, 'up' | 'down'>;
 }
 

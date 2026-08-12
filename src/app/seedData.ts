@@ -2141,7 +2141,7 @@ const seedComments = (): Comment[] => [
   { id: 'seed-cmt-002', eventId: 'seed-event-001', userId: 'demo-user-1', parentId: 'seed-cmt-001', text: 'That would be great! We could use extra hands on the drain dips section.', createdAt: '2026-08-09T15:00:00' as string, votes: { 'other-creator-3': 'up' } },
   { id: 'seed-cmt-003', eventId: 'seed-event-001', userId: 'other-creator-3', parentId: 'seed-cmt-002', text: 'Perfect. We will be there by 7:30 to help set up.', createdAt: '2026-08-09T16:15:00' as string, votes: {} },
   { id: 'seed-cmt-004', eventId: 'seed-event-001', userId: 'other-creator-1', parentId: null, text: 'Any chance we could extend the work area to the lower section near the creek? It needs some love too.', createdAt: '2026-08-10T09:00:00' as string, votes: { 'demo-user-1': 'up' } },
-  { id: 'seed-cmt-005', eventId: 'seed-event-001', userId: 'demo-user-1', parentId: 'seed-cmt-004', text: 'Good idea. Let me scout it this afternoon and add it to the plan.', createdAt: '2026-08-10T10:30:00' as string, votes: { 'other-creator-1': 'up' } },
+  { id: 'seed-cmt-005', eventId: 'seed-event-001', userId: 'demo-user-1', parentId: 'seed-cmt-004', text: 'Good idea. Let me scout it this afternoon and add it to the plan.', createdAt: '2026-08-10T10:30:00' as string, edited: true, votes: { 'other-creator-1': 'up' } },
   { id: 'seed-cmt-006', eventId: 'seed-event-001', userId: 'other-creator-2', parentId: null, text: 'I can provide a chainsaw for any blowdown clearing if needed.', createdAt: '2026-08-10T11:00:00' as string, votes: { 'demo-user-1': 'up', 'other-creator-3': 'up' } },
 
   // Event 002 — Rock Garden Rehab
@@ -2151,7 +2151,7 @@ const seedComments = (): Comment[] => [
   { id: 'seed-cmt-010', eventId: 'seed-event-002', userId: 'other-creator-4', parentId: null, text: 'I have a rock bar and a pick mattock I can bring. Also happy to bring extra gloves.', createdAt: '2026-08-09T07:30:00' as string, votes: {} },
 
   // Event 003 — Pisgah Trail Day (deep thread)
-  { id: 'seed-cmt-011', eventId: 'seed-event-003', userId: 'other-creator-1', parentId: null, text: 'Bennett Gap is riding rough this season. Really glad someone is organizing this. I can lead a brushing crew.', createdAt: '2026-08-07T06:00:00' as string, votes: { 'demo-user-1': 'up', 'other-creator-2': 'up', 'other-creator-3': 'up' } },
+  { id: 'seed-cmt-011', eventId: 'seed-event-003', userId: 'other-creator-1', parentId: null, text: 'Bennett Gap is riding rough this season. Really glad someone is organizing this. I can lead a brushing crew.', createdAt: '2026-08-07T06:00:00' as string, edited: true, votes: { 'demo-user-1': 'up', 'other-creator-2': 'up', 'other-creator-3': 'up' } },
   { id: 'seed-cmt-012', eventId: 'seed-event-003', userId: 'demo-user-1', parentId: 'seed-cmt-011', text: 'Thanks! A brushing crew would be hugely helpful. The rhododendron is really encroaching near the top.', createdAt: '2026-08-07T07:00:00' as string, votes: { 'other-creator-1': 'up' } },
   { id: 'seed-cmt-013', eventId: 'seed-event-003', userId: 'other-creator-1', parentId: 'seed-cmt-012', text: 'I will bring loppers and a hand saw. How many folks do you need for that section?', createdAt: '2026-08-07T08:00:00' as string, votes: {} },
   { id: 'seed-cmt-014', eventId: 'seed-event-003', userId: 'demo-user-1', parentId: 'seed-cmt-013', text: 'Three or four should be enough for the brushing. The real bottleneck will be the drain clearing on the lower half.', createdAt: '2026-08-07T09:00:00' as string, votes: { 'other-creator-1': 'up' } },

@@ -78,6 +78,20 @@ export const voteOnComment = createAsyncThunk<{ commentId: string; userId: strin
   }
 );
 
+export const editComment = createAsyncThunk<Comment, { commentId: string; text: string }>(
+  'comments/edit',
+  async ({ commentId, text }) => {
+    await new Promise((r) => setTimeout(r, 100));
+    const comments = loadComments();
+    const comment = comments.find((c) => c.id === commentId);
+    if (!comment) throw new Error('Comment not found');
+    comment.text = text;
+    comment.edited = true;
+    saveComments(comments);
+    return comment;
+  }
+);
+
 const commentsSlice = createSlice({
   name: 'comments',
   initialState,
@@ -106,6 +120,10 @@ const commentsSlice = createSlice({
             comment.votes[userId] = direction;
           }
         }
+      })
+      .addCase(editComment.fulfilled, (state, action) => {
+        const idx = state.items.findIndex((c) => c.id === action.payload.id);
+        if (idx !== -1) state.items[idx] = action.payload;
       });
   },
 });

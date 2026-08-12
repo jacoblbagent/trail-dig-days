@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { addComment, replyToComment, voteOnComment } from './commentsSlice';
+import { addComment, replyToComment, voteOnComment, editComment } from './commentsSlice';
 import { addNotification } from '../events/eventsSlice';
 import type { Comment } from '../../types';
 import { v4 as uuidv4 } from 'uuid';
@@ -22,6 +22,8 @@ const CommentSection: React.FC<Props> = ({ eventId, eventCreatorId }) => {
   const [collapsed, setCollapsed] = useState<Set<string>>(new Set());
   const [hiddenReplies, setHiddenReplies] = useState<Set<string>>(new Set());
   const [hoveredDepth, setHoveredDepth] = useState<number | null>(null);
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editText, setEditText] = useState('');
 
   const topLevel = comments.filter((c) => !c.parentId);
   const getReplies = (parentId: string) => comments.filter((c) => c.parentId === parentId);
@@ -66,6 +68,18 @@ const CommentSection: React.FC<Props> = ({ eventId, eventCreatorId }) => {
     const current = comment.votes[user.id];
     const newDir = current === direction ? null : direction;
     dispatch(voteOnComment({ commentId, userId: user.id, direction: newDir }));
+  };
+
+  const handleEdit = (c: Comment) => {
+    setEditingId(c.id);
+    setEditText(c.text);
+  };
+
+  const handleSaveEdit = async (commentId: string) => {
+    if (!editText.trim()) return;
+    await dispatch(editComment({ commentId, text: editText.trim() })).unwrap();
+    setEditingId(null);
+    setEditText('');
   };
 
   const handleSubmit = async () => {
@@ -154,11 +168,26 @@ const CommentSection: React.FC<Props> = ({ eventId, eventCreatorId }) => {
             <Link to={`/profile?userId=${c.userId}`} className="comment-author">
               {displayName(c.userId)}
             </Link>
-            <span className="comment-time">{timeAgo(c.createdAt)}</span>
+            <span className="comment-time">{timeAgo(c.createdAt)}{c.edited && ' (Edited)'}</span>
           </div>
           {!isCollapsed ? (
             <>
-              <div className="comment-text">{c.text}</div>
+              {editingId === c.id ? (
+                <div className="comment-edit-form">
+                  <textarea
+                    className="comment-input"
+                    value={editText}
+                    onChange={(e) => setEditText(e.target.value)}
+                    rows={2}
+                  />
+                  <div className="comment-form-actions">
+                    <button className="btn btn-sm btn-primary" onClick={() => handleSaveEdit(c.id)} disabled={!editText.trim()}>Save</button>
+                    <button className="btn btn-sm btn-ghost" onClick={() => { setEditingId(null); setEditText(''); }}>Cancel</button>
+                  </div>
+                </div>
+              ) : (
+                <div className="comment-text">{c.text}</div>
+              )}
               <div className="comment-actions">
                 <div className="comment-votes">
                   <button
@@ -174,9 +203,14 @@ const CommentSection: React.FC<Props> = ({ eventId, eventCreatorId }) => {
                   >▼</button>
                 </div>
                 {user && (
-                  <button className="comment-reply-btn" onClick={() => setReplyTo(replyTo === c.id ? null : c.id)}>
-                    {threadCount > 0 ? `${threadCount} reply${threadCount !== 1 ? 's' : ''}` : 'Reply'}
-                  </button>
+                  <>
+                    {user.id === c.userId && editingId !== c.id && (
+                      <button className="comment-edit-btn" onClick={() => handleEdit(c)}>Edit</button>
+                    )}
+                    <button className="comment-reply-btn" onClick={() => setReplyTo(replyTo === c.id ? null : c.id)}>
+                      {threadCount > 0 ? `${threadCount} reply${threadCount !== 1 ? 's' : ''}` : 'Reply'}
+                    </button>
+                  </>
                 )}
               </div>
               {replyTo === c.id && (
