@@ -339,74 +339,74 @@ const MapPage: React.FC = () => {
               )}
             </div>
           </div>
-
-          <div className="sidebar-col sidebar-col-list">
-            <hr className="calendar-separator" />
-
-            {selectedDay ? (
-              <div className="calendar-list">
-                <h2>
-                  <button className="btn btn-ghost btn-sm cal-back" onClick={() => setSelectedDay(null)}><span className="nav-arrow">←</span></button>
-                  {' '}Events on {new Date(selectedDay + 'T12:00:00').toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}
-                </h2>
-                {(() => {
-                  const dayEvents = eventMap.get(selectedDay) || [];
-                  return dayEvents.length === 0 ? (
-                    <p className="muted">No events on this day.</p>
-                  ) : (
-                    <ul className="calendar-event-list">
-                      {[...dayEvents]
-                        .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-                        .map((e) => (
-                          <li key={e.id} className="calendar-event-item">
-                            <Link to={`/events/${e.id}`} className="calendar-event-link">
-                              <span className="cal-event-title">{e.title}</span>
-                              <div className="cal-event-meta">
-                                <span className="cal-event-date">{e.date}</span>
-                                <span className="cal-event-location">{e.locationName}</span>
-                                <span className="cal-event-time">{e.startTime}</span>
-                              </div>
-                            </Link>
-                          </li>
-                        ))}
-                    </ul>
-                  );
-                })()}
-              </div>
-            ) : (
-              <>
-                <div className="event-list-header">
-                  <span className="event-list-count">{filtered.length} result{filtered.length !== 1 ? 's' : ''}</span>
-                  <div className="event-list-sort" ref={sortRef}>
-                    <span className="event-list-sort-label" onClick={() => setShowSortMenu(!showSortMenu)}>
-                      {sortBy === 'date' ? 'Date' : sortBy === 'distance' ? 'Distance' : 'Spots'}
-                    </span>
-                    {showSortMenu && (
-                      <div className="event-list-sort-menu">
-                        <button onClick={() => { setSortBy('date'); setShowSortMenu(false); }} className={sortBy === 'date' ? 'active' : ''}>Date</button>
-                        <button onClick={() => { setSortBy('distance'); setShowSortMenu(false); }} className={sortBy === 'distance' ? 'active' : ''} disabled={!searchCenter} style={{ opacity: !searchCenter ? 0.4 : 1 }}>Distance</button>
-                        <button onClick={() => { setSortBy('spots'); setShowSortMenu(false); }} className={sortBy === 'spots' ? 'active' : ''}>Spots</button>
-                      </div>
-                    )}
-                    <span className="event-list-sort-arrow" onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}>{sortOrder === 'desc' ? '↓' : '↑'}</span>
-                  </div>
-                </div>
-                <div className="event-list">
-                  {filtered.length === 0 ? (
-                    <div className="empty-state">
-                      <p>No dig days found within {radiusInput} miles.</p>
-                      <p>Try expanding your radius or <Link to="/events/create">create one</Link>!</p>
-                    </div>
-                  ) : (
-                    sorted.map((event) => (
-                      <EventCard event={event} key={event.id} center={searchCenter || DEFAULT_CENTER} />
-                    ))
-                  )}
-                </div>
-              </>
-            )}
-          </div>
         </div>
+      </div>
+
+      <div className="sidebar-col sidebar-col-list" style={{ width: sidebarWidth }}>
+        <hr className="calendar-separator" />
+
+        {selectedDay ? (
+          <div className="calendar-list">
+            <h2>
+              <button className="btn btn-ghost btn-sm cal-back" onClick={() => setSelectedDay(null)}><span className="nav-arrow">←</span></button>
+              {' '}Events on {new Date(selectedDay + 'T12:00:00').toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}
+            </h2>
+            {(() => {
+              const dayEvents = eventMap.get(selectedDay) || [];
+              return dayEvents.length === 0 ? (
+                <p className="muted">No events on this day.</p>
+              ) : (
+                <ul className="calendar-event-list">
+                  {[...dayEvents]
+                    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+                    .map((e) => (
+                      <li key={e.id} className="calendar-event-item">
+                        <Link to={`/events/${e.id}`} className="calendar-event-link">
+                          <span className="cal-event-title">{e.title}</span>
+                          <div className="cal-event-meta">
+                            <span className="cal-event-date">{e.date}</span>
+                            <span className="cal-event-location">{e.locationName}</span>
+                            <span className="cal-event-time">{e.startTime}</span>
+                          </div>
+                        </Link>
+                      </li>
+                    ))}
+                </ul>
+              );
+            })()}
+          </div>
+        ) : (
+          <>
+            <div className="event-list-header">
+              <span className="event-list-count">{filtered.length} result{filtered.length !== 1 ? 's' : ''}</span>
+              <div className="event-list-sort" ref={sortRef}>
+                <span className="event-list-sort-label" onClick={() => setShowSortMenu(!showSortMenu)}>
+                  {sortBy === 'date' ? 'Date' : sortBy === 'distance' ? 'Distance' : 'Spots'}
+                </span>
+                {showSortMenu && (
+                  <div className="event-list-sort-menu">
+                    <button onClick={() => { setSortBy('date'); setShowSortMenu(false); }} className={sortBy === 'date' ? 'active' : ''}>Date</button>
+                    <button onClick={() => { setSortBy('distance'); setShowSortMenu(false); }} className={sortBy === 'distance' ? 'active' : ''} disabled={!searchCenter} style={{ opacity: !searchCenter ? 0.4 : 1 }}>Distance</button>
+                    <button onClick={() => { setSortBy('spots'); setShowSortMenu(false); }} className={sortBy === 'spots' ? 'active' : ''}>Spots</button>
+                  </div>
+                )}
+                <span className="event-list-sort-arrow" onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}>{sortOrder === 'desc' ? '↓' : '↑'}</span>
+              </div>
+            </div>
+            <div className="event-list">
+              {filtered.length === 0 ? (
+                <div className="empty-state">
+                  <p>No dig days found within {radiusInput} miles.</p>
+                  <p>Try expanding your radius or <Link to="/events/create">create one</Link>!</p>
+                </div>
+              ) : (
+                sorted.map((event) => (
+                  <EventCard event={event} key={event.id} center={searchCenter || DEFAULT_CENTER} />
+                ))
+              )}
+            </div>
+          </>
+        )}
       </div>
 
       <div className={`sidebar-resizer ${nearMin ? 'at-min' : ''} ${nearMax ? 'at-max' : ''}`} onMouseDown={handleResizeStart} onDoubleClick={handleResizerDblClick}>
