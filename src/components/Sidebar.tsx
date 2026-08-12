@@ -165,7 +165,7 @@ const Sidebar: React.FC = () => {
                       <input
                         type="range"
                         min={5}
-                        max={250}
+                        max={100}
                         value={radiusInput}
                         onChange={(e) => handleRadiusChange(e.target.value)}
                         className="notif-slider"

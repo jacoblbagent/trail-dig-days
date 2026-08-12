@@ -138,8 +138,8 @@ const MapPage: React.FC = () => {
 
   // Filter expanded events by radius (for calendar dots)
   const filteredExpanded = useMemo(() => {
-    const radius = parseFloat(radiusInput) || 250;
-    if (radius >= 250) return expanded;
+    const radius = parseFloat(radiusInput) || 100;
+    if (radius >= 100) return expanded;
     if (!searchCenter) return expanded;
     return expanded.filter((e) => haversine(searchCenter, e.coordinates) <= radius);
   }, [expanded, searchCenter, radiusInput]);
@@ -156,8 +156,8 @@ const MapPage: React.FC = () => {
   }, [expanded]);
 
   const filtered = useMemo(() => {
-    const radius = parseFloat(radiusInput) || 250;
-    if (radius >= 250) return collapsed;
+    const radius = parseFloat(radiusInput) || 100;
+    if (radius >= 100) return collapsed;
     if (!searchCenter) return collapsed;
     return collapsed.filter((e) => haversine(searchCenter, e.coordinates) <= radius);
   }, [collapsed, searchCenter, radiusInput]);
@@ -183,7 +183,7 @@ const MapPage: React.FC = () => {
   const handleRadiusChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;
     setRadiusInput(val);
-    dispatch(setSearchRadius(parseFloat(val) || 250));
+    dispatch(setSearchRadius(parseFloat(val) || 100));
   };
 
   const cells: { day: number; events: typeof expanded }[] = [];
@@ -222,7 +222,7 @@ const MapPage: React.FC = () => {
             <div className="search-nearme">
               <div className="radius-control">
                 <label>Search radius: <strong>{radiusInput} mi</strong></label>
-                <input type="range" min={5} max={250} value={radiusInput} onChange={handleRadiusChange} />
+                <input type="range" min={5} max={100} value={radiusInput} onChange={handleRadiusChange} />
               </div>
               <SearchRadiusMap center={searchCenter || [39.7392, -104.9903]} radius={parseFloat(radiusInput) || 25} onCenterChange={(c) => dispatch(setSearchCenter(c))} />
             </div>

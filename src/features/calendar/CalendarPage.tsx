@@ -67,8 +67,8 @@ const CalendarPage: React.FC = () => {
   const daysInMonth = new Date(year, month + 1, 0).getDate();
 
   const filtered = useMemo(() => {
-    const radius = parseFloat(radiusInput) || 250;
-    if (radius >= 250) return expanded;
+    const radius = parseFloat(radiusInput) || 100;
+    if (radius >= 100) return expanded;
     return expanded.filter((e) => haversine(center, e.coordinates) <= radius);
   }, [expanded, radiusInput, center]);
 
@@ -124,7 +124,7 @@ const CalendarPage: React.FC = () => {
             <div className="search-nearme">
               <div className="radius-control">
                 <label>Search radius: <strong>{radiusInput} mi</strong></label>
-                <input type="range" min={5} max={250} value={radiusInput} onChange={handleRadiusChange} />
+                <input type="range" min={5} max={100} value={radiusInput} onChange={handleRadiusChange} />
               </div>
               <SearchRadiusMap center={searchCenter || [39.7392, -104.9903]} radius={parseFloat(radiusInput) || 25} onCenterChange={(c) => dispatch(setSearchCenter(c))} />
             </div>
