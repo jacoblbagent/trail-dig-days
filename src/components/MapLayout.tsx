@@ -1,8 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
 import { MapContainer, TileLayer, Circle, useMap } from 'react-leaflet';
 import { useAppSelector, useAppDispatch } from '../app/hooks';
-import { setSearchRadius, setSearchCenter } from '../features/events/eventsSlice';
+import { setSearchRadius, setSearchCenter, setSelectedDay } from '../features/events/eventsSlice';
+import { expandRecurring } from '../utils/recurrence';
+import { haversine } from '../features/map/mapUtils';
 import MapMoveHandler from '../features/map/MapMoveHandler';
 import TileLoadIndicator from '../features/map/TileLoadIndicator';
 import PageMarkerContent from '../features/map/PageMarkerContent';
@@ -71,6 +73,12 @@ const MapResizeWatcher: React.FC = () => {
 };
 
 const FilterCalendar: React.FC<{ onClose: () => void }> = ({ onClose }) => {
+  const dispatch = useAppDispatch();
+  const items = useAppSelector((s) => s.events.items);
+  const searchCenter = useAppSelector((s) => s.events.searchCenter);
+  const searchRadius = useAppSelector((s) => s.events.searchRadius);
+  const selectedDay = useAppSelector((s) => s.events.selectedDay);
+
   const today = new Date();
   const [viewDate, setViewDate] = useState(new Date(today.getFullYear(), today.getMonth(), 1));
   const year = viewDate.getFullYear();
@@ -78,13 +86,39 @@ const FilterCalendar: React.FC<{ onClose: () => void }> = ({ onClose }) => {
   const firstDay = new Date(year, month, 1).getDay();
   const daysInMonth = new Date(year, month + 1, 0).getDate();
 
-  const cells: { day: number; events: number }[] = [];
-  for (let i = 0; i < firstDay; i++) cells.push({ day: 0, events: 0 });
-  for (let d = 1; d <= daysInMonth; d++) cells.push({ day: d, events: 0 });
-  while (cells.length % 7 !== 0) cells.push({ day: 0, events: 0 });
+  const center = searchCenter || DEFAULT_CENTER;
+  const expanded = useMemo(() => expandRecurring(items), [items]);
+
+  const eventMap = useMemo(() => {
+    const radius = searchRadius || 100;
+    const filtered = radius < 100
+      ? expanded.filter((e) => haversine(center, e.coordinates) <= radius)
+      : expanded;
+    const map = new Map<string, number>();
+    for (const e of filtered) {
+      const key = e.date.slice(0, 10);
+      map.set(key, (map.get(key) || 0) + 1);
+    }
+    return map;
+  }, [expanded, searchRadius, center]);
+
+  const cells: { day: number; count: number }[] = [];
+  for (let i = 0; i < firstDay; i++) cells.push({ day: 0, count: 0 });
+  for (let d = 1; d <= daysInMonth; d++) {
+    const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+    cells.push({ day: d, count: eventMap.get(dateStr) || 0 });
+  }
+  while (cells.length % 7 !== 0) cells.push({ day: 0, count: 0 });
 
   const isToday = (d: number) =>
     d === today.getDate() && month === today.getMonth() && year === today.getFullYear();
+
+  const handleDayClick = (day: number) => {
+    if (day === 0) return;
+    const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+    dispatch(setSelectedDay(selectedDay === dateStr ? null : dateStr));
+    onClose();
+  };
 
   return (
     <div className="filter-panel filter-panel--time">
@@ -96,11 +130,25 @@ const FilterCalendar: React.FC<{ onClose: () => void }> = ({ onClose }) => {
       </div>
       <div className="calendar-grid">
         {DAYS.map((d) => (<div key={d} className="cal-day-header">{d}</div>))}
-        {cells.map((cell, i) => (
-          <div key={i} className={`cal-cell ${cell.day === 0 ? 'cal-empty' : ''} ${isToday(cell.day) ? 'cal-today' : ''}`}>
-            {cell.day > 0 && <span className="cal-day-num">{cell.day}</span>}
-          </div>
-        ))}
+        {cells.map((cell, i) => {
+          const dateStr = cell.day > 0
+            ? `${year}-${String(month + 1).padStart(2, '0')}-${String(cell.day).padStart(2, '0')}`
+            : '';
+          return (
+            <div key={i}
+              className={`cal-cell ${cell.day === 0 ? 'cal-empty' : ''} ${cell.count > 0 ? 'cal-has-events' : ''} ${isToday(cell.day) ? 'cal-today' : ''} ${dateStr === selectedDay ? 'cal-selected' : ''}`}
+              onClick={() => handleDayClick(cell.day)}
+              title={cell.count > 0 ? `${cell.count} event${cell.count > 1 ? 's' : ''}` : undefined}
+            >
+              {cell.day > 0 && (
+                <>
+                  <span className="cal-day-num">{cell.day}</span>
+                  {cell.count > 0 && <span className="cal-dot">{cell.count}</span>}
+                </>
+              )}
+            </div>
+          );
+        })}
       </div>
     </div>
   );

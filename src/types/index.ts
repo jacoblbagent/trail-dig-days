@@ -153,6 +153,7 @@ export interface EventsState {
   notificationRadius: number;
   notifications: NotificationItem[];
   referrerPath: string;
+  selectedDay: string | null;
 }
 
 // ─── Application Root State ───

@@ -72,6 +72,7 @@ const initialState: EventsState = {
   notificationRadius: 25,
   notifications: seedNotifications(),
   referrerPath: '/',
+  selectedDay: null as string | null,
 };
 
 // Re-read events from localStorage after seed runs (ES module hoisting means
@@ -217,6 +218,9 @@ const eventsSlice = createSlice({
     setReferrerPath(state, action: PayloadAction<string>) {
       state.referrerPath = action.payload;
     },
+    setSelectedDay(state, action: PayloadAction<string | null>) {
+      state.selectedDay = action.payload;
+    },
     loadEventsFromStorage(state) {
       state.items = reloadEvents();
     },
@@ -253,5 +257,5 @@ const eventsSlice = createSlice({
   },
 });
 
-export const { setSearchRadius, setSearchCenter, setMapViewport, setTheme, clearSearchCenter, setHoveredMarkerId, setNotificationsEnabled, setNotificationRadius, addNotification, markNotificationRead, setReferrerPath, loadEventsFromStorage } = eventsSlice.actions;
+export const { setSearchRadius, setSearchCenter, setMapViewport, setTheme, clearSearchCenter, setHoveredMarkerId, setNotificationsEnabled, setNotificationRadius, addNotification, markNotificationRead, setReferrerPath, setSelectedDay, loadEventsFromStorage } = eventsSlice.actions;
 export default eventsSlice.reducer;
