@@ -114,7 +114,6 @@ const DigDatesTab: React.FC<{ userId: string }> = ({ userId }) => {
             <>
               {signedUp.length > 0 && (
                 <section className="profile-section">
-                  <h3 style={{ color: 'var(--stone-600)', fontSize: '.85rem', fontWeight: 600, margin: '0 0 8px' }}>Signed Up</h3>
                   <div className="dig-date-list">
                     {signedUp.map((e) => (
                       <Link to={`/events/${e.id}`} key={e.id} className="dig-date-card">
