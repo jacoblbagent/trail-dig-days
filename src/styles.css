@@ -386,6 +386,16 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
 .search-nearme { display: flex; flex-direction: column; gap: 8px; }
 .radius-map-wrap { border: 1px solid var(--stone-200); border-radius: var(--radius); overflow: hidden; height: 200px; }
 .radius-map { width: 100%; height: 100%; }
+.radius-locate-btn {
+  position: absolute; top: 8px; right: 8px; z-index: 1000;
+  width: 32px; height: 32px; border-radius: 4px;
+  background: white; border: 2px solid rgba(0,0,0,.2);
+  cursor: pointer; font-size: 1rem; line-height: 1;
+  display: flex; align-items: center; justify-content: center;
+  color: #333; transition: background .1s;
+}
+.radius-locate-btn:hover { background: #f4f4f4; }
+.radius-locate-btn:disabled { opacity: .5; cursor: not-allowed; }
 .loc-error { color: var(--earth-500); font-size: .8rem; margin-top: 4px; }
 .event-list-header { display: flex; align-items: center; justify-content: space-between; padding: 4px 20px 0; }
 .event-list-count { font-size: .8rem; color: var(--stone-400); }

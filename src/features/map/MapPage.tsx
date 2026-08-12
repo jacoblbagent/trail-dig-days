@@ -224,9 +224,7 @@ const MapPage: React.FC = () => {
                 <label>Search radius: <strong>{radiusInput} mi</strong></label>
                 <input type="range" min={5} max={250} value={radiusInput} onChange={handleRadiusChange} />
               </div>
-              <div className="radius-map-wrap">
-                <SearchRadiusMap center={searchCenter || [39.7392, -104.9903]} radius={parseFloat(radiusInput) || 25} onCenterChange={(c) => dispatch(setSearchCenter(c))} />
-              </div>
+              <SearchRadiusMap center={searchCenter || [39.7392, -104.9903]} radius={parseFloat(radiusInput) || 25} onCenterChange={(c) => dispatch(setSearchCenter(c))} />
             </div>
           )}
         </div>
