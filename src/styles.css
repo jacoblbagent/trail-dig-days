@@ -611,8 +611,9 @@ input[type="time"]::-webkit-calendar-picker-indicator { filter: invert(0.55); cu
 .cat-item input { accent-color: var(--green-600); cursor: pointer; }
 .cat-clear { padding: 6px 12px; border: 1px solid var(--stone-200); border-radius: var(--radius-sm); font-size: .8rem; background: var(--surface); color: var(--red-600); cursor: pointer; white-space: nowrap; }
 .cat-clear:hover { background: var(--red-50); }
-.cat-modal-toggle { display: flex; align-items: center; justify-content: space-between; width: 100%; max-width: 320px; padding: 8px 12px; border: 1px solid var(--stone-200); border-radius: var(--radius-sm); background: var(--surface); font-size: .9rem; color: var(--stone-600); cursor: pointer; transition: border-color .12s; }
-.cat-modal-toggle:hover { border-color: var(--green-400); }
+.cat-modal-toggle { display: flex; align-items: center; justify-content: space-between; width: 100%; max-width: 320px; padding: 8px 12px; border: 1px solid var(--stone-200); border-radius: var(--radius-sm); background: var(--surface); font-size: .9rem; color: var(--stone-600); cursor: pointer; transition: border-color .12s, background .12s; gap: 8px; }
+.cat-modal-toggle::after { content: '▾'; font-size: .7rem; color: var(--stone-400); flex-shrink: 0; }
+.cat-modal-toggle:hover { border-color: var(--green-400); background: var(--stone-50); }
 .cat-modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 2000; display: flex; align-items: center; justify-content: center; }
 .cat-modal { background: var(--surface); border-radius: var(--radius-lg); box-shadow: 0 8px 32px rgba(0,0,0,0.2); min-width: 360px; max-width: 480px; max-height: 80vh; display: flex; flex-direction: column; }
 .cat-modal-header { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; border-bottom: 1px solid var(--stone-100); font-weight: 600; font-size: .95rem; color: var(--stone-700); }
