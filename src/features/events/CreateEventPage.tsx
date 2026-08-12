@@ -394,13 +394,14 @@ const CreateEventPage: React.FC = () => {
   return (
     <div className="create-event-page">
       <div className="page-header">
-        <h1> Create a Dig Day</h1>
-        <p>Organize a trail building day and rally the crew</p>
+        <div className="page-header-left">
+          <button className="page-back-btn" onClick={() => navigate(-1)}><span className="nav-arrow">←</span> Back</button>
+          <h1> Create a Dig Day</h1>
+        </div>
       </div>
 
       <form onSubmit={handleSubmit} className="event-form">
         <div className="form-section">
-          <h2>Event Details</h2>
           <div className="form-group">
             <label>Event Title *</label>
             <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="e.g. Upper Ridge Reroute Dig Day" required />
