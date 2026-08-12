@@ -147,8 +147,14 @@ const EditEventPage: React.FC = () => {
   const updateProvided = (name: string, field: keyof ProvidedItem, value: any) => {
     setProvidedItems((prev) => prev.map((p) => (p.name === name ? { ...p, [field]: value } : p)));
   };
+  const removeProvided = (name: string) => {
+    setProvidedItems((prev) => prev.filter((p) => p.name !== name));
+  };
   const updateRecommended = (name: string, field: keyof RecommendedItem, value: any) => {
     setRecommendedItems((prev) => prev.map((p) => (p.name === name ? { ...p, [field]: value } : p)));
+  };
+  const removeRecommended = (name: string) => {
+    setRecommendedItems((prev) => prev.filter((p) => p.name !== name));
   };
   const toggleProvided = (name: string) => {
     setProvidedItems((prev) =>
@@ -399,6 +405,7 @@ const EditEventPage: React.FC = () => {
                 <button type="button" className={`tag-qty-btn ${pi.quantity === 'Few' ? 'active' : ''}`} onClick={() => updateProvided(pi.name, 'quantity', 'Few')}>Few</button>
                 <button type="button" className={`tag-qty-btn ${pi.quantity === 'Plenty' ? 'active' : ''}`} onClick={() => updateProvided(pi.name, 'quantity', 'Plenty')}>Plenty</button>
               </div>
+              <button type="button" className="provided-remove" onClick={() => removeProvided(pi.name)} title="Remove" aria-label="Remove">🗑</button>
             </div>
           ))}
         </div>
@@ -449,6 +456,7 @@ const EditEventPage: React.FC = () => {
                 <input type="checkbox" checked={ri.essential} onChange={(e) => updateRecommended(ri.name, 'essential', e.target.checked)} />
                 Essential
               </label>
+              <button type="button" className="provided-remove" onClick={() => removeRecommended(ri.name)} title="Remove" aria-label="Remove">🗑</button>
             </div>
           ))}
         </div>

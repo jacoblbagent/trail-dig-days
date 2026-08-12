@@ -292,10 +292,18 @@ const CreateEventPage: React.FC = () => {
     );
   };
 
+  const removeProvided = (name: string) => {
+    setProvidedItems((prev) => prev.filter((p) => p.name !== name));
+  };
+
   const updateRecommended = (name: string, field: keyof RecommendedItem, value: any) => {
     setRecommendedItems((prev) =>
       prev.map((p) => (p.name === name ? { ...p, [field]: value } : p))
     );
+  };
+
+  const removeRecommended = (name: string) => {
+    setRecommendedItems((prev) => prev.filter((p) => p.name !== name));
   };
 
   const toggleProvided = (name: string) => {
@@ -637,6 +645,7 @@ const CreateEventPage: React.FC = () => {
                   onClick={() => updateProvided(pi.name, 'quantity', 'Plenty')}
                 >Plenty</button>
               </div>
+              <button type="button" className="provided-remove" onClick={() => removeProvided(pi.name)} title="Remove" aria-label="Remove">🗑</button>
             </div>
           ))}
         </div>
@@ -704,6 +713,7 @@ const CreateEventPage: React.FC = () => {
                 />
                 Essential
               </label>
+              <button type="button" className="provided-remove" onClick={() => removeRecommended(ri.name)} title="Remove" aria-label="Remove">🗑</button>
             </div>
           ))}
         </div>

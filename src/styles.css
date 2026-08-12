@@ -625,6 +625,8 @@ input[type="time"]::-webkit-calendar-picker-indicator { filter: invert(0.55); cu
 .provided-note { display: flex; align-items: center; gap: 8px; margin-top: 4px; }
 .provided-note input { flex: 1; padding: 6px 10px; border: 1px solid var(--stone-200); border-radius: var(--radius-sm); font-size: .85rem; background: var(--surface); color: var(--stone-900); }
 .provided-note .tag-qty-selector { display: flex; gap: 0; flex-shrink: 0; }
+.provided-remove { background: none; border: none; font-size: .9rem; color: var(--stone-400); cursor: pointer; padding: 4px; flex-shrink: 0; line-height: 1; transition: color .12s; border-radius: var(--radius-sm); }
+.provided-remove:hover { color: var(--red-500); background: var(--red-50); }
 
 /* ── Geo Search (Location Picker) ── */
 .geo-search { margin-bottom: 12px; }
