@@ -102,7 +102,7 @@ const DigDatesTab: React.FC<{ userId: string }> = ({ userId }) => {
           Past {!!past.length && <span className="tab-count">{past.length}</span>}
         </button>
         <button className={`tab-btn ${tab === 'mine' ? 'active' : ''}`} onClick={() => setTab('mine')}>
-          My Events
+          My Events {!!(created.length + signedUp.length) && <span className="tab-count">{created.length + signedUp.length}</span>}
         </button>
       </div>
 
