@@ -129,8 +129,7 @@ const CommentSection: React.FC<Props> = ({ eventId, eventCreatorId }) => {
           onClick={() => threadCount > 0 && toggleCollapse(c.id)}
           onMouseEnter={() => setHoveredDepth(depth)}
           onMouseLeave={() => setHoveredDepth(null)}
-          style={{ paddingLeft: depth > 0 ? `${depth * 20}px` : 0 }}
-        >
+          >
           {depth > 0 && <div className={`indent-line ${isHoveredLine ? 'hvr' : ''}`} />}
         </div>
         <div className="comment-body">
