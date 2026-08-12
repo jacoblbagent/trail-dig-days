@@ -211,7 +211,6 @@ const EditEventPage: React.FC = () => {
                   <button className="page-back-btn" onClick={() => navigate(`/events/${id}`)}><span className="nav-arrow">←</span> Back</button>
                   <h1>Edit Dig Day</h1>
                 </div>
-                <p>Update your event details</p>
               </div>
 
       <form onSubmit={handleSubmit} className="event-form">
