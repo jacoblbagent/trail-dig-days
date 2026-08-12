@@ -463,7 +463,7 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
   position: absolute; top: 0; left: 0; right: 0; height: 44px;
   background: color-mix(in srgb, var(--surface) 60%, transparent);
   border-bottom: 1px solid var(--stone-150);
-  z-index: 1100; display: flex; align-items: center; gap: 2px; padding: 0 8px;
+  z-index: 1100; display: flex; justify-content: flex-end; align-items: center; gap: 2px; padding: 0 8px;
 }
 .toolbar-btn {
   background: none; border: none; border-radius: 6px; height: 30px;
@@ -478,7 +478,7 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
   position: fixed; inset: 0; z-index: 1099;
 }
 .filter-panel {
-  position: absolute; top: 50px; left: 15px; z-index: 1100;
+  position: absolute; top: 50px; right: 15px; z-index: 1100;
   background: var(--surface); border: 1px solid var(--stone-200);
   border-radius: var(--radius); box-shadow: var(--shadow-lg);
   padding: 12px; min-width: 240px; max-width: 340px;
