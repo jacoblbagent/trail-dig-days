@@ -288,7 +288,7 @@ const MapPage: React.FC = () => {
               <SearchRadiusMap center={pendingCenter || searchCenter || [39.7392, -104.9903]} radius={parseFloat(radiusInput) || 10} onCenterChange={setPendingCenter} />
             </div>
           )}
-          <button className="btn btn-search" onClick={() => {
+          <button className="btn btn-search" disabled={searchTab === 'country' ? !selectedState : !pendingCenter} onClick={() => {
             if (searchTab === 'country') {
               if (selectedState && US_STATE_COORDS[selectedState]) {
                 dispatch(setSearchCenter(US_STATE_COORDS[selectedState]));
@@ -296,6 +296,7 @@ const MapPage: React.FC = () => {
               }
             } else if (pendingCenter) {
               dispatch(setSearchCenter(pendingCenter));
+              setPendingCenter(null);
             }
           }}>Search</button>
         </div>

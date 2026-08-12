@@ -392,6 +392,8 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
   cursor: pointer; transition: background .15s;
 }
 .btn-search:hover { background: var(--stone-200); }
+.btn-search:disabled { opacity: .45; cursor: not-allowed; }
+.btn-search:disabled:hover { background: var(--stone-100); }
 .radius-map-wrap { border: 1px solid var(--stone-200); border-radius: var(--radius); overflow: hidden; height: 200px; }
 .radius-map { width: 100%; height: 100%; }
 .radius-locate-btn {
