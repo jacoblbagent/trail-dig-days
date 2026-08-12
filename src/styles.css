@@ -993,8 +993,6 @@ input[type="time"]::-webkit-calendar-picker-indicator { filter: invert(0.55); cu
   min-width: 0; display: flex; flex-direction: column; overflow-y: auto;
 }
 
-.calendar-separator { margin: 8px 0; border: none; border-top: 1px solid var(--stone-150); }
-.calendar-list { display: flex; flex-direction: column; gap: 6px; }
 .calendar-grid-wrap { display: flex; flex-direction: column; gap: 8px; padding: 12px; }
 .calendar-list h2 { font-size: .9rem; color: var(--stone-700); margin: 0; font-weight: 500; }
 .calendar-event-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 4px; }

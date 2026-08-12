@@ -353,7 +353,6 @@ const MapPage: React.FC = () => {
       </div>
 
       <div className="sidebar-col sidebar-col-list" style={{ width: sidebarWidth }}>
-        <hr className="calendar-separator" />
 
         {selectedDay ? (
           <div className="calendar-list">
