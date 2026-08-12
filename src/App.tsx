@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react';
-import { BrowserRouter, Routes, Route, useLocation, useNavigate } from 'react-router-dom';
+import { BrowserRouter, Link, Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { store } from './app/store';
+import { useAppSelector } from './app/hooks';
 import { loadEventsFromStorage } from './features/events/eventsSlice';
 import Sidebar from './components/Sidebar';
 import MapLayout from './components/MapLayout';
@@ -16,6 +17,17 @@ import RecurringEventsPage from './features/events/RecurringEventsPage';
 import MapPage from './features/map/MapPage';
 import NotFoundPage from './pages/NotFoundPage';
 import ToastContainer from './components/ToastContainer';
+
+const TopNav: React.FC = () => {
+  const currentUser = useAppSelector((s) => s.auth.user);
+  const canCreate = currentUser?.userType === 'organization';
+  return (
+    <header className="top-nav">
+      <span className="top-nav-title">Dig Days</span>
+      {canCreate && <Link to="/events/create" className="btn btn-primary btn-sm">+ New</Link>}
+    </header>
+  );
+};
 
 const RedirectHandler: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const navigate = useNavigate();
@@ -69,7 +81,7 @@ const App: React.FC = () => {
     <Provider store={store}>
       <BrowserRouter basename={import.meta.env.BASE_URL.replace(/\/$/, '')}>
         <RedirectHandler>
-          <header className="top-nav">Dig Days</header>
+          <TopNav />
           <div className="app-layout">
             <Sidebar />
             <main className="app-main">
