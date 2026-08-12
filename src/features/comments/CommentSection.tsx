@@ -20,6 +20,7 @@ const CommentSection: React.FC<Props> = ({ eventId, eventCreatorId }) => {
   const [replyTo, setReplyTo] = useState<string | null>(null);
   const [replyText, setReplyText] = useState('');
   const [collapsed, setCollapsed] = useState<Set<string>>(new Set());
+  const [hiddenReplies, setHiddenReplies] = useState<Set<string>>(new Set());
   const [hoveredDepth, setHoveredDepth] = useState<number | null>(null);
 
   const topLevel = comments.filter((c) => !c.parentId);
@@ -114,6 +115,15 @@ const CommentSection: React.FC<Props> = ({ eventId, eventCreatorId }) => {
     });
   };
 
+  const toggleHiddenReplies = (id: string) => {
+    setHiddenReplies((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  };
+
   const renderComment = (c: Comment, depth = 0, parentId?: string) => {
     const votes = netVotes(c);
     const my = myVote(c);
@@ -127,7 +137,7 @@ const CommentSection: React.FC<Props> = ({ eventId, eventCreatorId }) => {
         {depth > 0 && (
         <div
           className={`comment-indent ${isHoveredLine ? 'hvr' : ''}`}
-          onClick={() => toggleCollapse(parentId!)}
+          onClick={() => toggleHiddenReplies(parentId!)}
           onMouseEnter={() => setHoveredDepth(depth)}
           onMouseLeave={() => setHoveredDepth(null)}
           >
@@ -184,11 +194,16 @@ const CommentSection: React.FC<Props> = ({ eventId, eventCreatorId }) => {
                   </div>
                 </div>
               )}
-              {replies.map((r) => renderComment(r, depth + 1, c.id))}
+              {threadCount > 0 && hiddenReplies.has(c.id) ? (
+                <div className="comment-collapsed" onClick={() => toggleHiddenReplies(c.id)}>
+                  <span className="comment-collapsed-text">{threadCount} repl{threadCount !== 1 ? 'ies' : 'y'} hidden</span>
+                </div>
+              ) : (
+                replies.map((r) => renderComment(r, depth + 1, c.id))
+              )}
             </>
           ) : (
             <div className="comment-collapsed" onClick={() => toggleCollapse(c.id)}>
-              <span className="thread-toggle">▸</span>
               <span className="comment-collapsed-text">{threadCount} repl{threadCount !== 1 ? 'ies' : 'y'} hidden</span>
             </div>
           )}
