@@ -13,6 +13,7 @@ const SearchRadiusMap: React.FC<Props> = ({ center, radius, onCenterChange }) =>
   const circleRef = useRef<L.Circle | null>(null);
   const markerRef = useRef<L.Marker | null>(null);
   const [locating, setLocating] = useState(false);
+  const suppressMove = useRef(false);
 
   const goToLocation = useCallback(() => {
     if (!navigator.geolocation) return;
@@ -21,6 +22,7 @@ const SearchRadiusMap: React.FC<Props> = ({ center, radius, onCenterChange }) =>
       (pos) => {
         const c: [number, number] = [pos.coords.latitude, pos.coords.longitude];
         if (mapInstance.current) {
+          suppressMove.current = true;
           mapInstance.current.setView(c, 10, { animate: true });
         }
         if (markerRef.current) markerRef.current.setLatLng(c);
@@ -32,16 +34,6 @@ const SearchRadiusMap: React.FC<Props> = ({ center, radius, onCenterChange }) =>
       { enableHighAccuracy: true, timeout: 8000 }
     );
   }, [onCenterChange]);
-
-  const fitToCircle = useCallback(() => {
-    if (circleRef.current && mapInstance.current) {
-      mapInstance.current.fitBounds(circleRef.current.getBounds(), {
-        padding: [20, 20],
-        maxZoom: 10,
-        animate: false,
-      });
-    }
-  }, []);
 
   useEffect(() => {
     if (!mapRef.current || mapInstance.current) return;
@@ -86,6 +78,7 @@ const SearchRadiusMap: React.FC<Props> = ({ center, radius, onCenterChange }) =>
     });
 
     map.on('moveend', () => {
+      if (suppressMove.current) return;
       const c = map.getCenter();
       onCenterChange([c.lat, c.lng]);
     });
@@ -94,15 +87,11 @@ const SearchRadiusMap: React.FC<Props> = ({ center, radius, onCenterChange }) =>
     circleRef.current = circle;
     markerRef.current = marker;
 
-    // Fit to circle on initial load
+    // Fit to circle on initial load (deferred so map is ready)
     setTimeout(() => {
-      if (circleRef.current && mapInstance.current) {
-        mapInstance.current.fitBounds(circleRef.current.getBounds(), {
-          padding: [20, 20],
-          maxZoom: 10,
-          animate: false,
-        });
-      }
+      suppressMove.current = true;
+      map.fitBounds(circle.getBounds(), { padding: [20, 20], maxZoom: 10, animate: false });
+      setTimeout(() => { suppressMove.current = false; }, 50);
     }, 100);
 
     return () => {
@@ -118,19 +107,26 @@ const SearchRadiusMap: React.FC<Props> = ({ center, radius, onCenterChange }) =>
     if (circleRef.current) {
       circleRef.current.setRadius(radius * 1609.34);
     }
-    fitToCircle();
-  }, [radius, fitToCircle]);
+    if (mapInstance.current && circleRef.current) {
+      suppressMove.current = true;
+      mapInstance.current.fitBounds(circleRef.current.getBounds(), {
+        padding: [20, 20], maxZoom: 10, animate: false,
+      });
+      setTimeout(() => { suppressMove.current = false; }, 50);
+    }
+  }, [radius]);
 
-  // Fit bounds when center changes externally (e.g. locate button)
+  // Update position when center changes externally (locate / Redux)
   useEffect(() => {
     if (mapInstance.current && markerRef.current && circleRef.current) {
       const c = [center[0], center[1]] as [number, number];
+      suppressMove.current = true;
       mapInstance.current.setView(c, mapInstance.current.getZoom());
       markerRef.current.setLatLng(c);
       circleRef.current.setLatLng(c);
+      setTimeout(() => { suppressMove.current = false; }, 50);
     }
-    fitToCircle();
-  }, [center[0], center[1], fitToCircle]);
+  }, [center[0], center[1]]);
 
   return (
     <div className="radius-map-wrap" style={{ position: 'relative' }}>
