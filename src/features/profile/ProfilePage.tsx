@@ -410,7 +410,6 @@ const ProfilePage: React.FC = () => {
         {/* Bio */}
         {form.bio && (
         <section className="profile-section">
-          <h3>Bio</h3>
           <p>{form.bio}</p>
         </section>
         )}
