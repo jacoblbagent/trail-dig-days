@@ -959,9 +959,24 @@ input[type="time"]::-webkit-calendar-picker-indicator { filter: invert(0.55); cu
 
 .calendar-map { border-radius: var(--radius); overflow: hidden; border: 1px solid var(--stone-150); min-height: 0; }
 
-.calendar-separator { margin: 8px 0; border: none; border-top: 1px solid var(--stone-150); }
+.radius-locate-btn:active { background: #f0f0f0; }
 
-.calendar-list { display: flex; flex-direction: column; gap: 6px; padding: 8px 12px 16px; }
+.sidebar-body {
+  display: flex; flex: 1; min-height: 0; overflow: hidden;
+}
+.sidebar-col {
+  display: flex; flex-direction: column; overflow-y: auto;
+}
+.sidebar-col-cal {
+  flex: 0 0 auto; min-width: 260px;
+}
+.sidebar-col-list {
+  flex: 1; min-width: 0;
+}
+
+.calendar-separator { margin: 8px 0; border: none; border-top: 1px solid var(--stone-150); }
+.calendar-list { display: flex; flex-direction: column; gap: 6px; }
+.calendar-grid-wrap { display: flex; flex-direction: column; gap: 8px; padding: 12px; }
 .calendar-list h2 { font-size: .9rem; color: var(--stone-700); margin: 0; font-weight: 500; }
 .calendar-event-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 4px; }
 .calendar-event-item { }
@@ -1159,6 +1174,7 @@ input[type="time"]::-webkit-calendar-picker-indicator { filter: invert(0.55); cu
   .app-main { padding-bottom: 48px; }
   .map-page { padding-bottom: 48px; }
   .map-sidebar { bottom: 48px; }
+  .sidebar-body { flex-direction: column; }
   .search-controls { padding: 8px 10px; }
   .map-sidebar-header { padding: 3px 5px; }
   .map-sidebar-header h1 { font-size: .9rem; }
