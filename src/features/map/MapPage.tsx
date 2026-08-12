@@ -151,37 +151,30 @@ const MapPage: React.FC = () => {
 
       <div className="sidebar-col sidebar-col-list" style={{ width: rightWidth, order: 2 }}>
         {selectedDay ? (
-          <div className="calendar-list">
-            <h2>
+          <>
+            <div className="event-list-header">
               <button className="btn btn-ghost btn-sm cal-back" onClick={() => dispatch(setSelectedDay(null))}>
                 <span className="nav-arrow">←</span>
               </button>
-              {' '}Events on {new Date(selectedDay + 'T12:00:00').toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}
-            </h2>
-            {(() => {
-              const dayEvents = eventMap.get(selectedDay) || [];
-              return dayEvents.length === 0 ? (
-                <p className="muted">No events on this day.</p>
-              ) : (
-                <ul className="calendar-event-list">
-                  {[...dayEvents]
-                    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-                    .map((e) => (
-                      <li key={e.id} className="calendar-event-item">
-                        <Link to={`/events/${e.id}`} className="calendar-event-link">
-                          <span className="cal-event-title">{e.title}</span>
-                          <div className="cal-event-meta">
-                            <span className="cal-event-date">{e.date}</span>
-                            <span className="cal-event-location">{e.locationName}</span>
-                            <span className="cal-event-time">{e.startTime}</span>
-                          </div>
-                        </Link>
-                      </li>
-                    ))}
-                </ul>
-              );
-            })()}
-          </div>
+              <span className="event-list-count">Events on {new Date(selectedDay + 'T12:00:00').toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}</span>
+            </div>
+            <div className="event-list">
+              {(() => {
+                const dayEvents = eventMap.get(selectedDay) || [];
+                return dayEvents.length === 0 ? (
+                  <div className="empty-state"><p>No events on this day.</p></div>
+                ) : (
+                  [...dayEvents]
+                    .sort((a, b) => sortOrder === 'asc'
+                      ? new Date(a.date).getTime() - new Date(b.date).getTime()
+                      : new Date(b.date).getTime() - new Date(a.date).getTime())
+                    .map((event) => (
+                      <EventCard event={event} key={event.id} center={searchCenter || DEFAULT_CENTER} />
+                    ))
+                );
+              })()}
+            </div>
+          </>
         ) : (
           <>
             <div className="event-list-header">
