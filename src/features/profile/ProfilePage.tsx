@@ -76,7 +76,7 @@ const readFileAsDataURL = (file: File): Promise<string> =>
     reader.readAsDataURL(file);
   });
 
-const DigDatesTab: React.FC<{ userId: string; displayName?: string; isOwnProfile?: boolean }> = ({ userId, displayName, isOwnProfile }) => {
+const DigDatesTab: React.FC<{ userId: string; displayName?: string }> = ({ userId, displayName }) => {
   const { items } = useAppSelector((s) => s.events);
   const [tab, setTab] = useState<'upcoming' | 'past' | 'mine'>('upcoming');
 
@@ -117,7 +117,7 @@ const DigDatesTab: React.FC<{ userId: string; displayName?: string; isOwnProfile
                   <h3 style={{ color: 'var(--stone-600)', fontSize: '.85rem', fontWeight: 600, margin: '0 0 8px' }}>{displayName ? `Created by ${displayName}` : 'Created by You'}</h3>
                   <div className="dig-date-list">
                     {created.map((e) => (
-                      <Link to={isOwnProfile ? `/events/${e.id}/edit` : `/events/${e.id}`} key={e.id} className="dig-date-card">
+                      <Link to={`/events/${e.id}`} key={e.id} className="dig-date-card">
                         <div className="ddc-left">
                           <span className="ddc-date">{new Date(e.date).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}</span>
                           <span className="ddc-time">{e.startTime}</span>
@@ -206,7 +206,7 @@ const DigDatesTab: React.FC<{ userId: string; displayName?: string; isOwnProfile
   );
 };
 
-const MyEventsSection: React.FC<{ userId: string; displayName?: string; isOwnProfile?: boolean }> = ({ userId, displayName, isOwnProfile }) => {
+const MyEventsSection: React.FC<{ userId: string; displayName?: string }> = ({ userId, displayName }) => {
   const { items } = useAppSelector((s) => s.events);
   const created = items.filter((e) => e.creatorId === userId);
   const signedUp = items.filter((e) => e.registeredVolunteers.includes(userId) && e.creatorId !== userId);
@@ -217,7 +217,7 @@ const MyEventsSection: React.FC<{ userId: string; displayName?: string; isOwnPro
           <h3>{displayName ? `Created by ${displayName}` : 'Created by You'}</h3>
           <div className="dig-date-list">
             {created.map((e) => (
-              <Link to={isOwnProfile ? `/events/${e.id}/edit` : `/events/${e.id}`} key={e.id} className="dig-date-card">
+              <Link to={`/events/${e.id}`} key={e.id} className="dig-date-card">
                 <div className="ddc-left">
                   <span className="ddc-date">{new Date(e.date).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}</span>
                   <span className="ddc-time">{e.startTime}</span>
@@ -486,10 +486,10 @@ const ProfilePage: React.FC = () => {
         )}
 
         {/* My Events */}
-        {targetId && <MyEventsSection userId={targetId!} displayName={profile?.displayName} isOwnProfile={isOwnProfile} />}
+        {targetId && <MyEventsSection userId={targetId!} displayName={profile?.displayName} />}
 
         {/* Dig Dates */}
-        {targetId && <DigDatesTab userId={targetId!} displayName={profile?.displayName} isOwnProfile={isOwnProfile} />}
+        {targetId && <DigDatesTab userId={targetId!} displayName={profile?.displayName} />}
 
         {/* Location */}
         {(editMode || form.location) && (
