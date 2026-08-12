@@ -129,7 +129,6 @@ const FilterCalendar: React.FC<{ onClose: () => void }> = ({ onClose }) => {
     if (day === 0) return;
     const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
     dispatch(setSelectedDay(selectedDay === dateStr ? null : dateStr));
-    onClose();
   };
 
   return (
