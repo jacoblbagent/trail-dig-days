@@ -1,10 +1,11 @@
 import React, { useState, useMemo, useEffect, useRef, memo } from 'react';
 import { Link } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { setSearchRadius } from '../events/eventsSlice';
+import { setSearchRadius, setSearchCenter } from '../events/eventsSlice';
 import { expandRecurring, collapseRecurring } from '../../utils/recurrence';
 import { haversine } from './mapUtils';
 import type { DigEvent } from '../../types';
+import SearchRadiusMap from '../calendar/SearchRadiusMap';
 
 const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
 const DAYS = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
@@ -222,6 +223,9 @@ const MapPage: React.FC = () => {
               <div className="radius-control">
                 <label>Search radius: <strong>{radiusInput} mi</strong></label>
                 <input type="range" min={5} max={250} value={radiusInput} onChange={handleRadiusChange} />
+              </div>
+              <div className="radius-map-wrap">
+                <SearchRadiusMap center={searchCenter || [39.7392, -104.9903]} radius={parseFloat(radiusInput) || 25} onCenterChange={(c) => dispatch(setSearchCenter(c))} />
               </div>
             </div>
           )}
