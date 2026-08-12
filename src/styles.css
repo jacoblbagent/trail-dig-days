@@ -469,7 +469,8 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
 .list-card-row .list-card-date { color: var(--stone-400); white-space: nowrap; }
 .list-card-row .list-card-spots { margin-left: auto; color: var(--stone-400); white-space: nowrap; }
 .list-card-dist { font-size: .72rem; color: var(--stone-400); margin-top: 4px; display: block; }
-.map-container { flex: 1; position: relative; overflow: hidden; z-index: 0; }
+.map-container { flex: 1; position: relative; overflow: hidden; z-index: 0; padding-top: 44px; }
+.map-toolbar { position: absolute; top: 0; left: 0; right: 0; height: 44px; background: var(--surface); border-bottom: 1px solid var(--stone-150); z-index: 1000; }
 
 /* ── Sidebar Resizer ── */
 .sidebar-resizer {
