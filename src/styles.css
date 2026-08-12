@@ -524,7 +524,7 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
 }
 .resizer-limits { position: relative; }
 .map-locate-btn {
-  position: absolute; bottom: 140px; right: 20px; z-index: 1000;
+  position: absolute; top: 50px; right: 20px; z-index: 1000;
   width: 36px; height: 36px; border-radius: 8px;
   background: #fff; border: 1px solid var(--stone-200);
   cursor: pointer; color: var(--stone-500); box-shadow: 0 2px 6px rgba(0,0,0,.1);
@@ -566,7 +566,7 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
 
 .map-locate-btn:hover { border-color: var(--accent, var(--green-600)); }
 .map-redetect-btn {
-  position: absolute; bottom: 96px; right: 20px; z-index: 1000;
+  position: absolute; top: 92px; right: 20px; z-index: 1000;
   font-size: .7rem; padding: 4px 8px; border-radius: 6px;
   background: #fff; border: 1px solid var(--stone-200); color: var(--stone-600);
   cursor: pointer; transition: border-color .15s;
