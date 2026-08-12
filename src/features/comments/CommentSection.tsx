@@ -124,14 +124,16 @@ const CommentSection: React.FC<Props> = ({ eventId, eventCreatorId }) => {
 
     return (
       <div key={c.id} className="comment">
+        {depth > 0 && (
         <div
           className={`comment-indent ${isHoveredLine ? 'hvr' : ''}`}
           onClick={() => threadCount > 0 && toggleCollapse(c.id)}
           onMouseEnter={() => setHoveredDepth(depth)}
           onMouseLeave={() => setHoveredDepth(null)}
           >
-          {depth > 0 && <div className={`indent-line ${isHoveredLine ? 'hvr' : ''}`} />}
+          <div className={`indent-line ${isHoveredLine ? 'hvr' : ''}`} />
         </div>
+        )}
         <div className="comment-body">
           <div className="comment-header">
             {threadCount > 0 && (
