@@ -109,12 +109,12 @@ const Sidebar: React.FC = () => {
                   <SvgIcon d={BELL_ICON} />
                   {unreadCount > 0 && <span className="notif-badge">{unreadCount}</span>}
                 </span>
-                {showLabels && <span className="sidebar-label">Notifications</span>}
+                {showLabels && <span className="sidebar-label">Notifications{unreadCount > 0 ? ` (${unreadCount})` : ''}</span>}
               </button>
               {showNotifications && (
                 <div className="notif-panel">
                   <div className="notif-header">
-                    <span>Notifications</span>
+                    <span>Notifications ({notifications.length})</span>
                     <button className="notif-close" onClick={() => setShowNotifications(false)}>x</button>
                   </div>
                   {notifications.length > 0 ? (
