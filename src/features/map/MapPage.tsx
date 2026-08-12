@@ -167,7 +167,7 @@ const MapPage: React.FC = () => {
     const startX = e.clientX;
     const startW = widthRef.current;
     const onMove = (me: MouseEvent) => {
-      const newW = Math.max(0, Math.min(SIDEBAR_MAX, startW + (me.clientX - startX)));
+      const newW = Math.max(0, Math.min(SIDEBAR_MAX, startW - (me.clientX - startX)));
       widthRef.current = newW;
       setSidebarWidth(newW);
     };
