@@ -11,8 +11,6 @@ interface Props {
   eventCreatorId: string;
 }
 
-const THREAD_COLORS = ['#16a34a', '#2563eb', '#a16207', '#dc2626', '#7c3aed', '#0891b2'];
-
 const CommentSection: React.FC<Props> = ({ eventId, eventCreatorId }) => {
   const dispatch = useAppDispatch();
   const comments = useAppSelector((s) => s.comments.items.filter((c) => c.eventId === eventId));
@@ -121,76 +119,77 @@ const CommentSection: React.FC<Props> = ({ eventId, eventCreatorId }) => {
     const replies = getReplies(c.id);
     const threadCount = countThread(c.id);
     const isCollapsed = collapsed.has(c.id);
-    const color = THREAD_COLORS[depth % THREAD_COLORS.length];
 
     return (
-      <div key={c.id} className="comment" style={{ borderLeftColor: depth > 0 ? color : undefined }}>
-        <div className="comment-header">
-          {threadCount > 0 && (
-            <button
-              className="thread-toggle"
-              onClick={() => toggleCollapse(c.id)}
-              title={isCollapsed ? 'Show replies' : 'Hide replies'}
-            >
-              <span className="thread-line" style={{ backgroundColor: color }} />
-              <span className="thread-icon">{isCollapsed ? '+' : '–'}</span>
-            </button>
-          )}
-          {threadCount === 0 && depth > 0 && (
-            <span className="thread-line-end" style={{ backgroundColor: color }} />
-          )}
-          <Link to={`/profile?userId=${c.userId}`} className="comment-author">
-            {displayName(c.userId)}
-          </Link>
-          <span className="comment-time">{timeAgo(c.createdAt)}</span>
+      <div key={c.id} className="comment-row">
+        <div
+          className="comment-thread"
+          onClick={() => threadCount > 0 && toggleCollapse(c.id)}
+          style={{ width: `${16 + depth * 20}px` }}
+        >
+          {depth > 0 && <div className="thread-vline" />}
         </div>
-        {!isCollapsed && (
-          <>
-            <div className="comment-text">{c.text}</div>
-            <div className="comment-actions">
-              <div className="comment-votes">
-                <button
-                  className={`vote-btn ${my === 'up' ? 'voted' : ''}`}
-                  onClick={() => handleVote(c.id, 'up')}
-                  title="Upvote"
-                >▲</button>
-                <span className={`vote-score ${votes > 0 ? 'pos' : votes < 0 ? 'neg' : ''}`}>{votes}</span>
-                <button
-                  className={`vote-btn ${my === 'down' ? 'voted' : ''}`}
-                  onClick={() => handleVote(c.id, 'down')}
-                  title="Downvote"
-                >▼</button>
-              </div>
-              {user && (
-                <button className="comment-reply-btn" onClick={() => setReplyTo(replyTo === c.id ? null : c.id)}>
-                  {threadCount > 0 ? `${threadCount} reply${threadCount !== 1 ? 's' : ''}` : 'Reply'}
-                </button>
-              )}
-            </div>
-            {replyTo === c.id && (
-              <div className="comment-reply-form">
-                <textarea
-                  className="comment-input"
-                  placeholder="Write a reply..."
-                  value={replyText}
-                  onChange={(e) => setReplyText(e.target.value)}
-                  rows={2}
-                />
-                <div className="comment-form-actions">
-                  <button className="btn btn-sm btn-primary" onClick={() => handleReply(c.id)} disabled={!replyText.trim()}>Reply</button>
-                  <button className="btn btn-sm btn-ghost" onClick={() => { setReplyTo(null); setReplyText(''); }}>Cancel</button>
-                </div>
-              </div>
+        <div className="comment-body">
+          <div className="comment-header">
+            {threadCount > 0 && (
+              <button className="thread-toggle" onClick={() => toggleCollapse(c.id)}>
+                <span className={`thread-icon ${isCollapsed ? 'col' : ''}`}>
+                  {isCollapsed ? '▸' : '▾'}
+                </span>
+              </button>
             )}
-            {replies.map((r) => renderComment(r, depth + 1))}
-          </>
-        )}
-        {isCollapsed && (
-          <div className="comment-collapsed" onClick={() => toggleCollapse(c.id)}>
-            <span className="thread-line" style={{ backgroundColor: color }} />
-            <span className="comment-collapsed-text">{threadCount} more repl{threadCount !== 1 ? 'ies' : 'y'}</span>
+            <Link to={`/profile?userId=${c.userId}`} className="comment-author">
+              {displayName(c.userId)}
+            </Link>
+            <span className="comment-time">{timeAgo(c.createdAt)}</span>
           </div>
-        )}
+          {!isCollapsed ? (
+            <>
+              <div className="comment-text">{c.text}</div>
+              <div className="comment-actions">
+                <div className="comment-votes">
+                  <button
+                    className={`vote-btn ${my === 'up' ? 'voted' : ''}`}
+                    onClick={() => handleVote(c.id, 'up')}
+                    title="Upvote"
+                  >▲</button>
+                  <span className={`vote-score ${votes > 0 ? 'pos' : votes < 0 ? 'neg' : ''}`}>{votes}</span>
+                  <button
+                    className={`vote-btn ${my === 'down' ? 'voted' : ''}`}
+                    onClick={() => handleVote(c.id, 'down')}
+                    title="Downvote"
+                  >▼</button>
+                </div>
+                {user && (
+                  <button className="comment-reply-btn" onClick={() => setReplyTo(replyTo === c.id ? null : c.id)}>
+                    {threadCount > 0 ? `${threadCount} reply${threadCount !== 1 ? 's' : ''}` : 'Reply'}
+                  </button>
+                )}
+              </div>
+              {replyTo === c.id && (
+                <div className="comment-reply-form">
+                  <textarea
+                    className="comment-input"
+                    placeholder="Write a reply..."
+                    value={replyText}
+                    onChange={(e) => setReplyText(e.target.value)}
+                    rows={2}
+                  />
+                  <div className="comment-form-actions">
+                    <button className="btn btn-sm btn-primary" onClick={() => handleReply(c.id)} disabled={!replyText.trim()}>Reply</button>
+                    <button className="btn btn-sm btn-ghost" onClick={() => { setReplyTo(null); setReplyText(''); }}>Cancel</button>
+                  </div>
+                </div>
+              )}
+              {replies.map((r) => renderComment(r, depth + 1))}
+            </>
+          ) : (
+            <div className="comment-collapsed" onClick={() => toggleCollapse(c.id)}>
+              <span className="thread-icon col">▸</span>
+              <span className="comment-collapsed-text">{threadCount} more repl{threadCount !== 1 ? 'ies' : 'y'}</span>
+            </div>
+          )}
+        </div>
       </div>
     );
   };
