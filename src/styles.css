@@ -547,6 +547,11 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
 .page-header-left { display: flex; flex-direction: column; align-items: flex-start; justify-content: flex-start; gap: 4px; }
 .page-back-btn { background: none; border: none; cursor: pointer; color: var(--stone-500); padding: 0; font-size: .85rem; display: flex; align-items: center; gap: 2px; white-space: nowrap; }
 .page-back-btn:hover { color: var(--stone-700); }
+
+input[type="date"]::-webkit-calendar-picker-indicator,
+input[type="time"]::-webkit-calendar-picker-indicator { filter: invert(0.55); cursor: pointer; }
+[data-theme="dark"] input[type="date"]::-webkit-calendar-picker-indicator,
+[data-theme="dark"] input[type="time"]::-webkit-calendar-picker-indicator { filter: invert(0.85); }
 .page-header h1 { font-size: 1.5rem; color: var(--stone-800); }
 .page-header p { color: var(--stone-400); }
 .event-form { display: flex; flex-direction: column; gap: 20px; }
