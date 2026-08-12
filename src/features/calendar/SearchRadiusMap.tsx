@@ -41,6 +41,7 @@ const SearchRadiusMap: React.FC<Props> = ({ center, radius, onCenterChange }) =>
       const pos = marker.getLatLng();
       const newCenter: [number, number] = [pos.lat, pos.lng];
       circle.setLatLng(pos);
+      map.panTo(pos);
       onCenterChange(newCenter);
     });
 
