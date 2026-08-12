@@ -490,6 +490,32 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
   color: var(--stone-600); cursor: default; letter-spacing: .01em;
 }
 .toolbar-btn:hover { background: var(--stone-100); color: var(--stone-700); }
+.toolbar-btn.active { background: var(--green-100); color: var(--green-700); }
+
+.filter-panel {
+  position: absolute; top: 50px; left: 15px; z-index: 1000;
+  background: var(--surface); border: 1px solid var(--stone-200);
+  border-radius: var(--radius); box-shadow: var(--shadow-lg);
+  padding: 12px; min-width: 240px; max-width: 340px;
+}
+.filter-panel--location { width: 280px; }
+.filter-panel--location .search-tabs { display: flex; gap: 0; margin-bottom: 8px; }
+.filter-panel--location .search-tab { flex: 1; }
+.filter-panel--location .search-select { width: 100%; margin-bottom: 6px; }
+.filter-panel--location .radius-control { margin-bottom: 8px; }
+.filter-panel--location .radius-control label { font-size: .85rem; color: var(--stone-600); }
+.filter-panel--location .radius-control strong { color: var(--stone-800); }
+.filter-panel--location input[type="range"] { width: 100%; margin-top: 4px; }
+.filter-panel--location .btn-search { width: 100%; }
+.filter-panel--time .calendar-nav { display: flex; align-items: center; gap: 6px; margin-bottom: 8px; justify-content: center; }
+.filter-panel--time .calendar-nav strong { flex: 1; text-align: center; font-size: .9rem; }
+.filter-panel--time .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 1px; }
+.filter-panel--time .cal-day-header { font-size: .65rem; color: var(--stone-400); text-align: center; padding: 4px 0; }
+.filter-panel--time .cal-cell { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; border-radius: 4px; cursor: default; font-size: .8rem; }
+.filter-panel--time .cal-today { background: var(--green-100); font-weight: 700; }
+.filter-panel--time .cal-cell.cal-empty { background: none; }
+.filter-panel--recurring { min-width: 180px; }
+.filter-panel--recurring .recurring-toggle { padding: 0; }
 
 /* ── Sidebar Resizer ── */
 .sidebar-resizer {
