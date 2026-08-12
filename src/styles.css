@@ -622,7 +622,7 @@ input[type="time"]::-webkit-calendar-picker-indicator { filter: invert(0.55); cu
 .cat-modal-footer { padding: 8px 16px; border-top: 1px solid var(--stone-100); }
 .cat-checklist { display: flex; flex-direction: column; gap: 8px; }
 .provided-note { display: flex; align-items: center; gap: 8px; margin-top: 4px; }
-.provided-note input { flex: 1; padding: 6px 10px; border: 1px solid var(--stone-200); border-radius: var(--radius-sm); font-size: .85rem; }
+.provided-note input { flex: 1; padding: 6px 10px; border: 1px solid var(--stone-200); border-radius: var(--radius-sm); font-size: .85rem; background: var(--surface); color: var(--stone-900); }
 .provided-note .tag-qty-selector { display: flex; gap: 0; flex-shrink: 0; }
 
 /* ── Geo Search (Location Picker) ── */
