@@ -49,10 +49,14 @@ const SearchRadiusMap: React.FC<Props> = ({ center, radius, onCenterChange }) =>
       onCenterChange(newCenter);
     });
 
-    map.on('moveend', () => {
+    map.on('move', () => {
       const c = map.getCenter();
       marker.setLatLng(c);
       circle.setLatLng(c);
+    });
+
+    map.on('moveend', () => {
+      const c = map.getCenter();
       onCenterChange([c.lat, c.lng]);
     });
 
