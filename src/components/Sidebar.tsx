@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
-import { setTheme, setNotificationsEnabled, setNotificationRadius, markNotificationRead } from '../features/events/eventsSlice';
+import { setTheme, markNotificationRead } from '../features/events/eventsSlice';
 import { logout } from '../features/auth/authSlice';
 import { addToast } from '../features/toast/toastSlice';
 
@@ -24,12 +24,11 @@ const Sidebar: React.FC = () => {
   const profile = useAppSelector((s) => (user ? s.profile.profiles[user.id] : undefined));
   const location = useLocation();
   const theme = useAppSelector((s) => s.events.theme);
-  const { notificationsEnabled, notificationRadius, notifications } = useAppSelector((s) => s.events);
+  const { notifications } = useAppSelector((s) => s.events);
   const dark = theme === 'dark';
   const unreadCount = notifications.filter((n) => !n.read).length;
   const [showMenu, setShowMenu] = React.useState(false);
   const [showNotifications, setShowNotifications] = React.useState(false);
-  const [radiusInput, setRadiusInput] = React.useState(String(notificationRadius));
   const menuRef = React.useRef<HTMLDivElement>(null);
   const notifRef = React.useRef<HTMLDivElement>(null);
 
@@ -45,10 +44,6 @@ const Sidebar: React.FC = () => {
     document.addEventListener('mousedown', onClick);
     return () => document.removeEventListener('mousedown', onClick);
   }, []);
-
-  React.useEffect(() => {
-    setRadiusInput(String(notificationRadius));
-  }, [notificationRadius, showNotifications]);
 
   const isActive = (path: string) => location.pathname === path;
   const isEventPage = location.pathname.startsWith('/events/') && !location.pathname.startsWith('/my-events');
@@ -67,14 +62,6 @@ const Sidebar: React.FC = () => {
         {showLabels && <span className="sidebar-label">{label}</span>}
       </Link>
     );
-  };
-
-  const handleRadiusChange = (val: string) => {
-    setRadiusInput(val);
-    const parsed = parseFloat(val);
-    if (!isNaN(parsed) && parsed >= 1 && parsed <= 250) {
-      dispatch(setNotificationRadius(parsed));
-    }
   };
 
   return (
@@ -136,29 +123,6 @@ const Sidebar: React.FC = () => {
                     </div>
                   ) : (
                     <div className="notif-empty">No notifications yet.</div>
-                  )}
-                  <div className="notif-divider" />
-                  <label className="notif-row">
-                    <input
-                      type="checkbox"
-                      checked={notificationsEnabled}
-                      onChange={(e) => dispatch(setNotificationsEnabled(e.target.checked))}
-                    />
-                    <span>Notify me about new events</span>
-                  </label>
-                  {notificationsEnabled && (
-                    <div className="notif-row">
-                      <span className="notif-label">Radius:</span>
-                      <input
-                        type="range"
-                        min={5}
-                        max={100}
-                        value={radiusInput}
-                        onChange={(e) => handleRadiusChange(e.target.value)}
-                        className="notif-slider"
-                      />
-                      <span className="notif-radius-val">{radiusInput} mi</span>
-                    </div>
                   )}
                 </div>
               )}

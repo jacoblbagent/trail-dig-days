@@ -4,7 +4,7 @@ import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import MapExtras from '../map/MapExtras';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { registerForEvent, loadEventsFromStorage } from './eventsSlice';
+import { registerForEvent, loadEventsFromStorage, followOrg, unfollowOrg } from './eventsSlice';
 import { addToast } from '../toast/toastSlice';
 import CommentSection from '../comments/CommentSection';
 
@@ -22,6 +22,7 @@ const EventDetailPage: React.FC = () => {
   const { user } = useAppSelector((s) => s.auth);
   const event = useAppSelector((s) => s.events.items.find((e) => e.id === id));
   const referrerPath = useAppSelector((s) => s.events.referrerPath);
+  const followedOrgs = useAppSelector((s) => s.events.followedOrgs);
   const [refreshing, setRefreshing] = useState(false);
   const [showContent, setShowContent] = useState(false);
 
@@ -174,6 +175,14 @@ const EventDetailPage: React.FC = () => {
                     {event.contactPhone && <p>{event.contactPhone}</p>}
                   </div>
                   </Link>
+                  {user && (
+                    <label className="follow-org-toggle">
+                      <input type="checkbox" checked={followedOrgs.includes(event.contactName)} onChange={() => {
+                        dispatch(followedOrgs.includes(event.contactName) ? unfollowOrg(event.contactName) : followOrg(event.contactName));
+                      }} />
+                      <span>Follow {event.contactName} for new events</span>
+                    </label>
+                  )}
                 </div>
               </div>
 

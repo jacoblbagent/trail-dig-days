@@ -155,6 +155,7 @@ export interface EventsState {
   referrerPath: string;
   selectedDay: string | null;
   showRecurring: boolean;
+  followedOrgs: string[];
 }
 
 // ─── Application Root State ───

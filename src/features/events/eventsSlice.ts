@@ -74,6 +74,7 @@ const initialState: EventsState = {
   referrerPath: '/',
   selectedDay: null as string | null,
   showRecurring: false,
+  followedOrgs: [],
 };
 
 // Re-read events from localStorage after seed runs (ES module hoisting means
@@ -228,6 +229,14 @@ const eventsSlice = createSlice({
     loadEventsFromStorage(state) {
       state.items = reloadEvents();
     },
+    followOrg(state, action: PayloadAction<string>) {
+      if (!state.followedOrgs.includes(action.payload)) {
+        state.followedOrgs.push(action.payload);
+      }
+    },
+    unfollowOrg(state, action: PayloadAction<string>) {
+      state.followedOrgs = state.followedOrgs.filter((o) => o !== action.payload);
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -261,5 +270,5 @@ const eventsSlice = createSlice({
   },
 });
 
-export const { setSearchRadius, setSearchCenter, setMapViewport, setTheme, clearSearchCenter, setHoveredMarkerId, setNotificationsEnabled, setNotificationRadius, addNotification, markNotificationRead, setReferrerPath, setSelectedDay, setShowRecurring, loadEventsFromStorage } = eventsSlice.actions;
+export const { setSearchRadius, setSearchCenter, setMapViewport, setTheme, clearSearchCenter, setHoveredMarkerId, setNotificationsEnabled, setNotificationRadius, addNotification, markNotificationRead, setReferrerPath, setSelectedDay, setShowRecurring, followOrg, unfollowOrg, loadEventsFromStorage } = eventsSlice.actions;
 export default eventsSlice.reducer;

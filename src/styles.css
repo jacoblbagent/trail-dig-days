@@ -302,12 +302,6 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
 .notif-item span:first-child { font-size: .82rem; color: var(--stone-700); line-height: 1.3; }
 .notif-time { font-size: .72rem; color: var(--stone-400); }
 .notif-empty { font-size: .82rem; color: var(--stone-400); text-align: center; padding: 12px 0; }
-.notif-divider { height: 1px; background: var(--stone-150); margin: 0; }
-.notif-row { display: flex; align-items: center; gap: 8px; font-size: .85rem; color: var(--stone-600); }
-.notif-row input[type="checkbox"] { accent-color: var(--green-600); cursor: pointer; margin: 0; }
-.notif-label { white-space: nowrap; font-size: .8rem; color: var(--stone-500); flex-shrink: 0; }
-.notif-slider { flex: 1; height: 4px; cursor: pointer; accent-color: var(--green-600); }
-.notif-radius-val { font-size: .8rem; color: var(--stone-500); min-width: 40px; text-align: right; }
 .notif-dismiss {
   padding: 6px 12px; border: 1px solid var(--stone-200); border-radius: var(--radius-sm);
   font-size: .8rem; background: var(--green-100); color: var(--green-700); cursor: pointer;
@@ -819,6 +813,8 @@ input[type="time"]::-webkit-calendar-picker-indicator { filter: invert(0.55); cu
 .contact-info { min-width: 0; }
 .contact-info p { margin: 0; }
 .contact-info a { word-break: break-all; }
+.follow-org-toggle { display: flex; align-items: center; gap: 8px; margin-top: 10px; font-size: .85rem; color: var(--stone-600); cursor: pointer; }
+.follow-org-toggle input[type="checkbox"] { accent-color: var(--green-600); cursor: pointer; margin: 0; }
 .creator-actions { margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--stone-150); display: flex; flex-direction: column; gap: 8px; }
 
 /* ── Profile Page ── */
