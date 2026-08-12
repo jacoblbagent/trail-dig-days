@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { addComment, replyToComment, voteOnComment } from './commentsSlice';
@@ -11,6 +11,8 @@ interface Props {
   eventCreatorId: string;
 }
 
+const THREAD_COLORS = ['#16a34a', '#2563eb', '#a16207', '#dc2626', '#7c3aed', '#0891b2'];
+
 const CommentSection: React.FC<Props> = ({ eventId, eventCreatorId }) => {
   const dispatch = useAppDispatch();
   const comments = useAppSelector((s) => s.comments.items.filter((c) => c.eventId === eventId));
@@ -19,9 +21,20 @@ const CommentSection: React.FC<Props> = ({ eventId, eventCreatorId }) => {
   const [newText, setNewText] = useState('');
   const [replyTo, setReplyTo] = useState<string | null>(null);
   const [replyText, setReplyText] = useState('');
+  const [collapsed, setCollapsed] = useState<Set<string>>(new Set());
 
   const topLevel = comments.filter((c) => !c.parentId);
   const getReplies = (parentId: string) => comments.filter((c) => c.parentId === parentId);
+
+  const countThread = useCallback((parentId: string): number => {
+    let count = 0;
+    for (const c of comments) {
+      if (c.parentId === parentId) {
+        count += 1 + countThread(c.id);
+      }
+    }
+    return count;
+  }, [comments]);
 
   const displayName = (userId: string) => profiles[userId]?.displayName || userId.slice(0, 8);
   const timeAgo = (iso: string) => {
@@ -59,7 +72,6 @@ const CommentSection: React.FC<Props> = ({ eventId, eventCreatorId }) => {
     if (!user || !newText.trim()) return;
     const result = await dispatch(addComment({ eventId, userId: user.id, text: newText.trim() })).unwrap();
     setNewText('');
-    // Notify event creator if different user
     if (user.id !== eventCreatorId) {
       dispatch(addNotification({
         id: uuidv4(),
@@ -80,7 +92,6 @@ const CommentSection: React.FC<Props> = ({ eventId, eventCreatorId }) => {
     const result = await dispatch(replyToComment({ eventId, userId: user.id, parentId, text: replyText.trim() })).unwrap();
     setReplyTo(null);
     setReplyText('');
-    // Notify parent comment author if different user
     if (parent && user.id !== parent.userId) {
       dispatch(addNotification({
         id: uuidv4(),
@@ -95,54 +106,91 @@ const CommentSection: React.FC<Props> = ({ eventId, eventCreatorId }) => {
     }
   };
 
-  const renderComment = (c: Comment, isReply = false) => {
+  const toggleCollapse = (id: string) => {
+    setCollapsed((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  };
+
+  const renderComment = (c: Comment, depth = 0) => {
     const votes = netVotes(c);
     const my = myVote(c);
+    const replies = getReplies(c.id);
+    const threadCount = countThread(c.id);
+    const isCollapsed = collapsed.has(c.id);
+    const color = THREAD_COLORS[depth % THREAD_COLORS.length];
+
     return (
-      <div key={c.id} className={`comment ${isReply ? 'comment-reply' : ''}`}>
+      <div key={c.id} className="comment" style={{ borderLeftColor: depth > 0 ? color : undefined }}>
         <div className="comment-header">
+          {threadCount > 0 && (
+            <button
+              className="thread-toggle"
+              onClick={() => toggleCollapse(c.id)}
+              title={isCollapsed ? 'Show replies' : 'Hide replies'}
+            >
+              <span className="thread-line" style={{ backgroundColor: color }} />
+              <span className="thread-icon">{isCollapsed ? '+' : '–'}</span>
+            </button>
+          )}
+          {threadCount === 0 && depth > 0 && (
+            <span className="thread-line-end" style={{ backgroundColor: color }} />
+          )}
           <Link to={`/profile?userId=${c.userId}`} className="comment-author">
             {displayName(c.userId)}
           </Link>
           <span className="comment-time">{timeAgo(c.createdAt)}</span>
         </div>
-        <div className="comment-text">{c.text}</div>
-        <div className="comment-actions">
-          <div className="comment-votes">
-            <button
-              className={`vote-btn ${my === 'up' ? 'voted' : ''}`}
-              onClick={() => handleVote(c.id, 'up')}
-              title="Upvote"
-            >▲</button>
-            <span className={`vote-score ${votes > 0 ? 'pos' : votes < 0 ? 'neg' : ''}`}>{votes}</span>
-            <button
-              className={`vote-btn ${my === 'down' ? 'voted' : ''}`}
-              onClick={() => handleVote(c.id, 'down')}
-              title="Downvote"
-            >▼</button>
-          </div>
-          {user && (
-            <button className="comment-reply-btn" onClick={() => setReplyTo(replyTo === c.id ? null : c.id)}>
-              Reply
-            </button>
-          )}
-        </div>
-        {replyTo === c.id && (
-          <div className="comment-reply-form">
-            <textarea
-              className="comment-input"
-              placeholder="Write a reply..."
-              value={replyText}
-              onChange={(e) => setReplyText(e.target.value)}
-              rows={2}
-            />
-            <div className="comment-form-actions">
-              <button className="btn btn-sm btn-primary" onClick={() => handleReply(c.id)} disabled={!replyText.trim()}>Reply</button>
-              <button className="btn btn-sm btn-ghost" onClick={() => { setReplyTo(null); setReplyText(''); }}>Cancel</button>
+        {!isCollapsed && (
+          <>
+            <div className="comment-text">{c.text}</div>
+            <div className="comment-actions">
+              <div className="comment-votes">
+                <button
+                  className={`vote-btn ${my === 'up' ? 'voted' : ''}`}
+                  onClick={() => handleVote(c.id, 'up')}
+                  title="Upvote"
+                >▲</button>
+                <span className={`vote-score ${votes > 0 ? 'pos' : votes < 0 ? 'neg' : ''}`}>{votes}</span>
+                <button
+                  className={`vote-btn ${my === 'down' ? 'voted' : ''}`}
+                  onClick={() => handleVote(c.id, 'down')}
+                  title="Downvote"
+                >▼</button>
+              </div>
+              {user && (
+                <button className="comment-reply-btn" onClick={() => setReplyTo(replyTo === c.id ? null : c.id)}>
+                  {threadCount > 0 ? `${threadCount} reply${threadCount !== 1 ? 's' : ''}` : 'Reply'}
+                </button>
+              )}
             </div>
+            {replyTo === c.id && (
+              <div className="comment-reply-form">
+                <textarea
+                  className="comment-input"
+                  placeholder="Write a reply..."
+                  value={replyText}
+                  onChange={(e) => setReplyText(e.target.value)}
+                  rows={2}
+                />
+                <div className="comment-form-actions">
+                  <button className="btn btn-sm btn-primary" onClick={() => handleReply(c.id)} disabled={!replyText.trim()}>Reply</button>
+                  <button className="btn btn-sm btn-ghost" onClick={() => { setReplyTo(null); setReplyText(''); }}>Cancel</button>
+                </div>
+              </div>
+            )}
+            {replies.map((r) => renderComment(r, depth + 1))}
+          </>
+        )}
+        {isCollapsed && (
+          <div className="comment-collapsed" onClick={() => toggleCollapse(c.id)}>
+            <span className="thread-line" style={{ backgroundColor: color }} />
+            <span className="comment-collapsed-text">{threadCount} more repl{threadCount !== 1 ? 'ies' : 'y'}</span>
           </div>
         )}
-        {getReplies(c.id).map((r) => renderComment(r, true))}
       </div>
     );
   };
