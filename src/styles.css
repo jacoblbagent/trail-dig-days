@@ -762,13 +762,13 @@ input[type="time"]::-webkit-calendar-picker-indicator { filter: invert(0.55); cu
 .date-badge {
   display: flex; flex-direction: row; align-items: center; justify-content: center; gap: 4px; flex-wrap: wrap;
   background: var(--green-800); color: #fff; border-radius: var(--radius);
-  padding: 8px 14px; margin-bottom: 14px; line-height: 1.2; font-size: 1rem;
+  padding: 8px 14px; margin-bottom: 14px; line-height: 1.2; font-size: 1.5rem;
 }
 [data-theme="dark"] .date-badge { background: var(--green-600); }
 .date-month { text-transform: uppercase; font-weight: 700; }
 .date-day { font-weight: 800; }
 .date-year { opacity: .8; }
-.date-time { font-size: .85rem; width: 100%; text-align: center; margin-top: 2px; }
+.date-time { font-size: 1rem; width: 100%; text-align: center; margin-top: 2px; }
 .time-info { text-align: center; font-size: 1.1rem; font-weight: 600; color: var(--stone-700); margin-bottom: 16px; }
 .volunteer-info { margin-bottom: 16px; }
 .volunteer-info h3 { font-size: .9rem; color: var(--stone-600); margin-bottom: 6px; }
