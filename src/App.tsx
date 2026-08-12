@@ -2,8 +2,8 @@ import React, { useEffect } from 'react';
 import { BrowserRouter, Link, Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { store } from './app/store';
-import { useAppDispatch, useAppSelector } from './app/hooks';
-import { loadEventsFromStorage, setMapSidebarCollapsed } from './features/events/eventsSlice';
+import { useAppSelector } from './app/hooks';
+import { loadEventsFromStorage } from './features/events/eventsSlice';
 import Sidebar from './components/Sidebar';
 import MapLayout from './components/MapLayout';
 import AuthPage from './features/auth/AuthPage';
@@ -18,15 +18,10 @@ import NotFoundPage from './pages/NotFoundPage';
 import ToastContainer from './components/ToastContainer';
 
 const TopNav: React.FC = () => {
-  const dispatch = useAppDispatch();
   const currentUser = useAppSelector((s) => s.auth.user);
-  const mapSidebarCollapsed = useAppSelector((s) => s.events.mapSidebarCollapsed);
   const canCreate = currentUser?.userType === 'organization';
   return (
     <header className="top-nav">
-      <button className="sidebar-collapse-btn" onClick={() => dispatch(setMapSidebarCollapsed(!mapSidebarCollapsed))}>
-        {mapSidebarCollapsed ? '▸' : '◂'}
-      </button>
       <span className="top-nav-title">Dig Days</span>
       {canCreate && <Link to="/events/create" className="btn btn-primary btn-sm">+ New</Link>}
     </header>

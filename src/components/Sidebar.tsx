@@ -92,6 +92,10 @@ const Sidebar: React.FC = () => {
       <>
       <aside className={`sidebar${showLabels ? ' expanded' : ''}`}>
         <div className="sidebar-top">
+          <button className={`sidebar-btn sidebar-collapse-btn${mapSidebarCollapsed ? ' active' : ''}`} onClick={() => dispatch(setMapSidebarCollapsed(!mapSidebarCollapsed))} title={mapSidebarCollapsed ? 'Show panel' : 'Hide panel'}>
+            <SvgIcon d="M3 12h18 M3 6h18 M3 18h18" />
+            {showLabels && <span className="sidebar-label">Menu</span>}
+          </button>
           {btn('/', MAP_ICON, 'Map')}
         </div>
         <div className="sidebar-bottom">
@@ -220,10 +224,7 @@ const Sidebar: React.FC = () => {
               )}
             </div>
           )}
-          <button className={`sidebar-btn sidebar-collapse-btn${mapSidebarCollapsed ? ' active' : ''}`} onClick={() => dispatch(setMapSidebarCollapsed(!mapSidebarCollapsed))} title={mapSidebarCollapsed ? 'Show panel' : 'Hide panel'}>
-                    <SvgIcon d={mapSidebarCollapsed ? 'M5 12l7-7 7 7' : 'M19 12l-7 7-7-7'} />
-                  </button>
-                </div>
+        </div>
               </aside>
             </>
     );

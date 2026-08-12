@@ -208,7 +208,7 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
 .sidebar {
   display: flex; flex-direction: column; align-items: center;
   background: var(--surface); border-right: 1px solid var(--stone-150);
-  flex-shrink: 0; gap: 4px;
+  flex-shrink: 0; gap: 4px; height: 100%;
   transition: width .15s;
 }
 .sidebar.expanded { width: auto; align-items: flex-start; padding: 0; }
@@ -233,7 +233,7 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
 .sidebar-btn:hover .sidebar-label { color: var(--stone-600); }
 .sidebar-btn.active { background: var(--green-100); color: var(--green-700); }
 .sidebar-btn.active-referrer { background: color-mix(in srgb, var(--green-100) 50%, transparent); color: color-mix(in srgb, var(--green-700) 50%, transparent); }
-.sidebar-collapse-btn { display: none; }
+.sidebar-collapse-btn { display: flex; }
 
 .profile-menu-wrap { position: relative; }
 .profile-menu {
