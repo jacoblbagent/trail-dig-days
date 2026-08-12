@@ -129,10 +129,10 @@ const CalendarPage: React.FC = () => {
   const daysInMonth = new Date(year, month + 1, 0).getDate();
 
   const filtered = useMemo(() => {
-    const radius = parseFloat(radiusInput) || 100;
+    const radius = searchRadius || 100;
     if (radius >= 100) return expanded;
     return expanded.filter((e) => haversine(center, e.coordinates) <= radius);
-  }, [expanded, radiusInput, center]);
+  }, [expanded, searchRadius, center]);
 
   const eventMap = useMemo(() => {
     const map = new Map<string, typeof filtered>();
@@ -147,7 +147,6 @@ const CalendarPage: React.FC = () => {
   const handleRadiusChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;
     setRadiusInput(val);
-    dispatch(setSearchRadius(parseFloat(val) || 10));
   };
 
   const prevMonth = () => { setViewDate(new Date(year, month - 1, 1)); setSelectedDay(null); };
@@ -191,7 +190,7 @@ const CalendarPage: React.FC = () => {
               <SearchRadiusMap center={pendingCenter || searchCenter || [39.7392, -104.9903]} radius={parseFloat(radiusInput) || 10} onCenterChange={setPendingCenter} onLocate={(c) => { dispatch(setSearchCenter(c)); setPendingCenter(null); }} />
             </div>
           )}
-          <button className="btn btn-search" disabled={searchTab === 'country' ? !selectedState : !pendingCenter} onClick={() => {
+          <button className="btn btn-search" disabled={searchTab === 'country' ? !selectedState : !pendingCenter && parseFloat(radiusInput) === searchRadius} onClick={() => {
             if (searchTab === 'country') {
               if (selectedState && US_STATE_COORDS[selectedState]) {
                 dispatch(setSearchCenter(US_STATE_COORDS[selectedState]));
@@ -199,6 +198,7 @@ const CalendarPage: React.FC = () => {
               }
             } else if (pendingCenter) {
               dispatch(setSearchCenter(pendingCenter));
+              dispatch(setSearchRadius(parseFloat(radiusInput) || 10));
               setPendingCenter(null);
             }
           }}>Search</button>

@@ -195,11 +195,11 @@ const MapPage: React.FC = () => {
 
   // Filter expanded events by radius (for calendar dots)
   const filteredExpanded = useMemo(() => {
-    const radius = parseFloat(radiusInput) || 100;
+    const radius = searchRadius || 100;
     if (radius >= 100) return expanded;
     const c = searchCenter || DEFAULT_CENTER;
     return expanded.filter((e) => haversine(c, e.coordinates) <= radius);
-  }, [expanded, searchCenter, radiusInput]);
+  }, [expanded, searchCenter, searchRadius]);
 
   // Calendar: events per day (within radius)
   const eventMap = useMemo(() => {
@@ -213,11 +213,11 @@ const MapPage: React.FC = () => {
   }, [filteredExpanded]);
 
   const filtered = useMemo(() => {
-    const radius = parseFloat(radiusInput) || 100;
+    const radius = searchRadius || 100;
     if (radius >= 100) return collapsed;
     const c = searchCenter || DEFAULT_CENTER;
     return collapsed.filter((e) => haversine(c, e.coordinates) <= radius);
-  }, [collapsed, searchCenter, radiusInput]);
+  }, [collapsed, searchCenter, searchRadius]);
 
   const sorted = useMemo(() => {
     const dir = sortOrder === 'asc' ? 1 : -1;
@@ -239,7 +239,7 @@ const MapPage: React.FC = () => {
   const handleRadiusChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value;
     setRadiusInput(val);
-    dispatch(setSearchRadius(parseFloat(val) || 10));
+  };
 
   // When a state is selected from Country tab, update pending center
   useEffect(() => {
@@ -247,7 +247,6 @@ const MapPage: React.FC = () => {
       setPendingCenter(US_STATE_COORDS[selectedState]);
     }
   }, [selectedState]);
-  };
 
   const cells: { day: number; events: typeof expanded }[] = [];
   for (let i = 0; i < firstDay; i++) cells.push({ day: 0, events: [] });
@@ -290,7 +289,7 @@ const MapPage: React.FC = () => {
               <SearchRadiusMap center={pendingCenter || searchCenter || DEFAULT_CENTER} radius={parseFloat(radiusInput) || 10} onCenterChange={setPendingCenter} onLocate={(c) => { dispatch(setSearchCenter(c)); setPendingCenter(null); }} />
             </div>
           )}
-          <button className="btn btn-search" disabled={searchTab === 'country' ? !selectedState : !pendingCenter} onClick={() => {
+          <button className="btn btn-search" disabled={searchTab === 'country' ? !selectedState : !pendingCenter && parseFloat(radiusInput) === searchRadius} onClick={() => {
             if (searchTab === 'country') {
               if (selectedState && US_STATE_COORDS[selectedState]) {
                 dispatch(setSearchCenter(US_STATE_COORDS[selectedState]));
@@ -298,6 +297,7 @@ const MapPage: React.FC = () => {
               }
             } else if (pendingCenter) {
               dispatch(setSearchCenter(pendingCenter));
+              dispatch(setSearchRadius(parseFloat(radiusInput) || 10));
               setPendingCenter(null);
             }
           }}>Search</button>
