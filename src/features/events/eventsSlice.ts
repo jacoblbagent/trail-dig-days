@@ -3,13 +3,6 @@ import type { PayloadAction } from '@reduxjs/toolkit';
 import { v4 as uuidv4 } from 'uuid';
 import type { DigEvent, EventsState, ProvidedItem, RecommendedItem, RecurrenceType, NotificationItem } from '../../types';
 
-export interface MapMarker {
-  id: string;
-  position: [number, number];
-  icon: 'green' | 'amber' | 'gray';
-  popup: string;
-}
-
 const seedNotifications = (): NotificationItem[] => [
   { id: 'notif-1', eventId: 'seed-event-043', type: 'event', message: 'New dig day: Galbraith Mountain Dig Day', read: false, createdAt: '2026-08-07T10:00:00' },
   { id: 'notif-2', eventId: 'seed-event-045', type: 'event', message: 'Demo Forest Flow Trail needs volunteers', read: false, createdAt: '2026-08-06T14:30:00' },

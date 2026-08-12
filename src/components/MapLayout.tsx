@@ -59,6 +59,17 @@ const MapCenterUpdater: React.FC<{ loc: [number, number] | null }> = ({ loc }) =
   return null;
 };
 
+const MapResizeWatcher: React.FC = () => {
+  const map = useMap();
+  useEffect(() => {
+    const el = map.getContainer();
+    const ro = new ResizeObserver(() => { map.invalidateSize(); });
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [map]);
+  return null;
+};
+
 const FilterCalendar: React.FC<{ onClose: () => void }> = ({ onClose }) => {
   const today = new Date();
   const [viewDate, setViewDate] = useState(new Date(today.getFullYear(), today.getMonth(), 1));
@@ -201,6 +212,7 @@ const MapLayout: React.FC = () => {
             }
           />
           <MapMoveHandler />
+          <MapResizeWatcher />
           <MapCenterUpdater loc={searchCenter} />
           <TileLoadIndicator />
           <PageMarkerContent />
