@@ -37,11 +37,15 @@ const SearchRadiusMap: React.FC<Props> = ({ center, radius, onCenterChange }) =>
       weight: 2,
     }).addTo(map);
 
+    marker.on('drag', () => {
+      const pos = marker.getLatLng();
+      circle.setLatLng(pos);
+      map.setView(pos, map.getZoom(), { animate: false });
+    });
+
     marker.on('dragend', () => {
       const pos = marker.getLatLng();
       const newCenter: [number, number] = [pos.lat, pos.lng];
-      circle.setLatLng(pos);
-      map.panTo(pos);
       onCenterChange(newCenter);
     });
 
