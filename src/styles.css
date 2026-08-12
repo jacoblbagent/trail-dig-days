@@ -477,6 +477,9 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
 .toolbar-btn:hover { background: var(--stone-100); color: var(--stone-700); }
 .toolbar-btn.active { background: var(--green-100); color: var(--green-700); }
 
+.filter-backdrop {
+  position: fixed; inset: 0; z-index: 1099;
+}
 .filter-panel {
   position: absolute; top: 50px; left: 15px; z-index: 1100;
   background: var(--surface); border: 1px solid var(--stone-200);

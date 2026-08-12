@@ -197,6 +197,8 @@ const MapLayout: React.FC = () => {
           <button className={`toolbar-btn${showPanel === 'recurring' ? ' active' : ''}`} onClick={() => togglePanel('recurring')}>Is Recurring</button>
         </div>
 
+        {showPanel && <div className="filter-backdrop" onClick={() => setShowPanel(null)} />}
+
         {showPanel === 'location' && (
           <div className="filter-panel filter-panel--location">
             <div className="search-tabs">
@@ -219,7 +221,7 @@ const MapLayout: React.FC = () => {
                   <label>Search radius: <strong>{radiusInput} mi</strong></label>
                   <input type="range" min={5} max={100} value={radiusInput} onChange={(e) => setRadiusInput(e.target.value)} />
                 </div>
-                <SearchRadiusMap center={pendingCenter || searchCenter || DEFAULT_CENTER} radius={parseFloat(radiusInput) || 10} onCenterChange={setPendingCenter} onLocate={(c) => { dispatch(setSearchCenter(c)); setPendingCenter(null); }} />
+                <SearchRadiusMap center={pendingCenter || searchCenter || DEFAULT_CENTER} radius={parseFloat(radiusInput) || 10} onCenterChange={setPendingCenter} onLocate={(c) => { setPendingCenter(c); }} />
               </div>
             )}
             <button className="btn btn-search" disabled={locTab === 'country' ? !selectedState : !pendingCenter && parseFloat(radiusInput) === searchRadius} onClick={() => {
