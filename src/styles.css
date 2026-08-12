@@ -895,7 +895,8 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
 .calendar-grid-wrap { display: flex; flex-direction: column; gap: 8px; padding: 12px; border-radius: 0 0 12px 12px; }
 .calendar-nav { display: flex; align-items: center; gap: 8px; padding: 0 4px; }
 .calendar-nav strong { font-size: 1rem; color: var(--stone-700); }
-.calendar-nav .cal-collapse-btn { margin-left: auto; }
+.calendar-nav .cal-collapse-btn { margin-left: auto; background: none; border: 1px solid var(--stone-200); cursor: pointer; font-size: .8rem; color: var(--stone-500); padding: 4px 10px; border-radius: var(--radius-sm); }
+.calendar-nav .cal-collapse-btn:hover { background: var(--stone-100); color: var(--stone-700); }
 .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); border: 1px solid var(--stone-200); border-radius: var(--radius); overflow: hidden; }
 .cal-day-header {
   font-size: .75rem; color: var(--stone-400); text-align: center;

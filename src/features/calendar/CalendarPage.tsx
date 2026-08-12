@@ -19,6 +19,7 @@ const CalendarPage: React.FC = () => {
   const [radiusInput, setRadiusInput] = useState('25');
   const [addressQuery, setAddressQuery] = useState('');
   const [sidebarWidth, setSidebarWidth] = useState(380);
+  const [calendarCollapsed, setCalendarCollapsed] = useState(true);
   const widthRef = useRef(380);
   const SIDEBAR_MIN = 240;
   const SIDEBAR_MAX = 600;
@@ -126,11 +127,14 @@ const CalendarPage: React.FC = () => {
 
         <div className="calendar-grid-wrap">
           <div className="calendar-nav">
-            <button className="btn btn-ghost btn-sm" onClick={prevMonth}><span className="nav-arrow">←</span></button>
+            <button className="btn btn-ghost btn-sm" onClick={prevMonth} disabled={calendarCollapsed}><span className="nav-arrow">←</span></button>
             <strong>{MONTHS[month]} {year}</strong>
-            <button className="btn btn-ghost btn-sm" onClick={nextMonth}>→</button>
+            <button className="btn btn-ghost btn-sm" onClick={nextMonth} disabled={calendarCollapsed}>→</button>
+            <button className="cal-collapse-btn" onClick={() => setCalendarCollapsed(!calendarCollapsed)}>
+              {calendarCollapsed ? '▶' : '▼'} Calendar
+            </button>
           </div>
-          <div className="calendar-grid">
+          {!calendarCollapsed && <div className="calendar-grid">
             {DAYS.map((d) => (<div key={d} className="cal-day-header">{d}</div>))}
             {cells.map((cell, i) => {
               const dateStr = cell.day
@@ -152,7 +156,7 @@ const CalendarPage: React.FC = () => {
                 </div>
               );
             })}
-          </div>
+          </div>}
         </div>
 
         <hr className="calendar-separator" />
