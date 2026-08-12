@@ -72,6 +72,8 @@ const US_STATE_COORDS: Record<string, [number, number]> = {
   'Wyoming': [42.755966, -107.302490],
 };
 
+const DEFAULT_CENTER: [number, number] = [39.7392, -104.9903];
+
 const EventCard = memo(function EventCard({ event, center }: { event: DigEvent; center: [number, number] | null }) {
   const dist = center ? haversine(center, event.coordinates) : null;
   return (
@@ -195,8 +197,8 @@ const MapPage: React.FC = () => {
   const filteredExpanded = useMemo(() => {
     const radius = parseFloat(radiusInput) || 100;
     if (radius >= 100) return expanded;
-    if (!searchCenter) return expanded;
-    return expanded.filter((e) => haversine(searchCenter, e.coordinates) <= radius);
+    const c = searchCenter || DEFAULT_CENTER;
+    return expanded.filter((e) => haversine(c, e.coordinates) <= radius);
   }, [expanded, searchCenter, radiusInput]);
 
   // Calendar: events per day (within radius)
@@ -213,17 +215,16 @@ const MapPage: React.FC = () => {
   const filtered = useMemo(() => {
     const radius = parseFloat(radiusInput) || 100;
     if (radius >= 100) return collapsed;
-    if (!searchCenter) return collapsed;
-    return collapsed.filter((e) => haversine(searchCenter, e.coordinates) <= radius);
+    const c = searchCenter || DEFAULT_CENTER;
+    return collapsed.filter((e) => haversine(c, e.coordinates) <= radius);
   }, [collapsed, searchCenter, radiusInput]);
 
   const sorted = useMemo(() => {
     const dir = sortOrder === 'asc' ? 1 : -1;
-    const c = searchCenter;
+    const c = searchCenter || DEFAULT_CENTER;
     return [...filtered].sort((a, b) => {
       if (sortBy === 'date') return dir * (new Date(a.date).getTime() - new Date(b.date).getTime());
       if (sortBy === 'distance') {
-        if (!c) return 0;
         return dir * (haversine(c, a.coordinates) - haversine(c, b.coordinates));
       }
       const aSpots = a.maxVolunteers - a.registeredVolunteers.length;
@@ -286,7 +287,7 @@ const MapPage: React.FC = () => {
                 <label>Search radius: <strong>{radiusInput} mi</strong></label>
                 <input type="range" min={5} max={100} value={radiusInput} onChange={handleRadiusChange} />
               </div>
-              <SearchRadiusMap center={pendingCenter || searchCenter || [39.7392, -104.9903]} radius={parseFloat(radiusInput) || 10} onCenterChange={setPendingCenter} onLocate={(c) => { dispatch(setSearchCenter(c)); setPendingCenter(null); }} />
+              <SearchRadiusMap center={pendingCenter || searchCenter || DEFAULT_CENTER} radius={parseFloat(radiusInput) || 10} onCenterChange={setPendingCenter} onLocate={(c) => { dispatch(setSearchCenter(c)); setPendingCenter(null); }} />
             </div>
           )}
           <button className="btn btn-search" disabled={searchTab === 'country' ? !selectedState : !pendingCenter} onClick={() => {
@@ -394,7 +395,7 @@ const MapPage: React.FC = () => {
                 </div>
               ) : (
                 sorted.map((event) => (
-                  <EventCard event={event} key={event.id} center={searchCenter} />
+                  <EventCard event={event} key={event.id} center={searchCenter || DEFAULT_CENTER} />
                 ))
               )}
             </div>
