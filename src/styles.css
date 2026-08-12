@@ -1265,7 +1265,7 @@ input[type="time"]::-webkit-calendar-picker-indicator { filter: invert(0.55); cu
   cursor: pointer;
   display: flex;
   justify-content: flex-end;
-  padding-right: 8px;
+  padding-right: 15px;
   position: relative;
 }
 .comment-indent:hover { background: var(--stone-50); }
