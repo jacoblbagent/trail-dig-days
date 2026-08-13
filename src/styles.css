@@ -1121,9 +1121,9 @@ input[type="time"]::-webkit-calendar-picker-indicator { filter: invert(0.55); cu
   .sidebar .sidebar-btn,
   .sidebar .notif-wrap,
   .sidebar .profile-menu-wrap {
-    flex: 1; display: flex; align-items: center; justify-content: center;
+    flex: 1; display: flex; align-items: center; justify-content: center; height: 100%;
   }
-  .sidebar-btn { background: none; border: none; color: var(--stone-500); cursor: pointer; padding: 0; gap: 0; height: auto; flex-shrink: 0; }
+  .sidebar-btn { background: none; border: none; color: var(--stone-500); cursor: pointer; padding: 0; gap: 0; height: 100%; flex-shrink: 0; }
   .sidebar.expanded .sidebar-btn:hover,
   .sidebar-btn:hover { background: none; color: var(--stone-700); }
   .sidebar-btn.active,
@@ -1262,7 +1262,7 @@ input[type="time"]::-webkit-calendar-picker-indicator { filter: invert(0.55); cu
   .cal-modal-item { padding: 8px 10px; }
 
   .sidebar { height: 48px; }
-  .sidebar-btn { background: none; border: none; color: var(--stone-500); cursor: pointer; padding: 0; gap: 0; height: auto; flex-shrink: 0; }
+  .sidebar-btn { background: none; border: none; color: var(--stone-500); cursor: pointer; padding: 0; gap: 0; height: 100%; flex-shrink: 0; }
   .sidebar-btn:hover { background: none; color: var(--stone-700); }
   .sidebar-btn.active,
   .sidebar-btn.partial { background: none; }
