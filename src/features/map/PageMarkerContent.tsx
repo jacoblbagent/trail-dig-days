@@ -47,7 +47,11 @@ const OffsetMarkerGroup: React.FC<{ events: DigEvent[]; inRange: boolean; hovere
     <>
       {markers.map(({ event, position }) => (
         <Marker key={event.id} position={position} icon={coloredIcon(inRange, hoveredId === event.id, myUserId === event.creatorId)}
-          eventHandlers={{ mouseover: (ev) => ev.target.openPopup(), mouseout: (ev) => ev.target.closePopup() }}
+          eventHandlers={{
+            mouseover: (ev) => ev.target.openPopup(),
+            mouseout: (ev) => ev.target.closePopup(),
+            click: () => navigate(`/events/${event.id}`),
+          }}
         >
           <Popup>
             <div className="map-popup">
