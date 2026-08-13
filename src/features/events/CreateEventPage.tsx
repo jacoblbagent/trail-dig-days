@@ -236,7 +236,11 @@ const CreateEventPage: React.FC = () => {
   const [mapCenter, setMapCenter] = useState<[number, number]>([39.7392, -104.9903]); // Denver default
   const [markerPos, setMarkerPos] = useState<[number, number] | null>(null);
 
+  const guardRef = useRef(false);
+
   useEffect(() => {
+    if (guardRef.current) return;
+    guardRef.current = true;
     if (!user) {
       navigate('/auth');
       dispatch(addToast({ message: 'Please sign in to create events', type: 'warning' }));
