@@ -557,6 +557,7 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
   width: 34px !important; height: 34px !important; line-height: 34px !important;
   border-radius: 0 0 8px 8px !important;
   background: var(--surface); border: 1px solid var(--stone-200);
+  border-bottom: 1px solid var(--stone-200) !important;
   color: var(--stone-500);
   box-shadow: 0 1px 3px rgba(0,0,0,.08);
   font-size: 1.1rem;
