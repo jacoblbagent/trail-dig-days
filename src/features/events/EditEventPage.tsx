@@ -15,8 +15,6 @@ import shadowUrl from 'leaflet/dist/images/marker-shadow.png';
 delete (L.Icon.Default.prototype as any)._getIconUrl;
 L.Icon.Default.mergeOptions({ iconUrl, iconRetinaUrl, shadowUrl });
 
-const DIFFICULTY_OPTIONS = ['easy', 'moderate', 'challenging', 'expert'] as const;
-
 interface CategoryGroup { label: string; items: string[]; }
 
 const PROVIDED_CATEGORIES: CategoryGroup[] = [
@@ -263,19 +261,9 @@ const EditEventPage: React.FC = () => {
               </div>
             )}
           </div>
-          <div className="form-row">
-            <div className="form-group">
-              <label>Physical Difficulty</label>
-              <select value={difficulty} onChange={(e) => setDifficulty(e.target.value as any)}>
-                {DIFFICULTY_OPTIONS.map((d) => (
-                  <option key={d} value={d}>{d.charAt(0).toUpperCase() + d.slice(1)}</option>
-                ))}
-              </select>
-            </div>
-            <div className="form-group">
-              <label>Max Volunteers</label>
-              <input type="number" min={1} max={200} value={maxVolunteers} onChange={(e) => setMaxVolunteers(parseInt(e.target.value) || 1)} />
-            </div>
+          <div className="form-group">
+            <label>Max Volunteers</label>
+            <input type="number" min={1} max={200} value={maxVolunteers} onChange={(e) => setMaxVolunteers(parseInt(e.target.value) || 1)} />
           </div>
           <div className="form-group">
             <label>Requirements (one per line)</label>
