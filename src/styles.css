@@ -375,7 +375,7 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
 .uto-desc { font-size: .8rem; color: var(--stone-400); }
 
 /* ── Map Page ── */
-.map-page { display: flex; height: 100%; }
+.map-page { display: flex; height: 100%; position: relative; }
 .search-controls { padding: 14px 20px; border-bottom: 1px solid var(--stone-150); }
 .radius-control { margin-bottom: 8px; }
 .radius-control label { font-size: .85rem; color: var(--stone-600); }
@@ -478,7 +478,7 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
   position: fixed; inset: 0; z-index: 1099;
 }
 .filter-panel {
-  position: absolute; top: 50px; right: 15px; z-index: 1100;
+  position: absolute; top: 50px; right: calc(var(--events-width, 0px) + 15px); z-index: 1100;
   background: var(--surface); border: 1px solid var(--stone-200);
   border-radius: var(--radius); box-shadow: var(--shadow-lg);
   padding: 12px; min-width: 240px; max-width: 340px;
@@ -1122,6 +1122,8 @@ input[type="time"]::-webkit-calendar-picker-indicator { filter: invert(0.55); cu
   .notif-panel { left: auto; right: 0; bottom: 100%; margin-bottom: 6px; }
 
   .sidebar-resizer { display: none; }
+
+  .filter-panel { right: 15px; }
 
   .events-toggle-bar { display: flex; align-items: center; justify-content: space-between; padding: 6px 16px; cursor: pointer; font-size: .85rem; font-weight: 500; color: var(--stone-600); background: var(--stone-50); border-bottom: 1px solid var(--stone-150); border-left: 5px solid var(--green-600); flex-shrink: 0; }
   .events-toggle-bar:hover { background: var(--stone-100); }

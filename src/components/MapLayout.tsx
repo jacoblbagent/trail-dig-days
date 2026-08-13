@@ -303,34 +303,54 @@ const MapLayout: React.FC = () => {
           )}
         </div>
 
-        {showPanel && <div className="filter-backdrop" onClick={() => setShowPanel(null)} />}
+        <MapContainer center={center} zoom={mapZoom} style={{ width: '100%', height: '100%' }} maxBounds={[[24, -125], [50, -66]]} maxBoundsViscosity={1}>
+          <TileLayer
+            key={theme}
+            attribution='&copy; <a href="https://carto.com/">CARTO</a>'
+            url={theme === 'dark'
+              ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
+              : 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png'
+            }
+          />
+          <MapMoveHandler />
+          <MapRefSetter mapRef={mapRef} />
+          <MapResizeWatcher />
+          <PanelPopupCloser showPanel={showPanel} />
+          <MapCenterUpdater loc={searchCenter} />
+          <TileLoadIndicator />
+          <PageMarkerContent />
+          <MapExtras />
+        </MapContainer>
+      </div>
 
-        {showPanel === 'location' && (
-          <div className="filter-panel filter-panel--location">
-            <div className="search-tabs">
-              <button className={`search-tab ${locTab === 'country' ? 'active' : ''}`} onClick={() => setLocTab('country')}>Country</button>
-              <button className={`search-tab ${locTab === 'nearme' ? 'active' : ''}`} onClick={() => setLocTab('nearme')}>Near Me</button>
+      {showPanel && <div className="filter-backdrop" onClick={() => setShowPanel(null)} />}
+
+      {showPanel === 'location' && (
+        <div className="filter-panel filter-panel--location">
+          <div className="search-tabs">
+            <button className={`search-tab ${locTab === 'country' ? 'active' : ''}`} onClick={() => setLocTab('country')}>Country</button>
+            <button className={`search-tab ${locTab === 'nearme' ? 'active' : ''}`} onClick={() => setLocTab('nearme')}>Near Me</button>
+          </div>
+          {locTab === 'country' ? (
+            <div className="search-country">
+              <select className="search-select" disabled>
+                <option>United States</option>
+              </select>
+              <select className="search-select" value={selectedState} onChange={(e) => setSelectedState(e.target.value)}>
+                <option value="">Select a state...</option>
+                {US_STATES.map((s) => <option key={s} value={s}>{s}</option>)}
+              </select>
             </div>
-            {locTab === 'country' ? (
-              <div className="search-country">
-                <select className="search-select" disabled>
-                  <option>United States</option>
-                </select>
-                <select className="search-select" value={selectedState} onChange={(e) => setSelectedState(e.target.value)}>
-                  <option value="">Select a state...</option>
-                  {US_STATES.map((s) => <option key={s} value={s}>{s}</option>)}
-                </select>
+          ) : (
+            <div className="search-nearme">
+              <div className="radius-control">
+                <label>Search radius: <strong>{radiusInput} mi</strong></label>
+                <input type="range" min={5} max={100} value={radiusInput} onChange={(e) => setRadiusInput(e.target.value)} />
               </div>
-            ) : (
-              <div className="search-nearme">
-                <div className="radius-control">
-                  <label>Search radius: <strong>{radiusInput} mi</strong></label>
-                  <input type="range" min={5} max={100} value={radiusInput} onChange={(e) => setRadiusInput(e.target.value)} />
-                </div>
-                <SearchRadiusMap center={pendingCenter || searchCenter || DEFAULT_CENTER} radius={parseFloat(radiusInput) || 10} onCenterChange={setPendingCenter} onLocate={(c) => { setPendingCenter(c); }} />
-              </div>
-            )}
-            <button className="btn btn-search" disabled={locTab === 'country' ? !selectedState : !pendingCenter && parseFloat(radiusInput) === searchRadius} onClick={() => {
+              <SearchRadiusMap center={pendingCenter || searchCenter || DEFAULT_CENTER} radius={parseFloat(radiusInput) || 10} onCenterChange={setPendingCenter} onLocate={(c) => { setPendingCenter(c); }} />
+            </div>
+          )}
+          <button className="btn btn-search" disabled={locTab === 'country' ? !selectedState : !pendingCenter && parseFloat(radiusInput) === searchRadius} onClick={() => {
               if (locTab === 'country') {
                 if (selectedState && US_STATE_COORDS[selectedState]) {
                   dispatch(setSearchCenter(US_STATE_COORDS[selectedState]));
@@ -358,26 +378,6 @@ const MapLayout: React.FC = () => {
             </label>
           </div>
         )}
-
-        <MapContainer center={center} zoom={mapZoom} style={{ width: '100%', height: '100%' }} maxBounds={[[24, -125], [50, -66]]} maxBoundsViscosity={1}>
-          <TileLayer
-            key={theme}
-            attribution='&copy; <a href="https://carto.com/">CARTO</a>'
-            url={theme === 'dark'
-              ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
-              : 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png'
-            }
-          />
-          <MapMoveHandler />
-          <MapRefSetter mapRef={mapRef} />
-          <MapResizeWatcher />
-          <PanelPopupCloser showPanel={showPanel} />
-          <MapCenterUpdater loc={searchCenter} />
-          <TileLoadIndicator />
-          <PageMarkerContent />
-          <MapExtras />
-        </MapContainer>
-      </div>
     </div>
   );
 };

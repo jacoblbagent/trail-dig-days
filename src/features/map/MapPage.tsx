@@ -91,8 +91,9 @@ const MapPage: React.FC = () => {
     if (el) {
       if (eventsCollapsed) el.removeAttribute('data-events-open');
       else el.setAttribute('data-events-open', '');
+      (el as HTMLElement).style.setProperty('--events-width', `${rightWidth}px`);
     }
-  }, [eventsCollapsed]);
+  }, [eventsCollapsed, rightWidth]);
 
   const handleResizeStart = (e: React.MouseEvent) => {
     e.preventDefault();
