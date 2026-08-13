@@ -1,6 +1,7 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo, useEffect, useRef, useCallback } from 'react';
 import { Outlet } from 'react-router-dom';
 import { MapContainer, TileLayer, useMap } from 'react-leaflet';
+import L from 'leaflet';
 import { useAppSelector, useAppDispatch } from '../app/hooks';
 import { setSearchRadius, setSearchCenter, setSelectedDay, setShowRecurring } from '../features/events/eventsSlice';
 import { expandRecurring } from '../utils/recurrence';
@@ -9,6 +10,22 @@ import TileLoadIndicator from '../features/map/TileLoadIndicator';
 import PageMarkerContent from '../features/map/PageMarkerContent';
 import MapExtras from '../features/map/MapExtras';
 import SearchRadiusMap from '../features/calendar/SearchRadiusMap';
+
+const LOCATION_KEY = 'trail-dig-location';
+
+const loadCachedLocation = (): [number, number] | null => {
+  try {
+    const raw = localStorage.getItem(LOCATION_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw);
+    if (Array.isArray(parsed) && parsed.length === 2) return parsed as [number, number];
+    return null;
+  } catch { return null; }
+};
+
+const saveLocation = (loc: [number, number]) => {
+  try { localStorage.setItem(LOCATION_KEY, JSON.stringify(loc)); } catch {}
+};
 
 const DEFAULT_CENTER: [number, number] = [39.7392, -104.9903];
 
@@ -57,6 +74,12 @@ const MapCenterUpdater: React.FC<{ loc: [number, number] | null }> = ({ loc }) =
     map.flyTo(loc, map.getZoom(), { duration: 1.2 });
   }, [loc, map]);
 
+  return null;
+};
+
+const MapRefSetter: React.FC<{ mapRef: React.MutableRefObject<L.Map | null> }> = ({ mapRef }) => {
+  const map = useMap();
+  mapRef.current = map;
   return null;
 };
 
@@ -173,6 +196,59 @@ const MapLayout: React.FC = () => {
   const mapZoom = useAppSelector((s) => s.events.mapZoom);
   const [showPanel, setShowPanel] = useState<'location' | 'time' | 'recurring' | null>(null);
 
+  const mapRef = useRef<L.Map | null>(null);
+
+  // Locate / re-detect state
+  const [userLocation, setUserLocation] = useState<[number, number] | null>(null);
+  const [isDetecting, setIsDetecting] = useState(false);
+  const initRef = useRef(false);
+
+  // On mount: restore cached location, then detect fresh
+  useEffect(() => {
+    if (initRef.current) return;
+    initRef.current = true;
+
+    const cached = loadCachedLocation();
+    if (cached && !searchCenter) {
+      setUserLocation(cached);
+      dispatch(setSearchCenter(cached));
+    }
+
+    if (!('geolocation' in navigator)) return;
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        const loc: [number, number] = [pos.coords.latitude, pos.coords.longitude];
+        setUserLocation(loc);
+        saveLocation(loc);
+        dispatch(setSearchCenter(loc));
+      },
+      () => {}
+    );
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const handleRedetect = useCallback(() => {
+    if (!('geolocation' in navigator)) return;
+    setIsDetecting(true);
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        const loc: [number, number] = [pos.coords.latitude, pos.coords.longitude];
+        setUserLocation(loc);
+        saveLocation(loc);
+        dispatch(setSearchCenter(loc));
+        setIsDetecting(false);
+      },
+      () => { setIsDetecting(false); }
+    );
+  }, [dispatch]);
+
+  const handleLocateClick = () => {
+    if (userLocation && mapRef.current) {
+      mapRef.current.flyTo(userLocation, 12, { duration: 1 });
+    } else {
+      handleRedetect();
+    }
+  };
+
   // Location panel local state
   const [locTab, setLocTab] = useState<'country' | 'nearme'>('nearme');
   const [selectedState, setSelectedState] = useState('');
@@ -203,9 +279,25 @@ const MapLayout: React.FC = () => {
       <Outlet />
       <div className="map-container" style={{ order: 1 }}>
         <div className="map-toolbar">
+          <button
+            className="map-locate-btn"
+            onClick={handleLocateClick}
+            disabled={isDetecting}
+            title="Find my location"
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="12" cy="12" r="3" />
+              <path d="M12 2v4M12 18v4M2 12h4M18 12h4" />
+            </svg>
+          </button>
           <button className={`toolbar-btn${showPanel === 'location' ? ' active' : ''}`} onClick={() => togglePanel('location')}>Location</button>
           <button className={`toolbar-btn${showPanel === 'time' ? ' active' : ''}`} onClick={() => togglePanel('time')}>Time Frame</button>
           <button className={`toolbar-btn${showPanel === 'recurring' ? ' active' : ''}`} onClick={() => togglePanel('recurring')}>Is Recurring</button>
+          {userLocation && (
+            <button className="map-redetect-btn" onClick={handleRedetect} disabled={isDetecting}>
+              {isDetecting ? 'Detecting…' : 'Re-detect'}
+            </button>
+          )}
         </div>
 
         {showPanel && <div className="filter-backdrop" onClick={() => setShowPanel(null)} />}
@@ -274,6 +366,7 @@ const MapLayout: React.FC = () => {
             }
           />
           <MapMoveHandler />
+          <MapRefSetter mapRef={mapRef} />
           <MapResizeWatcher />
           <PanelPopupCloser showPanel={showPanel} />
           <MapCenterUpdater loc={searchCenter} />
