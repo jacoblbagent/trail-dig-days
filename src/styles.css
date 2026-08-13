@@ -943,8 +943,8 @@ input[type="time"]::-webkit-calendar-picker-indicator { filter: invert(0.55); cu
 .dig-dates-tabs .tab-btn:hover { color: var(--stone-700); }
 .tab-count {
   display: inline-flex; align-items: center; justify-content: center;
-  min-width: 18px; height: 18px; padding: 0 5px; border-radius: 9px;
-  background: var(--green-700); color: #fff;
+  min-width: 18px; height: 18px; padding: 0 5px; border-radius: 4px;
+  background: var(--stone-300); color: var(--stone-700);
   font-size: .7rem; font-weight: 700; margin-left: 6px; vertical-align: middle;
 }
 .dig-date-list { display: flex; flex-direction: column; gap: 6px; }
