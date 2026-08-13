@@ -1117,7 +1117,7 @@ input[type="time"]::-webkit-calendar-picker-indicator { filter: invert(0.55); cu
 
   .events-toggle-bar { display: flex; align-items: center; justify-content: space-between; padding: 6px 16px; cursor: pointer; font-size: .85rem; font-weight: 500; color: var(--stone-600); background: var(--stone-50); border-bottom: 1px solid var(--stone-150); border-left: 5px solid var(--green-600); flex-shrink: 0; }
   .events-toggle-bar:hover { background: var(--stone-100); }
-  .events-toggle-bar.collapsed { border-left-color: transparent; }
+  .events-toggle-bar.collapsed { border-left: none; }
   .events-toggle-arrow { font-size: .9rem; color: var(--stone-500); }
 
   .sidebar-col-list { position: absolute; bottom: 0; left: 0; right: 0; z-index: 5; max-height: 60%; display: flex; flex-direction: column; overflow-y: auto; min-height: 0; background: var(--surface); width: 100% !important; }
