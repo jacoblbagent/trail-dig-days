@@ -528,7 +528,7 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
   display: flex; flex-direction: column; align-items: flex-end; gap: 10px;
 }
 .map-locate-btn {
-  width: 34px; height: 34px; border-radius: 8px;
+  width: 34px; height: 34px; border-radius: 4px;
   background: var(--surface); border: 1px solid var(--stone-200);
   cursor: pointer; color: var(--stone-500);
   display: flex; align-items: center; justify-content: center;
@@ -600,7 +600,7 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
 
 .map-locate-btn:hover { border-color: var(--accent, var(--green-600)); }
 .map-redetect-btn {
-  font-size: .7rem; padding: 4px 8px; border-radius: 8px;
+  font-size: .7rem; padding: 4px 8px; border-radius: 4px;
   background: var(--surface); border: 1px solid var(--stone-200);
   color: var(--stone-600); cursor: pointer;
   box-shadow: 0 1px 3px rgba(0,0,0,.08);
@@ -613,6 +613,8 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
 .empty-state { text-align: center; padding: 40px 20px; color: var(--stone-400); }
 .map-popup { font-size: .875rem; }
 .leaflet-popup-close-button { padding: 2px 2px 0 0 !important; }
+.leaflet-popup-content-wrapper { border-radius: 4px !important; }
+.leaflet-popup-content { margin: 8px 12px; }
 .map-popup strong { color: var(--stone-800); }
 .map-popup p { margin: 2px 0; color: var(--stone-500); }
 
