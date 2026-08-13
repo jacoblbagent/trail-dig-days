@@ -3,7 +3,7 @@ import { Marker, Popup, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import { useNavigate } from 'react-router-dom';
 import { useAppSelector } from '../../app/hooks';
-import { expandRecurring } from '../../utils/recurrence';
+import { collapseRecurring } from '../../utils/recurrence';
 import type { DigEvent } from '../../types';
 
 const coloredIcon = (inRange: boolean, highlight: boolean) => {
@@ -65,26 +65,26 @@ const PageMarkerContent: React.FC = () => {
   const mapBounds = useAppSelector((s) => s.events.mapBounds);
   const hoveredId = useAppSelector((s) => s.events.hoveredMarkerId);
 
-  const expanded = useMemo(() => {
-    return expandRecurring(events);
+  const collapsed = useMemo(() => {
+    return collapseRecurring(events);
   }, [events]);
 
   const groups = useMemo(() => {
-    return groupByLocation(expanded.filter((e: DigEvent) => !e.isPrivate));
-  }, [expanded]);
+    return groupByLocation(collapsed.filter((e: DigEvent) => !e.isPrivate));
+  }, [collapsed]);
 
   const inRangeIds = useMemo(() => {
     if (!mapBounds) return null;
     const [[south, west], [north, east]] = mapBounds;
     return new Set(
-      expanded
-        .filter((e) => {
+      collapsed
+        .filter((e: DigEvent) => {
           const [lat, lng] = e.coordinates;
           return lat >= south && lat <= north && lng >= west && lng <= east;
         })
-        .map((e) => e.id)
+        .map((e: DigEvent) => e.id)
     );
-  }, [expanded, mapBounds]);
+  }, [collapsed, mapBounds]);
 
   return (
     <>
