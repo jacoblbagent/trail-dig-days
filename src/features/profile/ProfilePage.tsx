@@ -125,7 +125,6 @@ const DigDatesTab: React.FC<{ userId: string }> = ({ userId }) => {
                           <span className="ddc-title">{e.title}</span>
                           <span className="ddc-trail">{e.trailName} · {e.locationName}</span>
                         </div>
-                        <span className="ddc-spots">{e.registeredVolunteers.length}/{e.maxVolunteers}</span>
                       </Link>
                     ))}
                   </div>
@@ -152,8 +151,7 @@ const DigDatesTab: React.FC<{ userId: string }> = ({ userId }) => {
                     <span className="ddc-title">{e.title}</span>
                     <span className="ddc-trail">{DIFF_ICONS[e.difficulty]} {e.trailName} · {e.locationName}</span>
                   </div>
-                  <span className="ddc-spots">{e.registeredVolunteers.length}/{e.maxVolunteers}</span>
-                </Link>
+                  </Link>
               ))}
             </div>
           )
@@ -174,8 +172,7 @@ const DigDatesTab: React.FC<{ userId: string }> = ({ userId }) => {
                     <span className="ddc-title">{e.title}</span>
                     <span className="ddc-trail">{DIFF_ICONS[e.difficulty]} {e.trailName} · {e.locationName}</span>
                   </div>
-                  <span className="ddc-spots">{e.registeredVolunteers.length}/{e.maxVolunteers}</span>
-                </Link>
+                  </Link>
               ))}
             </div>
           )

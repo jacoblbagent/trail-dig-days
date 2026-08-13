@@ -933,7 +933,6 @@ input[type="time"]::-webkit-calendar-picker-indicator { filter: invert(0.55); cu
 .ddc-mid { flex: 1; display: flex; flex-direction: column; min-width: 0; }
 .ddc-title { font-size: .85rem; font-weight: 600; color: var(--stone-800); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .ddc-trail { font-size: .75rem; color: var(--stone-500); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.ddc-spots { font-size: .72rem; color: var(--stone-400); }
 .profile-section { padding: 20px 0; margin-bottom: 16px; }
 .profile-section h3 { font-size: .9rem; color: var(--stone-600); margin-bottom: 12px; text-transform: uppercase; letter-spacing: .5px; }
 .profile-section p { color: var(--stone-600); line-height: 1.6; }
