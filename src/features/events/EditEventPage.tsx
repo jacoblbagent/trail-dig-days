@@ -218,6 +218,7 @@ const EditEventPage: React.FC = () => {
               </div>
 
       <form onSubmit={handleSubmit} className="event-form">
+        <span className="form-section-label">Details</span>
         <div className="form-section">
           <div className="form-group">
             <label>Event Title *</label>
@@ -236,6 +237,7 @@ const EditEventPage: React.FC = () => {
             <textarea value={requirements} onChange={(e) => setRequirements(e.target.value)} rows={4} placeholder="Must be 18+&#10;Closed-toe shoes required" />
           </div>
         </div>
+        <span className="form-section-label">Schedule</span>
         <div className="form-section">
           <div className="form-row">
             <div className="form-group flex-1">
@@ -269,6 +271,7 @@ const EditEventPage: React.FC = () => {
             )}
           </div>
         </div>
+        <span className="form-section-label">Contact</span>
         <div className="form-section">
           <div className="form-row three">
             <div className="form-group flex-1">
@@ -285,6 +288,7 @@ const EditEventPage: React.FC = () => {
             </div>
           </div>
         </div>
+        <span className="form-section-label">Image</span>
         <div className="form-section">
           <div className="form-group">
             <label>Event Image</label>
@@ -312,8 +316,8 @@ const EditEventPage: React.FC = () => {
           </div>
         </div>
 
+        <span className="form-section-label">Location</span>
         <div className="form-section">
-          <h2>Location</h2>
           <div className="form-group">
             <label>Address / Trailhead</label>
             <input type="text" value={locationName} onChange={(e) => setLocationName(e.target.value)} placeholder="e.g. Phil's World Trailhead" required />
@@ -353,8 +357,8 @@ const EditEventPage: React.FC = () => {
           )}
         </div>
 
+        <span className="form-section-label">Provided Items</span>
         <div className="form-section">
-          <h2>Provided:</h2>
           <p className="section-desc">Select what the dig day organizers provide</p>
           <button type="button" className="cat-modal-toggle" onClick={() => setShowProvidedCat(true)}>
             {providedItems.length > 0 ? `${providedItems.length} items selected` : 'Add items…'}
@@ -404,8 +408,8 @@ const EditEventPage: React.FC = () => {
           ))}
         </div>
 
+        <span className="form-section-label">Bring Items</span>
         <div className="form-section">
-          <h2>Bring:</h2>
           <p className="section-desc">What volunteers are expected or recommended to bring themselves</p>
           <button type="button" className="cat-modal-toggle" onClick={() => setShowRecommendedCat(true)}>
             {recommendedItems.length > 0 ? `${recommendedItems.length} items selected` : 'Add items…'}
