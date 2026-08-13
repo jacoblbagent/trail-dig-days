@@ -39,7 +39,17 @@ const dedupeByLocation = (events: DigEvent[]): { event: DigEvent; count: number 
   for (const group of groups.values()) {
     // Latest event by date (then startTime as tiebreaker)
     group.sort((a, b) => b.date.localeCompare(a.date) || b.startTime.localeCompare(a.startTime));
-    result.push({ event: group[0], count: group.length });
+    // Count each recurring series once — multiple instances of the same
+    // recurrenceGroupId (expanded by expandRecurring) are a single event on the map
+    const counted = new Set<string>();
+    let count = 0;
+    for (const e of group) {
+      const key = e.recurrenceGroupId || e.id;
+      if (counted.has(key)) continue;
+      counted.add(key);
+      count++;
+    }
+    result.push({ event: group[0], count });
   }
   return result;
 };
