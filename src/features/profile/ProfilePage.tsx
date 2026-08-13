@@ -423,6 +423,33 @@ const ProfilePage: React.FC = () => {
         {/* Dig Dates */}
         {targetId && <DigDatesTab userId={targetId!} />}
 
+        {/* Profile Info (edit mode) */}
+        {editMode && (
+        <section className="profile-section">
+          <h3>Profile Info</h3>
+          <div className="form-group">
+            <label>Display Name</label>
+            <input type="text" value={form.displayName || ''} onChange={(e) => saveField({ displayName: e.target.value })} placeholder="Your trail name..." />
+          </div>
+          <div className="form-group">
+            <label>Bio</label>
+            <textarea value={form.bio || ''} onChange={(e) => saveField({ bio: e.target.value })} placeholder="Tell the trail community about yourself..." rows={3} />
+          </div>
+          <div className="form-group">
+            <label>Trail Crew</label>
+            <input type="text" value={form.trailCrew || ''} onChange={(e) => saveField({ trailCrew: e.target.value })} placeholder="e.g. Tarheel Trail Blazers" />
+          </div>
+          <div className="form-group">
+            <label>Crew Website</label>
+            <input type="text" value={form.trailCrewUrl || ''} onChange={(e) => saveField({ trailCrewUrl: e.target.value })} placeholder="https://..." />
+          </div>
+          <div className="form-group check-group" style={{ marginTop: 8 }}>
+            <label><input type="checkbox" checked={form.theme.showGear} onChange={(e) => saveField({ theme: { ...form.theme, showGear: e.target.checked } })} /> Show Gear</label>
+            <label><input type="checkbox" checked={form.theme.showSocial} onChange={(e) => saveField({ theme: { ...form.theme, showSocial: e.target.checked } })} /> Show Social Links</label>
+          </div>
+        </section>
+        )}
+
         {/* Location */}
         {(editMode || form.location) && (
         <section className="profile-section">
