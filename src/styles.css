@@ -1100,7 +1100,7 @@ input[type="time"]::-webkit-calendar-picker-indicator { filter: invert(0.55); cu
 
   .profile-menu { left: auto; right: 0; bottom: 100%; margin-bottom: 4px; }
 
-  .map-page { position: relative; flex-direction: column; height: 100%; padding-bottom: 52px; box-sizing: border-box; }
+  .map-page { position: relative; flex-direction: column; min-height: calc(100vh - 48px - 52px); height: auto; padding-bottom: 52px; box-sizing: border-box; }
   .map-container { flex: 1; height: auto; position: relative; overflow: hidden; z-index: 0; }
 
   .search-controls { padding: 10px 12px; }
@@ -1112,7 +1112,9 @@ input[type="time"]::-webkit-calendar-picker-indicator { filter: invert(0.55); cu
 
   .sidebar-resizer { display: none; }
 
-  .sidebar-col-list { display: none; }
+  .sidebar-col-list { display: flex; width: 100% !important; flex: 1; overflow-y: auto; min-height: 0; }
+
+  .map-container { flex: none; height: 300px; }
 
   .event-detail-grid { grid-template-columns: 1fr; }
   .event-detail-main.collapsed-mobile section,
