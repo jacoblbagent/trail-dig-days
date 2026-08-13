@@ -244,7 +244,7 @@ const CreateEventPage: React.FC = () => {
     }
     if (user.userType !== 'organization') {
       navigate('/');
-      dispatch(addToast({ message: 'Only organizations can create events', type: 'error' }));
+      dispatch(addToast({ message: 'Only organizations can create events', type: 'warning' }));
       return;
     }
     // Randomize mock data on page load
@@ -395,7 +395,7 @@ const CreateEventPage: React.FC = () => {
       dispatch(addToast({ message: 'Dig day created!', type: 'success' }));
     } catch (err: any) {
       setError(err.message || 'Failed to create event');
-      dispatch(addToast({ message: err.message || 'Failed to create event', type: 'error' }));
+      dispatch(addToast({ message: err.message || 'Failed to create event', type: 'warning' }));
     }
   };
 

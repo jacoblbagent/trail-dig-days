@@ -41,7 +41,7 @@ const EventDetailPage: React.FC = () => {
       await dispatch(registerForEvent({ eventId: event.id, userId: user.id })).unwrap();
       dispatch(addToast({ message: isRegistered ? 'Unregistered' : 'Signed up!', type: 'success' }));
     } catch (err: any) {
-      dispatch(addToast({ message: err.message || 'Failed', type: 'error' }));
+      dispatch(addToast({ message: err.message || 'Failed', type: 'warning' }));
     }
   };
 

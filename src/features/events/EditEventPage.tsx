@@ -206,7 +206,7 @@ const EditEventPage: React.FC = () => {
       dispatch(addToast({ message: 'Dig day updated!', type: 'success' }));
     } catch (err: any) {
       setError(err.message || 'Failed to update event');
-      dispatch(addToast({ message: err.message || 'Failed to update event', type: 'error' }));
+      dispatch(addToast({ message: err.message || 'Failed to update event', type: 'warning' }));
     }
   };
 

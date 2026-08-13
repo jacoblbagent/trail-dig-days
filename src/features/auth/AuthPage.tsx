@@ -58,7 +58,7 @@ const AuthPage: React.FC = () => {
       }
     } catch (err: any) {
       setError(err.message || 'Something went wrong');
-      dispatch(addToast({ message: err.message || 'Something went wrong', type: 'error' }));
+      dispatch(addToast({ message: err.message || 'Something went wrong', type: 'warning' }));
     }
   };
 
