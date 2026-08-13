@@ -25,7 +25,7 @@ const SettingsPage: React.FC = () => {
   return (
     <div className="settings-page">
       <div className="settings-page-header">
-        <Link to="/" className="btn btn-sm btn-ghost"><span className="nav-arrow">←</span> Back</Link>
+        <Link to="/" className="page-back-btn"><span className="nav-arrow">←</span> Back</Link>
         <h1>Settings</h1>
       </div>
 
