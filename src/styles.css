@@ -629,7 +629,7 @@ input[type="time"]::-webkit-calendar-picker-indicator { filter: invert(0.55); cu
   border-radius: var(--radius); padding: 16px 18px;
 }
 .form-section h2 { font-size: 1rem; margin-bottom: 10px; color: var(--stone-700); }
-.form-section-label { display: block; font-size: .75rem; font-weight: 600; color: var(--stone-400); margin-top: 16px; margin-bottom: 4px; }
+.form-section-label { display: block; font-size: .75rem; font-weight: 600; color: var(--stone-400); margin-top: 16px; margin-bottom: 2px; }
 .cat-checklist { display: flex; flex-direction: column; gap: 10px; margin-bottom: 12px; }
 .cat-group-label { font-size: .8rem; font-weight: 600; color: var(--stone-400); margin-bottom: 4px; text-transform: uppercase; letter-spacing: .04em; }
 .cat-group-items { display: flex; flex-wrap: wrap; gap: 4px; }
