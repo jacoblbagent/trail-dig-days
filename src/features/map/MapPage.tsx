@@ -165,6 +165,10 @@ const MapPage: React.FC = () => {
     return map;
   }, [expanded, mapBounds]);
 
+  const visibleCount = selectedDay
+    ? (eventMap.get(selectedDay) || []).length
+    : filtered.length;
+
   const sorted = useMemo(() => {
     const dir = sortOrder === 'asc' ? 1 : -1;
     const c = viewCenter || DEFAULT_CENTER;
@@ -189,7 +193,7 @@ const MapPage: React.FC = () => {
       <div className={`sidebar-col sidebar-col-list${eventsCollapsed ? ' collapsed' : ''}`} style={{ width: rightWidth, order: 2 }}>
         <div className={`events-toggle-bar${eventsCollapsed ? ' collapsed' : ''}`} onClick={() => setEventsCollapsed(!eventsCollapsed)}>
           <span className="events-toggle-label">
-            Events{filtered.length > 0 ? ` (${filtered.length})` : ''}
+            Events ({visibleCount})
           </span>
           <span className="events-toggle-arrow">{eventsCollapsed ? '▸' : '▾'}</span>
         </div>
