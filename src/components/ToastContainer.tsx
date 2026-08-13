@@ -9,7 +9,7 @@ const ToastContainer: React.FC = () => {
   useEffect(() => {
     if (toasts.length === 0) return;
     const id = toasts[toasts.length - 1].id;
-    const timer = setTimeout(() => dispatch(removeToast(id)), 3000);
+    const timer = setTimeout(() => dispatch(removeToast(id)), 2000);
     return () => clearTimeout(timer);
   }, [toasts, dispatch]);
 
