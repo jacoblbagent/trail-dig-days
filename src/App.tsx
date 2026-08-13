@@ -19,7 +19,7 @@ import ToastContainer from './components/ToastContainer';
 const TopNav: React.FC = () => {
   return (
     <header className="top-nav">
-      <span className="top-nav-title">Dig Days</span>
+      <Link to="/" className="top-nav-title">Dig Days</Link>
       <Link to="/events/create" className="btn btn-primary btn-sm">+ New</Link>
     </header>
   );
