@@ -1226,6 +1226,10 @@ input[type="time"]::-webkit-calendar-picker-indicator { filter: invert(0.55); cu
   .dig-date-card { padding: 10px 14px; }
   .ddc-date { font-size: .78rem; }
   .ddc-title { font-size: .85rem; }
+  .leaflet-marker-icon:not(.marker-cluster) {
+    width: 28px !important; height: 28px !important;
+    margin-left: -14px !important; margin-top: -14px !important;
+  }
 }
 
 /* ── Responsive: Phones ── */
