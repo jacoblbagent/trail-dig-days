@@ -147,6 +147,7 @@ export interface EventsState {
   loading: boolean;
   searchRadius: number; // miles
   searchCenter: [number, number] | null;
+  mapBounds: [[number, number], [number, number]] | null; // [[south, west], [north, east]]
   mapZoom: number;
   theme: 'light' | 'dark';
   hoveredMarkerId: string | null;

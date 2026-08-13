@@ -5,7 +5,6 @@ import MarkerClusterGroup from 'react-leaflet-cluster';
 import L from 'leaflet';
 import { useAppSelector } from '../../app/hooks';
 import { expandRecurring } from '../../utils/recurrence';
-import { haversine } from './mapUtils';
 import type { DigEvent } from '../../types';
 
 const greenIcon = () =>
@@ -27,7 +26,7 @@ const coloredIcon = (inRange: boolean, highlight: boolean) =>
 const PageMarkerContent: React.FC = () => {
   const navigate = useNavigate();
   const events = useAppSelector((s) => s.events.items);
-  const searchCenter = useAppSelector((s) => s.events.searchCenter);
+  const mapBounds = useAppSelector((s) => s.events.mapBounds);
   const hoveredId = useAppSelector((s) => s.events.hoveredMarkerId);
 
   const isMapPage = true;
@@ -37,10 +36,17 @@ const PageMarkerContent: React.FC = () => {
   }, [events]);
 
   const inRangeIds = useMemo(() => {
-    if (!isMapPage || !searchCenter) return null;
-    const r = 250;
-    return new Set(expanded.filter((e) => haversine(searchCenter, e.coordinates) <= r).map((e) => e.id));
-  }, [expanded, searchCenter, isMapPage]);
+    if (!isMapPage || !mapBounds) return null;
+    const [[south, west], [north, east]] = mapBounds;
+    return new Set(
+      expanded
+        .filter((e) => {
+          const [lat, lng] = e.coordinates;
+          return lat >= south && lat <= north && lng >= west && lng <= east;
+        })
+        .map((e) => e.id)
+    );
+  }, [expanded, mapBounds, isMapPage]);
 
   return (
     <MarkerClusterGroup chunkedLoading spiderfyOnMaxZoom={false} showCoverageOnHover={false} maxClusterRadius={10} disableClusteringAtZoom={4}>

@@ -1,10 +1,9 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
-import { MapContainer, TileLayer, Circle, useMap } from 'react-leaflet';
+import { MapContainer, TileLayer, useMap } from 'react-leaflet';
 import { useAppSelector, useAppDispatch } from '../app/hooks';
 import { setSearchRadius, setSearchCenter, setSelectedDay, setShowRecurring } from '../features/events/eventsSlice';
 import { expandRecurring } from '../utils/recurrence';
-import { haversine } from '../features/map/mapUtils';
 import MapMoveHandler from '../features/map/MapMoveHandler';
 import TileLoadIndicator from '../features/map/TileLoadIndicator';
 import PageMarkerContent from '../features/map/PageMarkerContent';
@@ -87,8 +86,7 @@ const PanelPopupCloser: React.FC<{ showPanel: string | null }> = ({ showPanel })
 const FilterCalendar: React.FC<{ onClose: () => void }> = ({ onClose }) => {
   const dispatch = useAppDispatch();
   const items = useAppSelector((s) => s.events.items);
-  const searchCenter = useAppSelector((s) => s.events.searchCenter);
-  const searchRadius = useAppSelector((s) => s.events.searchRadius);
+  const mapBounds = useAppSelector((s) => s.events.mapBounds);
   const selectedDay = useAppSelector((s) => s.events.selectedDay);
 
   const today = new Date();
@@ -98,13 +96,15 @@ const FilterCalendar: React.FC<{ onClose: () => void }> = ({ onClose }) => {
   const firstDay = new Date(year, month, 1).getDay();
   const daysInMonth = new Date(year, month + 1, 0).getDate();
 
-  const center = searchCenter || DEFAULT_CENTER;
   const expanded = useMemo(() => expandRecurring(items), [items]);
 
   const eventMap = useMemo(() => {
-    const radius = searchRadius || 100;
-    const filtered = radius < 100
-      ? expanded.filter((e) => haversine(center, e.coordinates) <= radius)
+    const filtered = mapBounds
+      ? expanded.filter((e) => {
+          const [lat, lng] = e.coordinates;
+          const [[south, west], [north, east]] = mapBounds;
+          return lat >= south && lat <= north && lng >= west && lng <= east;
+        })
       : expanded;
     const map = new Map<string, number>();
     for (const e of filtered) {
@@ -112,7 +112,7 @@ const FilterCalendar: React.FC<{ onClose: () => void }> = ({ onClose }) => {
       map.set(key, (map.get(key) || 0) + 1);
     }
     return map;
-  }, [expanded, searchRadius, center]);
+  }, [expanded, mapBounds]);
 
   const cells: { day: number; count: number }[] = [];
   for (let i = 0; i < firstDay; i++) cells.push({ day: 0, count: 0 });
@@ -280,7 +280,6 @@ const MapLayout: React.FC = () => {
           <TileLoadIndicator />
           <PageMarkerContent />
           <MapExtras />
-          {searchCenter && <Circle center={searchCenter} radius={searchRadius * 1609.34} pathOptions={{ color: '#2d6a4f', weight: 2, fill: true, fillOpacity: 0.06 }} />}
         </MapContainer>
       </div>
     </div>

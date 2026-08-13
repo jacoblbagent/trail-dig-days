@@ -413,7 +413,7 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
 .radius-locate-btn:hover { background: #f4f4f4; }
 .radius-locate-btn:disabled { opacity: .5; cursor: not-allowed; }
 .loc-error { color: var(--earth-500); font-size: .8rem; margin-top: 4px; }
-.event-list-header { display: flex; align-items: center; justify-content: space-between; padding: 4px 20px 0; }
+.event-list-header { display: flex; align-items: center; justify-content: space-between; padding: 8px 16px; }
 .event-list-count { font-size: .8rem; color: var(--stone-400); }
 .event-list-sort { display: flex; align-items: center; gap: 4px; position: relative; }
 .event-list-sort-label { font-size: .8rem; color: var(--stone-400); cursor: pointer; user-select: none; }
@@ -1107,7 +1107,7 @@ input[type="time"]::-webkit-calendar-picker-indicator { filter: invert(0.55); cu
   .event-list { padding: 8px; }
   .event-list-card { padding: 10px; }
   .list-card-img { height: 56px; }
-  .event-list-header { padding: 2px 12px 0; }
+  .event-list-header { padding: 8px 16px; }
   .notif-panel { left: auto; right: 0; bottom: 100%; margin-bottom: 6px; }
 
   .sidebar-resizer { display: none; }
@@ -1213,7 +1213,7 @@ input[type="time"]::-webkit-calendar-picker-indicator { filter: invert(0.55); cu
   .list-card-img { height: 44px; }
   .list-card-header h3 { font-size: .85rem; }
   .list-card-trail { font-size: .78rem; }
-  .event-list-header { padding: 2px 10px 0; }
+  .event-list-header { padding: 8px 16px; }
   .event-list-count { font-size: .72rem; }
 
   .create-event-page { padding: 12px 8px; }

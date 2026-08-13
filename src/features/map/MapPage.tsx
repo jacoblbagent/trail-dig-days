@@ -8,6 +8,17 @@ import type { DigEvent } from '../../types';
 
 const DEFAULT_CENTER: [number, number] = [39.7392, -104.9903];
 
+const inBounds = (coord: [number, number], bounds: [[number, number], [number, number]]): boolean => {
+  const [lat, lng] = coord;
+  const [[south, west], [north, east]] = bounds;
+  return lat >= south && lat <= north && lng >= west && lng <= east;
+};
+
+const boundsCenter = (bounds: [[number, number], [number, number]]): [number, number] => {
+  const [[south, west], [north, east]] = bounds;
+  return [(south + north) / 2, (west + east) / 2];
+};
+
 const EventCard = memo(function EventCard({ event, center }: { event: DigEvent; center: [number, number] | null }) {
   const dist = center ? haversine(center, event.coordinates) : null;
   return (
@@ -52,11 +63,9 @@ const EventCard = memo(function EventCard({ event, center }: { event: DigEvent; 
 const MapPage: React.FC = () => {
   const dispatch = useAppDispatch();
   const items = useAppSelector((s) => s.events.items);
-  const searchCenter = useAppSelector((s) => s.events.searchCenter);
-  const searchRadius = useAppSelector((s) => s.events.searchRadius);
+  const mapBounds = useAppSelector((s) => s.events.mapBounds);
   const selectedDay = useAppSelector((s) => s.events.selectedDay);
   const showRecurring = useAppSelector((s) => s.events.showRecurring);
-  const [radiusInput] = useState(() => String(searchRadius));
   const [sortBy, setSortBy] = useState<'date' | 'distance' | 'spots'>('date');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
   const [showSortMenu, setShowSortMenu] = useState(false);
@@ -68,11 +77,13 @@ const MapPage: React.FC = () => {
   const RIGHT_SIDEBAR_MAX = 600;
   const RIGHT_SIDEBAR_DEFAULT = 380;
 
+  const viewCenter: [number, number] | null = mapBounds ? boundsCenter(mapBounds) : null;
+
   useEffect(() => {
-    if (sortBy === 'distance' && !searchCenter) {
+    if (sortBy === 'distance' && !viewCenter) {
       setSortBy('date');
     }
-  }, [searchCenter, sortBy]);
+  }, [viewCenter, sortBy]);
 
   const handleResizeStart = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -104,24 +115,21 @@ const MapPage: React.FC = () => {
   const expanded = useMemo(() => expandRecurring(items), [items]);
 
   const filtered = useMemo(() => {
-    const radius = searchRadius || 100;
     let result = collapsed;
-    if (radius < 100) {
-      const c = searchCenter || DEFAULT_CENTER;
-      result = collapsed.filter((e) => haversine(c, e.coordinates) <= radius);
+    if (mapBounds) {
+      result = collapsed.filter((e) => inBounds(e.coordinates, mapBounds));
     }
     if (showRecurring) {
       result = result.filter((e) => e.recurrence && e.recurrence !== 'none');
     }
     return result;
-  }, [collapsed, searchCenter, searchRadius, showRecurring]);
+  }, [collapsed, mapBounds, showRecurring]);
 
   const eventMap = useMemo(() => {
-    const radius = searchRadius || 100;
-    const c = searchCenter || DEFAULT_CENTER;
-    let all = radius < 100
-      ? expanded.filter((e) => haversine(c, e.coordinates) <= radius)
-      : expanded;
+    let all = expanded;
+    if (mapBounds) {
+      all = expanded.filter((e) => inBounds(e.coordinates, mapBounds));
+    }
     const map = new Map<string, typeof all>();
     for (const e of all) {
       const key = e.date.slice(0, 10);
@@ -129,11 +137,11 @@ const MapPage: React.FC = () => {
       map.get(key)!.push(e);
     }
     return map;
-  }, [expanded, searchRadius, searchCenter]);
+  }, [expanded, mapBounds]);
 
   const sorted = useMemo(() => {
     const dir = sortOrder === 'asc' ? 1 : -1;
-    const c = searchCenter || DEFAULT_CENTER;
+    const c = viewCenter || DEFAULT_CENTER;
     return [...filtered].sort((a, b) => {
       if (sortBy === 'date') return dir * (new Date(a.date).getTime() - new Date(b.date).getTime());
       if (sortBy === 'distance') {
@@ -143,7 +151,7 @@ const MapPage: React.FC = () => {
       const bSpots = b.maxVolunteers - b.registeredVolunteers.length;
       return dir * (aSpots - bSpots);
     });
-  }, [filtered, sortBy, sortOrder, searchCenter]);
+  }, [filtered, sortBy, sortOrder, viewCenter]);
 
   return (
     <>
@@ -172,7 +180,7 @@ const MapPage: React.FC = () => {
                       ? new Date(a.date).getTime() - new Date(b.date).getTime()
                       : new Date(b.date).getTime() - new Date(a.date).getTime())
                     .map((event) => (
-                      <EventCard event={event} key={event.id} center={searchCenter || DEFAULT_CENTER} />
+                      <EventCard event={event} key={event.id} center={viewCenter} />
                     ))
                 );
               })()}
@@ -189,7 +197,7 @@ const MapPage: React.FC = () => {
                 {showSortMenu && (
                   <div className="event-list-sort-menu">
                     <button onClick={() => { setSortBy('date'); setShowSortMenu(false); }} className={sortBy === 'date' ? 'active' : ''}>Date</button>
-                    <button onClick={() => { setSortBy('distance'); setShowSortMenu(false); }} className={sortBy === 'distance' ? 'active' : ''} disabled={!searchCenter} style={{ opacity: !searchCenter ? 0.4 : 1 }}>Distance</button>
+                    <button onClick={() => { setSortBy('distance'); setShowSortMenu(false); }} className={sortBy === 'distance' ? 'active' : ''} disabled={!viewCenter} style={{ opacity: !viewCenter ? 0.4 : 1 }}>Distance</button>
                     <button onClick={() => { setSortBy('spots'); setShowSortMenu(false); }} className={sortBy === 'spots' ? 'active' : ''}>Spots</button>
                   </div>
                 )}
@@ -199,12 +207,12 @@ const MapPage: React.FC = () => {
             <div className="event-list">
               {filtered.length === 0 ? (
                 <div className="empty-state">
-                  <p>No dig days found within {radiusInput} miles.</p>
-                  <p>Try expanding your radius or <Link to="/events/create">create one</Link>!</p>
+                  <p>No dig days in this area.</p>
+                  <p>Try panning or zooming the map to a different location, or <Link to="/events/create">create one</Link>!</p>
                 </div>
               ) : (
                 sorted.map((event) => (
-                  <EventCard event={event} key={event.id} center={searchCenter || DEFAULT_CENTER} />
+                  <EventCard event={event} key={event.id} center={viewCenter} />
                 ))
               )}
             </div>
