@@ -13,6 +13,7 @@ import EditEventPage from './features/events/EditEventPage';
 import MyEventsPage from './features/events/MyEventsPage';
 import EventDetailPage from './features/events/EventDetailPage';
 import MapPage from './features/map/MapPage';
+import EditProfilePage from './features/profile/EditProfilePage';
 import NotFoundPage from './pages/NotFoundPage';
 import ToastContainer from './components/ToastContainer';
 
@@ -41,7 +42,7 @@ const RedirectHandler: React.FC<{ children: React.ReactNode }> = ({ children }) 
 
 const ROUTES = [
   '/', '/auth', '/my-events', '/events/create',
-  '/profile', '/settings',
+  '/profile', '/settings', '/edit-profile',
 ];
 
 const isKnownRoute = (pathname: string) =>
@@ -66,6 +67,7 @@ const AppRoutes: React.FC = () => {
       <Route path="/events/:id" element={<EventDetailPage />} />
       <Route path="/profile" element={<ProfilePage />} />
       <Route path="/settings" element={<SettingsPage />} />
+      <Route path="/edit-profile" element={<EditProfilePage />} />
     </Routes>
   );
 };
