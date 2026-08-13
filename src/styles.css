@@ -1013,6 +1013,8 @@ input[type="time"]::-webkit-calendar-picker-indicator { filter: invert(0.55); cu
   min-width: 0; display: flex; flex-direction: column; overflow-y: auto;
 }
 
+.events-toggle-bar { display: none; }
+
 .calendar-grid-wrap { display: flex; flex-direction: column; gap: 8px; padding: 12px; }
 .calendar-list h2 { font-size: .9rem; color: var(--stone-700); margin: 0; font-weight: 500; }
 .calendar-event-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 4px; }
@@ -1111,6 +1113,10 @@ input[type="time"]::-webkit-calendar-picker-indicator { filter: invert(0.55); cu
   .notif-panel { left: auto; right: 0; bottom: 100%; margin-bottom: 6px; }
 
   .sidebar-resizer { display: none; }
+
+  .events-toggle-bar { display: flex; align-items: center; justify-content: space-between; padding: 6px 16px; cursor: pointer; font-size: .85rem; font-weight: 500; color: var(--stone-600); background: var(--stone-50); border-bottom: 1px solid var(--stone-150); flex-shrink: 0; }
+  .events-toggle-bar:hover { background: var(--stone-100); }
+  .events-toggle-arrow { font-size: .75rem; color: var(--stone-400); }
 
   .sidebar-col-list { display: flex; width: 100% !important; flex: 1; overflow-y: auto; min-height: 0; }
 

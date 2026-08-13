@@ -69,6 +69,7 @@ const MapPage: React.FC = () => {
   const [sortBy, setSortBy] = useState<'date' | 'distance' | 'spots'>('date');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
   const [showSortMenu, setShowSortMenu] = useState(false);
+  const [eventsCollapsed, setEventsCollapsed] = useState(false);
   const [rightWidth, setRightWidth] = useState(380);
   const rightWidthRef = useRef(380);
   const sortRef = useRef<HTMLDivElement>(null);
@@ -161,7 +162,14 @@ const MapPage: React.FC = () => {
       </div>
 
       <div className="sidebar-col sidebar-col-list" style={{ width: rightWidth, order: 2 }}>
-        {selectedDay ? (
+        <div className="events-toggle-bar" onClick={() => setEventsCollapsed(!eventsCollapsed)}>
+          <span className="events-toggle-label">
+            Events{filtered.length > 0 ? ` (${filtered.length})` : ''}
+          </span>
+          <span className="events-toggle-arrow">{eventsCollapsed ? '▸' : '▾'}</span>
+        </div>
+        {!eventsCollapsed && (
+          <>{selectedDay ? (
           <>
             <div className="event-list-header">
               <button className="btn btn-ghost btn-sm cal-back" onClick={() => dispatch(setSelectedDay(null))}>
@@ -218,6 +226,7 @@ const MapPage: React.FC = () => {
             </div>
           </>
         )}
+        </>)}
       </div>
     </>
   );
