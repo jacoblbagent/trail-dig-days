@@ -1163,6 +1163,7 @@ input[type="time"]::-webkit-calendar-picker-indicator { filter: invert(0.55); cu
   .event-detail-main.collapsed-mobile section,
   .event-detail-main.collapsed-mobile .items-columns { display: none; }
   .content-toggle-btn { display: flex; align-items: center; justify-content: space-between; width: 100%; padding: 8px 12px; border: 1px solid var(--stone-200); background: transparent; cursor: pointer; font-size: .9rem; color: var(--stone-700); font-weight: 500; border-radius: var(--radius); margin-bottom: 12px; }
+  .content-toggle-btn:hover { background: var(--stone-100); }
   .location-section { grid-template-columns: 1fr; }
   .items-columns { grid-template-columns: 1fr 1fr; }
   .form-row { flex-direction: column; gap: 8px; }
