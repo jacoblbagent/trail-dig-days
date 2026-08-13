@@ -1105,6 +1105,7 @@ input[type="time"]::-webkit-calendar-picker-indicator { filter: invert(0.55); cu
 
   .map-page { position: relative; height: calc(100vh - 48px - 52px); }
   .map-container { position: absolute; inset: 0; padding-top: 44px; overflow: hidden; z-index: 0; }
+  .map-page:has(.sidebar-col-list:not(:has(.events-toggle-bar.collapsed))) .map-container { bottom: 60%; }
 
   .search-controls { padding: 10px 12px; }
   .event-list { padding: 8px; }
