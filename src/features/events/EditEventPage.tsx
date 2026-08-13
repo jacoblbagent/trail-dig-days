@@ -230,6 +230,7 @@ const EditEventPage: React.FC = () => {
           <div className="form-row">
             <TrailAutocomplete trailName={trailName} trailSystem={trailSystem} onTrailNameChange={setTrailName} onTrailSystemChange={setTrailSystem} />
           </div>
+          <hr />
           <div className="form-row">
             <div className="form-group flex-1">
               <label>Date *</label>
@@ -269,6 +270,7 @@ const EditEventPage: React.FC = () => {
             <label>Requirements (one per line)</label>
             <textarea value={requirements} onChange={(e) => setRequirements(e.target.value)} rows={4} placeholder="Must be 18+&#10;Closed-toe shoes required" />
           </div>
+          <hr />
           <div className="form-row three">
             <div className="form-group flex-1">
               <label>Contact Name *</label>
@@ -283,6 +285,7 @@ const EditEventPage: React.FC = () => {
               <input type="tel" value={contactPhone} onChange={(e) => setContactPhone(e.target.value)} placeholder="(555) 123-4567" />
             </div>
           </div>
+          <hr />
           <div className="form-group">
             <label>Event Image</label>
             <div

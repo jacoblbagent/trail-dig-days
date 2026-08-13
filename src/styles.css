@@ -106,7 +106,7 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
 .btn-ghost { background: transparent; color: var(--stone-600); border: 1px solid var(--stone-200); }
 .btn-ghost:hover { background: var(--stone-100); }
 .btn-sm { padding: 4px 12px; font-size: .875rem; }
-.btn-lg { padding: 12px 28px; }
+.btn-lg { padding: 10px 20px; }
 .btn-block { width: 100%; justify-content: center; }
 .btn-icon { background: none; border: none; cursor: pointer; padding: 4px 8px; color: var(--stone-400); }
 .btn-icon:hover { color: var(--stone-600); }
@@ -629,6 +629,7 @@ input[type="time"]::-webkit-calendar-picker-indicator { filter: invert(0.55); cu
   border-radius: var(--radius); padding: 16px 18px;
 }
 .form-section h2 { font-size: 1rem; margin-bottom: 10px; color: var(--stone-700); }
+.form-section hr { border: none; border-top: 1px solid var(--stone-200); margin: 14px 0; }
 .cat-checklist { display: flex; flex-direction: column; gap: 10px; margin-bottom: 12px; }
 .cat-group-label { font-size: .8rem; font-weight: 600; color: var(--stone-400); margin-bottom: 4px; text-transform: uppercase; letter-spacing: .04em; }
 .cat-group-items { display: flex; flex-wrap: wrap; gap: 4px; }
@@ -1168,8 +1169,7 @@ input[type="time"]::-webkit-calendar-picker-indicator { filter: invert(0.55); cu
   .items-columns { grid-template-columns: 1fr 1fr; }
   .form-row { flex-direction: column; gap: 8px; }
   .form-row.three > * { flex: none; }
-  .form-actions { flex-direction: column; }
-  .form-actions .btn { width: 100%; justify-content: center; }
+  .form-actions .btn { border-radius: 3px; }
   .form-section { padding: 16px; }
 
   .create-event-page { padding: 20px 12px; }
