@@ -86,6 +86,14 @@ const MapPage: React.FC = () => {
     }
   }, [viewCenter, sortBy]);
 
+  useEffect(() => {
+    const el = document.querySelector('.map-page');
+    if (el) {
+      if (eventsCollapsed) el.removeAttribute('data-events-open');
+      else el.setAttribute('data-events-open', '');
+    }
+  }, [eventsCollapsed]);
+
   const handleResizeStart = (e: React.MouseEvent) => {
     e.preventDefault();
     const startX = e.clientX;
