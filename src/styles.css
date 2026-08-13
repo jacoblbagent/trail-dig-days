@@ -762,7 +762,7 @@ input[type="time"]::-webkit-calendar-picker-indicator { filter: invert(0.55); cu
 }
 
 .event-detail-grid { display: grid; grid-template-columns: 1fr 320px; gap: 32px; }
-.event-detail-main { min-width: 0; padding-bottom: 40px; }
+.event-detail-main { min-width: 0; }
 .content-toggle-btn { display: none; }
 .event-detail-main section { margin-bottom: 28px; }
 .event-detail-main h2 { font-size: 1.1rem; color: var(--stone-700); margin-bottom: 12px; }
