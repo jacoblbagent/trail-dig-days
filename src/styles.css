@@ -727,6 +727,14 @@ input[type="time"]::-webkit-calendar-picker-indicator { filter: invert(0.55); cu
 .image-drop-preview { max-height: 200px; max-width: 100%; border-radius: var(--radius-sm); object-fit: contain; }
 [data-theme="dark"] .image-drop-zone:hover, [data-theme="dark"] .image-drop-zone.drag-over { border-color: var(--green-600); background: var(--stone-100); }
 
+/* Settings dark mode */
+[data-theme="dark"] .settings-group input[type="text"],
+[data-theme="dark"] .settings-group textarea,
+[data-theme="dark"] .settings-group select { background: var(--stone-100); color: var(--stone-800); border-color: #444; }
+[data-theme="dark"] .settings-group input[type="text"]:focus,
+[data-theme="dark"] .settings-group textarea:focus,
+[data-theme="dark"] .settings-group select:focus { border-color: var(--green-600); outline: none; }
+
 .trail-results {
   list-style: none; margin: 6px 0 0; padding: 0;
   border: 1px solid var(--stone-200); border-radius: var(--radius-sm);
