@@ -324,7 +324,7 @@ const MapLayout: React.FC = () => {
             <CircleMarker
               center={userLocation}
               radius={7}
-              pathOptions={{ color: '#fff', weight: 3, fillColor: '#3b82f6', fillOpacity: 1 }}
+              pathOptions={{ color: '#fff', weight: 3, fillColor: '#3b82f6', fillOpacity: 1, className: 'user-location-dot' }}
             />
           )}
         </MapContainer>

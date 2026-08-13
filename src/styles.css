@@ -565,6 +565,14 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
 .leaflet-control-zoom-out:hover { border-color: var(--accent, var(--green-600)); }
 [data-theme="dark"] .leaflet-control-zoom-out { background: var(--surface); border-color: #444; color: var(--stone-400); }
 .leaflet-control-zoom a { text-decoration: none; }
+/* User location dot pulse */
+@keyframes user-location-glow {
+  0%, 100% { filter: drop-shadow(0 0 3px rgba(59,130,246,0.4)); }
+  50% { filter: drop-shadow(0 0 9px rgba(59,130,246,0.7)); }
+}
+.leaflet-interactive.user-location-dot {
+  animation: user-location-glow 2s ease-in-out infinite;
+}
 [data-theme="dark"] .leaflet-control-attribution { background: rgba(28,25,23,.8); color: #777; }
 [data-theme="dark"] .leaflet-control-attribution a { color: #999; }
 [data-theme="dark"] .leaflet-popup-content-wrapper { background: var(--surface); color: var(--stone-200); }
