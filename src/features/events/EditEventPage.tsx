@@ -230,6 +230,14 @@ const EditEventPage: React.FC = () => {
           <div className="form-row">
             <TrailAutocomplete trailName={trailName} trailSystem={trailSystem} onTrailNameChange={setTrailName} onTrailSystemChange={setTrailSystem} />
           </div>
+          <div className="form-group">
+            <label>Max Volunteers</label>
+            <input type="number" min={1} max={200} value={maxVolunteers} onChange={(e) => setMaxVolunteers(parseInt(e.target.value) || 1)} />
+          </div>
+          <div className="form-group">
+            <label>Requirements (one per line)</label>
+            <textarea value={requirements} onChange={(e) => setRequirements(e.target.value)} rows={4} placeholder="Must be 18+&#10;Closed-toe shoes required" />
+          </div>
         </div>
         <div className="form-section">
           <div className="form-row">
@@ -262,14 +270,6 @@ const EditEventPage: React.FC = () => {
                 <input type="date" value={recurrenceEnd} onChange={(e) => setRecurrenceEnd(e.target.value)} />
               </div>
             )}
-          </div>
-          <div className="form-group">
-            <label>Max Volunteers</label>
-            <input type="number" min={1} max={200} value={maxVolunteers} onChange={(e) => setMaxVolunteers(parseInt(e.target.value) || 1)} />
-          </div>
-          <div className="form-group">
-            <label>Requirements (one per line)</label>
-            <textarea value={requirements} onChange={(e) => setRequirements(e.target.value)} rows={4} placeholder="Must be 18+&#10;Closed-toe shoes required" />
           </div>
         </div>
         <div className="form-section">
