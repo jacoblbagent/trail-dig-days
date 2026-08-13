@@ -1156,6 +1156,7 @@ input[type="time"]::-webkit-calendar-picker-indicator { filter: invert(0.55); cu
   .sidebar-col-list.collapsed { overflow: visible; height: auto; }
 
   .event-detail-grid { grid-template-columns: 1fr; gap: 0; }
+  .event-detail-sidebar { order: -1; }
   .event-detail-main section { margin-bottom: 16px; }
   .items-columns { margin-bottom: 16px; }
   .event-detail-main.collapsed-mobile section,
