@@ -1125,7 +1125,8 @@ input[type="time"]::-webkit-calendar-picker-indicator { filter: invert(0.55); cu
   }
   .sidebar-btn { background: none; border: none; color: var(--stone-500); cursor: pointer; padding: 0; gap: 0; height: 100%; flex-shrink: 0; }
   .sidebar.expanded .sidebar-btn:hover,
-  .sidebar-btn:hover { background: none; color: var(--stone-700); }
+  .sidebar-btn:hover { background: var(--stone-100); color: var(--stone-700); }
+  .sidebar-btn:active { background: var(--stone-150); }
   .sidebar-btn.active,
   .sidebar-btn.partial { background: none; }
   .sidebar.expanded .sidebar-top,
@@ -1264,7 +1265,8 @@ input[type="time"]::-webkit-calendar-picker-indicator { filter: invert(0.55); cu
 
   .sidebar { height: 48px; }
   .sidebar-btn { background: none; border: none; color: var(--stone-500); cursor: pointer; padding: 0; gap: 0; height: 100%; flex-shrink: 0; }
-  .sidebar-btn:hover { background: none; color: var(--stone-700); }
+  .sidebar-btn:hover { background: var(--stone-100); color: var(--stone-700); }
+  .sidebar-btn:active { background: var(--stone-150); }
   .sidebar-btn.active,
   .sidebar-btn.partial { background: none; }
   .app-main { padding-bottom: 48px; }
