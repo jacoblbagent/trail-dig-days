@@ -571,7 +571,7 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
   50% { filter: drop-shadow(0 0 9px rgba(59,130,246,0.7)); }
 }
 .leaflet-interactive.user-location-dot {
-  animation: user-location-glow 2s ease-in-out infinite;
+  animation: user-location-glow 1.5s ease-in-out infinite;
 }
 [data-theme="dark"] .leaflet-control-attribution { background: rgba(28,25,23,.8); color: #777; }
 [data-theme="dark"] .leaflet-control-attribution a { color: #999; }
