@@ -111,6 +111,18 @@ const MapPage: React.FC = () => {
     return () => ro.disconnect();
   }, []);
 
+  // Close sort menu on click outside
+  useEffect(() => {
+    if (!showSortMenu) return;
+    const handler = (e: MouseEvent) => {
+      if (sortRef.current && !sortRef.current.contains(e.target as Node)) {
+        setShowSortMenu(false);
+      }
+    };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, [showSortMenu]);
+
   const handleResizeStart = (e: React.MouseEvent) => {
     e.preventDefault();
     const startX = e.clientX;
