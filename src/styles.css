@@ -320,7 +320,6 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
   background: var(--surface); border: 1px solid var(--stone-200);
   border-radius: var(--radius); padding: 16px 18px; margin-bottom: 12px;
 }
-.settings-section h2 { font-size: 1rem; margin-bottom: 10px; color: var(--stone-700); border: none; padding: 0; }
 .settings-page .settings-group { margin-bottom: 10px; }
 .settings-page .settings-group label { font-size: .875rem; margin-bottom: 3px; }
 .settings-page input[type="text"],

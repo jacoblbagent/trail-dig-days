@@ -30,8 +30,8 @@ const SettingsPage: React.FC = () => {
       </div>
 
       <div className="settings-page-body">
+        <span className="form-section-label">Profile</span>
         <section className="settings-section">
-          <h2>Profile</h2>
           <div className="settings-group">
             <label>Display Name</label>
             <input
@@ -61,16 +61,16 @@ const SettingsPage: React.FC = () => {
           </div>
         </section>
 
+        <span className="form-section-label">Theme</span>
         <section className="settings-section">
-          <h2>Theme</h2>
           <div className="settings-group check-group">
             <label><input type="checkbox" checked={profile.theme.showGear} onChange={(e) => save({ theme: { ...profile.theme, showGear: e.target.checked } })} /> Show Gear</label>
             <label><input type="checkbox" checked={profile.theme.showSocial} onChange={(e) => save({ theme: { ...profile.theme, showSocial: e.target.checked } })} /> Show Social Links</label>
           </div>
         </section>
 
+        <span className="form-section-label">Trail Crew</span>
         <section className="settings-section">
-          <h2>Trail Crew</h2>
           <div className="settings-group">
             <label>Crew Name</label>
             <input
