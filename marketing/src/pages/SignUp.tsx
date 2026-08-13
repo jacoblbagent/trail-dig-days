@@ -12,6 +12,7 @@ export default function SignUp() {
   const [password, setPassword] = useState('');
   const [displayName, setDisplayName] = useState('');
   const [userType, setUserType] = useState<'volunteer' | 'organization'>('volunteer');
+  const loading = useAppSelector((s) => s.auth.loading);
 
   if (user) {
     return (
@@ -67,7 +68,7 @@ export default function SignUp() {
                   <option value="organization">Organization — Create and manage events</option>
                 </select>
               </div>
-              <button type="submit" className="btn btn-primary btn-lg" style={{ width: '100%' }}>Create Account</button>
+              <button type="submit" className="btn btn-primary btn-lg" style={{ width: '100%' }} disabled={loading}>{loading ? 'Creating account…' : 'Create Account'}</button>
               <p className="form-note">Already have an account? <a href="../">Sign in →</a></p>
             </form>
           </div>
