@@ -273,8 +273,8 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
   display: flex; flex-direction: column; gap: 8px;
 }
 .notif-header { display: flex; justify-content: space-between; align-items: center; font-size: .9rem; font-weight: 600; color: var(--stone-700); }
-.notif-close { background: none; border: none; font-size: 1rem; color: var(--stone-400); cursor: pointer; padding: 2px 6px; }
-.notif-close:hover { color: var(--stone-600); }
+.notif-close { background: none; border: 1px solid transparent; font-size: .85rem; color: var(--stone-400); cursor: pointer; padding: 4px 8px; border-radius: 4px; transition: all .15s; line-height: 1; }
+.notif-close:hover { background: var(--stone-100); color: var(--stone-600); border-color: var(--stone-200); }
 .notif-list { display: flex; flex-direction: column; gap: 0; max-height: 220px; overflow-y: auto; margin: 0 -12px; }
 .notif-item {
   padding: 8px 12px; cursor: pointer; transition: background .1s;
