@@ -279,6 +279,12 @@ const MapLayout: React.FC = () => {
       <Outlet />
       <div className="map-container" style={{ order: 1 }}>
         <div className="map-toolbar">
+          <button className={`toolbar-btn${showPanel === 'location' ? ' active' : ''}`} onClick={() => togglePanel('location')}>Location</button>
+          <button className={`toolbar-btn${showPanel === 'time' ? ' active' : ''}`} onClick={() => togglePanel('time')}>Time Frame</button>
+          <button className={`toolbar-btn${showPanel === 'recurring' ? ' active' : ''}`} onClick={() => togglePanel('recurring')}>Is Recurring</button>
+        </div>
+
+        <div className="map-actions">
           <button
             className="map-locate-btn"
             onClick={handleLocateClick}
@@ -290,9 +296,6 @@ const MapLayout: React.FC = () => {
               <path d="M12 2v4M12 18v4M2 12h4M18 12h4" />
             </svg>
           </button>
-          <button className={`toolbar-btn${showPanel === 'location' ? ' active' : ''}`} onClick={() => togglePanel('location')}>Location</button>
-          <button className={`toolbar-btn${showPanel === 'time' ? ' active' : ''}`} onClick={() => togglePanel('time')}>Time Frame</button>
-          <button className={`toolbar-btn${showPanel === 'recurring' ? ' active' : ''}`} onClick={() => togglePanel('recurring')}>Is Recurring</button>
           {userLocation && (
             <button className="map-redetect-btn" onClick={handleRedetect} disabled={isDetecting}>
               {isDetecting ? 'Detecting…' : 'Re-detect'}
