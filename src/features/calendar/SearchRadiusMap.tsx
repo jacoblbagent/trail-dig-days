@@ -114,6 +114,7 @@ const SearchRadiusMap: React.FC<Props> = ({ center, radius, onCenterChange, onLo
 
     // Fit to circle on initial load (deferred so map is ready)
     setTimeout(() => {
+      if (!mapInstance.current || !circleRef.current) return;
       suppressMove.current = true;
       map.fitBounds(circle.getBounds(), { padding: [20, 20], maxZoom: 10, animate: false });
       setTimeout(() => { suppressMove.current = false; }, 50);
