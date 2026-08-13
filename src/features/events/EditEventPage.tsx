@@ -227,9 +227,6 @@ const EditEventPage: React.FC = () => {
             <label>Description *</label>
             <textarea value={description} onChange={(e) => setDescription(e.target.value)} rows={4} placeholder="Describe the work to be done..." required />
           </div>
-          <div className="form-row">
-            <TrailAutocomplete trailName={trailName} trailSystem={trailSystem} onTrailNameChange={setTrailName} onTrailSystemChange={setTrailSystem} />
-          </div>
           <div className="form-group">
             <label>Max Volunteers</label>
             <input type="number" min={1} max={200} value={maxVolunteers} onChange={(e) => setMaxVolunteers(parseInt(e.target.value) || 1)} />
@@ -320,6 +317,9 @@ const EditEventPage: React.FC = () => {
           <div className="form-group">
             <label>Address / Trailhead</label>
             <input type="text" value={locationName} onChange={(e) => setLocationName(e.target.value)} placeholder="e.g. Phil's World Trailhead" required />
+          </div>
+          <div className="form-row">
+            <TrailAutocomplete trailName={trailName} trailSystem={trailSystem} onTrailNameChange={setTrailName} onTrailSystemChange={setTrailSystem} />
           </div>
           <div className="location-picker-map">
             <MapContainer center={mapCenter} zoom={10} style={{ width: '100%', height: '100%' }} maxBounds={[[24, -125], [50, -66]]} maxBoundsViscosity={1}>
