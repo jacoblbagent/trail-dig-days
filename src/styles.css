@@ -1102,8 +1102,8 @@ input[type="time"]::-webkit-calendar-picker-indicator { filter: invert(0.55); cu
 
   .profile-menu { left: auto; right: 0; bottom: 100%; margin-bottom: 4px; }
 
-  .map-page { position: relative; flex-direction: column; min-height: calc(100vh - 48px - 52px); height: auto; padding-bottom: 52px; box-sizing: border-box; }
-  .map-container { flex: 1; height: auto; position: relative; overflow: hidden; z-index: 0; }
+  .map-page { position: relative; height: calc(100vh - 48px - 52px); }
+  .map-container { position: absolute; inset: 0; padding-top: 44px; overflow: hidden; z-index: 0; }
 
   .search-controls { padding: 10px 12px; }
   .event-list { padding: 8px; }
@@ -1118,9 +1118,7 @@ input[type="time"]::-webkit-calendar-picker-indicator { filter: invert(0.55); cu
   .events-toggle-bar:hover { background: var(--stone-100); }
   .events-toggle-arrow { font-size: .75rem; color: var(--stone-400); }
 
-  .sidebar-col-list { display: flex; width: 100% !important; flex: 1; overflow-y: auto; min-height: 0; }
-
-  .map-container { flex: none; height: 300px; }
+  .sidebar-col-list { position: absolute; bottom: 0; left: 0; right: 0; z-index: 5; max-height: 60%; display: flex; flex-direction: column; overflow-y: auto; min-height: 0; }
 
   .event-detail-grid { grid-template-columns: 1fr; }
   .event-detail-main.collapsed-mobile section,
@@ -1213,7 +1211,6 @@ input[type="time"]::-webkit-calendar-picker-indicator { filter: invert(0.55); cu
   .sidebar-btn { background: none; border: none; color: var(--stone-500); cursor: pointer; padding: 0; gap: 0; width: auto; height: auto; flex-shrink: 0; }
   .sidebar-btn:hover { background: none; color: var(--stone-700); }
   .app-main { padding-bottom: 48px; }
-  .map-page { padding-bottom: 48px; }
   .create-event-page { padding: 12px 8px; }
   .search-controls { padding: 8px 10px; }
   .event-list { padding: 6px; }

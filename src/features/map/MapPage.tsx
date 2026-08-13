@@ -161,7 +161,7 @@ const MapPage: React.FC = () => {
         <div className="resizer-limits" />
       </div>
 
-      <div className="sidebar-col sidebar-col-list" style={{ width: rightWidth, order: 2, flex: eventsCollapsed ? 'none' : '', marginTop: eventsCollapsed ? 'auto' : '' }}>
+      <div className="sidebar-col sidebar-col-list" style={{ width: rightWidth, order: 2 }}>
         <div className="events-toggle-bar" onClick={() => setEventsCollapsed(!eventsCollapsed)}>
           <span className="events-toggle-label">
             Events{filtered.length > 0 ? ` (${filtered.length})` : ''}
