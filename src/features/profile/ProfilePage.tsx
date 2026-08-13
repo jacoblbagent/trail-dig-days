@@ -287,7 +287,7 @@ const ProfilePage: React.FC = () => {
   const hasCustomFields = form.customFields.filter((f) => f.label && f.value).length > 0;
 
   return (
-    <div className="profile-page" style={{ '--accent': theme.accentColor } as React.CSSProperties}>
+    <div className="profile-page">
       <div className={`profile-header ${theme.layout}`}>
         <div
           ref={coverRef}
@@ -295,7 +295,7 @@ const ProfilePage: React.FC = () => {
           style={{
             background: form.theme.headerImage
               ? `url(${form.theme.headerImage}) ${coverPos}% / cover no-repeat`
-              : 'linear-gradient(135deg, var(--accent, var(--green-700)) 0%, #1a1a2e 100%)',
+              : 'linear-gradient(135deg, var(--green-700) 0%, #1a1a2e 100%)',
           }}
           onMouseDown={form.theme.headerImage ? (e) => handleCoverDragStart(e.clientY) : undefined}
           onTouchStart={form.theme.headerImage ? (e) => handleCoverDragStart(e.touches[0].clientY) : undefined}

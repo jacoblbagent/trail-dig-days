@@ -63,17 +63,6 @@ const SettingsPage: React.FC = () => {
 
         <section className="settings-section">
           <h2>Theme</h2>
-          <div className="settings-group">
-            <label>Accent Color</label>
-            <div className="color-input-wrap">
-              <input
-                type="color"
-                value={profile.theme.accentColor}
-                onChange={(e) => save({ theme: { ...profile.theme, accentColor: e.target.value } })}
-              />
-              <span className="color-hex">{profile.theme.accentColor}</span>
-            </div>
-          </div>
           <div className="settings-group check-group">
             <label><input type="checkbox" checked={profile.theme.showGear} onChange={(e) => save({ theme: { ...profile.theme, showGear: e.target.checked } })} /> Show Gear</label>
             <label><input type="checkbox" checked={profile.theme.showSocial} onChange={(e) => save({ theme: { ...profile.theme, showSocial: e.target.checked } })} /> Show Social Links</label>

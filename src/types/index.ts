@@ -52,7 +52,6 @@ export interface CustomField {
 }
 
 export interface ProfileTheme {
-  accentColor: string;
   headerImage: string;
   coverPosition: number;
   showStats: boolean;
