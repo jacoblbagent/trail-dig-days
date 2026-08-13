@@ -545,7 +545,7 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
 [data-theme="dark"] .leaflet-control-zoom a:hover { color: var(--stone-200); }
 .leaflet-control-zoom-in {
   width: 34px !important; height: 34px !important; line-height: 34px !important;
-  border-radius: 0 0 8px 8px;
+  border-radius: 8px 8px 0 0;
   background: var(--surface); border: 1px solid var(--stone-200);
   color: var(--stone-500);
   box-shadow: 0 1px 3px rgba(0,0,0,.08);
@@ -555,7 +555,7 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
 [data-theme="dark"] .leaflet-control-zoom-in { background: var(--surface); border-color: #444; color: var(--stone-400); }
 .leaflet-control-zoom-out {
   width: 34px !important; height: 34px !important; line-height: 34px !important;
-  border-radius: 8px 8px 0 0;
+  border-radius: 0 0 8px 8px;
   background: var(--surface); border: 1px solid var(--stone-200);
   color: var(--stone-500);
   box-shadow: 0 1px 3px rgba(0,0,0,.08);
