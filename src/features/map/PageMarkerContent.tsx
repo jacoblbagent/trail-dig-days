@@ -1,7 +1,6 @@
 import React, { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Marker, Popup } from 'react-leaflet';
-import MarkerClusterGroup from 'react-leaflet-cluster';
 import L from 'leaflet';
 import { useAppSelector } from '../../app/hooks';
 import { expandRecurring } from '../../utils/recurrence';
@@ -49,7 +48,7 @@ const PageMarkerContent: React.FC = () => {
   }, [expanded, mapBounds, isMapPage]);
 
   return (
-    <MarkerClusterGroup chunkedLoading spiderfyOnMaxZoom={false} showCoverageOnHover={false} maxClusterRadius={10} disableClusteringAtZoom={4}>
+    <>
       {expanded.filter((e: DigEvent) => !e.isPrivate).map((e: DigEvent) => {
         const inRange = !inRangeIds || inRangeIds.has(e.id);
         const highlight = hoveredId === e.id;
@@ -69,7 +68,7 @@ const PageMarkerContent: React.FC = () => {
           </Marker>
         );
       })}
-    </MarkerClusterGroup>
+    </>
   );
 };
 
