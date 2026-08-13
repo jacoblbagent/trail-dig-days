@@ -222,6 +222,9 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
 .sidebar-btn.active { background: var(--green-100); color: var(--green-700); }
 .sidebar-btn.partial { background: var(--stone-100); color: var(--stone-500); }
 
+.sidebar-avatar { width: 16px; height: 16px; border-radius: 50%; object-fit: cover; }
+.sidebar-avatar-initial { width: 16px; height: 16px; border-radius: 50%; background: var(--green-700); color: #fff; font-size: .6rem; font-weight: 700; display: flex; align-items: center; justify-content: center; line-height: 1; }
+
 .profile-menu-wrap { position: relative; }
 .profile-menu {
   position: absolute; left: calc(100% + 8px); bottom: 0;

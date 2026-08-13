@@ -136,7 +136,11 @@ const Sidebar: React.FC = () => {
                 onClick={() => setShowMenu(!showMenu)}
                 title="Profile menu"
               >
-                <SvgIcon d={PROFILE_ICON} />
+                {profile?.avatarUrl ? (
+                  <img src={profile.avatarUrl} alt="" className="sidebar-avatar" />
+                ) : (
+                  <span className="sidebar-avatar-initial">{user!.displayName.charAt(0).toUpperCase()}</span>
+                )}
               </button>
               {showMenu && (
                 <div className="profile-menu">
