@@ -1118,7 +1118,7 @@ input[type="time"]::-webkit-calendar-picker-indicator { filter: invert(0.55); cu
   .event-list { padding: 8px; }
   .event-list-card { padding: 10px; }
   .list-card-img { height: 56px; }
-  .event-list-header { padding: 8px 16px; }
+  .event-list-header { padding: 0px 16px; }
   .notif-panel { left: auto; right: 0; bottom: 100%; margin-bottom: 6px; }
 
   .sidebar-resizer { display: none; }
@@ -1233,7 +1233,7 @@ input[type="time"]::-webkit-calendar-picker-indicator { filter: invert(0.55); cu
   .list-card-img { height: 44px; }
   .list-card-header h3 { font-size: .85rem; }
   .list-card-trail { font-size: .78rem; }
-  .event-list-header { padding: 8px 16px; }
+  .event-list-header { padding: 0px 16px; }
   .event-list-count { font-size: .72rem; }
 
   .create-event-page { padding: 12px 8px; }
