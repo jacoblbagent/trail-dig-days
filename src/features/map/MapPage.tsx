@@ -93,6 +93,8 @@ const MapPage: React.FC = () => {
       else el.setAttribute('data-events-open', '');
       (el as HTMLElement).style.setProperty('--events-width', `${rightWidth}px`);
     }
+    // Notify Leaflet to recalculate map container size
+    window.dispatchEvent(new Event('resize'));
   }, [eventsCollapsed, rightWidth]);
 
   const handleResizeStart = (e: React.MouseEvent) => {
