@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import { BrowserRouter, Link, Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { store } from './app/store';
-import { useAppSelector } from './app/hooks';
 import { loadEventsFromStorage } from './features/events/eventsSlice';
 import Sidebar from './components/Sidebar';
 import MapLayout from './components/MapLayout';
@@ -18,12 +17,10 @@ import NotFoundPage from './pages/NotFoundPage';
 import ToastContainer from './components/ToastContainer';
 
 const TopNav: React.FC = () => {
-  const currentUser = useAppSelector((s) => s.auth.user);
-  const canCreate = currentUser?.userType === 'organization';
   return (
     <header className="top-nav">
       <span className="top-nav-title">Dig Days</span>
-      {canCreate && <Link to="/events/create" className="btn btn-primary btn-sm">+ New</Link>}
+      <Link to="/events/create" className="btn btn-primary btn-sm">+ New</Link>
     </header>
   );
 };
