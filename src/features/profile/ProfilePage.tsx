@@ -5,6 +5,7 @@ import MapExtras from '../../features/map/MapExtras';
 import L from 'leaflet';
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
 import { updateProfile } from './profileSlice';
+import { followOrg, unfollowOrg } from '../events/eventsSlice';
 import type { UserProfile, CustomField } from '../../types';
 
 // Fix Leaflet icon issue
@@ -191,6 +192,7 @@ const ProfilePage: React.FC = () => {
   const targetId = viewUserId || user?.id;
   const profile: UserProfile | undefined = targetId ? profiles[targetId] : undefined;
   const isOwnProfile = !viewUserId || viewUserId === user?.id;
+  const followedOrgs = useAppSelector((s) => s.events.followedOrgs);
   const [editMode, setEditMode] = useState(false);
   const [form, setForm] = useState<UserProfile | null>(null);
   const [coverPos, setCoverPos] = useState(50);
@@ -384,6 +386,14 @@ const ProfilePage: React.FC = () => {
             <span>Member Since {form.createdAt ? new Date(form.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : ''}</span>
             {form.location && <><span className="sep">·</span><span>{form.location}</span></>}
           </p>
+          {!isOwnProfile && (
+            <label className="follow-org-toggle" style={{ justifyContent: 'center', padding: '8px 0' }}>
+              <input type="checkbox" checked={followedOrgs.includes(form.displayName)} onChange={() => {
+                dispatch(followedOrgs.includes(form.displayName) ? unfollowOrg(form.displayName) : followOrg(form.displayName));
+              }} />
+              <span>Follow {form.displayName} for new events</span>
+            </label>
+          )}
           {isOwnProfile && (
           <button
             className={`profile-edit-btn ${editMode ? 'editing' : ''}`}

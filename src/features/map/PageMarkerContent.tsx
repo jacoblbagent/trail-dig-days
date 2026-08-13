@@ -6,8 +6,12 @@ import { useAppSelector } from '../../app/hooks';
 import { collapseRecurring } from '../../utils/recurrence';
 import type { DigEvent } from '../../types';
 
-const coloredIcon = (inRange: boolean, highlight: boolean) => {
-  const dot = `<div style="width:14px;height:14px;border-radius:50%;background:${highlight ? '#d97706' : inRange ? '#2d6a4f' : '#a8a29e'};border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.3)"></div>`;
+const coloredIcon = (inRange: boolean, highlight: boolean, isMyEvent: boolean) => {
+  let color: string;
+  if (highlight) color = '#d97706';
+  else if (isMyEvent) color = '#a8a29e';
+  else color = inRange ? '#2d6a4f' : '#a8a29e';
+  const dot = `<div style="width:14px;height:14px;border-radius:50%;background:${color};border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.3)"></div>`;
   return new L.DivIcon({ className: '', iconSize: [16, 16], iconAnchor: [8, 8], html: dot });
 };
 
@@ -24,14 +28,14 @@ const groupByLocation = (events: DigEvent[]): DigEvent[][] => {
 
 /** Render each event in a group as its own marker, offset in pixel space so
  *  co-located markers sit directly adjacent (touching, no gap). */
-const OffsetMarkerGroup: React.FC<{ events: DigEvent[]; inRange: boolean; hoveredId: string | null }> = ({ events, inRange, hoveredId }) => {
+const OffsetMarkerGroup: React.FC<{ events: DigEvent[]; inRange: boolean; hoveredId: string | null; myUserId: string | undefined }> = ({ events, inRange, hoveredId, myUserId }) => {
   const map = useMap();
   const navigate = useNavigate();
 
   const markers = useMemo(() => {
     const base = events[0].coordinates;
     const px = map.latLngToContainerPoint([base[0], base[1]]);
-    const step = 14; // px between markers = marker dot width, so they touch
+    const step = 14;
     const startX = px.x - ((events.length - 1) * step) / 2;
     return events.map((e, i) => {
       const pos = map.containerPointToLatLng([startX + i * step, px.y]);
@@ -42,7 +46,7 @@ const OffsetMarkerGroup: React.FC<{ events: DigEvent[]; inRange: boolean; hovere
   return (
     <>
       {markers.map(({ event, position }) => (
-        <Marker key={event.id} position={position} icon={coloredIcon(inRange, hoveredId === event.id)}
+        <Marker key={event.id} position={position} icon={coloredIcon(inRange, hoveredId === event.id, myUserId === event.creatorId)}
           eventHandlers={{ mouseover: (ev) => ev.target.openPopup(), mouseout: (ev) => ev.target.closePopup() }}
         >
           <Popup>
@@ -64,6 +68,7 @@ const PageMarkerContent: React.FC = () => {
   const events = useAppSelector((s) => s.events.items);
   const mapBounds = useAppSelector((s) => s.events.mapBounds);
   const hoveredId = useAppSelector((s) => s.events.hoveredMarkerId);
+  const myUserId = useAppSelector((s) => s.auth.user?.id);
 
   const collapsed = useMemo(() => {
     return collapseRecurring(events);
@@ -90,7 +95,7 @@ const PageMarkerContent: React.FC = () => {
     <>
       {groups.map((group) => {
         const inRange = !inRangeIds || group.some((e) => inRangeIds.has(e.id));
-        return <OffsetMarkerGroup key={group[0].id} events={group} inRange={inRange} hoveredId={hoveredId} />;
+        return <OffsetMarkerGroup key={group[0].id} events={group} inRange={inRange} hoveredId={hoveredId} myUserId={myUserId} />;
       })}
     </>
   );

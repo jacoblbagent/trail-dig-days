@@ -939,7 +939,7 @@ input[type="time"]::-webkit-calendar-picker-indicator { filter: invert(0.55); cu
   font-size: .875rem; font-weight: 600; color: var(--stone-500);
   border-bottom: 2px solid transparent; transition: all .15s;
 }
-.dig-dates-tabs .tab-btn.active { color: var(--accent, var(--green-700)); border-bottom-color: var(--accent, var(--green-700)); }
+.dig-dates-tabs .tab-btn.active { color: var(--green-700); border-bottom-color: var(--green-700); }
 .dig-dates-tabs .tab-btn:hover { color: var(--stone-700); }
 .tab-count {
   display: inline-flex; align-items: center; justify-content: center;
