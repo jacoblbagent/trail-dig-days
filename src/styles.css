@@ -1177,6 +1177,7 @@ input[type="time"]::-webkit-calendar-picker-indicator { filter: invert(0.55); cu
   .auth-header { margin-bottom: 16px; }
 
   .event-detail-inner { padding: 0 12px 24px; }
+  .location-section-wrap { padding-top: 16px; margin-top: 16px; }
   .event-cover { height: 160px; }
   .event-detail-title-group h1 { font-size: 1.4rem; }
   .event-detail-header-row { flex-direction: column; }
