@@ -113,12 +113,12 @@ const SearchRadiusMap: React.FC<Props> = ({ center, radius, onCenterChange, onLo
     markerRef.current = marker;
 
     // Fit to circle on initial load (deferred so map is ready)
-    setTimeout(() => {
+    map.whenReady(() => {
       if (!mapInstance.current || !circleRef.current) return;
       suppressMove.current = true;
       map.fitBounds(circle.getBounds(), { padding: [20, 20], maxZoom: 10, animate: false });
       setTimeout(() => { suppressMove.current = false; }, 50);
-    }, 100);
+    });
 
     return () => {
       map.remove();
