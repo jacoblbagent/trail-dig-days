@@ -71,7 +71,8 @@ const EventDetailPage: React.FC = () => {
         <div className="event-detail-grid">
           <div className={`event-detail-main${showContent ? '' : ' collapsed-mobile'}`}>
             <button className="content-toggle-btn" onClick={() => setShowContent(!showContent)}>
-              <span className="nav-arrow">{showContent ? '▼' : '▶'}</span> {showContent ? 'Hide Details' : 'Show Details'}
+              <span>{showContent ? 'Hide Details' : 'Show Details'}</span>
+              <span className="nav-arrow">{showContent ? '▼' : '▶'}</span>
             </button>
             <section>
               <p>{event.description}</p>
