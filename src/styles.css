@@ -553,7 +553,16 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
 }
 .leaflet-control-zoom-in:hover { border-color: var(--accent, var(--green-600)); }
 [data-theme="dark"] .leaflet-control-zoom-in { background: var(--surface); border-color: #444; color: var(--stone-400); }
-.leaflet-control-zoom-out { display: none; }
+.leaflet-control-zoom-out {
+  width: 34px !important; height: 34px !important; line-height: 34px !important;
+  border-radius: 8px;
+  background: var(--surface); border: 1px solid var(--stone-200);
+  color: var(--stone-500);
+  box-shadow: 0 1px 3px rgba(0,0,0,.08);
+  font-size: 1.1rem;
+}
+.leaflet-control-zoom-out:hover { border-color: var(--accent, var(--green-600)); }
+[data-theme="dark"] .leaflet-control-zoom-out { background: var(--surface); border-color: #444; color: var(--stone-400); }
 .leaflet-control-zoom a { text-decoration: none; }
 [data-theme="dark"] .leaflet-control-attribution { background: rgba(28,25,23,.8); color: #777; }
 [data-theme="dark"] .leaflet-control-attribution a { color: #999; }
