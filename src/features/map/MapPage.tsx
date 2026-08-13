@@ -97,6 +97,20 @@ const MapPage: React.FC = () => {
     window.dispatchEvent(new Event('resize'));
   }, [eventsCollapsed, rightWidth]);
 
+  // Keep map bottom edge matched to events list height on mobile
+  useEffect(() => {
+    const listEl = document.querySelector('.sidebar-col-list');
+    if (!listEl) return;
+    const ro = new ResizeObserver((entries) => {
+      const page = document.querySelector('.map-page') as HTMLElement | null;
+      if (page) {
+        page.style.setProperty('--events-height', `${entries[0].contentRect.height}px`);
+      }
+    });
+    ro.observe(listEl);
+    return () => ro.disconnect();
+  }, []);
+
   const handleResizeStart = (e: React.MouseEvent) => {
     e.preventDefault();
     const startX = e.clientX;
