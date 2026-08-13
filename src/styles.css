@@ -1162,7 +1162,7 @@ input[type="time"]::-webkit-calendar-picker-indicator { filter: invert(0.55); cu
   .event-detail-main.collapsed-mobile .items-columns { display: none; }
   .content-toggle-btn { display: flex; align-items: center; gap: 6px; width: 100%; padding: 10px 12px; border: none; background: var(--stone-50); cursor: pointer; font-size: .9rem; color: var(--stone-600); border-radius: var(--radius); margin-bottom: 12px; }
   .location-section { grid-template-columns: 1fr; }
-  .items-columns { grid-template-columns: 1fr; }
+  .items-columns { grid-template-columns: 1fr 1fr; }
   .form-row { flex-direction: column; gap: 8px; }
   .form-row.three > * { flex: none; }
   .form-actions { flex-direction: column; }
