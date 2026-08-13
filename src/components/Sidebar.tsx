@@ -45,7 +45,13 @@ const Sidebar: React.FC = () => {
     return () => document.removeEventListener('mousedown', onClick);
   }, []);
 
-  const isActive = (path: string) => location.pathname === path;
+  const isActive = (path: string) => {
+    if (path === '/profile') {
+      // only highlight own profile, not other users' profiles
+      return location.pathname === '/profile' && !new URLSearchParams(location.search).get('userId');
+    }
+    return location.pathname === path;
+  };
   const isEventPage = location.pathname.startsWith('/events/') && !location.pathname.startsWith('/my-events');
 
   const btn = (to: string, icon: string, label: string) => {
