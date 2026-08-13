@@ -415,7 +415,7 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
 .loc-error { color: var(--earth-500); font-size: .8rem; margin-top: 4px; }
 .event-list-header { display: flex; align-items: center; justify-content: space-between; padding: 8px 16px; }
 .event-list-count { font-size: .8rem; color: var(--stone-400); }
-.event-list-sort { display: flex; align-items: center; gap: 4px; position: relative; }
+.event-list-sort { display: flex; align-items: center; gap: 4px; position: relative; margin-left: auto; }
 .event-list-sort-label { font-size: .8rem; color: var(--stone-400); cursor: pointer; user-select: none; }
 .event-list-sort-label:hover { color: var(--stone-600); }
 .event-list-sort-arrow { font-size: .8rem; color: var(--stone-400); cursor: pointer; user-select: none; padding: 4px 10px; min-width: 28px; text-align: center; }
