@@ -47,7 +47,6 @@ const Sidebar: React.FC = () => {
 
   const isActive = (path: string) => location.pathname === path;
   const isEventPage = location.pathname.startsWith('/events/') && !location.pathname.startsWith('/my-events');
-  const showLabels = isEventPage || location.pathname.startsWith('/settings') || location.pathname.startsWith('/profile') || location.pathname.startsWith('/my-events') || location.pathname.startsWith('/auth');
 
   const btn = (to: string, icon: string, label: string) => {
     const cls = isActive(to) ? 'active' : isEventPage && to === '/' ? 'partial' : '';
@@ -59,14 +58,13 @@ const Sidebar: React.FC = () => {
         onClick={() => setShowMenu(false)}
       >
         <SvgIcon d={icon} />
-        {showLabels && <span className="sidebar-label">{label}</span>}
       </Link>
     );
   };
 
   return (
       <>
-      <aside className={`sidebar${showLabels ? ' expanded' : ''}`}>
+      <aside className="sidebar">
         <div className="sidebar-top">
           {btn('/', MAP_ICON, 'Map')}
         </div>
@@ -77,12 +75,10 @@ const Sidebar: React.FC = () => {
             title={dark ? 'Light mode' : 'Dark mode'}
           >
             {dark ? '☀️' : '🌙'}
-            {showLabels && <span className="sidebar-label">{dark ? 'Light Mode' : 'Dark Mode'}</span>}
           </button>
           {!isAuthenticated && (
             <Link to="/auth" className="sidebar-btn" title="Sign In">
               <SvgIcon d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4 M10 17l5-5-5-5 M13 12H3" />
-              {showLabels && <span className="sidebar-label">Sign In</span>}
             </Link>
           )}
           {isAuthenticated && (
@@ -96,7 +92,6 @@ const Sidebar: React.FC = () => {
                   <SvgIcon d={BELL_ICON} />
                   {unreadCount > 0 && <span className="notif-badge">{unreadCount}</span>}
                 </span>
-                {showLabels && <span className="sidebar-label">Notifications{unreadCount > 0 ? ` (${unreadCount})` : ''}</span>}
               </button>
               {showNotifications && (
                 <div className="notif-panel">
@@ -136,7 +131,6 @@ const Sidebar: React.FC = () => {
                 title="Profile menu"
               >
                 <SvgIcon d={PROFILE_ICON} />
-                {showLabels && <span className="sidebar-label">Profile</span>}
               </button>
               {showMenu && (
                 <div className="profile-menu">
