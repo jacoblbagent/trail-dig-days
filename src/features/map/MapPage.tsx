@@ -162,7 +162,7 @@ const MapPage: React.FC = () => {
       </div>
 
       <div className="sidebar-col sidebar-col-list" style={{ width: rightWidth, order: 2 }}>
-        <div className="events-toggle-bar" onClick={() => setEventsCollapsed(!eventsCollapsed)}>
+        <div className={`events-toggle-bar${eventsCollapsed ? ' collapsed' : ''}`} onClick={() => setEventsCollapsed(!eventsCollapsed)}>
           <span className="events-toggle-label">
             Events{filtered.length > 0 ? ` (${filtered.length})` : ''}
           </span>
