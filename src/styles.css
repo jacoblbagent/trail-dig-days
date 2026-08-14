@@ -139,6 +139,7 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
 
 /* ── Tags / Chips ── */
 .tag-grid { display: flex; flex-wrap: wrap; gap: 6px; }
+.tag-grid .tag { border-radius: 3px; background: var(--stone-100); border: 1px solid var(--stone-200); color: var(--stone-500); }
 .tag {
   display: inline-flex; align-items: center; gap: 4px;
   padding: 4px 14px; border-radius: 100px;
@@ -148,7 +149,6 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
   transition: all .15s;
 }
 .tag:hover { border-color: var(--green-600); }
-.tag.active { background: var(--green-100); border-color: var(--green-600); color: var(--green-800); }
 .tag-wrapper { display: inline-flex; align-items: center; gap: 6px; }
 .tag-qty-selector { display: inline-flex; gap: 2px; }
 .tag-qty-btn {
@@ -1007,11 +1007,6 @@ input[type="time"]::-webkit-calendar-picker-indicator { filter: invert(0.55); cu
 .check-group { display: flex; flex-direction: row; align-items: center; gap: 12px; margin-top: 4px; flex-wrap: wrap; }
 .check-group label { display: flex; align-items: center; gap: 6px; font-size: .9rem; color: var(--stone-600); cursor: pointer; }
 .check-group input[type="checkbox"] { width: 16px; height: 16px; accent-color: var(--green-700); }
-.profile-page .tag.active {
-  background: color-mix(in srgb, #dcfce7 30%, white);
-  border-color: var(--green-600);
-  color: var(--green-800);
-}
 
 
 
