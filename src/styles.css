@@ -272,16 +272,26 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
   position: absolute; left: calc(100% + 8px); bottom: 0;
   background: var(--surface); border: 1px solid var(--stone-200);
   border-radius: var(--radius); box-shadow: var(--shadow-lg);
-  min-width: 260px; z-index: 2500; padding: 12px;
-  display: flex; flex-direction: column; gap: 8px;
+  min-width: 260px; z-index: 2500; display: flex; flex-direction: column;
 }
-.notif-header { display: flex; justify-content: space-between; align-items: center; font-size: .9rem; font-weight: 600; color: var(--stone-700); }
+.notif-header { display: flex; justify-content: space-between; align-items: center; font-size: .9rem; font-weight: 600; color: var(--stone-700); border-bottom: 1px solid var(--stone-300); padding: 12px 12px 8px; }
 .notif-close { background: none; border: 1px solid transparent; font-size: .85rem; color: var(--stone-400); cursor: pointer; padding: 4px 8px; border-radius: 4px; transition: all .15s; line-height: 1; }
 .notif-close:hover { background: var(--stone-100); color: var(--stone-600); border-color: var(--stone-200); }
-.notif-list { display: flex; flex-direction: column; gap: 0; max-height: 220px; overflow-y: auto; margin: 0 -12px; }
+.notif-list-wrap { position: relative; }
+.notif-shadow-top,
+.notif-shadow-bottom {
+  position: absolute; left: 0; right: 0; height: 20px;
+  pointer-events: none; z-index: 1;
+  opacity: 0; transition: opacity .2s;
+}
+.notif-shadow-top { top: 0; background: linear-gradient(to bottom, var(--surface), transparent); }
+.notif-shadow-bottom { bottom: 0; background: linear-gradient(to top, var(--surface), transparent); }
+.notif-shadow-top.visible,
+.notif-shadow-bottom.visible { opacity: 1; }
+.notif-list { display: flex; flex-direction: column; gap: 0; max-height: 220px; overflow-y: auto; }
 .notif-item {
   padding: 8px 12px; cursor: pointer; transition: background .1s;
-  display: flex; flex-direction: column; gap: 2px; border-bottom: 1px solid var(--stone-100);
+  display: flex; flex-direction: column; gap: 2px; border-bottom: 1px solid var(--stone-300);
   position: relative;
 }
 .notif-item:hover { background: var(--stone-50); }
@@ -294,7 +304,7 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
 .notif-item:last-child { border-bottom: none; }
 .notif-item span:first-child { font-size: .82rem; color: var(--stone-700); line-height: 1.3; }
 .notif-time { font-size: .72rem; color: var(--stone-400); }
-.notif-empty { font-size: .82rem; color: var(--stone-400); text-align: center; padding: 12px 0; }
+.notif-empty { font-size: .82rem; color: var(--stone-400); text-align: center; padding: 12px; }
 .notif-dismiss {
   padding: 6px 12px; border: 1px solid var(--stone-200); border-radius: var(--radius-sm);
   font-size: .8rem; background: var(--green-100); color: var(--green-700); cursor: pointer;
@@ -833,10 +843,10 @@ input[type="time"]::-webkit-calendar-picker-indicator { filter: invert(0.55); cu
 
 .date-badge {
   display: flex; flex-direction: row; align-items: center; justify-content: center; gap: 4px; flex-wrap: wrap;
-  background: var(--green-800); color: #fff; border-radius: var(--radius);
+  background: color-mix(in srgb, var(--surface), white 6%);
+  color: var(--stone-800); border-radius: var(--radius);
   padding: 8px 14px; margin-bottom: 14px; line-height: 1.2; font-size: 1.5rem;
 }
-[data-theme="dark"] .date-badge { background: var(--green-600); }
 .date-month { text-transform: uppercase; font-weight: 700; }
 .date-day { font-weight: 800; }
 .date-year { opacity: .8; }

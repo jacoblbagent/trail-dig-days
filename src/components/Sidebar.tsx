@@ -29,8 +29,25 @@ const Sidebar: React.FC = () => {
   const unreadCount = notifications.filter((n) => !n.read).length;
   const [showMenu, setShowMenu] = React.useState(false);
   const [showNotifications, setShowNotifications] = React.useState(false);
+  const [scrollUp, setScrollUp] = React.useState(false);
+  const [scrollDown, setScrollDown] = React.useState(true);
   const menuRef = React.useRef<HTMLDivElement>(null);
   const notifRef = React.useRef<HTMLDivElement>(null);
+  const notifListRef = React.useRef<HTMLDivElement>(null);
+
+  const updateNotifShadows = React.useCallback(() => {
+    const el = notifListRef.current;
+    if (!el) return;
+    setScrollUp(el.scrollTop > 2);
+    setScrollDown(el.scrollTop + el.clientHeight < el.scrollHeight - 2);
+  }, []);
+
+  React.useEffect(() => {
+    if (showNotifications) {
+      // small delay so ref is attached
+      requestAnimationFrame(() => updateNotifShadows());
+    }
+  }, [showNotifications, updateNotifShadows]);
 
   React.useEffect(() => {
     const onClick = (e: MouseEvent) => {
@@ -106,21 +123,29 @@ const Sidebar: React.FC = () => {
                     <button className="notif-close" onClick={() => setShowNotifications(false)}>x</button>
                   </div>
                   {notifications.length > 0 ? (
-                    <div className="notif-list">
-                      {notifications.map((n) => (
-                        <div
-                          key={n.id}
-                          className={`notif-item ${n.read ? '' : 'unread'}`}
-                          onClick={() => {
-                            if (!n.read) dispatch(markNotificationRead(n.id));
-                            setShowNotifications(false);
-                            navigate(`/events/${n.eventId}`);
-                          }}
-                        >
-                          <span>{n.message}</span>
-                          <span className="notif-time">{new Date(n.createdAt).toLocaleDateString()}</span>
-                        </div>
-                      ))}
+                    <div className="notif-list-wrap">
+                      <div className={`notif-shadow-top ${scrollUp ? 'visible' : ''}`} />
+                      <div
+                        className="notif-list"
+                        ref={notifListRef}
+                        onScroll={updateNotifShadows}
+                      >
+                        {notifications.map((n) => (
+                          <div
+                            key={n.id}
+                            className={`notif-item ${n.read ? '' : 'unread'}`}
+                            onClick={() => {
+                              if (!n.read) dispatch(markNotificationRead(n.id));
+                              setShowNotifications(false);
+                              navigate(`/events/${n.eventId}`);
+                            }}
+                          >
+                            <span>{n.message}</span>
+                            <span className="notif-time">{new Date(n.createdAt).toLocaleDateString()}</span>
+                          </div>
+                        ))}
+                      </div>
+                      <div className={`notif-shadow-bottom ${scrollDown ? 'visible' : ''}`} />
                     </div>
                   ) : (
                     <div className="notif-empty">No notifications yet.</div>
