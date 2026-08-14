@@ -413,6 +413,7 @@ const CreateEventPage: React.FC = () => {
       </div>
 
       <form onSubmit={handleSubmit} className="event-form">
+        <span className="form-section-label">Details</span>
         <div className="form-section">
           <div className="form-group">
             <label>Event Title *</label>
@@ -423,13 +424,32 @@ const CreateEventPage: React.FC = () => {
             <textarea value={description} onChange={(e) => setDescription(e.target.value)} rows={4} placeholder="Describe the work to be done, the goals for the day, and what volunteers can expect." required />
           </div>
           <div className="form-row">
-            <TrailAutocomplete
-              trailName={trailName}
-              trailSystem={trailSystem}
-              onTrailNameChange={setTrailName}
-              onTrailSystemChange={setTrailSystem}
+            <div className="form-group">
+              <label>Physical Difficulty</label>
+              <select value={difficulty} onChange={(e) => setDifficulty(e.target.value as any)}>
+                {DIFFICULTY_OPTIONS.map((d) => (
+                  <option key={d} value={d}>{d.charAt(0).toUpperCase() + d.slice(1)}</option>
+                ))}
+              </select>
+            </div>
+            <div className="form-group">
+              <label>Max Volunteers</label>
+              <input type="number" min={1} max={200} value={maxVolunteers} onChange={(e) => setMaxVolunteers(parseInt(e.target.value) || 1)} />
+            </div>
+          </div>
+          <div className="form-group">
+            <label>Requirements (one per line)</label>
+            <textarea
+              value={requirements}
+              onChange={(e) => setRequirements(e.target.value)}
+              rows={4}
+              placeholder="Must be 18+&#10;Trail building experience preferred&#10;Closed-toe shoes required&#10;Must sign waiver"
             />
           </div>
+        </div>
+
+        <span className="form-section-label">Schedule</span>
+        <div className="form-section">
           <div className="form-row">
             <div className="form-group flex-1">
               <label>Date *</label>
@@ -461,29 +481,10 @@ const CreateEventPage: React.FC = () => {
               </div>
             )}
           </div>
-          <div className="form-row">
-            <div className="form-group">
-              <label>Physical Difficulty</label>
-              <select value={difficulty} onChange={(e) => setDifficulty(e.target.value as any)}>
-                {DIFFICULTY_OPTIONS.map((d) => (
-                  <option key={d} value={d}>{d.charAt(0).toUpperCase() + d.slice(1)}</option>
-                ))}
-              </select>
-            </div>
-            <div className="form-group">
-              <label>Max Volunteers</label>
-              <input type="number" min={1} max={200} value={maxVolunteers} onChange={(e) => setMaxVolunteers(parseInt(e.target.value) || 1)} />
-            </div>
-          </div>
-          <div className="form-group">
-            <label>Requirements (one per line)</label>
-            <textarea
-              value={requirements}
-              onChange={(e) => setRequirements(e.target.value)}
-              rows={4}
-              placeholder="Must be 18+&#10;Trail building experience preferred&#10;Closed-toe shoes required&#10;Must sign waiver"
-            />
-          </div>
+        </div>
+
+        <span className="form-section-label">Contact</span>
+        <div className="form-section">
           <div className="form-row three">
             <div className="form-group flex-1">
               <label>Contact Name *</label>
@@ -498,6 +499,10 @@ const CreateEventPage: React.FC = () => {
               <input type="tel" value={contactPhone} onChange={(e) => setContactPhone(e.target.value)} placeholder="(555) 123-4567" />
             </div>
           </div>
+        </div>
+
+        <span className="form-section-label">Image</span>
+        <div className="form-section">
           <div className="form-group">
             <label>Event Image</label>
             <div
@@ -524,14 +529,15 @@ const CreateEventPage: React.FC = () => {
           </div>
         </div>
 
+        <span className="form-section-label">Location</span>
         <div className="form-section">
-          <h2>Location</h2>
           <div className="form-group">
             <label>Address / Trailhead</label>
-            <input type="text" value={locationName} onChange={(e) => setLocationName(e.target.value)} placeholder="e.g. Phil's World Trailhead, 123 Main St" required />
+            <input type="text" value={locationName} onChange={(e) => setLocationName(e.target.value)} placeholder="e.g. Phil's World Trailhead" required />
           </div>
-
-          {/* Location picker map */}
+          <div className="form-row">
+            <TrailAutocomplete trailName={trailName} trailSystem={trailSystem} onTrailNameChange={setTrailName} onTrailSystemChange={setTrailSystem} />
+          </div>
           <div className="location-picker-map">
             <MapContainer
               center={mapCenter}
@@ -548,18 +554,9 @@ const CreateEventPage: React.FC = () => {
               <FlyToCenter center={markerPos} />
               <MapExtras />
             </MapContainer>
-            {!markerPos && (
-              <div className="map-click-hint">
-                Click the map or enter coordinates
-              </div>
-            )}
-            {markerPos && (
-              <div className="map-coords-display">
-                 {markerPos[0].toFixed(4)}, {markerPos[1].toFixed(4)}
-              </div>
-            )}
+            {!markerPos && <div className="map-click-hint">Click the map or enter coordinates</div>}
+            {markerPos && <div className="map-coords-display">{markerPos[0].toFixed(4)}, {markerPos[1].toFixed(4)}</div>}
           </div>
-
           <div className="loc-toggle-row">
             <button type="button" className={`loc-toggle-btn ${showParking ? 'active' : ''}`} onClick={() => setShowParking(!showParking)}>
               {showParking ? '− Hide' : '+ Add'} Parking Notes
@@ -582,14 +579,10 @@ const CreateEventPage: React.FC = () => {
           )}
         </div>
 
+        <span className="form-section-label">Provided Items</span>
         <div className="form-section">
-          <h2>Provided:</h2>
           <p className="section-desc">Select what the dig day organizers provide</p>
-          <button
-            type="button"
-            className="cat-modal-toggle"
-            onClick={() => setShowProvidedCat(true)}
-          >
+          <button type="button" className="cat-modal-toggle" onClick={() => setShowProvidedCat(true)}>
             {providedItems.length > 0 ? `${providedItems.length} items selected` : 'Add items…'}
           </button>
           {showProvidedCat && (
@@ -608,11 +601,7 @@ const CreateEventPage: React.FC = () => {
                           const checked = !!providedItems.find((p) => p.name === item);
                           return (
                             <label key={item} className={`cat-item ${checked ? 'checked' : ''}`}>
-                              <input
-                                type="checkbox"
-                                checked={checked}
-                                onChange={() => toggleProvided(item)}
-                              />
+                              <input type="checkbox" checked={checked} onChange={() => toggleProvided(item)} />
                               <span>{item}</span>
                             </label>
                           );
@@ -631,37 +620,20 @@ const CreateEventPage: React.FC = () => {
           )}
           {providedItems.map((pi) => (
             <div key={pi.name} className="provided-note">
-              <input
-                type="text"
-                placeholder={`Notes for ${pi.name} (optional)`}
-                value={pi.description}
-                onChange={(e) => updateProvided(pi.name, 'description', e.target.value)}
-              />
+              <input type="text" placeholder={`Notes for ${pi.name} (optional)`} value={pi.description} onChange={(e) => updateProvided(pi.name, 'description', e.target.value)} />
               <div className="tag-qty-selector">
-                <button
-                  type="button"
-                  className={`tag-qty-btn ${pi.quantity === 'Few' ? 'active' : ''}`}
-                  onClick={() => updateProvided(pi.name, 'quantity', 'Few')}
-                >Few</button>
-                <button
-                  type="button"
-                  className={`tag-qty-btn ${pi.quantity === 'Plenty' ? 'active' : ''}`}
-                  onClick={() => updateProvided(pi.name, 'quantity', 'Plenty')}
-                >Plenty</button>
+                <button type="button" className={`tag-qty-btn ${pi.quantity === 'Few' ? 'active' : ''}`} onClick={() => updateProvided(pi.name, 'quantity', 'Few')}>Few</button>
+                <button type="button" className={`tag-qty-btn ${pi.quantity === 'Plenty' ? 'active' : ''}`} onClick={() => updateProvided(pi.name, 'quantity', 'Plenty')}>Plenty</button>
               </div>
               <button type="button" className="provided-remove" onClick={() => removeProvided(pi.name)} title="Remove" aria-label="Remove">🗑</button>
             </div>
           ))}
         </div>
 
+        <span className="form-section-label">Bring Items</span>
         <div className="form-section">
-          <h2>Bring:</h2>
           <p className="section-desc">What volunteers are expected or recommended to bring themselves</p>
-          <button
-            type="button"
-            className="cat-modal-toggle"
-            onClick={() => setShowRecommendedCat(true)}
-          >
+          <button type="button" className="cat-modal-toggle" onClick={() => setShowRecommendedCat(true)}>
             {recommendedItems.length > 0 ? `${recommendedItems.length} items selected` : 'Add items…'}
           </button>
           {showRecommendedCat && (
@@ -680,11 +652,7 @@ const CreateEventPage: React.FC = () => {
                           const checked = !!recommendedItems.find((p) => p.name === item);
                           return (
                             <label key={item} className={`cat-item ${checked ? 'checked' : ''}`}>
-                              <input
-                                type="checkbox"
-                                checked={checked}
-                                onChange={() => toggleRecommended(item)}
-                              />
+                              <input type="checkbox" checked={checked} onChange={() => toggleRecommended(item)} />
                               <span>{item}</span>
                             </label>
                           );
@@ -703,18 +671,9 @@ const CreateEventPage: React.FC = () => {
           )}
           {recommendedItems.map((ri) => (
             <div key={ri.name} className="provided-note">
-              <input
-                type="text"
-                placeholder={`Notes for ${ri.name} (optional)`}
-                value={ri.notes}
-                onChange={(e) => updateRecommended(ri.name, 'notes', e.target.value)}
-              />
+              <input type="text" placeholder={`Notes for ${ri.name} (optional)`} value={ri.notes} onChange={(e) => updateRecommended(ri.name, 'notes', e.target.value)} />
               <label className="tag-checkbox">
-                <input
-                  type="checkbox"
-                  checked={ri.essential}
-                  onChange={(e) => updateRecommended(ri.name, 'essential', e.target.checked)}
-                />
+                <input type="checkbox" checked={ri.essential} onChange={(e) => updateRecommended(ri.name, 'essential', e.target.checked)} />
                 Essential
               </label>
               <button type="button" className="provided-remove" onClick={() => removeRecommended(ri.name)} title="Remove" aria-label="Remove">🗑</button>
@@ -732,7 +691,7 @@ const CreateEventPage: React.FC = () => {
           <p className="muted" style={{ fontSize: '.8rem', margin: '4px 0 0 0' }}>Not shown on the map, but anyone with the link can still view it.</p>
         </div>
 
-                <div className="form-actions">
+        <div className="form-actions">
           <button type="submit" className="btn btn-primary btn-lg">Post Dig Day</button>
           <button type="button" className="btn btn-ghost" onClick={() => navigate('/')}>Cancel</button>
         </div>
