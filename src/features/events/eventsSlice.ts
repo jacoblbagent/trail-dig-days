@@ -80,16 +80,6 @@ const initialState: EventsState = {
   followedOrgs: [],
 };
 
-// Re-read events from localStorage after seed runs (ES module hoisting means
-// items above may be empty even after ensureSeedData() called it first)
-const reloadEvents = (): DigEvent[] => {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return [];
-    return JSON.parse(raw);
-  } catch { return []; }
-};
-
 interface CreateEventPayload {
   creatorId: string;
   title: string;
@@ -300,7 +290,7 @@ const eventsSlice = createSlice({
       state.searchQuery = action.payload;
     },
     loadEventsFromStorage(state) {
-      state.items = reloadEvents();
+      state.items = loadEvents();
     },
     followOrg(state, action: PayloadAction<string>) {
       if (!state.followedOrgs.includes(action.payload)) {
