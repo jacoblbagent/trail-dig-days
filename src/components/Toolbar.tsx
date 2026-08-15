@@ -216,7 +216,7 @@ const Toolbar: React.FC = () => {
           <div className="filter-panel filter-panel--style">
             <div className="map-style-grid">
               {[
-                { id: 'carto', label: 'Default', desc: 'Light street map' },
+                { id: 'carto', label: 'Light', desc: 'Light street map' },
                 { id: 'carto-dark', label: 'Dark', desc: 'Dark street map' },
                 { id: 'osm', label: 'OpenStreetMap', desc: 'Standard OSM tiles' },
                 { id: 'topo', label: 'Topographic', desc: 'Contours & terrain' },
