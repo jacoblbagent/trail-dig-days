@@ -281,8 +281,14 @@ const MapPage: React.FC = () => {
             <div className="event-list">
               {filtered.length === 0 ? (
                 <div className="empty-state">
-                  <p>No dig days in this area.</p>
-                  <p>Try panning or zooming the map to a different location, or <Link to="/events/create">create one</Link>!</p>
+                  {searchQuery ? (
+                    <p>No results for &ldquo;{searchQuery}&rdquo;.</p>
+                  ) : (
+                    <>
+                      <p>No dig days in this area.</p>
+                      <p>Try panning or zooming the map to a different location, or <Link to="/events/create">create one</Link>!</p>
+                    </>
+                  )}
                 </div>
               ) : (
                 sorted.map((event) => (
