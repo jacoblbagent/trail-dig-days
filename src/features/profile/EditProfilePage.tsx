@@ -53,8 +53,12 @@ const EditProfilePage: React.FC = () => {
 
   if (!profile || !user || !form) {
     return (
-      <div className="create-event-page">
-        <p className="muted" style={{ padding: '40px', textAlign: 'center' }}>Loading...</p>
+      <div className="create-event-page" style={{ padding: 24 }}>
+        <div className="skeleton skeleton-title" />
+        <div className="skeleton skeleton-text" style={{ width: '80%' }} />
+        <div className="skeleton skeleton-block" />
+        <div className="skeleton skeleton-text" style={{ width: '50%' }} />
+        <div className="skeleton skeleton-block" />
       </div>
     );
   }

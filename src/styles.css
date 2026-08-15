@@ -1669,6 +1669,20 @@ input[type="time"]::-webkit-calendar-picker-indicator { filter: invert(0.55); cu
 [data-theme="dark"] .status-cancelled { background: var(--red-500); }
 [data-theme="dark"] .status-completed { background: var(--blue-500); }
 
+
+/* ── Skeleton Loaders ── */
+@keyframes skeleton-pulse {
+  0% { opacity: .6; }
+  50% { opacity: 1; }
+  100% { opacity: .6; }
+}
+.skeleton { background: var(--stone-200); border-radius: var(--radius-sm); animation: skeleton-pulse 1.5s ease-in-out infinite; }
+.skeleton-text { height: 1rem; width: 60%; margin-bottom: 8px; }
+.skeleton-title { height: 1.4rem; width: 40%; margin-bottom: 12px; }
+.skeleton-block { height: 80px; width: 100%; margin-bottom: 12px; }
+.skeleton-avatar { width: 48px; height: 48px; border-radius: 50%; flex-shrink: 0; }
+[data-theme="dark"] .skeleton { background: var(--stone-700); }
+
 /* ── Volunteer Roster ── */
 .volunteer-roster { margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--stone-150); }
 .volunteer-roster h4 { font-size: .9rem; color: var(--stone-600); margin-bottom: 8px; }

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../app/hooks';
-import { setTheme, markNotificationRead } from '../features/events/eventsSlice';
+import { setTheme, markNotificationRead, markAllNotificationsRead } from '../features/events/eventsSlice';
 import { logout } from '../features/auth/authSlice';
 import { addToast } from '../features/toast/toastSlice';
 
@@ -130,7 +130,14 @@ const Sidebar: React.FC = () => {
                 <div className="notif-panel" role="dialog" aria-modal="true" aria-label="Notifications">
                   <div className="notif-header">
                     <span>Notifications ({notifications.length})</span>
-                    <button className="notif-close" onClick={() => setShowNotifications(false)} aria-label="Close notifications">x</button>
+                    <div className="notif-header-actions">
+                      {unreadCount > 0 && (
+                        <button className="notif-mark-read-btn" onClick={() => dispatch(markAllNotificationsRead())} aria-label="Mark all notifications as read">
+                          Mark all read
+                        </button>
+                      )}
+                      <button className="notif-close" onClick={() => setShowNotifications(false)} aria-label="Close notifications">x</button>
+                    </div>
                   </div>
                   {notifications.length > 0 ? (
                     <div className="notif-list-wrap">

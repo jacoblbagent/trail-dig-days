@@ -58,6 +58,14 @@ const CommentSection: React.FC<Props> = ({ eventId, eventCreatorId }) => {
     }
     return up - down;
   };
+  const totalVotes = (c: Comment) => {
+    let up = 0, down = 0;
+    for (const d of Object.values(c.votes)) {
+      if (d === 'up') up++;
+      else down++;
+    }
+    return up + down;
+  };
 
   const myVote = (c: Comment) => (user ? c.votes[user.id] : undefined);
 
@@ -196,6 +204,7 @@ const CommentSection: React.FC<Props> = ({ eventId, eventCreatorId }) => {
                     title="Upvote"
                   >▲</button>
                   <span className={`vote-score ${votes > 0 ? 'pos' : votes < 0 ? 'neg' : ''}`}>{votes}</span>
+                  {totalVotes(c) > 0 && <span className="vote-total" title={`${totalVotes(c)} total votes`}>{totalVotes(c)}</span>}
                   <button
                     className={`vote-btn ${my === 'down' ? 'voted' : ''}`}
                     onClick={() => handleVote(c.id, 'down')}

@@ -26,7 +26,7 @@ const LocationMap: React.FC<{ location: string }> = ({ location }) => {
       .catch(() => {});
   }, [location]);
 
-  if (!coords) return <p className="muted" style={{ fontSize: '.8rem' }}>Loading map...</p>;
+  if (!coords) return <div className="skeleton" style={{ height: 180, borderRadius: 'var(--radius)' }} />;
 
   return (
     <div style={{ height: 180, borderRadius: 'var(--radius)', overflow: 'hidden', marginTop: 8 }}>
