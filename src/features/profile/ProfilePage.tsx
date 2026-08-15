@@ -94,14 +94,14 @@ const DigDatesTab: React.FC<{ userId: string }> = ({ userId }) => {
   return (
     <section className="profile-section tabs-section">
       <div className="dig-dates-tabs">
+        <button className={`tab-btn ${tab === 'mine' ? 'active' : ''}`} onClick={() => handleTabChange('mine')}>
+          My Events {!!(created.length + signedUp.length) && <span className="tab-count">{created.length + signedUp.length}</span>}
+        </button>
         <button className={`tab-btn ${tab === 'upcoming' ? 'active' : ''}`} onClick={() => handleTabChange('upcoming')}>
           Upcoming {!!upcoming.length && <span className="tab-count">{upcoming.length}</span>}
         </button>
         <button className={`tab-btn ${tab === 'past' ? 'active' : ''}`} onClick={() => handleTabChange('past')}>
           Past {!!past.length && <span className="tab-count">{past.length}</span>}
-        </button>
-        <button className={`tab-btn ${tab === 'mine' ? 'active' : ''}`} onClick={() => handleTabChange('mine')}>
-          My Events {!!(created.length + signedUp.length) && <span className="tab-count">{created.length + signedUp.length}</span>}
         </button>
       </div>
 
