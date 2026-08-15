@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { updateProfile } from './profileSlice';
+import { deleteAccount, logout } from '../auth/authSlice';
+import { addToast } from '../toast/toastSlice';
 import type { UserProfile, CustomField } from '../../types';
 
 const SKILL_OPTIONS = [
@@ -39,6 +41,9 @@ const EditProfilePage: React.FC = () => {
   const profile: UserProfile | undefined = user ? profiles[user.id] : undefined;
 
   const [form, setForm] = useState<UserProfile | null>(null);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [deleteConfirm, setDeleteConfirm] = useState('');
+  const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
     if (profile) setForm({ ...profile });
@@ -65,6 +70,20 @@ const EditProfilePage: React.FC = () => {
     const arr = form[key] as string[];
     const next = arr.includes(item) ? arr.filter((s) => s !== item) : [...arr, item];
     save({ [key]: next } as any);
+  };
+
+  const handleDeleteAccount = async () => {
+    if (!user || deleteConfirm !== 'DELETE') return;
+    setDeleting(true);
+    try {
+      await dispatch(deleteAccount(user.id)).unwrap();
+      dispatch(logout());
+      dispatch(addToast({ message: 'Account deleted permanently', type: 'info' }));
+      navigate('/auth');
+    } catch (err: any) {
+      dispatch(addToast({ message: err.message || 'Failed to delete account', type: 'warning' }));
+      setDeleting(false);
+    }
   };
 
   const addCustomField = () => {
@@ -247,6 +266,49 @@ const EditProfilePage: React.FC = () => {
         </section>
 
         </div>
+
+        {/* ── Delete Account ── */}
+        <span className="form-section-label" style={{ color: 'var(--red-600)' }}>Danger Zone</span>
+        <section className="form-section" style={{ border: '1px solid var(--red-200)', borderRadius: 'var(--radius)', padding: 16 }}>
+          <p className="muted" style={{ marginBottom: 8 }}>Permanently delete your account and all associated data. This cannot be undone.</p>
+          <button className="btn btn-danger" onClick={() => setShowDeleteModal(true)} disabled={deleting}>
+            {deleting ? 'Deleting...' : 'Delete Account'}
+          </button>
+        </section>
+
+      {/* Delete Account Confirmation Modal */}
+      {showDeleteModal && (
+        <div className="modal-backdrop" onClick={() => { if (!deleting) { setShowDeleteModal(false); setDeleteConfirm(''); } }}>
+          <div className="modal-dialog" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h3 style={{ color: 'var(--red-600)' }}>Delete Account</h3>
+              <button className="modal-close" onClick={() => { if (!deleting) { setShowDeleteModal(false); setDeleteConfirm(''); } }}>✕</button>
+            </div>
+            <div className="modal-body">
+              <p className="muted" style={{ marginBottom: 8, lineHeight: 1.5 }}>
+                This will permanently delete your profile, remove you from all events, and sign you out. This action cannot be undone.
+              </p>
+              <label style={{ fontSize: '.85rem', color: 'var(--stone-600)' }}>
+                Type <strong>DELETE</strong> to confirm:
+              </label>
+              <input
+                type="text"
+                value={deleteConfirm}
+                onChange={(e) => setDeleteConfirm(e.target.value)}
+                placeholder="Type DELETE"
+                disabled={deleting}
+                style={{ marginTop: 6, width: '100%', padding: '8px 10px', border: '1px solid var(--stone-200)', borderRadius: 'var(--radius-sm)', fontSize: '.9rem', background: 'var(--bg)', color: 'var(--stone-800)' }}
+              />
+            </div>
+            <div className="modal-footer">
+              <button className="btn btn-ghost" onClick={() => { setShowDeleteModal(false); setDeleteConfirm(''); }} disabled={deleting}>Cancel</button>
+              <button className="btn btn-danger" onClick={handleDeleteAccount} disabled={deleteConfirm !== 'DELETE' || deleting}>
+                {deleting ? 'Deleting...' : 'Permanently Delete'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

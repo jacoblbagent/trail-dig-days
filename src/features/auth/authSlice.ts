@@ -154,6 +154,45 @@ export const login = createAsyncThunk<User, LoginPayload>(
   }
 );
 
+export const deleteAccount = createAsyncThunk<void, string>(
+  'auth/deleteAccount',
+  async (userId) => {
+    await new Promise((r) => setTimeout(r, 400));
+    
+    // Unregister from all events
+    const EVENTS_KEY = 'trail-dig-events';
+    try {
+      const events = JSON.parse(localStorage.getItem(EVENTS_KEY) || '[]');
+      let changed = false;
+      for (const e of events) {
+        if (e.registeredVolunteers?.includes(userId)) {
+          e.registeredVolunteers = e.registeredVolunteers.filter((id: string) => id !== userId);
+          changed = true;
+        }
+        if (e.waitlist?.includes(userId)) {
+          e.waitlist = e.waitlist.filter((id: string) => id !== userId);
+          changed = true;
+        }
+      }
+      if (changed) localStorage.setItem(EVENTS_KEY, JSON.stringify(events));
+    } catch {}
+
+    // Remove from trail-dig-users
+    const users = loadUsers();
+    saveUsers(users.filter((u) => u.id !== userId));
+
+    // Remove profile
+    try {
+      const profiles = JSON.parse(localStorage.getItem('trail-dig-profiles') || '{}');
+      delete profiles[userId];
+      localStorage.setItem('trail-dig-profiles', JSON.stringify(profiles));
+    } catch {}
+
+    // Clear auth session
+    localStorage.removeItem(STORAGE_KEY);
+  }
+);
+
 const authSlice = createSlice({
   name: 'auth',
   initialState,
@@ -190,7 +229,12 @@ const authSlice = createSlice({
         state.user = action.payload;
         state.isAuthenticated = true;
       })
-      .addCase(login.rejected, (state) => { state.loading = false; });
+      .addCase(login.rejected, (state) => { state.loading = false; })
+      .addCase(deleteAccount.fulfilled, (state) => {
+        state.user = null;
+        state.isAuthenticated = false;
+        state.pendingVerification = null;
+      });
   },
 });
 
