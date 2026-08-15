@@ -810,6 +810,16 @@ input[type="time"]::-webkit-calendar-picker-indicator { filter: invert(0.55); cu
 .event-cover { height: 240px; border-radius: var(--radius); background-size: cover; background-position: center; margin-bottom: 16px; }
 .event-detail-title-group { margin-bottom: 0; }
 .event-detail-title-group h1 { font-size: 1.8rem; color: var(--stone-800); }
+.event-detail-title-group { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.share-btn {
+  display: inline-flex; align-items: center; gap: 5px; padding: 5px 12px;
+  border: 1px solid var(--stone-200); border-radius: var(--radius-sm);
+  background: var(--surface); color: var(--stone-600); font-size: .8rem;
+  cursor: pointer; transition: all .15s; flex-shrink: 0;
+}
+.share-btn:hover { border-color: var(--green-400); color: var(--green-700); }
+[data-theme="dark"] .share-btn { border-color: var(--stone-700); color: var(--stone-400); }
+[data-theme="dark"] .share-btn:hover { border-color: var(--green-600); color: var(--green-400); }
 .trail-name { color: var(--stone-500); font-size: 1rem; margin-top: 4px; }
 .private-badge {
   display: inline-block; font-size: .7rem; font-weight: 600; text-transform: uppercase;

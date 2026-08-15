@@ -7,6 +7,7 @@ import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { registerForEvent, loadEventsFromStorage, removeVolunteer, promoteFromWaitlist, updateEvent, addNotification } from './eventsSlice';
 import { addToast } from '../toast/toastSlice';
 import CommentSection from '../comments/CommentSection';
+import { Helmet } from 'react-helmet-async';
 import { v4 as uuidv4 } from 'uuid';
 
 const MapRefCapture: React.FC<{ mapRef: React.MutableRefObject<L.Map | null> }> = ({ mapRef }) => {
@@ -34,6 +35,10 @@ const EventDetailPage: React.FC = () => {
 
   if (!event) return <div className="loading">Event not found.</div>;
 
+  const shareTitle = event.title;
+  const shareDesc = `${event.trailName} \u00b7 ${event.locationName} \u00b7 ${event.registeredVolunteers.length}/${event.maxVolunteers} registered`;
+  const eventUrl = window.location.href;
+
   const isCreator = user ? event.creatorId === user.id : false;
   const isRegistered = user ? event.registeredVolunteers.includes(user.id) : false;
   const isOnWaitlist = user ? event.waitlist.includes(user.id) : false;
@@ -55,6 +60,14 @@ const EventDetailPage: React.FC = () => {
     } catch (err: any) {
       dispatch(addToast({ message: err.message || 'Failed', type: 'warning' }));
     }
+  };
+
+  const handleShare = () => {
+    const url = window.location.href;
+    navigator.clipboard.writeText(url).then(
+      () => dispatch(addToast({ message: 'Link copied to clipboard!', type: 'success' })),
+      () => dispatch(addToast({ message: 'Failed to copy link', type: 'warning' }))
+    );
   };
 
   const handleRemoveVolunteer = async (userId: string) => {
@@ -160,6 +173,16 @@ const EventDetailPage: React.FC = () => {
 
   return (
     <div className="event-detail-page">
+      <Helmet>
+        <title>{shareTitle} - Trail Dig Days</title>
+        <meta property="og:title" content={shareTitle} />
+        <meta property="og:description" content={shareDesc} />
+        <meta property="og:url" content={eventUrl} />
+        <meta property="og:image" content={event.imageUrl || 'https://jacoblbagent.github.io/trail-dig-days/og-image.png'} />
+        <meta name="twitter:title" content={shareTitle} />
+        <meta name="twitter:description" content={shareDesc} />
+        <meta name="twitter:image" content={event.imageUrl || 'https://jacoblbagent.github.io/trail-dig-days/og-image.png'} />
+      </Helmet>
       <div className="event-detail-inner">
         <button className="event-detail-page-back" onClick={() => navigate(referrerPath || '/')}><span className="nav-arrow">←</span> Back</button>
         <div className="event-detail-header">
@@ -176,6 +199,13 @@ const EventDetailPage: React.FC = () => {
               {isFull && <span className="full-badge">Full</span>}
               <span className={`status-badge status-${event.status}`}>{event.status}</span>
             </h1>
+            <button className="share-btn" onClick={handleShare} title="Copy event link to clipboard">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="18" cy="5" r="3" /><circle cx="6" cy="12" r="3" /><circle cx="18" cy="19" r="3" />
+                <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" /><line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
+              </svg>
+              Share
+            </button>
           </div>
         </div>
 
