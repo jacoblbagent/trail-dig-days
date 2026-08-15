@@ -71,6 +71,12 @@ const DigDatesTab: React.FC<{ userId: string }> = ({ userId }) => {
   const created = items.filter((e) => e.creatorId === userId);
   const signedUp = items.filter((e) => e.registeredVolunteers.includes(userId) && e.creatorId !== userId);
 
+  const participantLabel = (eventId: string) => {
+    if (created.find((e) => e.id === eventId)) return 'Created';
+    if (signedUp.find((e) => e.id === eventId)) return 'Signed Up';
+    return '';
+  };
+
   const handleTabChange = (t: typeof tab) => {
     setTab(t);
     if (!page[t]) setPage((p) => ({ ...p, [t]: 1 }));
@@ -146,7 +152,7 @@ const DigDatesTab: React.FC<{ userId: string }> = ({ userId }) => {
                   <span className="ddc-time">{e.startTime}</span>
                 </div>
                 <div className="ddc-mid">
-                  <span className="ddc-title">{e.title}</span>
+                  <span className="ddc-title">{e.title} <span className="participant-tag">{participantLabel(e.id)}</span></span>
                   <span className="ddc-trail">{DIFF_ICONS[e.difficulty]} {e.trailName} · {e.locationName}</span>
                 </div>
               </Link>
@@ -176,7 +182,7 @@ const DigDatesTab: React.FC<{ userId: string }> = ({ userId }) => {
                   <span className="ddc-time">{e.startTime}</span>
                 </div>
                 <div className="ddc-mid">
-                  <span className="ddc-title">{e.title}</span>
+                  <span className="ddc-title">{e.title} <span className="participant-tag">{participantLabel(e.id)}</span></span>
                   <span className="ddc-trail">{DIFF_ICONS[e.difficulty]} {e.trailName} · {e.locationName}</span>
                 </div>
               </Link>
@@ -251,15 +257,19 @@ const ProfilePage: React.FC = () => {
             <p className="profile-metrics">
               <span>{profile.digStats.totalDigs} Dig Days</span>
               <span className="sep">·</span>
+              <span>{profile.digStats.totalHours} Hours</span>
+              <span className="sep">·</span>
+              <span>{profile.digStats.totalMiles} mi</span>
+              <span className="sep">·</span>
               <span>Member Since {profile.createdAt ? new Date(profile.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : ''}</span>
               {profile.location && <><span className="sep">·</span><span>{profile.location}</span></>}
             </p>
             {!isOwnProfile && (
               <label className="follow-org-toggle" style={{ justifyContent: 'center', padding: '8px 0' }}>
-                <input type="checkbox" checked={followedOrgs.includes(profile.displayName)} onChange={() => {
-                  dispatch(followedOrgs.includes(profile.displayName) ? unfollowOrg(profile.displayName) : followOrg(profile.displayName));
+                <input type="checkbox" checked={followedOrgs.includes(targetId!)} onChange={() => {
+                  dispatch(followedOrgs.includes(targetId!) ? unfollowOrg(targetId!) : followOrg(targetId!));
                 }} />
-                <span>Follow {profile.displayName} for new events</span>
+                <span>Follow</span>
               </label>
             )}
             {isOwnProfile && (
@@ -311,6 +321,24 @@ const ProfilePage: React.FC = () => {
             <h3>My Gear</h3>
             <div className="tag-grid">
               {profile.gearList.map((g) => <span key={g} className="tag active">{g}</span>)}
+            </div>
+          </section>
+        )}
+
+        {profile.favoriteTrails.length > 0 && (
+          <section className="profile-section">
+            <h3>Favorite Trails</h3>
+            <div className="tag-grid">
+              {profile.favoriteTrails.map((t) => <span key={t} className="tag-meta">{t}</span>)}
+            </div>
+          </section>
+        )}
+
+        {profile.availability.length > 0 && (
+          <section className="profile-section">
+            <h3>Availability</h3>
+            <div className="tag-grid">
+              {profile.availability.map((a) => <span key={a} className="tag-meta">{a}</span>)}
             </div>
           </section>
         )}

@@ -21,6 +21,7 @@ const boundsCenter = (bounds: [[number, number], [number, number]]): [number, nu
 
 const EventCard = memo(function EventCard({ event, center }: { event: DigEvent; center: [number, number] | null }) {
   const dist = center ? haversine(center, event.coordinates) : null;
+  const isFull = event.registeredVolunteers.length >= event.maxVolunteers;
   return (
     <Link
       to={`/events/${event.id}`}
@@ -36,9 +37,12 @@ const EventCard = memo(function EventCard({ event, center }: { event: DigEvent; 
       <div className="list-card-body">
         <div className="list-card-header">
           <h3>{event.title}</h3>
-          {event.recurrence && event.recurrence !== 'none' && (
-            <span className="recurring-badge">Recurring</span>
-          )}
+          <div className="list-card-badges">
+            {event.recurrence && event.recurrence !== 'none' && (
+              <span className="recurring-badge">Recurring</span>
+            )}
+            {isFull && <span className="full-badge">Full</span>}
+          </div>
         </div>
         <p className="list-card-trail">
             {event.trailName}
@@ -65,6 +69,7 @@ const MapPage: React.FC = () => {
   const items = useAppSelector((s) => s.events.items);
   const mapBounds = useAppSelector((s) => s.events.mapBounds);
   const selectedDay = useAppSelector((s) => s.events.selectedDay);
+  const searchQuery = useAppSelector((s) => s.events.searchQuery);
   const showRecurring = useAppSelector((s) => s.events.showRecurring);
   const [sortBy, setSortBy] = useState<'date' | 'distance' | 'spots'>('date');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
@@ -154,6 +159,16 @@ const MapPage: React.FC = () => {
 
   const filtered = useMemo(() => {
     let result = collapsed;
+    if (searchQuery) {
+      const q = searchQuery.toLowerCase();
+      result = result.filter((e) =>
+        e.title.toLowerCase().includes(q) ||
+        e.trailName.toLowerCase().includes(q) ||
+        e.trailSystem.toLowerCase().includes(q) ||
+        e.locationName.toLowerCase().includes(q) ||
+        e.description.toLowerCase().includes(q)
+      );
+    }
     if (mapBounds) {
       result = collapsed.filter((e) => inBounds(e.coordinates, mapBounds));
     }

@@ -29,7 +29,7 @@ const defaultProfile = (userId: string, displayName: string): UserProfile => ({
   certifications: [],
   favoriteTrails: [],
   digStats: { totalDigs: 0, totalHours: 0, totalMiles: 0 },
-  socialLinks: { instagram: '', strava: '', facebook: '', website: '' },
+  socialLinks: { instagram: '', strava: '', facebook: '', website: '', youtube: '', tiktok: '', bluesky: '' },
   gearList: [],
   availability: [],
   customFields: [],

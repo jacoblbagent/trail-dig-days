@@ -36,6 +36,9 @@ export interface UserProfile {
     instagram: string;
     strava: string;
     facebook: string;
+    youtube: string;
+    tiktok: string;
+    bluesky: string;
     website: string;
   };
   gearList: string[];
@@ -148,6 +151,7 @@ export interface EventsState {
   mapZoom: number;
   theme: 'light' | 'dark';
   hoveredMarkerId: string | null;
+  searchQuery: string;
   notificationsEnabled: boolean;
   notificationRadius: number;
   notifications: NotificationItem[];

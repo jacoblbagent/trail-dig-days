@@ -30,6 +30,7 @@ const EventDetailPage: React.FC = () => {
   const isCreator = user ? event.creatorId === user.id : false;
   const isRegistered = user ? event.registeredVolunteers.includes(user.id) : false;
   const isPast = new Date(event.date) < new Date(new Date().toDateString());
+  const isFull = event.registeredVolunteers.length >= event.maxVolunteers;
   const volCount = event.registeredVolunteers.length;
   const { profiles } = useAppSelector((s) => s.profile);
   const creatorProfile = profiles[event.creatorId];
@@ -63,7 +64,12 @@ const EventDetailPage: React.FC = () => {
             />
           )}
           <div className="event-detail-title-group">
-            <h1>{event.title} {event.isPrivate && <span className="private-badge">Private</span>}</h1>
+            <h1>
+              {event.title}
+              {event.isPrivate && <span className="private-badge">Private</span>}
+              {isFull && <span className="full-badge">Full</span>}
+              <span className={`status-badge status-${event.status}`}>{event.status}</span>
+            </h1>
           </div>
         </div>
 
@@ -181,6 +187,29 @@ const EventDetailPage: React.FC = () => {
               {isCreator && (
                 <div className="creator-actions">
                   <Link to={`/events/${event.id}/edit`} className="btn btn-ghost btn-block">Edit Event</Link>
+                </div>
+              )}
+
+              {isCreator && event.registeredVolunteers.length > 0 && (
+                <div className="volunteer-roster">
+                  <h4>Volunteers ({event.registeredVolunteers.length})</h4>
+                  <ul className="roster-list">
+                    {event.registeredVolunteers.map((vid) => {
+                      const p = profiles[vid];
+                      return (
+                        <li key={vid} className="roster-item">
+                          {p?.avatarUrl ? (
+                            <img src={p.avatarUrl} alt="" className="roster-avatar" />
+                          ) : (
+                            <div className="roster-avatar roster-avatar-fallback">
+                              {p?.displayName?.charAt(0) || vid.charAt(0)}
+                            </div>
+                          )}
+                          <span>{p?.displayName || vid.slice(0, 8)}</span>
+                        </li>
+                      );
+                    })}
+                  </ul>
                 </div>
               )}
 

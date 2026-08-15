@@ -87,6 +87,7 @@ const EditEventPage: React.FC = () => {
   const [recurrence, setRecurrence] = useState<'none' | 'weekly' | 'biweekly' | 'monthly'>('none');
   const [recurrenceEnd, setRecurrenceEnd] = useState('');
   const [isPrivate, setIsPrivate] = useState(false);
+  const [eventStatus, setEventStatus] = useState<'planned' | 'confirmed' | 'cancelled' | 'completed'>('planned');
   const [error, setError] = useState('');
 
   const [providedItems, setProvidedItems] = useState<ProvidedItem[]>([]);
@@ -126,6 +127,7 @@ const EditEventPage: React.FC = () => {
     setRecurrence(event.recurrence || 'none');
     setRecurrenceEnd(event.recurrenceEnd || '');
     setIsPrivate(event.isPrivate ?? false);
+    setEventStatus(event.status || 'planned');
     setProvidedItems(event.providedItems);
     setRecommendedItems(event.recommendedItems);
     const coords: [number, number] = [event.coordinates[0], event.coordinates[1]];
@@ -197,7 +199,7 @@ const EditEventPage: React.FC = () => {
           providedItems, recommendedItems,
           requirements: requirements.split('\n').filter(Boolean),
           parkingNotes, weatherNotes, contactName, contactEmail, contactPhone,
-          imageUrl, isPrivate, recurrence, recurrenceEnd,
+          imageUrl, isPrivate, status: eventStatus, recurrence, recurrenceEnd,
         },
       })).unwrap();
       navigate(`/events/${id}`);
@@ -235,6 +237,15 @@ const EditEventPage: React.FC = () => {
           <div className="form-group">
             <label>Requirements (one per line)</label>
             <textarea value={requirements} onChange={(e) => setRequirements(e.target.value)} rows={4} placeholder="Must be 18+&#10;Closed-toe shoes required" />
+          </div>
+          <div className="form-group">
+            <label>Status</label>
+            <select value={eventStatus} onChange={(e) => setEventStatus(e.target.value as typeof eventStatus)}>
+              <option value="planned">Planned</option>
+              <option value="confirmed">Confirmed</option>
+              <option value="cancelled">Cancelled</option>
+              <option value="completed">Completed</option>
+            </select>
           </div>
         </div>
         <span className="form-section-label">Schedule</span>

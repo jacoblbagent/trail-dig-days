@@ -69,6 +69,7 @@ const initialState: EventsState = {
   mapZoom: 10,
   theme: getInitialTheme(),
   hoveredMarkerId: null,
+  searchQuery: '',
   notificationsEnabled: false,
   notificationRadius: 25,
   notifications: seedNotifications(),
@@ -230,6 +231,9 @@ const eventsSlice = createSlice({
     setShowRecurring(state, action: PayloadAction<boolean>) {
       state.showRecurring = action.payload;
     },
+    setSearchQuery(state, action: PayloadAction<string>) {
+      state.searchQuery = action.payload;
+    },
     loadEventsFromStorage(state) {
       state.items = reloadEvents();
     },
@@ -274,5 +278,5 @@ const eventsSlice = createSlice({
   },
 });
 
-export const { setSearchRadius, setSearchCenter, setMapViewport, setMapBounds, setTheme, clearSearchCenter, setHoveredMarkerId, setNotificationsEnabled, setNotificationRadius, addNotification, markNotificationRead, setReferrerPath, setSelectedDay, setShowRecurring, followOrg, unfollowOrg, loadEventsFromStorage } = eventsSlice.actions;
+export const { setSearchRadius, setSearchCenter, setMapViewport, setMapBounds, setTheme, clearSearchCenter, setHoveredMarkerId, setSearchQuery, setNotificationsEnabled, setNotificationRadius, addNotification, markNotificationRead, setReferrerPath, setSelectedDay, setShowRecurring, followOrg, unfollowOrg, loadEventsFromStorage } = eventsSlice.actions;
 export default eventsSlice.reducer;

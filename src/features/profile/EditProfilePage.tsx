@@ -24,7 +24,12 @@ const GEAR_OPTIONS = [
   'Gloves', 'Hard Hat', 'Safety Vest',
 ];
 
-const SOCIAL_KEYS = ['facebook', 'instagram', 'strava', 'youtube', 'tiktok', 'bluesky'];
+const SOCIAL_KEYS = ['facebook', 'instagram', 'strava', 'youtube', 'tiktok', 'bluesky', 'website'];
+
+const AVAILABILITY_OPTIONS = [
+  'Weekdays', 'Weekends', 'Mornings', 'Afternoons', 'Evenings',
+  'One-time', 'Ongoing',
+];
 
 const EditProfilePage: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -150,6 +155,56 @@ const EditProfilePage: React.FC = () => {
                 {g}
               </button>
             ))}
+          </div>
+        </section>
+
+        {/* Favorite Trails */}
+        <span className="form-section-label">Favorite Trails</span>
+        <section className="form-section">
+          <div className="form-group">
+            <label>Favorite Trails (one per line)</label>
+            <textarea value={(form.favoriteTrails || []).join('\n')}
+              onChange={(e) => save({ favoriteTrails: e.target.value.split('\n').filter(Boolean) })}
+              rows={4} placeholder="Galbraith Mountain&#10;Porcupine Rim&#10;Buffalo Creek" />
+          </div>
+        </section>
+
+        {/* Availability */}
+        <span className="form-section-label">Availability</span>
+        <section className="form-section">
+          <div className="tag-grid">
+            {AVAILABILITY_OPTIONS.map((a) => (
+              <button key={a} className={`tag ${(form.availability || []).includes(a) ? 'active' : ''}`}
+                onClick={() => {
+                  const arr = form.availability || [];
+                  const next = arr.includes(a) ? arr.filter((s) => s !== a) : [...arr, a];
+                  save({ availability: next });
+                }}>
+                {a}
+              </button>
+            ))}
+          </div>
+        </section>
+
+        {/* Dig Stats */}
+        <span className="form-section-label">Dig Stats</span>
+        <section className="form-section">
+          <div className="form-row">
+            <div className="form-group flex-1">
+              <label>Total Digs</label>
+              <input type="number" min={0} value={form.digStats?.totalDigs || 0}
+                onChange={(e) => save({ digStats: { ...form.digStats, totalDigs: parseInt(e.target.value) || 0 } })} />
+            </div>
+            <div className="form-group flex-1">
+              <label>Total Hours</label>
+              <input type="number" min={0} step={0.5} value={form.digStats?.totalHours || 0}
+                onChange={(e) => save({ digStats: { ...form.digStats, totalHours: parseFloat(e.target.value) || 0 } })} />
+            </div>
+            <div className="form-group flex-1">
+              <label>Total Miles</label>
+              <input type="number" min={0} step={0.1} value={form.digStats?.totalMiles || 0}
+                onChange={(e) => save({ digStats: { ...form.digStats, totalMiles: parseFloat(e.target.value) || 0 } })} />
+            </div>
           </div>
         </section>
 

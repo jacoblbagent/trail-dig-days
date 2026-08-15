@@ -3,7 +3,7 @@ import { Outlet } from 'react-router-dom';
 import { MapContainer, TileLayer, useMap, Marker } from 'react-leaflet';
 import L from 'leaflet';
 import { useAppSelector, useAppDispatch } from '../app/hooks';
-import { setSearchRadius, setSearchCenter, setSelectedDay, setShowRecurring } from '../features/events/eventsSlice';
+import { setSearchRadius, setSearchCenter, setSelectedDay, setShowRecurring, setSearchQuery } from '../features/events/eventsSlice';
 import { expandRecurring } from '../utils/recurrence';
 import MapMoveHandler from '../features/map/MapMoveHandler';
 import TileLoadIndicator from '../features/map/TileLoadIndicator';
@@ -257,6 +257,7 @@ const MapLayout: React.FC = () => {
 
   // Recurring panel state
   const showRecurring = useAppSelector((s) => s.events.showRecurring);
+  const searchQuery = useAppSelector((s) => s.events.searchQuery);
 
   const togglePanel = (name: 'location' | 'time' | 'recurring') => {
     setShowPanel((prev) => (prev === name ? null : name));
@@ -278,6 +279,14 @@ const MapLayout: React.FC = () => {
     <div className="map-page">
       <Outlet />
       <div className="map-toolbar">
+        <div className="toolbar-search-wrap">
+          <svg className="toolbar-search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="11" cy="11" r="8" />
+            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+          </svg>
+          <input className="toolbar-search-input" type="text" placeholder="Search events..." value={searchQuery} onChange={(e) => dispatch(setSearchQuery(e.target.value))} />
+          {searchQuery && <button className="toolbar-search-clear" onClick={() => dispatch(setSearchQuery(''))}>✕</button>}
+        </div>
         <button className={`toolbar-btn${showPanel === 'location' ? ' active' : ''}`} onClick={() => togglePanel('location')}>Location</button>
         <button className={`toolbar-btn${showPanel === 'time' ? ' active' : ''}`} onClick={() => togglePanel('time')}>Date</button>
         <button className={`toolbar-btn${showPanel === 'recurring' ? ' active' : ''}`} onClick={() => togglePanel('recurring')}>Recurring?</button>
