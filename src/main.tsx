@@ -6,11 +6,33 @@ import { ensureSeedData } from './app/seedData';
 import './styles.css';
 
 // Suppress Leaflet's deprecated MouseEvent.mozInputSource warning in Firefox
-const origWarn = console.warn;
-console.warn = (...args: any[]) => {
-  if (typeof args[0] === 'string' && args[0].includes('mozInputSource')) return;
-  origWarn.call(console, ...args);
-};
+// Firefox emits a native deprecation warning when any code accesses mozInputSource.
+// Override the prototype getter to return undefined and suppress the browser warning.
+(function() {
+  try {
+    // Check if mozInputSource exists as a getter on the prototype
+    var desc = Object.getOwnPropertyDescriptor(MouseEvent.prototype, 'mozInputSource');
+    if (desc && desc.get) {
+      // Replace the getter to return undefined, silencing the deprecation warning
+      Object.defineProperty(MouseEvent.prototype, 'mozInputSource', {
+        get: function() { return undefined; },
+        configurable: true,
+        enumerable: true,
+      });
+    }
+    // Also check PointerEvent for Firefox >= 112
+    var pDesc = Object.getOwnPropertyDescriptor(PointerEvent.prototype, 'mozInputSource');
+    if (pDesc && pDesc.get) {
+      Object.defineProperty(PointerEvent.prototype, 'mozInputSource', {
+        get: function() { return undefined; },
+        configurable: true,
+        enumerable: true,
+      });
+    }
+  } catch(e) {
+    // Ignore — won't break anything if patching fails
+  }
+})();
 
 // Seed mock data before Redux initializes
 ensureSeedData();
