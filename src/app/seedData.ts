@@ -17,6 +17,14 @@ const DEMO_USER = {
   userType: 'organization' as const,
 };
 
+const DEMO_VOLUNTEER = {
+  id: 'demo-volunteer-1',
+  email: 'demo@hiker.com',
+  displayName: 'Trail Hiker',
+  createdAt: new Date('2026-04-09').toISOString(),
+  userType: 'volunteer' as const,
+};
+
 const demoProfile: UserProfile = {
   userId: DEMO_USER.id,
   displayName: DEMO_USER.displayName,
@@ -3164,6 +3172,24 @@ export const ensureSeedData = () => {
     const filteredComments = existingComments.filter((c: Comment) => !seedCommentIds.has(c.id));
     localStorage.setItem(COMMENTS_KEY, JSON.stringify([...filteredComments, ...seedComments()]));
 
+    // Ensure registered users include both demo accounts (backfill on re-seed)
+    const regUsers = JSON.parse(localStorage.getItem('trail-dig-users') || '[]');
+    const hasVolunteer = regUsers.some((u: any) => u.email === 'demo@hiker.com');
+    if (!hasVolunteer) {
+      regUsers.push({ ...DEMO_VOLUNTEER, password: 'demo1234' });
+      localStorage.setItem('trail-dig-users', JSON.stringify(regUsers));
+    }
+
+    // Backfill userType on auth user if missing (from older seeds)
+    const authRaw = localStorage.getItem(AUTH_KEY);
+    if (authRaw) {
+      const authUser = JSON.parse(authRaw);
+      if (!authUser.userType) {
+        authUser.userType = 'organization';
+        localStorage.setItem(AUTH_KEY, JSON.stringify(authUser));
+      }
+    }
+
     return;
   }
 
@@ -3171,7 +3197,7 @@ export const ensureSeedData = () => {
   localStorage.setItem(AUTH_KEY, JSON.stringify(DEMO_USER));
 
   // Seed registered users (so login works)
-  const users = [{ ...DEMO_USER, password: 'demo1234' }];
+  const users = [{ ...DEMO_USER, password: 'demo1234' }, { ...DEMO_VOLUNTEER, password: 'demo1234' }];
   localStorage.setItem('trail-dig-users', JSON.stringify(users));
 
   // Seed profile
