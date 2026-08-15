@@ -237,7 +237,7 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
 [data-theme="dark"] .nav-search-btn { background: var(--green-600); }
 [data-theme="dark"] .nav-search-btn:hover { background: var(--green-700); }
 
-.app-layout { display: flex; height: calc(100vh - 92px); box-sizing: border-box; }
+.app-layout { display: flex; height: 100vh; padding-top: 48px; box-sizing: border-box; }
 .app-main { flex: 1; overflow-y: auto; }
 
 /* ── Toast Messages ── */
@@ -565,14 +565,12 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
 .list-card-row .list-card-date { color: var(--stone-400); white-space: nowrap; }
 .list-card-row .list-card-spots { margin-left: auto; color: var(--stone-400); white-space: nowrap; }
 .list-card-dist { font-size: .72rem; color: var(--stone-400); }
-.map-container { flex: 1; position: relative; overflow: hidden; z-index: 0; }
+.map-container { flex: 1; position: relative; overflow: hidden; z-index: 0; padding-top: 44px; }
 .map-toolbar {
-  position: sticky; top: 48px; z-index: 1100;
-  height: 44px;
-  background: color-mix(in srgb, var(--surface) 85%, transparent);
-  backdrop-filter: blur(8px);
+  position: absolute; top: 0; left: 0; right: 0; height: 44px;
+  background: color-mix(in srgb, var(--surface) 60%, transparent);
   border-bottom: 1px solid var(--stone-150);
-  display: flex; justify-content: flex-end; align-items: center; gap: 2px; padding: 0 8px;
+  z-index: 1100; display: flex; justify-content: flex-end; align-items: center; gap: 2px; padding: 0 8px;
 }
 .toolbar-btn {
   background: none; border: none; border-radius: 6px; height: 30px;
