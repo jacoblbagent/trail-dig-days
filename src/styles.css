@@ -636,10 +636,6 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
 .map-style-btn:hover { background: var(--stone-50); border-color: var(--stone-300); }
 .map-style-btn.active { border-color: var(--green-600); background: var(--green-50); color: var(--stone-800); }
 .map-style-btn .map-style-desc { font-size: .75rem; color: var(--stone-400); margin-top: 1px; }
-[data-theme="dark"] .map-style-btn { border-color: var(--stone-700); color: var(--stone-300); }
-[data-theme="dark"] .map-style-btn:hover { background: var(--stone-800); border-color: var(--stone-600); }
-[data-theme="dark"] .map-style-btn.active { border-color: var(--green-600); background: rgba(21,128,61,.15); color: var(--stone-200); }
-[data-theme="dark"] .map-style-btn .map-style-desc { color: var(--stone-500); }
 [data-theme="dark"] .filter-panel { background: var(--stone-100); border-color: var(--stone-700); }
 [data-theme="dark"] .filter-panel .calendar-nav strong,
 [data-theme="dark"] .filter-panel .cal-cell { color: var(--stone-300); }
