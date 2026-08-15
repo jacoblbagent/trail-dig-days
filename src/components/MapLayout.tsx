@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useEffect, useRef, useCallback } from 'react';
 import { Outlet } from 'react-router-dom';
-import { MapContainer, TileLayer, useMap, CircleMarker } from 'react-leaflet';
+import { MapContainer, TileLayer, useMap, Marker } from 'react-leaflet';
 import L from 'leaflet';
 import { useAppSelector, useAppDispatch } from '../app/hooks';
 import { setSearchRadius, setSearchCenter, setSelectedDay, setShowRecurring } from '../features/events/eventsSlice';
@@ -321,10 +321,17 @@ const MapLayout: React.FC = () => {
           <PageMarkerContent />
           <MapExtras />
           {userLocation && (
-            <CircleMarker
-              center={userLocation}
-              radius={7}
-              pathOptions={{ color: '#fff', weight: 3, fillColor: '#3b82f6', fillOpacity: 1, className: 'user-location-dot' }}
+            <Marker
+              position={userLocation}
+              icon={L.divIcon({
+                className: '',
+                iconSize: [24, 36],
+                iconAnchor: [12, 36],
+                html: `<svg width="24" height="36" viewBox="0 0 24 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12 0C5.373 0 0 5.373 0 12c0 9 12 24 12 24s12-15 12-24C24 5.373 18.627 0 12 0z" fill="#3b82f6"/>
+                  <circle cx="12" cy="12" r="4" fill="#fff"/>
+                </svg>`,
+              })}
             />
           )}
         </MapContainer>
