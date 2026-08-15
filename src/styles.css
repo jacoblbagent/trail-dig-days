@@ -487,9 +487,6 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
 .demo-btn strong { font-weight: 600; }
 .demo-btn-desc { font-size: .72rem; color: var(--stone-400); }
 [data-theme="dark"] .demo-card { border-color: transparent; }
-[data-theme="dark"] .demo-btn { background: var(--stone-800); border-color: var(--stone-700); color: var(--stone-400); }
-[data-theme="dark"] .demo-btn:hover { border-color: var(--stone-600); background: var(--stone-800); }
-[data-theme="dark"] .demo-btn.active { background: rgba(21,128,61,.15); color: var(--green-400); border-color: var(--green-600); }
 [data-theme="dark"] .demo-btn-desc { color: var(--stone-500); }
 
 .user-type-options { display: flex; flex-direction: column; gap: 8px; }
