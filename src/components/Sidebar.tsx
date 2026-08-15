@@ -129,15 +129,17 @@ const Sidebar: React.FC = () => {
               {showNotifications && (
                 <div className="notif-panel" role="dialog" aria-modal="true" aria-label="Notifications">
                   <div className="notif-header">
-                    <span>Notifications ({notifications.length})</span>
-                    <div className="notif-header-actions">
-                      {unreadCount > 0 && (
-                        <button className="notif-mark-read-btn" onClick={() => dispatch(markAllNotificationsRead())} aria-label="Mark all notifications as read">
-                          Mark all read
-                        </button>
-                      )}
-                      <button className="notif-close" onClick={() => setShowNotifications(false)} aria-label="Close notifications">x</button>
+                    <div className="notif-header-left">
+                      <span>Notifications ({notifications.length})</span>
+                      <div className="notif-header-actions">
+                        {unreadCount > 0 && (
+                          <button className="notif-mark-read-btn" onClick={() => dispatch(markAllNotificationsRead())} aria-label="Mark all notifications as read">
+                            Mark all read
+                          </button>
+                        )}
+                      </div>
                     </div>
+                    <button className="notif-close" onClick={() => setShowNotifications(false)} aria-label="Close notifications">x</button>
                   </div>
                   {notifications.length > 0 ? (
                     <div className="notif-list-wrap">
