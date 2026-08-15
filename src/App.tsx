@@ -18,6 +18,7 @@ import MapPage from './features/map/MapPage';
 import EditProfilePage from './features/profile/EditProfilePage';
 import NotFoundPage from './pages/NotFoundPage';
 import ToastContainer from './components/ToastContainer';
+import Toolbar from './components/Toolbar';
 
 const TopNav: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -91,6 +92,7 @@ const App: React.FC = () => {
       <BrowserRouter basename={import.meta.env.BASE_URL.replace(/\/$/, '')}>
         <RedirectHandler>
           <TopNav />
+          <Toolbar />
           <div className="app-layout">
             <Sidebar />
             <main className="app-main">
