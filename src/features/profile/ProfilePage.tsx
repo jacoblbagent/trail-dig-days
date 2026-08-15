@@ -56,6 +56,8 @@ const DIFF_ICONS: Record<string, string> = {
 const DigDatesTab: React.FC<{ userId: string }> = ({ userId }) => {
   const { items } = useAppSelector((s) => s.events);
   const [tab, setTab] = useState<'upcoming' | 'past' | 'mine'>('upcoming');
+  const [page, setPage] = useState<Record<string, number>>({ upcoming: 1, past: 1, mine: 1 });
+  const PAGE_SIZE = 5;
 
   const userEvents = items.filter(
     (e) => e.creatorId === userId || e.registeredVolunteers.includes(userId)
@@ -69,39 +71,44 @@ const DigDatesTab: React.FC<{ userId: string }> = ({ userId }) => {
   const created = items.filter((e) => e.creatorId === userId);
   const signedUp = items.filter((e) => e.registeredVolunteers.includes(userId) && e.creatorId !== userId);
 
+  const handleTabChange = (t: typeof tab) => {
+    setTab(t);
+    if (!page[t]) setPage((p) => ({ ...p, [t]: 1 }));
+  };
+
+  const paginate = (list: typeof upcoming, t: typeof tab) => {
+    const p = page[t] || 1;
+    const start = (p - 1) * PAGE_SIZE;
+    return list.slice(start, start + PAGE_SIZE);
+  };
+
+  const totalPages = (list: typeof upcoming) => Math.max(1, Math.ceil(list.length / PAGE_SIZE));
+
   return (
-    <section className="profile-section">
+    <section className="profile-section tabs-section">
       <div className="dig-dates-tabs">
-        <button className={`tab-btn ${tab === 'upcoming' ? 'active' : ''}`} onClick={() => setTab('upcoming')}>
+        <button className={`tab-btn ${tab === 'upcoming' ? 'active' : ''}`} onClick={() => handleTabChange('upcoming')}>
           Upcoming {!!upcoming.length && <span className="tab-count">{upcoming.length}</span>}
         </button>
-        <button className={`tab-btn ${tab === 'past' ? 'active' : ''}`} onClick={() => setTab('past')}>
+        <button className={`tab-btn ${tab === 'past' ? 'active' : ''}`} onClick={() => handleTabChange('past')}>
           Past {!!past.length && <span className="tab-count">{past.length}</span>}
         </button>
-        <button className={`tab-btn ${tab === 'mine' ? 'active' : ''}`} onClick={() => setTab('mine')}>
+        <button className={`tab-btn ${tab === 'mine' ? 'active' : ''}`} onClick={() => handleTabChange('mine')}>
           My Events {!!(created.length + signedUp.length) && <span className="tab-count">{created.length + signedUp.length}</span>}
         </button>
       </div>
 
       {tab === 'mine' ? (
-        <>
-          {created.length === 0 && signedUp.length === 0 ? (
+        (() => {
+          const allMine = [...created, ...signedUp];
+          const tp = totalPages(allMine);
+          const items = paginate(allMine, 'mine');
+          return allMine.length === 0 ? (
             <p className="muted" style={{ padding: '24px 0' }}>No events yet.</p>
           ) : (
+            <>
             <div className="dig-date-list">
-              {created.map((e) => (
-                <Link to={`/events/${e.id}`} key={e.id} className="dig-date-card">
-                  <div className="ddc-left">
-                    <span className="ddc-date">{new Date(e.date).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}</span>
-                    <span className="ddc-time">{e.startTime}</span>
-                  </div>
-                  <div className="ddc-mid">
-                    <span className="ddc-title">{e.title}</span>
-                    <span className="ddc-trail">{e.trailName} · {e.locationName}</span>
-                  </div>
-                </Link>
-              ))}
-              {signedUp.map((e) => (
+              {items.map((e) => (
                 <Link to={`/events/${e.id}`} key={e.id} className="dig-date-card">
                   <div className="ddc-left">
                     <span className="ddc-date">{new Date(e.date).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}</span>
@@ -114,51 +121,75 @@ const DigDatesTab: React.FC<{ userId: string }> = ({ userId }) => {
                 </Link>
               ))}
             </div>
-          )}
-        </>
-      ) : (
-        tab === 'upcoming' ? (
-          upcoming.length === 0 ? (
-            <p className="muted" style={{ textAlign: 'center', padding: '24px 0' }}>No upcoming dig dates.</p>
-          ) : (
-            <div className="dig-date-list">
-              {upcoming.slice(0, 10).map((e) => (
-                <Link to={`/events/${e.id}`} key={e.id} className="dig-date-card">
-                  <div className="ddc-left">
-                    <span className="ddc-date">
-                      {new Date(e.date).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}
-                    </span>
-                    <span className="ddc-time">{e.startTime}</span>
-                  </div>
-                  <div className="ddc-mid">
-                    <span className="ddc-title">{e.title}</span>
-                    <span className="ddc-trail">{DIFF_ICONS[e.difficulty]} {e.trailName} · {e.locationName}</span>
-                  </div>
-                </Link>
-              ))}
-            </div>
-          )
+              {tp > 1 && (
+                <div className="pagination-row">
+                  <button className="btn btn-ghost btn-sm" disabled={(page.mine || 1) <= 1} onClick={() => setPage((p) => ({ ...p, mine: (p.mine || 1) - 1 }))}>← Prev</button>
+                  <span className="pagination-info">Page {(page.mine || 1)} of {tp}</span>
+                  <button className="btn btn-ghost btn-sm" disabled={(page.mine || 1) >= tp} onClick={() => setPage((p) => ({ ...p, mine: (p.mine || 1) + 1 }))}>Next →</button>
+                </div>
+              )}
+            </>
+          );
+        })()
+      ) : tab === 'upcoming' ? (
+        upcoming.length === 0 ? (
+          <p className="muted" style={{ textAlign: 'center', padding: '24px 0' }}>No upcoming dig dates.</p>
         ) : (
-          past.length === 0 ? (
-            <p className="muted" style={{ textAlign: 'center', padding: '24px 0' }}>No past dig dates yet.</p>
-          ) : (
-            <div className="dig-date-list">
-              {past.slice(0, 10).map((e) => (
-                <Link to={`/events/${e.id}`} key={e.id} className="dig-date-card">
-                  <div className="ddc-left">
-                    <span className="ddc-date">
-                      {new Date(e.date).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}
-                    </span>
-                    <span className="ddc-time">{e.startTime}</span>
-                  </div>
-                  <div className="ddc-mid">
-                    <span className="ddc-title">{e.title}</span>
-                    <span className="ddc-trail">{DIFF_ICONS[e.difficulty]} {e.trailName} · {e.locationName}</span>
-                  </div>
-                </Link>
-              ))}
-            </div>
-          )
+          <>
+          <div className="dig-date-list">
+            {paginate(upcoming, 'upcoming').map((e) => (
+              <Link to={`/events/${e.id}`} key={e.id} className="dig-date-card">
+                <div className="ddc-left">
+                  <span className="ddc-date">
+                    {new Date(e.date).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}
+                  </span>
+                  <span className="ddc-time">{e.startTime}</span>
+                </div>
+                <div className="ddc-mid">
+                  <span className="ddc-title">{e.title}</span>
+                  <span className="ddc-trail">{DIFF_ICONS[e.difficulty]} {e.trailName} · {e.locationName}</span>
+                </div>
+              </Link>
+            ))}
+          </div>
+            {(totalPages(upcoming) > 1) && (
+              <div className="pagination-row">
+                <button className="btn btn-ghost btn-sm" disabled={(page.upcoming || 1) <= 1} onClick={() => setPage((p) => ({ ...p, upcoming: (p.upcoming || 1) - 1 }))}>← Prev</button>
+                <span className="pagination-info">Page {(page.upcoming || 1)} of {totalPages(upcoming)}</span>
+                <button className="btn btn-ghost btn-sm" disabled={(page.upcoming || 1) >= totalPages(upcoming)} onClick={() => setPage((p) => ({ ...p, upcoming: (p.upcoming || 1) + 1 }))}>Next →</button>
+              </div>
+            )}
+          </>
+        )
+      ) : (
+        past.length === 0 ? (
+          <p className="muted" style={{ textAlign: 'center', padding: '24px 0' }}>No past dig dates yet.</p>
+        ) : (
+          <>
+          <div className="dig-date-list">
+            {paginate(past, 'past').map((e) => (
+              <Link to={`/events/${e.id}`} key={e.id} className="dig-date-card">
+                <div className="ddc-left">
+                  <span className="ddc-date">
+                    {new Date(e.date).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}
+                  </span>
+                  <span className="ddc-time">{e.startTime}</span>
+                </div>
+                <div className="ddc-mid">
+                  <span className="ddc-title">{e.title}</span>
+                  <span className="ddc-trail">{DIFF_ICONS[e.difficulty]} {e.trailName} · {e.locationName}</span>
+                </div>
+              </Link>
+            ))}
+          </div>
+            {(totalPages(past) > 1) && (
+              <div className="pagination-row">
+                <button className="btn btn-ghost btn-sm" disabled={(page.past || 1) <= 1} onClick={() => setPage((p) => ({ ...p, past: (p.past || 1) - 1 }))}>← Prev</button>
+                <span className="pagination-info">Page {(page.past || 1)} of {totalPages(past)}</span>
+                <button className="btn btn-ghost btn-sm" disabled={(page.past || 1) >= totalPages(past)} onClick={() => setPage((p) => ({ ...p, past: (p.past || 1) + 1 }))}>Next →</button>
+              </div>
+            )}
+          </>
         )
       )}
     </section>

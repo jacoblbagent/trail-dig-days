@@ -139,7 +139,8 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
 
 /* ── Tags / Chips ── */
 .tag-grid { display: flex; flex-wrap: wrap; gap: 6px; }
-.tag-grid .tag { border-radius: 3px; background: var(--stone-100); border: 1px solid var(--stone-200); color: var(--stone-500); }
+.tag-grid .tag { border-radius: 3px; background: var(--stone-100); border: 1px solid var(--stone-200); color: var(--stone-500); cursor: default; }
+.tag-grid .tag:hover { border-color: var(--stone-200); }
 .tag {
   display: inline-flex; align-items: center; gap: 4px;
   padding: 4px 14px; border-radius: 100px;
@@ -977,6 +978,8 @@ input[type="time"]::-webkit-calendar-picker-indicator { filter: invert(0.55); cu
   font-size: .7rem; font-weight: 700; margin-left: 6px; vertical-align: middle;
 }
 .dig-date-list { display: flex; flex-direction: column; gap: 6px; }
+.pagination-row { display: flex; align-items: center; justify-content: flex-end; gap: 12px; padding: 12px 12px 4px; }
+.pagination-info { font-size: .8rem; color: var(--stone-400); }
 .dig-date-card {
   display: flex; align-items: center; gap: 12px;
   padding: 10px 12px; border-radius: var(--radius-sm);
@@ -991,6 +994,8 @@ input[type="time"]::-webkit-calendar-picker-indicator { filter: invert(0.55); cu
 .ddc-title { font-size: .85rem; font-weight: 600; color: var(--stone-800); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .ddc-trail { font-size: .75rem; color: var(--stone-500); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .profile-section { padding: 20px 0; margin-bottom: 16px; }
+.profile-section.tabs-section { margin-bottom: 24px; }
+.tabs-section .dig-date-list { max-height: 350px; overflow-y: auto; }
 .profile-section h3 { font-size: .9rem; color: var(--stone-600); margin-bottom: 12px; text-transform: uppercase; letter-spacing: .5px; }
 .profile-section p { color: var(--stone-600); line-height: 1.6; }
 .profile-section textarea { width: 100%; padding: 10px; border: 1px solid var(--stone-200); border-radius: var(--radius); resize: vertical; }
