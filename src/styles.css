@@ -645,15 +645,17 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
   display: flex; flex-direction: column; align-items: flex-start;
 }
 .map-style-toggle {
-  width: 34px; height: 34px; border-radius: 4px;
+  height: 34px; border-radius: 4px;
   background: var(--surface); border: 1px solid var(--stone-200);
-  cursor: pointer; color: var(--stone-500);
+  cursor: pointer; color: var(--stone-700);
   display: flex; align-items: center; justify-content: center;
   box-shadow: 0 1px 3px rgba(0,0,0,.08);
   transition: border-color .15s;
+  font-size: .8rem; padding: 0 10px; white-space: nowrap;
 }
+.map-style-toggle .map-style-label { font-weight: 600; }
 .map-style-toggle:hover { border-color: var(--green-600); }
-[data-theme="dark"] .map-style-toggle { background: var(--surface); border-color: #444; color: var(--stone-400); }
+[data-theme="dark"] .map-style-toggle { background: var(--surface); border-color: #444; color: var(--stone-300); }
 .map-style-panel {
   position: absolute; bottom: 40px; left: 0;
   background: var(--surface); border: 1px solid var(--stone-200);

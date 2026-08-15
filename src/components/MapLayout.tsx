@@ -193,10 +193,7 @@ const MapLayout: React.FC = () => {
         </MapContainer>
         <div className="map-style-ctrl">
           <button className="map-style-toggle" onClick={() => setShowStyle(!showStyle)} title="Map style" aria-label="Map style">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <circle cx="12" cy="12" r="3"/>
-              <path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
-            </svg>
+            <span className="map-style-label">Map: {{'carto':'Light','carto-dark':'Dark','osm':'OpenStreetMap','topo':'Topographic','satellite':'Satellite'}[mapStyle] || 'Light'}</span>
           </button>
           {showStyle && (
             <div className="map-style-panel">
