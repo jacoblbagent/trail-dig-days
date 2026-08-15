@@ -31,8 +31,8 @@ const NavSearch: React.FC = () => {
   };
 
   const handleBlur = (e: React.FocusEvent) => {
-    // Don't collapse if focus moves within the search wrap
-    if (!e.currentTarget.contains(e.relatedTarget as Node)) {
+    // Don't collapse if focus moves within the search wrap or if there's text
+    if (!e.currentTarget.contains(e.relatedTarget as Node) && !pendingSearch.trim()) {
       setExpanded(false);
     }
   };
