@@ -342,7 +342,7 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
   min-width: 260px; z-index: 2500; display: flex; flex-direction: column;
 }
 .notif-header { display: flex; justify-content: space-between; align-items: center; font-size: .9rem; font-weight: 600; color: var(--stone-700); border-bottom: 1px solid var(--stone-300); padding: 12px 12px 8px; }
-.notif-header-actions { display: flex; align-items: center; gap: 4px; }
+.notif-header-actions { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; }
 .notif-mark-read-btn { background: none; border: none; font-size: .75rem; color: var(--green-700); cursor: pointer; padding: 4px 6px; border-radius: 4px; white-space: nowrap; transition: background .15s; }
 .notif-mark-read-btn:hover { background: var(--green-50); }
 [data-theme="dark"] .notif-mark-read-btn { color: var(--green-400); }
