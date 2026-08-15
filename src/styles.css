@@ -1576,6 +1576,17 @@ input[type="time"]::-webkit-calendar-picker-indicator { filter: invert(0.55); cu
   padding: 2px; line-height: 1;
 }
 .toolbar-search-clear:hover { color: var(--stone-600); }
+.toolbar-search-btn {
+  height: 28px; padding: 0 10px; flex-shrink: 0;
+  font-size: .75rem; font-weight: 600; border: none; border-radius: 6px;
+  background: var(--green-700); color: #fff; cursor: pointer;
+  line-height: 1;
+}
+.toolbar-search-btn:hover { background: var(--green-800); }
+.toolbar-search-btn:disabled { opacity: .4; cursor: default; background: var(--stone-300); }
+[data-theme="dark"] .toolbar-search-btn { background: var(--green-600); }
+[data-theme="dark"] .toolbar-search-btn:hover { background: var(--green-700); }
+[data-theme="dark"] .toolbar-search-btn:disabled { background: var(--stone-700); }
 
 /* ── Participant Tag (Created / Signed Up) ── */
 .participant-tag {

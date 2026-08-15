@@ -258,6 +258,14 @@ const MapLayout: React.FC = () => {
   // Recurring panel state
   const showRecurring = useAppSelector((s) => s.events.showRecurring);
   const searchQuery = useAppSelector((s) => s.events.searchQuery);
+  const [pendingSearch, setPendingSearch] = useState(searchQuery);
+
+  // Sync pendingSearch when Redux gets cleared from outside
+  useEffect(() => { setPendingSearch(searchQuery); }, [searchQuery]);
+
+  const applySearch = () => dispatch(setSearchQuery(pendingSearch));
+  const clearSearch = () => { setPendingSearch(''); dispatch(setSearchQuery('')); };
+  const handleSearchKeyDown = (e: React.KeyboardEvent) => { if (e.key === 'Enter') applySearch(); };
 
   const togglePanel = (name: 'location' | 'time' | 'recurring') => {
     setShowPanel((prev) => (prev === name ? null : name));
@@ -284,9 +292,10 @@ const MapLayout: React.FC = () => {
             <circle cx="11" cy="11" r="8" />
             <line x1="21" y1="21" x2="16.65" y2="16.65" />
           </svg>
-          <input className="toolbar-search-input" type="text" placeholder="Search events..." value={searchQuery} onChange={(e) => dispatch(setSearchQuery(e.target.value))} />
-          {searchQuery && <button className="toolbar-search-clear" onClick={() => dispatch(setSearchQuery(''))}>✕</button>}
+          <input className="toolbar-search-input" type="text" placeholder="Search events..." value={pendingSearch} onChange={(e) => setPendingSearch(e.target.value)} onKeyDown={handleSearchKeyDown} />
+          {pendingSearch && <button className="toolbar-search-clear" onClick={clearSearch}>✕</button>}
         </div>
+        <button className="toolbar-search-btn" onClick={applySearch} disabled={!pendingSearch.trim()} title="Search">Search</button>
         <button className={`toolbar-btn${showPanel === 'location' ? ' active' : ''}`} onClick={() => togglePanel('location')}>Location</button>
         <button className={`toolbar-btn${showPanel === 'time' ? ' active' : ''}`} onClick={() => togglePanel('time')}>Date</button>
         <button className={`toolbar-btn${showPanel === 'recurring' ? ' active' : ''}`} onClick={() => togglePanel('recurring')}>Recurring?</button>
