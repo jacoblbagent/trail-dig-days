@@ -1087,6 +1087,25 @@ input[type="time"]::-webkit-calendar-picker-indicator { filter: invert(0.55); cu
 .portfolio-stats-row { display: flex; justify-content: space-between; font-size: .7rem; color: var(--stone-400); margin-top: auto; padding-top: 6px; border-top: 1px solid var(--stone-100); }
 [data-theme="dark"] .portfolio-stats-row { border-color: var(--stone-700); }
 
+/* ── My Events Filters ── */
+.my-events-tabs { display: flex; gap: 0; margin-bottom: 14px; border-bottom: 1px solid var(--stone-150); }
+.my-events-tabs .tab-btn { padding: 8px 16px; border: none; background: none; cursor: pointer; font-size: .875rem; font-weight: 600; color: var(--stone-500); border-bottom: 2px solid transparent; transition: all .15s; }
+.my-events-tabs .tab-btn:hover { color: var(--stone-700); }
+.my-events-tabs .tab-btn.active { color: var(--green-700); border-bottom-color: var(--green-700); }
+.my-events-search { display: flex; align-items: center; gap: 8px; padding: 8px 12px; border: 1px solid var(--stone-200); border-radius: var(--radius-sm); background: var(--bg); margin-bottom: 10px; }
+.my-events-search .search-input { border: none; background: none; outline: none; flex: 1; font-size: .875rem; color: var(--stone-800); }
+.my-events-search .search-input::placeholder { color: var(--stone-400); }
+.search-clear { background: none; border: none; cursor: pointer; font-size: .8rem; color: var(--stone-400); padding: 2px 4px; line-height: 1; border-radius: 3px; }
+.search-clear:hover { color: var(--stone-600); background: var(--stone-100); }
+.my-events-filters { display: flex; flex-direction: column; gap: 8px; margin-bottom: 4px; }
+.filter-chip-group { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.filter-group-label { font-size: .75rem; font-weight: 600; text-transform: uppercase; letter-spacing: .4px; color: var(--stone-400); min-width: 48px; }
+.filter-chips { display: flex; flex-wrap: wrap; gap: 4px; }
+.list-card-header { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.list-card-header .status-dot { width: 10px; height: 10px; flex-shrink: 0; }
+[data-theme="dark"] .my-events-search { border-color: var(--stone-700); }
+[data-theme="dark"] .my-events-search .search-input { color: var(--stone-200); }
+
 
 
 /* ── Calendar Page ── */
