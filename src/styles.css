@@ -540,7 +540,18 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
 .loc-error { color: var(--earth-500); font-size: .8rem; margin-top: 4px; }
 .event-list-header { display: flex; align-items: center; justify-content: space-between; padding: 8px 16px; }
 .event-list-count { font-size: .8rem; color: var(--stone-400); }
-.event-list-sort { display: flex; align-items: center; gap: 4px; position: relative; margin-left: auto; }
+.event-list-filter-badge {
+  font-size: .8rem; color: var(--stone-700); font-weight: 600;
+  display: flex; align-items: center; gap: 2px;
+  margin-left: auto; margin-right: 8px;
+}
+.event-list-filter-clear {
+  background: none; border: none; cursor: pointer;
+  font-size: .7rem; color: var(--stone-400); padding: 2px 4px; line-height: 1;
+  border-radius: 3px;
+}
+.event-list-filter-clear:hover { background: var(--stone-100); color: var(--stone-600); }
+.event-list-sort { display: flex; align-items: center; gap: 4px; position: relative; }
 .event-list-sort-label { font-size: .8rem; color: var(--stone-400); cursor: pointer; user-select: none; }
 .event-list-sort-label:hover { color: var(--stone-600); }
 .event-list-sort-arrow { font-size: .8rem; color: var(--stone-400); cursor: pointer; user-select: none; padding: 4px 10px; min-width: 28px; text-align: center; }

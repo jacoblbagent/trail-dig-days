@@ -175,8 +175,14 @@ const MapPage: React.FC = () => {
     if (showRecurring) {
       result = result.filter((e) => e.recurrence && e.recurrence !== 'none');
     }
+    if (selectedDay) {
+      result = result.filter((e) => {
+        const eDate = (e.date as string).slice(0, 10);
+        return eDate === selectedDay;
+      });
+    }
     return result;
-  }, [collapsed, mapBounds, showRecurring, searchQuery]);
+  }, [collapsed, mapBounds, showRecurring, searchQuery, selectedDay]);
 
   const eventMap = useMemo(() => {
     let all = expanded;
@@ -264,6 +270,12 @@ const MapPage: React.FC = () => {
           <>
             <div className="event-list-header">
               <span className="event-list-count">{filtered.length} result{filtered.length !== 1 ? 's' : ''}</span>
+              {selectedDay && (
+                <span className="event-list-filter-badge">
+                  {new Date(selectedDay + 'T12:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+                  <button className="event-list-filter-clear" onClick={() => dispatch(setSelectedDay(null))} aria-label="Clear date filter">✕</button>
+                </span>
+              )}
               <div className="event-list-sort" ref={sortRef}>
                 <span className="event-list-sort-label" onClick={() => setShowSortMenu(!showSortMenu)}>
                   {sortBy === 'date' ? 'Date' : sortBy === 'distance' ? 'Distance' : 'Spots'}

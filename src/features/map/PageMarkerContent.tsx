@@ -72,11 +72,16 @@ const PageMarkerContent: React.FC = () => {
   const events = useAppSelector((s) => s.events.items);
   const mapBounds = useAppSelector((s) => s.events.mapBounds);
   const hoveredId = useAppSelector((s) => s.events.hoveredMarkerId);
+  const selectedDay = useAppSelector((s) => s.events.selectedDay);
   const myUserId = useAppSelector((s) => s.auth.user?.id);
 
   const collapsed = useMemo(() => {
-    return collapseRecurring(events);
-  }, [events]);
+    let result = collapseRecurring(events);
+    if (selectedDay) {
+      result = result.filter((e) => (e.date as string).slice(0, 10) === selectedDay);
+    }
+    return result;
+  }, [events, selectedDay]);
 
   const groups = useMemo(() => {
     return groupByLocation(collapsed.filter((e: DigEvent) => !e.isPrivate));
