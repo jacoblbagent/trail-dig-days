@@ -294,8 +294,8 @@ const MapLayout: React.FC = () => {
           </svg>
           <input className="toolbar-search-input" type="text" placeholder="Search events..." aria-label="Search events" value={pendingSearch} onChange={(e) => setPendingSearch(e.target.value)} onKeyDown={handleSearchKeyDown} />
           {pendingSearch && <button className="toolbar-search-clear" onClick={clearSearch} aria-label="Clear search">✕</button>}
+          <button className="toolbar-search-btn" onClick={applySearch} disabled={!pendingSearch.trim()} title="Search" aria-label="Search events">Search</button>
         </div>
-        <button className="toolbar-search-btn" onClick={applySearch} disabled={!pendingSearch.trim()} title="Search" aria-label="Search events">Search</button>
         <button className={`toolbar-btn${showPanel === 'location' ? ' active' : ''}`} onClick={() => togglePanel('location')} aria-label="Filter by location" aria-pressed={showPanel === 'location'}>Location</button>
         <button className={`toolbar-btn${showPanel === 'time' ? ' active' : ''}`} onClick={() => togglePanel('time')} aria-label="Filter by date" aria-pressed={showPanel === 'time'}>Date</button>
         <button className={`toolbar-btn${showPanel === 'recurring' ? ' active' : ''}`} onClick={() => togglePanel('recurring')} aria-label="Filter recurring events" aria-pressed={showPanel === 'recurring'}>Recurring?</button>
