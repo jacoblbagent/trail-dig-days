@@ -52,6 +52,33 @@ const demoProfile: UserProfile = {
   },
 };
 
+const volunteerProfile: UserProfile = {
+  userId: DEMO_VOLUNTEER.id,
+  displayName: DEMO_VOLUNTEER.displayName,
+  userType: 'volunteer',
+  bio: 'Weekend warrior and trail lover. Happiest with dirt on my tires and a shovel in my hand.',
+  avatarUrl: '',
+  location: 'Charlotte, NC, United States',
+  coordinates: [35.2271, -80.8431] as [number, number],
+  trailCrew: '',
+  trailCrewUrl: '',
+  skills: ['Brushing', 'Drain Clearing', 'Trail Maintenance'],
+  certifications: [],
+  favoriteTrails: ['Backyard Trail', 'Church Street', 'Ridgeline'],
+  createdAt: new Date('2026-04-09').toISOString(),
+  digStats: { totalDigs: 5, totalHours: 28, totalMiles: 0 },
+  socialLinks: { instagram: 'https://instagram.com/trailhiker', strava: '', facebook: '', website: '', youtube: '', tiktok: '', bluesky: '' },
+  gearList: ['Shovel', 'Lopper', 'Work Gloves', 'Water Bottle'],
+  availability: [],
+  customFields: [],
+  theme: {
+    headerImage: '',
+    coverPosition: 50,
+    showStats: true,
+    layout: 'standard',
+  },
+};
+
 const now = new Date();
 const day = (offset: number) => {
   const d = new Date(now);
@@ -3257,6 +3284,12 @@ export const ensureSeedData = () => {
       profilesChanged = true;
     }
 
+    // Ensure volunteer profile exists
+    if (!storedProfiles[DEMO_VOLUNTEER.id]) {
+      storedProfiles[DEMO_VOLUNTEER.id] = volunteerProfile;
+      profilesChanged = true;
+    }
+
     for (const key of Object.keys(OTHER_PROFILES)) {
       if (!storedProfiles[key]) {
         storedProfiles[key] = OTHER_PROFILES[key];
@@ -3307,6 +3340,7 @@ export const ensureSeedData = () => {
   // Seed profile
   const profiles: Record<string, UserProfile> = {};
   profiles[DEMO_USER.id] = demoProfile;
+  profiles[DEMO_VOLUNTEER.id] = volunteerProfile;
   Object.assign(profiles, OTHER_PROFILES);
   localStorage.setItem(PROFILES_KEY, JSON.stringify(profiles));
 
