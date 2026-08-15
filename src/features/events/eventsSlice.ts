@@ -69,6 +69,7 @@ const initialState: EventsState = {
   mapBounds: null,
   mapZoom: 10,
   theme: getInitialTheme(),
+  mapStyle: 'carto',
   hoveredMarkerId: null,
   searchQuery: '',
   notificationsEnabled: false,
@@ -255,6 +256,9 @@ const eventsSlice = createSlice({
       localStorage.setItem('trail-dig-theme', action.payload);
       document.documentElement.setAttribute('data-theme', action.payload);
     },
+    setMapStyle(state, action: PayloadAction<string>) {
+      state.mapStyle = action.payload;
+    },
     clearSearchCenter(state) {
       state.searchCenter = null;
     },
@@ -341,5 +345,5 @@ const eventsSlice = createSlice({
   },
 });
 
-export const { setSearchRadius, setSearchCenter, setMapViewport, setMapBounds, setTheme, clearSearchCenter, setHoveredMarkerId, setSearchQuery, setNotificationsEnabled, setNotificationRadius, addNotification, markNotificationRead, markAllNotificationsRead, setReferrerPath, setSelectedDay, setShowRecurring, followOrg, unfollowOrg, loadEventsFromStorage } = eventsSlice.actions;
+export const { setSearchRadius, setSearchCenter, setMapViewport, setMapBounds, setTheme, setMapStyle, clearSearchCenter, setHoveredMarkerId, setSearchQuery, setNotificationsEnabled, setNotificationRadius, addNotification, markNotificationRead, markAllNotificationsRead, setReferrerPath, setSelectedDay, setShowRecurring, followOrg, unfollowOrg, loadEventsFromStorage } = eventsSlice.actions;
 export default eventsSlice.reducer;

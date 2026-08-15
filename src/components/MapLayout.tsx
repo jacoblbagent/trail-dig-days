@@ -63,6 +63,7 @@ const MapResizeWatcher: React.FC = () => {
 const MapLayout: React.FC = () => {
   const dispatch = useAppDispatch();
   const theme = useAppSelector((s) => s.events.theme);
+  const mapStyle = useAppSelector((s) => s.events.mapStyle);
   const searchCenter = useAppSelector((s) => s.events.searchCenter);
   const mapZoom = useAppSelector((s) => s.events.mapZoom);
   const mapRef = useRef<L.Map | null>(null);
@@ -154,14 +155,19 @@ const MapLayout: React.FC = () => {
 
       <div className="map-container" style={{ order: 1 }}>
         <MapContainer center={center} zoom={mapZoom} style={{ width: '100%', height: '100%' }} maxBounds={[[24, -125], [50, -66]]} maxBoundsViscosity={1}>
-          <TileLayer
-            key={theme}
-            attribution='&copy; <a href="https://carto.com/">CARTO</a>'
-            url={theme === 'dark'
-              ? 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png'
-              : 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png'
-            }
-          />
+          {(() => {
+            const tileStyles: Record<string, { url: string; attr: string }> = {
+              'carto': { url: 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', attr: '&copy; <a href="https://carto.com/">CARTO</a>' },
+              'carto-dark': { url: 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', attr: '&copy; <a href="https://carto.com/">CARTO</a>' },
+              'osm': { url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', attr: '&copy; <a href="https://openstreetmap.org/copyright">OpenStreetMap</a>' },
+              'topo': { url: 'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', attr: '&copy; <a href="https://opentopomap.org/copyright">OpenTopoMap</a>' },
+              'satellite': { url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', attr: '&copy; Esri, Maxar, Earthstar Geographics' },
+            };
+            // Fallback: if dark theme and no explicit mapStyle, use carto-dark
+            const key = mapStyle === 'carto' && theme === 'dark' ? 'carto-dark' : mapStyle;
+            const tile = tileStyles[key] || tileStyles['carto'];
+            return <TileLayer key={key} url={tile.url} attribution={tile.attr} />;
+          })()}
           <MapMoveHandler />
           <MapRefSetter mapRef={mapRef} />
           <MapResizeWatcher />
