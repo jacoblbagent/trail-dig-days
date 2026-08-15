@@ -227,15 +227,15 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
 .nav-search-btn {
   height: 28px; padding: 0 10px; flex-shrink: 0;
   font-size: .75rem; font-weight: 600; border: none; border-radius: 0 var(--radius) var(--radius) 0;
-  background: var(--emerald-600); color: #fff; cursor: pointer;
+  background: var(--stone-200); color: var(--stone-700); cursor: pointer;
 }
-.nav-search-btn:hover { background: var(--emerald-700); }
+.nav-search-btn:hover { background: var(--stone-300); }
 .nav-search-btn:disabled { opacity: .5; cursor: default; }
 [data-theme="dark"] .nav-search-icon-btn:hover { background: var(--stone-800); color: var(--stone-300); }
 [data-theme="dark"] .nav-search-input { background: var(--stone-800); border-color: var(--stone-700); color: var(--stone-200); }
 [data-theme="dark"] .nav-search-input:focus { border-color: var(--emerald-500); }
-[data-theme="dark"] .nav-search-btn { background: var(--green-600); }
-[data-theme="dark"] .nav-search-btn:hover { background: var(--green-700); }
+[data-theme="dark"] .nav-search-btn { background: var(--stone-700); color: var(--stone-200); }
+[data-theme="dark"] .nav-search-btn:hover { background: var(--stone-600); }
 
 .app-layout { display: flex; height: 100vh; padding-top: 48px; box-sizing: border-box; }
 .app-main { flex: 1; overflow-y: auto; }
