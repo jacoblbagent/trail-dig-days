@@ -466,12 +466,30 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
 [data-theme="dark"] .token-code:hover { background: rgba(21, 128, 61, .15); border-color: var(--green-600); }
 [data-theme="dark"] .token-display { background: var(--stone-850); border-color: var(--stone-600); }
 
-.demo-section { margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--stone-150); text-align: center; }
-.demo-label { font-size: .75rem; text-transform: uppercase; letter-spacing: .5px; color: var(--stone-400); margin-bottom: 8px; }
+/* ── Auth Demo Card ── */
+.demo-card {
+  background: var(--surface); border: 1px solid var(--stone-150);
+  border-radius: var(--radius); padding: 24px;
+  max-width: 380px; width: 100%; margin: 0 auto 16px;
+  text-align: center;
+}
+.demo-label { font-size: .75rem; text-transform: uppercase; letter-spacing: .5px; color: var(--stone-400); margin-bottom: 4px; }
+.demo-sub { font-size: .82rem; color: var(--stone-500); margin-bottom: 14px; line-height: 1.4; }
 .demo-toggles { display: flex; gap: 8px; justify-content: center; }
-.demo-btn { padding: 4px 14px; border-radius: 999px; font-size: .8rem; font-weight: 500; cursor: pointer; background: var(--stone-100); color: var(--stone-600); border: 1px solid var(--stone-200); transition: all .15s; }
-.demo-btn:hover { background: var(--stone-150); }
-.demo-btn.active { background: var(--green-100); color: var(--green-800); border-color: var(--green-400); }
+.demo-btn {
+  flex: 1; display: flex; flex-direction: column; align-items: center; gap: 2px;
+  padding: 10px 14px; border-radius: var(--radius); font-size: .82rem; cursor: pointer;
+  background: var(--stone-50); color: var(--stone-600); border: 1px solid var(--stone-200);
+  transition: all .15s;
+}
+.demo-btn:hover { background: var(--stone-100); border-color: var(--stone-300); }
+.demo-btn.active { background: var(--green-50); color: var(--green-800); border-color: var(--green-400); }
+.demo-btn-desc { font-size: .72rem; color: var(--stone-400); }
+[data-theme="dark"] .demo-card { border-color: var(--stone-700); }
+[data-theme="dark"] .demo-btn { background: var(--stone-800); border-color: var(--stone-700); color: var(--stone-400); }
+[data-theme="dark"] .demo-btn:hover { background: var(--stone-750); border-color: var(--stone-600); }
+[data-theme="dark"] .demo-btn.active { background: rgba(21,128,61,.15); color: var(--green-400); border-color: var(--green-600); }
+[data-theme="dark"] .demo-btn-desc { color: var(--stone-500); }
 
 .user-type-options { display: flex; flex-direction: column; gap: 8px; }
 .user-type-option { display: flex; flex-direction: column; gap: 2px; padding: 10px 14px; border: 1px solid var(--stone-200); border-radius: var(--radius); cursor: pointer; transition: border-color .15s, background .15s; }

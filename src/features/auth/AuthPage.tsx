@@ -144,6 +144,28 @@ const AuthPage: React.FC = () => {
 
   return (
     <div className="auth-page">
+      <div className="demo-card">
+            <p className="demo-label">This is a demo</p>
+            <p className="demo-sub">Click a role below to preview its sample account. Each shows a different side of the app.</p>
+            <div className="demo-toggles">
+              <button
+                className={`demo-btn ${demoMode === 'organization' ? 'active' : ''}`}
+                onClick={() => fillDemo('organization')}
+                type="button"
+              >
+                <strong>Organization</strong>
+                <span className="demo-btn-desc">Create events, manage volunteers</span>
+              </button>
+              <button
+                className={`demo-btn ${demoMode === 'volunteer' ? 'active' : ''}`}
+                onClick={() => fillDemo('volunteer')}
+                type="button"
+              >
+                <strong>Volunteer</strong>
+                <span className="demo-btn-desc">Discover digs, sign up, track hours</span>
+              </button>
+            </div>
+          </div>
       <div className="auth-card">
 
         {/* ── Verify Email Screen ── */}
@@ -374,22 +396,6 @@ const AuthPage: React.FC = () => {
                 {loading ? '...' : mode === 'login' ? 'Sign In' : 'Create Account'}
               </button>
             </form>
-
-            <div className="demo-section">
-              <p className="demo-label">This is a demo</p>
-              <div className="demo-toggles">
-                <button
-                  className={`demo-btn ${demoMode === 'organization' ? 'active' : ''}`}
-                  onClick={() => fillDemo('organization')}
-                  type="button"
-                >Organization</button>
-                <button
-                  className={`demo-btn ${demoMode === 'volunteer' ? 'active' : ''}`}
-                  onClick={() => fillDemo('volunteer')}
-                  type="button"
-                >Volunteer</button>
-              </div>
-            </div>
 
             <p className="auth-toggle">
               {mode === 'login' ? "Don't have an account?" : 'Already have an account?'}{' '}
