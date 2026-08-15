@@ -292,13 +292,13 @@ const MapLayout: React.FC = () => {
             <circle cx="11" cy="11" r="8" />
             <line x1="21" y1="21" x2="16.65" y2="16.65" />
           </svg>
-          <input className="toolbar-search-input" type="text" placeholder="Search events..." value={pendingSearch} onChange={(e) => setPendingSearch(e.target.value)} onKeyDown={handleSearchKeyDown} />
-          {pendingSearch && <button className="toolbar-search-clear" onClick={clearSearch}>✕</button>}
+          <input className="toolbar-search-input" type="text" placeholder="Search events..." aria-label="Search events" value={pendingSearch} onChange={(e) => setPendingSearch(e.target.value)} onKeyDown={handleSearchKeyDown} />
+          {pendingSearch && <button className="toolbar-search-clear" onClick={clearSearch} aria-label="Clear search">✕</button>}
         </div>
-        <button className="toolbar-search-btn" onClick={applySearch} disabled={!pendingSearch.trim()} title="Search">Search</button>
-        <button className={`toolbar-btn${showPanel === 'location' ? ' active' : ''}`} onClick={() => togglePanel('location')}>Location</button>
-        <button className={`toolbar-btn${showPanel === 'time' ? ' active' : ''}`} onClick={() => togglePanel('time')}>Date</button>
-        <button className={`toolbar-btn${showPanel === 'recurring' ? ' active' : ''}`} onClick={() => togglePanel('recurring')}>Recurring?</button>
+        <button className="toolbar-search-btn" onClick={applySearch} disabled={!pendingSearch.trim()} title="Search" aria-label="Search events">Search</button>
+        <button className={`toolbar-btn${showPanel === 'location' ? ' active' : ''}`} onClick={() => togglePanel('location')} aria-label="Filter by location" aria-pressed={showPanel === 'location'}>Location</button>
+        <button className={`toolbar-btn${showPanel === 'time' ? ' active' : ''}`} onClick={() => togglePanel('time')} aria-label="Filter by date" aria-pressed={showPanel === 'time'}>Date</button>
+        <button className={`toolbar-btn${showPanel === 'recurring' ? ' active' : ''}`} onClick={() => togglePanel('recurring')} aria-label="Filter recurring events" aria-pressed={showPanel === 'recurring'}>Recurring?</button>
       </div>
 
       <div className="map-actions">
@@ -306,7 +306,7 @@ const MapLayout: React.FC = () => {
           className="map-locate-btn"
           onClick={handleLocateClick}
           disabled={isDetecting}
-          title="Find my location"
+          title="Find my location" aria-label="Find my location"
         >
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <circle cx="12" cy="12" r="3" />
@@ -314,7 +314,7 @@ const MapLayout: React.FC = () => {
           </svg>
         </button>
         {userLocation && (
-          <button className="map-redetect-btn" onClick={handleRedetect} disabled={isDetecting}>
+          <button className="map-redetect-btn" onClick={handleRedetect} disabled={isDetecting} aria-label="Re-detect location">
             {isDetecting ? 'Detecting…' : 'Re-detect'}
           </button>
         )}
@@ -382,7 +382,7 @@ const MapLayout: React.FC = () => {
               <SearchRadiusMap center={pendingCenter || searchCenter || DEFAULT_CENTER} radius={parseFloat(radiusInput) || 10} onCenterChange={setPendingCenter} onLocate={(c) => { setPendingCenter(c); }} />
             </div>
           )}
-          <button className="btn btn-search" disabled={locTab === 'country' ? !selectedState : !pendingCenter && parseFloat(radiusInput) === searchRadius} onClick={() => {
+          <button className="btn btn-search" aria-label="Apply location filter" disabled={locTab === 'country' ? !selectedState : !pendingCenter && parseFloat(radiusInput) === searchRadius} onClick={() => {
               if (locTab === 'country') {
                 if (selectedState && US_STATE_COORDS[selectedState]) {
                   dispatch(setSearchCenter(US_STATE_COORDS[selectedState]));
@@ -405,7 +405,7 @@ const MapLayout: React.FC = () => {
         {showPanel === 'recurring' && (
           <div className="filter-panel filter-panel--recurring">
             <label className="recurring-toggle">
-              <input type="checkbox" checked={showRecurring} onChange={() => dispatch(setShowRecurring(!showRecurring))} />
+              <input type="checkbox" checked={showRecurring} onChange={() => dispatch(setShowRecurring(!showRecurring))} aria-label="Show recurring only" />
               Show recurring only
             </label>
           </div>

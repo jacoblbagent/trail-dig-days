@@ -5,8 +5,8 @@ import { setTheme, markNotificationRead } from '../features/events/eventsSlice';
 import { logout } from '../features/auth/authSlice';
 import { addToast } from '../features/toast/toastSlice';
 
-const SvgIcon: React.FC<{ d: string; viewBox?: string }> = ({ d, viewBox = '0 0 24 24' }) => (
-  <svg width="16" height="16" viewBox={viewBox} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+const SvgIcon: React.FC<{ d: string; viewBox?: string; ariaLabel?: string }> = ({ d, viewBox = '0 0 24 24', ariaLabel }) => (
+  <svg width="16" height="16" viewBox={viewBox} fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-label={ariaLabel} role={ariaLabel ? 'img' : undefined}>
     <path d={d} />
   </svg>
 );
@@ -44,7 +44,6 @@ const Sidebar: React.FC = () => {
 
   React.useEffect(() => {
     if (showNotifications) {
-      // small delay so ref is attached
       requestAnimationFrame(() => updateNotifShadows());
     }
   }, [showNotifications, updateNotifShadows]);
@@ -62,9 +61,19 @@ const Sidebar: React.FC = () => {
     return () => document.removeEventListener('mousedown', onClick);
   }, []);
 
+  React.useEffect(() => {
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setShowMenu(false);
+        setShowNotifications(false);
+      }
+    };
+    document.addEventListener('keydown', onKeyDown);
+    return () => document.removeEventListener('keydown', onKeyDown);
+  }, []);
+
   const isActive = (path: string) => {
     if (path === '/profile') {
-      // only highlight own profile, not other users' profiles
       return location.pathname === '/profile' && !new URLSearchParams(location.search).get('userId');
     }
     return location.pathname === path;
@@ -77,17 +86,17 @@ const Sidebar: React.FC = () => {
       <Link
         to={to}
         className={`sidebar-btn ${cls}`}
-        title={label}
+        aria-label={label}
         onClick={() => setShowMenu(false)}
       >
-        <SvgIcon d={icon} />
+        <SvgIcon d={icon} ariaLabel={label} />
       </Link>
     );
   };
 
   return (
-      <>
-      <aside className="sidebar">
+    <>
+      <aside className="sidebar" aria-label="Main navigation">
         <div className="sidebar-top">
           {btn('/', MAP_ICON, 'Map')}
         </div>
@@ -95,13 +104,13 @@ const Sidebar: React.FC = () => {
           <button
             className="sidebar-btn"
             onClick={() => dispatch(setTheme(dark ? 'light' : 'dark'))}
-            title={dark ? 'Light mode' : 'Dark mode'}
+            aria-label={dark ? 'Switch to light mode' : 'Switch to dark mode'}
           >
             {dark ? '☀️' : '🌙'}
           </button>
           {!isAuthenticated && (
-            <Link to="/auth" className="sidebar-btn" title="Sign In">
-              <SvgIcon d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4 M10 17l5-5-5-5 M13 12H3" />
+            <Link to="/auth" className="sidebar-btn" aria-label="Sign in">
+              <SvgIcon d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4 M10 17l5-5-5-5 M13 12H3" ariaLabel="Sign in" />
             </Link>
           )}
           {isAuthenticated && (
@@ -109,26 +118,28 @@ const Sidebar: React.FC = () => {
               <button
                 className={`sidebar-btn ${showNotifications ? 'active' : ''}`}
                 onClick={() => { setShowNotifications(!showNotifications); setShowMenu(false); }}
-                title="Notifications"
+                aria-label={`Notifications${unreadCount > 0 ? `, ${unreadCount} unread` : ''}`}
+                aria-expanded={showNotifications}
               >
                 <span className="notif-btn-inner">
-                  <SvgIcon d={BELL_ICON} />
-                  {unreadCount > 0 && <span className="notif-badge">{unreadCount}</span>}
+                  <SvgIcon d={BELL_ICON} ariaLabel="Notifications" />
+                  {unreadCount > 0 && <span className="notif-badge" aria-hidden="true">{unreadCount}</span>}
                 </span>
               </button>
               {showNotifications && (
-                <div className="notif-panel">
+                <div className="notif-panel" role="dialog" aria-modal="true" aria-label="Notifications">
                   <div className="notif-header">
                     <span>Notifications ({notifications.length})</span>
-                    <button className="notif-close" onClick={() => setShowNotifications(false)}>x</button>
+                    <button className="notif-close" onClick={() => setShowNotifications(false)} aria-label="Close notifications">x</button>
                   </div>
                   {notifications.length > 0 ? (
                     <div className="notif-list-wrap">
-                      <div className={`notif-shadow-top ${scrollUp ? 'visible' : ''}`} />
+                      <div className={`notif-shadow-top ${scrollUp ? 'visible' : ''}`} aria-hidden="true" />
                       <div
                         className="notif-list"
                         ref={notifListRef}
                         onScroll={updateNotifShadows}
+                        role="list"
                       >
                         {notifications.map((n) => (
                           <div
@@ -139,13 +150,24 @@ const Sidebar: React.FC = () => {
                               setShowNotifications(false);
                               navigate(`/events/${n.eventId}`);
                             }}
+                            role="listitem"
+                            tabIndex={0}
+                            aria-label={n.message}
+                            onKeyDown={(e) => {
+                              if (e.key === 'Enter' || e.key === ' ') {
+                                e.preventDefault();
+                                if (!n.read) dispatch(markNotificationRead(n.id));
+                                setShowNotifications(false);
+                                navigate(`/events/${n.eventId}`);
+                              }
+                            }}
                           >
                             <span>{n.message}</span>
                             <span className="notif-time">{new Date(n.createdAt).toLocaleDateString()}</span>
                           </div>
                         ))}
                       </div>
-                      <div className={`notif-shadow-bottom ${scrollDown ? 'visible' : ''}`} />
+                      <div className={`notif-shadow-bottom ${scrollDown ? 'visible' : ''}`} aria-hidden="true" />
                     </div>
                   ) : (
                     <div className="notif-empty">No notifications yet.</div>
@@ -159,16 +181,17 @@ const Sidebar: React.FC = () => {
               <button
                 className={`sidebar-btn ${isActive('/profile') || isActive('/settings') ? 'active' : ''}`}
                 onClick={() => setShowMenu(!showMenu)}
-                title="Profile menu"
+                aria-label="Profile menu"
+                aria-expanded={showMenu}
               >
                 {profile?.avatarUrl ? (
-                  <img src={profile.avatarUrl} alt="" className="sidebar-avatar" />
+                  <img src={profile.avatarUrl} alt="" className="sidebar-avatar" aria-hidden="true" />
                 ) : (
                   <span className="sidebar-avatar-initial">{user!.displayName.charAt(0).toUpperCase()}</span>
                 )}
               </button>
               {showMenu && (
-                <div className="profile-menu">
+                <div className="profile-menu" role="menu" aria-label="User menu">
                   <div className="profile-menu-header">
                     <div className="profile-menu-avatar">
                       {profile?.avatarUrl ? (
@@ -183,17 +206,17 @@ const Sidebar: React.FC = () => {
                     </div>
                   </div>
                   <div className="profile-menu-divider" />
-                  <Link to="/profile" className="profile-menu-item" onClick={() => setShowMenu(false)}>
-                    <SvgIcon d={PROFILE_ICON} />
+                  <Link to="/profile" className="profile-menu-item" onClick={() => setShowMenu(false)} role="menuitem">
+                    <SvgIcon d={PROFILE_ICON} ariaLabel="View Profile" />
                     View Profile
                   </Link>
-                  <Link to="/settings" className="profile-menu-item" onClick={() => setShowMenu(false)}>
-                    <SvgIcon d={SETTINGS_ICON} />
+                  <Link to="/settings" className="profile-menu-item" onClick={() => setShowMenu(false)} role="menuitem">
+                    <SvgIcon d={SETTINGS_ICON} ariaLabel="Settings" />
                     Settings
                   </Link>
                   <div className="profile-menu-divider" />
-                  <button className="profile-menu-item signout" onClick={() => { setShowMenu(false); dispatch(logout()); dispatch(addToast({ message: 'Signed out', type: 'info' })); }}>
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <button className="profile-menu-item signout" onClick={() => { setShowMenu(false); dispatch(logout()); dispatch(addToast({ message: 'Signed out', type: 'info' })); }} role="menuitem">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-label="Sign Out">
                       <path d={LOGOUT_ICON} />
                     </svg>
                     Sign Out
@@ -203,9 +226,9 @@ const Sidebar: React.FC = () => {
             </div>
           )}
         </div>
-              </aside>
-            </>
-    );
-  };
+      </aside>
+    </>
+  );
+};
 
 export default Sidebar;

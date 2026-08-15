@@ -5,6 +5,7 @@ import { updateProfile } from './profileSlice';
 import { deleteAccount, logout } from '../auth/authSlice';
 import { addToast } from '../toast/toastSlice';
 import type { UserProfile, CustomField } from '../../types';
+import { useFocusTrap } from '../../hooks/useFocusTrap';
 
 const SKILL_OPTIONS = [
   'Trail Design', 'Bench Cutting', 'Rock Work', 'Timber Work',
@@ -44,6 +45,7 @@ const EditProfilePage: React.FC = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deleteConfirm, setDeleteConfirm] = useState('');
   const [deleting, setDeleting] = useState(false);
+  const deleteModalRef = useFocusTrap(showDeleteModal);
 
   useEffect(() => {
     if (profile) setForm({ ...profile });
@@ -278,8 +280,8 @@ const EditProfilePage: React.FC = () => {
 
       {/* Delete Account Confirmation Modal */}
       {showDeleteModal && (
-        <div className="modal-backdrop" onClick={() => { if (!deleting) { setShowDeleteModal(false); setDeleteConfirm(''); } }}>
-          <div className="modal-dialog" onClick={(e) => e.stopPropagation()}>
+        <div className="modal-backdrop" ref={deleteModalRef} onClick={() => { if (!deleting) { setShowDeleteModal(false); setDeleteConfirm(''); } }}>
+          <div className="modal-dialog" role="dialog" aria-modal="true" aria-label="Delete account confirmation" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
               <h3 style={{ color: 'var(--red-600)' }}>Delete Account</h3>
               <button className="modal-close" onClick={() => { if (!deleting) { setShowDeleteModal(false); setDeleteConfirm(''); } }}>✕</button>

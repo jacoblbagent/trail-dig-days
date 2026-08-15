@@ -1,3 +1,16 @@
+
+/* ── Focus-visible outlines ── */
+:focus-visible { outline: 2px solid var(--green-600); outline-offset: 2px; border-radius: var(--radius-sm); }
+input:focus-visible, select:focus-visible, textarea:focus-visible { outline: 2px solid var(--green-600); outline-offset: 0; }
+.btn:focus-visible, .sidebar-btn:focus-visible, .tab-btn:focus-visible, .toolbar-btn:focus-visible,
+.filter-chip:focus-visible, .tag:focus-visible, .page-back-btn:focus-visible,
+.event-list-card:focus-visible, .dig-date-card:focus-visible, .portfolio-card:focus-visible,
+.profile-menu-item:focus-visible, .notif-item:focus-visible, .link-btn:focus-visible {
+  outline: 2px solid var(--green-600); outline-offset: 2px;
+}
+[data-theme="dark"] :focus-visible { outline-color: var(--green-400); }
+[data-theme="dark"] input:focus-visible, [data-theme="dark"] select:focus-visible, [data-theme="dark"] textarea:focus-visible { outline-color: var(--green-400); }
+
 /* ── Reset & Base ── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
@@ -33,6 +46,8 @@
   --red-600: #dc2626;
   --red-700: #b91c1c;
   --amber-500: #f59e0b;
+  --amber-600: #d97706;
+  --amber-700: #b45309;
   --blue-500: #3b82f6;
   --blue-600: #2563eb;
   --earth-50: #fefce8;
@@ -68,6 +83,8 @@ html { font-size: 16px; }
   --red-600: #ef4444;
   --red-700: #f87171;
   --amber-500: #fbbf24;
+  --amber-600: #f59e0b;
+  --amber-700: #d97706;
   --blue-500: #60a5fa;
   --blue-600: #93c5fd;
   --earth-50: #422006;
@@ -495,10 +512,10 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
 .list-card-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
 .list-card-header h3 { font-size: 1rem; color: var(--stone-800); }
 .recurring-badge { font-size: .7rem; color: var(--stone-500); border: 1px solid var(--stone-300); border-left: 3px solid var(--green-600); border-radius: 3px; padding: 1px 5px; white-space: nowrap; flex-shrink: 0; }
-.status-planned { background: var(--amber-500); }
-.status-confirmed { background: var(--green-600); }
-.status-cancelled { background: var(--red-500); }
-.status-completed { background: var(--blue-500); }
+.status-planned { background: var(--amber-600); }
+.status-confirmed { background: var(--green-700); }
+.status-cancelled { background: var(--red-600); }
+.status-completed { background: var(--blue-600); }
 .list-card-trail { font-size: .85rem; color: var(--stone-500); margin-top: 3px; }
 .list-card-row { display: flex; align-items: center; gap: 4px; font-size: .8rem; color: var(--stone-500); margin-top: 3px; }
 .list-card-row .list-card-location { color: var(--stone-500); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -1069,8 +1086,8 @@ input[type="time"]::-webkit-calendar-picker-indicator { filter: invert(0.55); cu
 .status-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
 .status-dot.status-planned { background: var(--amber-500); }
 .status-dot.status-confirmed { background: var(--green-500); }
-.status-dot.status-completed { background: var(--blue-500); }
-.status-dot.status-cancelled { background: var(--red-500); }
+.status-dot.status-completed { background: var(--blue-600); }
+.status-dot.status-cancelled { background: var(--red-600); }
 
 /* ── Organization Portfolio ── */
 .org-portfolio-header { display: flex; align-items: baseline; gap: 10px; margin-bottom: 12px; }
@@ -1641,10 +1658,16 @@ input[type="time"]::-webkit-calendar-picker-indicator { filter: invert(0.55); cu
   letter-spacing: .4px; padding: 2px 8px; border-radius: 4px;
   vertical-align: middle; margin-left: 4px; color: #fff;
 }
-.status-planned { background: var(--amber-500); }
-.status-confirmed { background: var(--green-600); }
-.status-cancelled { background: var(--red-500); }
-.status-completed { background: var(--blue-500); }
+.status-planned { background: var(--amber-600); }
+.status-confirmed { background: var(--green-700); }
+.status-cancelled { background: var(--red-600); }
+.status-completed { background: var(--blue-600); }
+
+
+[data-theme="dark"] .status-planned { background: var(--amber-500); }
+[data-theme="dark"] .status-confirmed { background: var(--green-600); }
+[data-theme="dark"] .status-cancelled { background: var(--red-500); }
+[data-theme="dark"] .status-completed { background: var(--blue-500); }
 
 /* ── Volunteer Roster ── */
 .volunteer-roster { margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--stone-150); }

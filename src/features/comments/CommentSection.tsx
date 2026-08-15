@@ -161,7 +161,7 @@ const CommentSection: React.FC<Props> = ({ eventId, eventCreatorId }) => {
         <div className="comment-body">
           <div className="comment-header">
             {threadCount > 0 && (
-              <button className="thread-toggle" onClick={() => toggleCollapse(c.id)}>
+              <button className="thread-toggle" onClick={() => toggleCollapse(c.id)} aria-label={isCollapsed ? 'Expand thread' : 'Collapse thread'}>
                 {isCollapsed ? '▸' : '▾'}
               </button>
             )}
@@ -179,10 +179,10 @@ const CommentSection: React.FC<Props> = ({ eventId, eventCreatorId }) => {
                     value={editText}
                     onChange={(e) => setEditText(e.target.value)}
                     rows={2}
-                  />
+                    aria-label="Edit comment" />
                   <div className="comment-form-actions">
-                    <button className="btn btn-sm btn-primary" onClick={() => handleSaveEdit(c.id)} disabled={!editText.trim()}>Save</button>
-                    <button className="btn btn-sm btn-ghost" onClick={() => { setEditingId(null); setEditText(''); }}>Cancel</button>
+                    <button className="btn btn-sm btn-primary" onClick={() => handleSaveEdit(c.id)} disabled={!editText.trim()} aria-label="Save edit">Save</button>
+                    <button className="btn btn-sm btn-ghost" onClick={() => { setEditingId(null); setEditText(''); }} aria-label="Cancel edit">Cancel</button>
                   </div>
                 </div>
               ) : (
@@ -205,9 +205,9 @@ const CommentSection: React.FC<Props> = ({ eventId, eventCreatorId }) => {
                 {user && (
                   <>
                     {user.id === c.userId && editingId !== c.id && (
-                      <button className="comment-edit-btn" onClick={() => handleEdit(c)}>Edit</button>
+                      <button className="comment-edit-btn" onClick={() => handleEdit(c)} aria-label="Edit comment">Edit</button>
                     )}
-                    <button className="comment-reply-btn" onClick={() => setReplyTo(replyTo === c.id ? null : c.id)}>
+                    <button className="comment-reply-btn" onClick={() => setReplyTo(replyTo === c.id ? null : c.id)} aria-label="Reply to comment">
                       {threadCount > 0 ? `${threadCount} repl${threadCount !== 1 ? 'ies' : 'y'}` : 'Reply'}
                     </button>
                   </>
@@ -221,10 +221,10 @@ const CommentSection: React.FC<Props> = ({ eventId, eventCreatorId }) => {
                     value={replyText}
                     onChange={(e) => setReplyText(e.target.value)}
                     rows={2}
-                  />
+                    aria-label="Write a reply" />
                   <div className="comment-form-actions">
-                    <button className="btn btn-sm btn-primary" onClick={() => handleReply(c.id)} disabled={!replyText.trim()}>Reply</button>
-                    <button className="btn btn-sm btn-ghost" onClick={() => { setReplyTo(null); setReplyText(''); }}>Cancel</button>
+                    <button className="btn btn-sm btn-primary" onClick={() => handleReply(c.id)} disabled={!replyText.trim()} aria-label="Post reply">Reply</button>
+                    <button className="btn btn-sm btn-ghost" onClick={() => { setReplyTo(null); setReplyText(''); }} aria-label="Cancel reply">Cancel</button>
                   </div>
                 </div>
               )}
@@ -255,12 +255,13 @@ const CommentSection: React.FC<Props> = ({ eventId, eventCreatorId }) => {
           <textarea
             className="comment-input"
             placeholder="Share your thoughts..."
+            aria-label="Write a comment"
             value={newText}
             onChange={(e) => setNewText(e.target.value)}
             rows={3}
           />
           <div className="comment-form-actions">
-            <button className="btn btn-sm btn-primary" onClick={handleSubmit} disabled={!newText.trim()}>Post Comment</button>
+            <button className="btn btn-sm btn-primary" onClick={handleSubmit} disabled={!newText.trim()} aria-label="Post comment">Post Comment</button>
           </div>
         </div>
       ) : (

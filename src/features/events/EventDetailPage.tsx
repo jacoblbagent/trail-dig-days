@@ -9,6 +9,7 @@ import { addToast } from '../toast/toastSlice';
 import CommentSection from '../comments/CommentSection';
 import { Helmet } from 'react-helmet-async';
 import { v4 as uuidv4 } from 'uuid';
+import { useFocusTrap } from '../../hooks/useFocusTrap';
 
 const MapRefCapture: React.FC<{ mapRef: React.MutableRefObject<L.Map | null> }> = ({ mapRef }) => {
   const map = useMap();
@@ -32,6 +33,9 @@ const EventDetailPage: React.FC = () => {
   const [showCancelModal, setShowCancelModal] = useState(false);
   const [cancelReason, setCancelReason] = useState('');
   const [cancelling, setCancelling] = useState(false);
+
+  const messageModalRef = useFocusTrap(showMessageModal);
+  const cancelModalRef = useFocusTrap(showCancelModal);
 
   if (!event) return <div className="loading">Event not found.</div>;
 
@@ -466,8 +470,8 @@ const EventDetailPage: React.FC = () => {
 
       {/* Message Volunteers Modal */}
       {showMessageModal && (
-        <div className="modal-backdrop" onClick={() => { if (!sendingMessage) setShowMessageModal(false); }}>
-          <div className="modal-dialog" onClick={(e) => e.stopPropagation()}>
+        <div className="modal-backdrop" ref={messageModalRef} onClick={() => { if (!sendingMessage) setShowMessageModal(false); }}>
+          <div className="modal-dialog" role="dialog" aria-modal="true" aria-label="Message volunteers" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
               <h3>Message Volunteers</h3>
               <button className="modal-close" onClick={() => { if (!sendingMessage) setShowMessageModal(false); }}>✕</button>
@@ -495,8 +499,8 @@ const EventDetailPage: React.FC = () => {
 
       {/* Cancel Event Modal */}
       {showCancelModal && (
-        <div className="modal-backdrop" onClick={() => { if (!cancelling) setShowCancelModal(false); }}>
-          <div className="modal-dialog" onClick={(e) => e.stopPropagation()}>
+        <div className="modal-backdrop" ref={cancelModalRef} onClick={() => { if (!cancelling) setShowCancelModal(false); }}>
+          <div className="modal-dialog" role="dialog" aria-modal="true" aria-label="Cancel event confirmation" onClick={(e) => e.stopPropagation()}>
             <div className="modal-header">
               <h3>Cancel Event</h3>
               <button className="modal-close" onClick={() => { if (!cancelling) setShowCancelModal(false); }}>✕</button>
