@@ -39,8 +39,6 @@ const demoProfile: UserProfile = {
     headerImage: '',
     coverPosition: 50,
     showStats: true,
-    showGear: true,
-    showSocial: true,
     layout: 'standard',
   },
 };
@@ -2987,7 +2985,7 @@ const OTHER_PROFILES: Record<string, UserProfile> = {
     gearList: ['McLeod', 'Pick Mattock', 'Shovel', 'Pulaski', 'Crosscut Saw'],
     availability: [],
     customFields: [],
-    theme: { headerImage: '', coverPosition: 50, showStats: true, showGear: true, showSocial: false, layout: 'standard' },
+    theme: { headerImage: '', coverPosition: 50, showStats: true, layout: 'standard' },
   },
   'other-creator-2': {
     userId: 'other-creator-2',
@@ -3007,7 +3005,7 @@ const OTHER_PROFILES: Record<string, UserProfile> = {
     gearList: ['McLeod', 'Shovel', 'Pulaski', 'Crosscut Saw', 'Chainsaw'],
     availability: [],
     customFields: [],
-    theme: { headerImage: '', coverPosition: 50, showStats: true, showGear: true, showSocial: false, layout: 'standard' },
+    theme: { headerImage: '', coverPosition: 50, showStats: true, layout: 'standard' },
   },
   'other-creator-3': {
     userId: 'other-creator-3',
@@ -3027,7 +3025,7 @@ const OTHER_PROFILES: Record<string, UserProfile> = {
     gearList: ['Rock Bar', 'McLeod', 'Shovel', 'Pick Mattock', 'Gloves'],
     availability: [],
     customFields: [],
-    theme: { headerImage: '', coverPosition: 50, showStats: true, showGear: true, showSocial: false, layout: 'standard' },
+    theme: { headerImage: '', coverPosition: 50, showStats: true, layout: 'standard' },
   },
   'other-creator-4': {
     userId: 'other-creator-4',
@@ -3047,7 +3045,7 @@ const OTHER_PROFILES: Record<string, UserProfile> = {
     gearList: ['McLeod', 'Shovel', 'Pick Mattock', 'Pulaski', 'Gloves'],
     availability: [],
     customFields: [],
-    theme: { headerImage: '', coverPosition: 50, showStats: true, showGear: true, showSocial: false, layout: 'standard' },
+    theme: { headerImage: '', coverPosition: 50, showStats: true, layout: 'standard' },
   },
 };
 

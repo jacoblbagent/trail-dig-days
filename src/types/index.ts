@@ -55,8 +55,6 @@ export interface ProfileTheme {
   headerImage: string;
   coverPosition: number;
   showStats: boolean;
-  showGear: boolean;
-  showSocial: boolean;
   layout: 'standard' | 'compact' | 'hero';
 }
 

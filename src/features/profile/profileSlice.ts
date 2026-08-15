@@ -37,8 +37,6 @@ const defaultProfile = (userId: string, displayName: string): UserProfile => ({
     headerImage: '',
     coverPosition: 50,
     showStats: true,
-    showGear: true,
-    showSocial: true,
     layout: 'standard',
   },
 });

@@ -191,16 +191,7 @@ const EditProfilePage: React.FC = () => {
           <button className="btn btn-sm btn-ghost" onClick={addCustomField} style={{ marginTop: 8 }}>+ Add Field</button>
         </section>
 
-        {/* Visibility Toggles */}
-        <span className="form-section-label">Display Options</span>
-        <section className="form-section">
-          <div className="check-group">
-            <label><input type="checkbox" checked={form.theme.showGear} onChange={(e) => save({ theme: { ...form.theme, showGear: e.target.checked } })} /> Show Gear on Profile</label>
-            <label><input type="checkbox" checked={form.theme.showSocial} onChange={(e) => save({ theme: { ...form.theme, showSocial: e.target.checked } })} /> Show Social Links on Profile</label>
-          </div>
-        </section>
-
-      </div>
+        </div>
     </div>
   );
 };

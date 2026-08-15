@@ -299,7 +299,7 @@ const ProfilePage: React.FC = () => {
           </section>
         )}
 
-        {theme.showGear && profile.gearList.length > 0 && (
+        {profile.gearList.length > 0 && (
           <section className="profile-section">
             <h3>My Gear</h3>
             <div className="tag-grid">
@@ -308,7 +308,7 @@ const ProfilePage: React.FC = () => {
           </section>
         )}
 
-        {theme.showSocial && hasSocial && (
+        {hasSocial && (
           <section className="profile-section">
             <h3>Social & Links</h3>
             <div className="social-links">
