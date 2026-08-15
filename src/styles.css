@@ -483,7 +483,7 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
   transition: all .15s;
 }
 .demo-btn:hover { border-color: var(--stone-300); background: var(--stone-100); }
-.demo-btn.active { background: var(--green-50); color: var(--green-800); border-color: var(--green-400); }
+.demo-btn.active { background: var(--green-50); color: var(--green-800); border-color: var(--green-600); }
 .demo-btn strong { font-weight: 600; }
 .demo-btn-desc { font-size: .72rem; color: var(--stone-400); }
 [data-theme="dark"] .demo-card { border-color: transparent; }
