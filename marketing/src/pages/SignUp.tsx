@@ -19,8 +19,8 @@ export default function SignUp() {
       <div className="page-content">
         <div className="container">
           <div className="signup-success">
-            <h1>Welcome, {user.displayName}! 🎉</h1>
-            <p>Your account has been created and you're signed in.</p>
+            <h1>Welcome, {user.displayName}</h1>
+            <p>Your account has been created and you are signed in.</p>
             <div className="hero-cta" style={{ justifyContent: 'center', marginTop: 24 }}>
               <a href="../" className="btn btn-primary btn-lg">Go to the App →</a>
             </div>
@@ -49,26 +49,28 @@ export default function SignUp() {
             <form className="signup-form" onSubmit={handleSubmit}>
               <div className="form-row">
                 <div className="form-group">
-                  <label htmlFor="email">Email</label>
+                  <label htmlFor="email">Email:</label>
                   <input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required placeholder="you@example.com" />
                 </div>
                 <div className="form-group">
-                  <label htmlFor="password">Password</label>
+                  <label htmlFor="password">Password:</label>
                   <input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required minLength={6} placeholder="Min 6 characters" />
                 </div>
               </div>
               <div className="form-group">
-                <label htmlFor="name">Display Name</label>
+                <label htmlFor="name">Display Name:</label>
                 <input id="name" type="text" value={displayName} onChange={(e) => setDisplayName(e.target.value)} required placeholder="Your name or org name" />
               </div>
               <div className="form-group">
-                <label htmlFor="type">Account Type</label>
+                <label htmlFor="type">Account Type:</label>
                 <select id="type" value={userType} onChange={(e) => setUserType(e.target.value as any)}>
                   <option value="volunteer">Volunteer — Join trail work days</option>
                   <option value="organization">Organization — Create and manage events</option>
                 </select>
               </div>
-              <button type="submit" className="btn btn-primary btn-lg" style={{ width: '100%' }} disabled={loading}>{loading ? 'Creating account…' : 'Create Account'}</button>
+              <button type="submit" className="btn btn-primary btn-lg" style={{ width: '100%' }} disabled={loading}>
+                {loading ? 'Creating account...' : 'Create Account'}
+              </button>
               <p className="form-note">Already have an account? <a href="../">Sign in →</a></p>
             </form>
           </div>

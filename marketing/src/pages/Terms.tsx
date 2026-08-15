@@ -15,7 +15,7 @@ export default function Terms() {
           <p>Trail Dig Days is a web application that connects volunteers with trail organizations for the purpose of trail building, maintenance, and stewardship events.</p>
 
           <h2>3. User Accounts</h2>
-          <p>You are responsible for maintaining the confidentiality of your account credentials. You agree to provide accurate information when creating an account. You may not use another person's account without permission.</p>
+          <p>You are responsible for maintaining the confidentiality of your account credentials. You agree to provide accurate information when creating an account. You may not use another persons account without permission.</p>
 
           <h2>4. User Conduct</h2>
           <p>You agree to use Trail Dig Days responsibly. You may not:</p>

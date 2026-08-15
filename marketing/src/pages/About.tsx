@@ -18,7 +18,7 @@ export default function About() {
 
           <section>
             <h2>Who We Are</h2>
-            <p>Trail Dig Days was created by a small team of trail enthusiasts who believe in the power of community-built trails. We're riders, hikers, runners, and volunteers who have spent countless hours on trail work crews and wanted a better way to organize and promote the events that keep our trails rideable.</p>
+            <p>Trail Dig Days was created by a small team of trail enthusiasts who believe in the power of community-built trails. We are riders, hikers, runners, and volunteers who have spent countless hours on trail work crews and wanted a better way to organize and promote the events that keep our trails rideable.</p>
           </section>
 
           <section>
@@ -27,7 +27,7 @@ export default function About() {
               <li><strong>Community first</strong> — Everything we build starts with the needs of volunteers and trail organizations.</li>
               <li><strong>Simplicity</strong> — Trail work is hard enough. The tools we use should be simple and intuitive.</li>
               <li><strong>Accessibility</strong> — Trail stewardship should be open to everyone, regardless of experience level.</li>
-              <li><strong>Stewardship</strong> — We're committed to building and maintaining the trails that connect us to the outdoors.</li>
+              <li><strong>Stewardship</strong> — We are committed to building and maintaining the trails that connect us to the outdoors.</li>
             </ul>
           </section>
 

@@ -15,19 +15,19 @@ const faqs = [
   },
   {
     q: 'How do I create an account?',
-    a: 'Click the "Get Started" or "Join" button on any page, fill in your email, password, and display name, and choose whether you\'re joining as a volunteer or an organization.',
+    a: 'Click the "Get Started" or "Join" button on any page, fill in your email, password, and display name, and choose whether you are joining as a volunteer or an organization.',
   },
   {
     q: 'Can I create events as a volunteer?',
-    a: 'Only organization accounts can create events. If you\'re part of a trail organization, sign up with an organization account. Volunteers can browse, RSVP, and participate in events.',
+    a: 'Only organization accounts can create events. If you are part of a trail organization, sign up with an organization account. Volunteers can browse, RSVP, and participate in events.',
   },
   {
     q: 'How do I change my account type?',
-    a: 'Account types are set during registration. To switch from volunteer to organization (or vice versa), contact us and we\'ll help you update your account.',
+    a: 'Account types are set during registration. To switch from volunteer to organization (or vice versa), contact us and we will help you update your account.',
   },
   {
     q: 'What should I bring to a dig day?',
-    a: 'Each event lists what\'s being provided and what volunteers should bring. Generally, bring work gloves, sturdy boots, water, and weather-appropriate clothing. Tools are often provided, but check the event details.',
+    a: 'Each event lists what is being provided and what volunteers should bring. Generally, bring work gloves, sturdy boots, water, and weather-appropriate clothing. Tools are often provided, but check the event details.',
   },
   {
     q: 'How do I track my volunteer hours?',

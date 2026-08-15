@@ -24,14 +24,14 @@ export default function Privacy() {
             <li>Provide, maintain, and improve the Trail Dig Days platform</li>
             <li>Connect you with relevant trail events and organizations</li>
             <li>Track event participation and volunteer hours</li>
-            <li>Communicate about events you've signed up for</li>
+            <li>Communicate about events you have signed up for</li>
           </ul>
 
           <h2>3. Data Storage</h2>
           <p>Trail Dig Days stores your account information locally in your browser using localStorage. This means your data stays on your device and is not transmitted to external servers. The data is used solely to power your experience within the app.</p>
 
           <h2>4. Third-Party Services</h2>
-          <p>We use leaflet (via react-leaflet) for map rendering. Map tiles are served from OpenStreetMap. No personal data is shared with these services beyond standard web requests.</p>
+          <p>We use Leaflet (via react-leaflet) for map rendering. Map tiles are served from OpenStreetMap. No personal data is shared with these services beyond standard web requests.</p>
 
           <h2>5. Your Choices</h2>
           <p>You can:</p>

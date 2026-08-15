@@ -2,19 +2,34 @@ import { Link } from 'react-router-dom';
 
 const features = [
   {
-    icon: <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>,
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+      </svg>
+    ),
     title: 'Find Events Near You',
     desc: 'Browse trail building and maintenance events on an interactive map. Filter by date, location, and activity type.',
   },
   {
-    icon: <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>,
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>
+        <path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+      </svg>
+    ),
     title: 'Organize Volunteers',
-    desc: 'Create events, track RSVPs, and communicate with volunteers. Know exactly who\'s coming.',
+    desc: 'Create events, track RSVPs, and communicate with volunteers. Know exactly who is coming.',
   },
   {
-    icon: <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>,
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+        <polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/>
+        <line x1="16" y1="17" x2="8" y2="17"/>
+      </svg>
+    ),
     title: 'Track Tools & Gear',
-    desc: 'List what you\'re providing and what volunteers should bring. Everyone comes prepared.',
+    desc: 'List what you are providing and what volunteers should bring. Everyone comes prepared.',
   },
 ];
 
@@ -25,7 +40,7 @@ const steps = [
 ];
 
 const testimonials = [
-  { text: '"Trail Dig Days made it so easy to find work days near Brevard. I\'ve already been to three events and met great people."', author: 'Mike R.', role: 'Volunteer, Pisgah Forest' },
+  { text: '"Trail Dig Days made it so easy to find work days near Brevard. I have already been to three events and met great people."', author: 'Mike R.', role: 'Volunteer, Pisgah Forest' },
   { text: '"As a small trail organization, managing volunteers used to mean spreadsheets and text chains. Now everything is in one place."', author: 'Sarah K.', role: 'Galbraith Crew Organizer' },
   { text: '"The map view is a game-changer. I can see exactly where events are happening and how far they are from my house."', author: 'Daryl W.', role: 'Volunteer, Hendersonville' },
 ];
@@ -71,7 +86,7 @@ export default function Home() {
       <section id="how">
         <div className="container">
           <h2 className="section-title">How It Works</h2>
-          <p className="section-subtitle">Whether you're a seasoned trail steward or a first-time volunteer, getting involved is easy.</p>
+          <p className="section-subtitle">Whether you are a seasoned trail steward or a first-time volunteer, getting involved is easy.</p>
           <div className="steps-grid">
             {steps.map((s) => (
               <div key={s.num} className="step">
@@ -87,11 +102,11 @@ export default function Home() {
       {/* For Whom */}
       <section id="audience">
         <div className="container">
-          <h2 className="section-title">Who It's For</h2>
+          <h2 className="section-title">Who It Is For</h2>
           <p className="section-subtitle">Trail Dig Days brings together everyone who cares about great trails.</p>
           <div className="whom-grid">
             <div className="whom-card">
-              <h3>🛠️ Volunteers</h3>
+              <h3>Volunteers</h3>
               <ul>
                 <li>Discover trail work days near you</li>
                 <li>RSVP and track your volunteer hours</li>
@@ -100,7 +115,7 @@ export default function Home() {
               </ul>
             </div>
             <div className="whom-card">
-              <h3>🏞️ Organizations</h3>
+              <h3>Organizations</h3>
               <ul>
                 <li>Create and manage dig day events</li>
                 <li>Track volunteer registrations</li>
