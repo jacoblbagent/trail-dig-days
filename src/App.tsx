@@ -2,6 +2,8 @@ import React, { useEffect } from 'react';
 import { BrowserRouter, Link, Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { store } from './app/store';
+import { useAppDispatch, useAppSelector } from './app/hooks';
+import { addToast } from './features/toast/toastSlice';
 import { loadEventsFromStorage } from './features/events/eventsSlice';
 import Sidebar from './components/Sidebar';
 import MapLayout from './components/MapLayout';
@@ -18,10 +20,20 @@ import NotFoundPage from './pages/NotFoundPage';
 import ToastContainer from './components/ToastContainer';
 
 const TopNav: React.FC = () => {
+  const dispatch = useAppDispatch();
+  const { user } = useAppSelector((s) => s.auth);
+
+  const handleNewClick = (e: React.MouseEvent) => {
+    if (user && user.userType !== 'organization') {
+      e.preventDefault();
+      dispatch(addToast({ message: 'Only organizations can create events', type: 'warning' }));
+    }
+  };
+
   return (
     <header className="top-nav">
       <Link to="/" className="top-nav-title">Dig Days</Link>
-      <Link to="/events/create" className="btn btn-primary btn-sm">+ New</Link>
+      <Link to="/events/create" className="btn btn-primary btn-sm" onClick={handleNewClick}>+ New</Link>
     </header>
   );
 };
