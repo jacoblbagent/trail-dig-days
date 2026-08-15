@@ -29,6 +29,12 @@ const getInitialTheme = (): 'light' | 'dark' => {
   return theme;
 };
 
+const getInitialMapStyle = (): string => {
+  const stored = localStorage.getItem('trail-dig-map-style');
+  if (stored) return stored;
+  return 'carto';
+};
+
 const loadEvents = (): DigEvent[] => {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
@@ -69,7 +75,7 @@ const initialState: EventsState = {
   mapBounds: null,
   mapZoom: 10,
   theme: getInitialTheme(),
-  mapStyle: 'carto',
+  mapStyle: getInitialMapStyle(),
   hoveredMarkerId: null,
   searchQuery: '',
   notificationsEnabled: false,
@@ -258,6 +264,7 @@ const eventsSlice = createSlice({
     },
     setMapStyle(state, action: PayloadAction<string>) {
       state.mapStyle = action.payload;
+      localStorage.setItem('trail-dig-map-style', action.payload);
     },
     clearSearchCenter(state) {
       state.searchCenter = null;
