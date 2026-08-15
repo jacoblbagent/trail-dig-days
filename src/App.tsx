@@ -19,6 +19,7 @@ import EditProfilePage from './features/profile/EditProfilePage';
 import NotFoundPage from './pages/NotFoundPage';
 import ToastContainer from './components/ToastContainer';
 import Toolbar from './components/Toolbar';
+import NavSearch from './components/NavSearch';
 
 const TopNav: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -34,6 +35,7 @@ const TopNav: React.FC = () => {
   return (
     <header className="top-nav">
       <Link to="/" className="top-nav-title">Dig Days</Link>
+      <NavSearch />
       <Link to="/events/create" className="btn btn-primary btn-sm" onClick={handleNewClick}>+ New</Link>
     </header>
   );

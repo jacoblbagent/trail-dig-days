@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useAppSelector, useAppDispatch } from '../app/hooks';
-import { setSearchRadius, setSearchCenter, setSelectedDay, setShowRecurring, setSearchQuery } from '../features/events/eventsSlice';
+import { setSearchRadius, setSearchCenter, setSelectedDay, setShowRecurring } from '../features/events/eventsSlice';
 import SearchRadiusMap from '../features/calendar/SearchRadiusMap';
 import { expandRecurring } from '../utils/recurrence';
 
@@ -125,7 +125,6 @@ const Toolbar: React.FC = () => {
   const dispatch = useAppDispatch();
   const searchCenter = useAppSelector((s) => s.events.searchCenter);
   const searchRadius = useAppSelector((s) => s.events.searchRadius);
-  const searchQuery = useAppSelector((s) => s.events.searchQuery);
   const showRecurring = useAppSelector((s) => s.events.showRecurring);
 
   const [showPanel, setShowPanel] = useState<'location' | 'time' | 'recurring' | null>(null);
@@ -133,14 +132,6 @@ const Toolbar: React.FC = () => {
   const [selectedState, setSelectedState] = useState('');
   const [radiusInput, setRadiusInput] = useState(() => String(searchRadius));
   const [pendingCenter, setPendingCenter] = useState<[number, number] | null>(null);
-  const [pendingSearch, setPendingSearch] = useState(searchQuery);
-
-  useEffect(() => { setPendingSearch(searchQuery); }, [searchQuery]);
-
-  const applySearch = () => dispatch(setSearchQuery(pendingSearch));
-  const clearSearch = () => { setPendingSearch(''); dispatch(setSearchQuery('')); };
-  const handleSearchKeyDown = (e: React.KeyboardEvent) => { if (e.key === 'Enter') applySearch(); };
-
   const togglePanel = (name: 'location' | 'time' | 'recurring') => {
     setShowPanel((prev) => (prev === name ? null : name));
   };
@@ -160,15 +151,6 @@ const Toolbar: React.FC = () => {
   return (
     <>
       <div className="map-toolbar">
-        <div className="toolbar-search-wrap">
-          <svg className="toolbar-search-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-            <circle cx="11" cy="11" r="8" />
-            <line x1="21" y1="21" x2="16.65" y2="16.65" />
-          </svg>
-          <input className="toolbar-search-input" type="text" placeholder="Search events..." aria-label="Search events" value={pendingSearch} onChange={(e) => setPendingSearch(e.target.value)} onKeyDown={handleSearchKeyDown} />
-          {pendingSearch && <button className="toolbar-search-clear" onClick={clearSearch} aria-label="Clear search">✕</button>}
-          <button className="toolbar-search-btn" onClick={applySearch} disabled={!pendingSearch.trim()} title="Search" aria-label="Search events">Search</button>
-        </div>
         <button className={`toolbar-btn${showPanel === 'location' ? ' active' : ''}`} onClick={() => togglePanel('location')} aria-label="Filter by location" aria-pressed={showPanel === 'location'}>Location</button>
         <button className={`toolbar-btn${showPanel === 'time' ? ' active' : ''}`} onClick={() => togglePanel('time')} aria-label="Filter by date" aria-pressed={showPanel === 'time'}>Date</button>
         <button className={`toolbar-btn${showPanel === 'recurring' ? ' active' : ''}`} onClick={() => togglePanel('recurring')} aria-label="Filter recurring events" aria-pressed={showPanel === 'recurring'}>Recurring?</button>
