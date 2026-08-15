@@ -39,7 +39,7 @@ const DEFAULT_CENTER: [number, number] = [39.7392, -104.9903];
 const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
 const DAYS = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 
-const FilterCalendar: React.FC<{ onClose: () => void }> = ({ onClose }) => {
+const FilterCalendar: React.FC = () => {
   const dispatch = useAppDispatch();
   const items = useAppSelector((s) => s.events.items);
   const mapBounds = useAppSelector((s) => s.events.mapBounds);
@@ -93,7 +93,6 @@ const FilterCalendar: React.FC<{ onClose: () => void }> = ({ onClose }) => {
         <button className="btn btn-ghost btn-sm" onClick={() => setViewDate(new Date(year, month - 1, 1))}>←</button>
         <strong>{MONTHS[month]} {year}</strong>
         <button className="btn btn-ghost btn-sm" onClick={() => setViewDate(new Date(year, month + 1, 1))}>→</button>
-        <button className="btn btn-ghost btn-sm" onClick={onClose}>✕</button>
       </div>
       <div className="calendar-grid">
         {DAYS.map((d) => (<div key={d} className="cal-day-header">{d}</div>))}
@@ -202,7 +201,7 @@ const Toolbar: React.FC = () => {
         )}
 
         {showPanel === 'time' && (
-          <FilterCalendar onClose={() => setShowPanel(null)} />
+          <FilterCalendar />
         )}
 
         {showPanel === 'recurring' && (
