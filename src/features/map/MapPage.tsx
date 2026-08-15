@@ -170,18 +170,28 @@ const MapPage: React.FC = () => {
       );
     }
     if (mapBounds) {
-      result = collapsed.filter((e) => inBounds(e.coordinates, mapBounds));
+      result = result.filter((e) => inBounds(e.coordinates, mapBounds));
     }
     if (showRecurring) {
       result = result.filter((e) => e.recurrence && e.recurrence !== 'none');
     }
     return result;
-  }, [collapsed, mapBounds, showRecurring]);
+  }, [collapsed, mapBounds, showRecurring, searchQuery]);
 
   const eventMap = useMemo(() => {
     let all = expanded;
+    if (searchQuery) {
+      const q = searchQuery.toLowerCase();
+      all = all.filter((e) =>
+        e.title.toLowerCase().includes(q) ||
+        e.trailName.toLowerCase().includes(q) ||
+        e.trailSystem.toLowerCase().includes(q) ||
+        e.locationName.toLowerCase().includes(q) ||
+        e.description.toLowerCase().includes(q)
+      );
+    }
     if (mapBounds) {
-      all = expanded.filter((e) => inBounds(e.coordinates, mapBounds));
+      all = all.filter((e) => inBounds(e.coordinates, mapBounds));
     }
     const map = new Map<string, typeof all>();
     for (const e of all) {
@@ -190,7 +200,7 @@ const MapPage: React.FC = () => {
       map.get(key)!.push(e);
     }
     return map;
-  }, [expanded, mapBounds]);
+  }, [expanded, mapBounds, searchQuery]);
 
   const visibleCount = selectedDay
     ? (eventMap.get(selectedDay) || []).length
