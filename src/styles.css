@@ -1038,6 +1038,55 @@ input[type="time"]::-webkit-calendar-picker-indicator { filter: invert(0.55); cu
 .check-group label { display: flex; align-items: center; gap: 6px; font-size: .9rem; color: var(--stone-600); cursor: pointer; }
 .check-group input[type="checkbox"] { width: 16px; height: 16px; accent-color: var(--green-700); }
 
+/* ── Organization Profile ── */
+.profile-name-row { display: flex; align-items: center; gap: 8px; }
+.org-badge { display: inline-block; font-size: .6rem; text-transform: uppercase; letter-spacing: .4px; padding: 2px 6px; border-radius: 4px; background: var(--green-100); color: var(--green-800); font-weight: 600; }
+[data-theme="dark"] .org-badge { background: rgba(21, 128, 61, .2); color: var(--green-400); }
+.follow-org-btn { display: inline-flex; align-items: center; gap: 6px; padding: 4px 16px; font-size: .85rem; margin-top: 6px; }
+
+/* ── Organization Dashboard ── */
+.org-dashboard { border: 1px solid var(--stone-150); border-radius: var(--radius); padding: 20px !important; margin-bottom: 16px; }
+.org-dashboard h3 { margin-bottom: 16px; }
+.dashboard-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 16px; }
+.dashboard-card { background: var(--stone-50); border-radius: var(--radius); padding: 14px 16px; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.dash-stat { font-size: 1.6rem; font-weight: 700; color: var(--green-700); line-height: 1; }
+.dash-label { font-size: .75rem; text-transform: uppercase; letter-spacing: .4px; color: var(--stone-500); }
+[data-theme="dark"] .dashboard-card { background: var(--stone-800); }
+[data-theme="dark"] .dash-stat { color: var(--green-400); }
+.status-breakdown { display: flex; flex-wrap: wrap; gap: 4px 16px; }
+.sb-row { display: flex; align-items: center; gap: 6px; font-size: .85rem; color: var(--stone-600); }
+.sb-count { margin-left: auto; font-weight: 600; color: var(--stone-700); }
+.status-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.status-dot.status-planned { background: var(--amber-500); }
+.status-dot.status-confirmed { background: var(--green-500); }
+.status-dot.status-completed { background: var(--blue-500); }
+.status-dot.status-cancelled { background: var(--red-500); }
+
+/* ── Organization Portfolio ── */
+.org-portfolio-header { display: flex; align-items: baseline; gap: 10px; margin-bottom: 12px; }
+.org-portfolio-filters { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 12px; }
+.filter-chip { padding: 3px 10px; border-radius: 999px; font-size: .78rem; border: 1px solid var(--stone-200); background: transparent; cursor: pointer; color: var(--stone-500); transition: all .15s; }
+.filter-chip:hover { border-color: var(--green-400); color: var(--green-700); }
+.filter-chip.active { background: var(--green-100); color: var(--green-800); border-color: var(--green-400); font-weight: 500; }
+[data-theme="dark"] .filter-chip { border-color: var(--stone-700); color: var(--stone-400); }
+[data-theme="dark"] .filter-chip:hover { border-color: var(--green-600); color: var(--green-400); }
+[data-theme="dark"] .filter-chip.active { background: rgba(21, 128, 61, .2); color: var(--green-400); border-color: var(--green-600); }
+.org-portfolio-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+@media (max-width: 640px) { .org-portfolio-grid { grid-template-columns: 1fr; } }
+.portfolio-card {
+  display: flex; flex-direction: column; gap: 4px; padding: 12px;
+  border: 1px solid var(--stone-150); border-radius: var(--radius);
+  text-decoration: none; color: inherit; transition: border-color .15s, box-shadow .15s;
+}
+.portfolio-card:hover { border-color: var(--green-400); box-shadow: 0 2px 8px rgba(0,0,0,.06); }
+[data-theme="dark"] .portfolio-card { border-color: var(--stone-700); }
+[data-theme="dark"] .portfolio-card:hover { border-color: var(--green-600); }
+.portfolio-card-header { display: flex; align-items: center; gap: 6px; font-size: .75rem; color: var(--stone-400); margin-bottom: 2px; }
+.portfolio-title { font-size: .9rem; font-weight: 600; color: var(--stone-800); line-height: 1.3; }
+.portfolio-meta { font-size: .75rem; color: var(--stone-400); }
+.portfolio-stats-row { display: flex; justify-content: space-between; font-size: .7rem; color: var(--stone-400); margin-top: auto; padding-top: 6px; border-top: 1px solid var(--stone-100); }
+[data-theme="dark"] .portfolio-stats-row { border-color: var(--stone-700); }
+
 
 
 /* ── Calendar Page ── */

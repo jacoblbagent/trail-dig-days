@@ -53,6 +53,7 @@ const DIFF_ICONS: Record<string, string> = {
   easy: 'Easy', moderate: 'Moderate', challenging: 'Challenging', expert: 'Expert',
 };
 
+/* ── Shared / Volunteer Dig Dates Tab ── */
 const DigDatesTab: React.FC<{ userId: string }> = ({ userId }) => {
   const { items } = useAppSelector((s) => s.events);
   const [tab, setTab] = useState<'upcoming' | 'past' | 'mine'>('upcoming');
@@ -169,7 +170,7 @@ const DigDatesTab: React.FC<{ userId: string }> = ({ userId }) => {
         )
       ) : (
         past.length === 0 ? (
-          <p className="muted" style={{ textAlign: 'center', padding: '24px 0' }}>No past dig dates yet.</p>
+          <p className="muted" style={{ textAlign: 'center', padding: '24px 0' }}>No past dig dates.</p>
         ) : (
           <>
           <div className="dig-date-list">
@@ -202,6 +203,129 @@ const DigDatesTab: React.FC<{ userId: string }> = ({ userId }) => {
   );
 };
 
+/* ── Organization Portfolio Tab ── */
+const OrgPortfolioTab: React.FC<{ userId: string }> = ({ userId }) => {
+  const { items } = useAppSelector((s) => s.events);
+  const [filter, setFilter] = useState<string>('all');
+  const [page, setPage] = useState(1);
+  const PAGE_SIZE = 6;
+
+  const orgEvents = items
+    .filter((e) => e.creatorId === userId)
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+
+  const filtered = filter === 'all' ? orgEvents : orgEvents.filter((e) => e.status === filter);
+
+  const tp = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+  const display = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+
+  const statusLabels: Record<string, string> = {
+    all: 'All Events',
+    planned: 'Planned',
+    confirmed: 'Confirmed',
+    completed: 'Completed',
+    cancelled: 'Cancelled',
+  };
+
+  return (
+    <section className="profile-section">
+      <div className="org-portfolio-header">
+        <h3>Event Portfolio</h3>
+        <span className="muted">{orgEvents.length} event{orgEvents.length !== 1 ? 's' : ''}</span>
+      </div>
+      <div className="org-portfolio-filters">
+        {['all', 'planned', 'confirmed', 'completed', 'cancelled'].map((s) => (
+          <button
+            key={s}
+            className={`filter-chip ${filter === s ? 'active' : ''}`}
+            onClick={() => { setFilter(s); setPage(1); }}
+          >
+            {statusLabels[s]}
+          </button>
+        ))}
+      </div>
+      {display.length === 0 ? (
+        <p className="muted" style={{ padding: '24px 0', textAlign: 'center' }}>
+          {orgEvents.length === 0 ? 'No events created yet.' : 'No events match this filter.'}
+        </p>
+      ) : (
+        <div className="org-portfolio-grid">
+          {display.map((e) => (
+            <Link to={`/events/${e.id}`} key={e.id} className="portfolio-card">
+              <div className="portfolio-card-header">
+                <span className={`status-dot status-${e.status}`} />
+                <span className="portfolio-date">{new Date(e.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
+              </div>
+              <h4 className="portfolio-title">{e.title}</h4>
+              <p className="portfolio-meta">{e.trailName} · {e.locationName}</p>
+              <div className="portfolio-stats-row">
+                <span>{e.registeredVolunteers.length}/{e.maxVolunteers} registered</span>
+                <span>{e.startTime}</span>
+              </div>
+            </Link>
+          ))}
+        </div>
+      )}
+      {tp > 1 && (
+        <div className="pagination-row">
+          <button className="btn btn-ghost btn-sm" disabled={page <= 1} onClick={() => setPage(page - 1)}>← Prev</button>
+          <span className="pagination-info">Page {page} of {tp}</span>
+          <button className="btn btn-ghost btn-sm" disabled={page >= tp} onClick={() => setPage(page + 1)}>Next →</button>
+        </div>
+      )}
+    </section>
+  );
+};
+
+/* ── Organization Dashboard (own profile only) ── */
+const OrgDashboard: React.FC<{ userId: string }> = ({ userId }) => {
+  const { items } = useAppSelector((s) => s.events);
+  const orgEvents = items.filter((e) => e.creatorId === userId);
+
+  const totalEvents = orgEvents.length;
+  const byStatus = {
+    planned: orgEvents.filter((e) => e.status === 'planned').length,
+    confirmed: orgEvents.filter((e) => e.status === 'confirmed').length,
+    completed: orgEvents.filter((e) => e.status === 'completed').length,
+    cancelled: orgEvents.filter((e) => e.status === 'cancelled').length,
+  };
+  const totalRegistrations = orgEvents.reduce((sum, e) => sum + e.registeredVolunteers.length, 0);
+  // Unique volunteers across all org events
+  const uniqueVolunteers = new Set(orgEvents.flatMap((e) => e.registeredVolunteers)).size;
+  const totalCapacity = orgEvents.reduce((sum, e) => sum + e.maxVolunteers, 0);
+
+  return (
+    <section className="profile-section org-dashboard">
+      <h3>Organization Dashboard</h3>
+      <div className="dashboard-grid">
+        <div className="dashboard-card">
+          <span className="dash-stat">{totalEvents}</span>
+          <span className="dash-label">Events Created</span>
+        </div>
+        <div className="dashboard-card">
+          <span className="dash-stat">{totalRegistrations}</span>
+          <span className="dash-label">Total Sign-ups</span>
+        </div>
+        <div className="dashboard-card">
+          <span className="dash-stat">{uniqueVolunteers}</span>
+          <span className="dash-label">Unique Volunteers</span>
+        </div>
+        <div className="dashboard-card">
+          <span className="dash-stat">{totalCapacity}</span>
+          <span className="dash-label">Total Capacity</span>
+        </div>
+      </div>
+      <div className="status-breakdown">
+        <div className="sb-row"><span className="status-dot status-planned" /> Planned <span className="sb-count">{byStatus.planned}</span></div>
+        <div className="sb-row"><span className="status-dot status-confirmed" /> Confirmed <span className="sb-count">{byStatus.confirmed}</span></div>
+        <div className="sb-row"><span className="status-dot status-completed" /> Completed <span className="sb-count">{byStatus.completed}</span></div>
+        <div className="sb-row"><span className="status-dot status-cancelled" /> Cancelled <span className="sb-count">{byStatus.cancelled}</span></div>
+      </div>
+    </section>
+  );
+};
+
+/* ── Main ProfilePage ── */
 const ProfilePage: React.FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -213,6 +337,7 @@ const ProfilePage: React.FC = () => {
   const profile: UserProfile | undefined = targetId ? profiles[targetId] : undefined;
   const isOwnProfile = !viewUserId || viewUserId === user?.id;
   const followedOrgs = useAppSelector((s) => s.events.followedOrgs);
+  const isOrg = profile?.userType === 'organization';
 
   if (!profile) {
     return <div className="profile-page"><p className="muted">Profile not found.</p></div>;
@@ -221,6 +346,7 @@ const ProfilePage: React.FC = () => {
   const theme = profile.theme;
   const hasSocial = Object.entries(profile.socialLinks).filter(([, v]) => v).length > 0;
   const hasCustomFields = profile.customFields.filter((f) => f.label && f.value).length > 0;
+  const isFollowing = followedOrgs.includes(targetId!);
 
   return (
     <div className="profile-page">
@@ -239,7 +365,10 @@ const ProfilePage: React.FC = () => {
             </div>
           )}
           <div className="profile-meta">
-            <h1 className="profile-name">{profile.displayName}</h1>
+            <div className="profile-name-row">
+              <h1 className="profile-name">{profile.displayName}</h1>
+              {isOrg && <span className="org-badge">Organization</span>}
+            </div>
             {profile.trailCrew && (
               <p className="profile-crew">
                 {profile.trailCrewUrl ? (
@@ -265,12 +394,12 @@ const ProfilePage: React.FC = () => {
               {profile.location && <><span className="sep">·</span><span>{profile.location}</span></>}
             </p>
             {!isOwnProfile && (
-              <label className="follow-org-toggle" style={{ justifyContent: 'center', padding: '8px 0' }}>
-                <input type="checkbox" checked={followedOrgs.includes(targetId!)} onChange={() => {
-                  dispatch(followedOrgs.includes(targetId!) ? unfollowOrg(targetId!) : followOrg(targetId!));
-                }} />
-                <span>Follow</span>
-              </label>
+              <button
+                className={`btn ${isFollowing ? 'btn-ghost' : 'btn-primary'} btn-sm follow-org-btn`}
+                onClick={() => dispatch(isFollowing ? unfollowOrg(targetId!) : followOrg(targetId!))}
+              >
+                {isFollowing ? 'Unfollow' : 'Follow'}
+              </button>
             )}
             {isOwnProfile && (
               <button className="profile-edit-btn" onClick={() => navigate('/edit-profile')}>Edit</button>
@@ -282,11 +411,19 @@ const ProfilePage: React.FC = () => {
       <div className="profile-body">
         {profile.bio && (
           <section className="profile-section">
+            <h3>{isOrg ? 'Mission' : 'About'}</h3>
             <p>{profile.bio}</p>
           </section>
         )}
 
-        {targetId && <DigDatesTab userId={targetId!} />}
+        {/* Organization Dashboard — own profile only */}
+        {isOwnProfile && isOrg && targetId && <OrgDashboard userId={targetId} />}
+
+        {/* Organization Portfolio — always visible on org profiles */}
+        {isOrg && targetId && <OrgPortfolioTab userId={targetId} />}
+
+        {/* Dig dates tab — for volunteers, or as secondary tab for orgs */}
+        {targetId && <DigDatesTab userId={targetId} />}
 
         {profile.location && (
           <section className="profile-section">

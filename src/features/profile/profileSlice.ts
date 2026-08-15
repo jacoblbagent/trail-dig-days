@@ -48,12 +48,13 @@ const initialState: ProfileState = {
 
 export const createProfile = createAsyncThunk<
   UserProfile,
-  { userId: string; displayName: string }
->('profile/create', async ({ userId, displayName }) => {
+  { userId: string; displayName: string; userType?: 'volunteer' | 'organization' }
+>('profile/create', async ({ userId, displayName, userType }) => {
   await new Promise((r) => setTimeout(r, 100));
   const profiles = loadProfiles();
   if (profiles[userId]) return profiles[userId];
   const profile = defaultProfile(userId, displayName);
+  if (userType) profile.userType = userType;
   profiles[userId] = profile;
   saveProfiles(profiles);
   return profile;

@@ -28,6 +28,7 @@ const DEMO_VOLUNTEER = {
 const demoProfile: UserProfile = {
   userId: DEMO_USER.id,
   displayName: DEMO_USER.displayName,
+  userType: 'organization',
   bio: 'Dirt worker and trail enthusiast. Building sustainable singletrack one bench cut at a time.',
   avatarUrl: '',
   location: 'Matthews, NC, United States',
@@ -3077,7 +3078,8 @@ const OTHER_PROFILES: Record<string, UserProfile> = {
   'other-creator-1': {
     userId: 'other-creator-1',
     displayName: 'Galbraith Crew',
-    bio: 'Dedicated trail crew maintaining and building sustainable singletrack in the Pacific Northwest.',
+  userType: 'organization',
+        bio: 'Dedicated trail crew maintaining and building sustainable singletrack in the Pacific Northwest.',
     avatarUrl: '',
     location: 'Bellingham, WA',
     coordinates: [48.7596, -122.4868],
@@ -3097,7 +3099,8 @@ const OTHER_PROFILES: Record<string, UserProfile> = {
   'other-creator-2': {
     userId: 'other-creator-2',
     displayName: 'UMWELD Training Staff',
-    bio: 'US Forest Service trail training and education.',
+  userType: 'organization',
+        bio: 'US Forest Service trail training and education.',
     avatarUrl: '',
     location: 'Pisgah National Forest, NC',
     coordinates: [35.3024, -82.4512],
@@ -3117,7 +3120,8 @@ const OTHER_PROFILES: Record<string, UserProfile> = {
   'other-creator-3': {
     userId: 'other-creator-3',
     displayName: 'Moab Trail Alliance',
-    bio: "Keeping Moab's world-class trails rideable year-round.",
+  userType: 'organization',
+        bio: "Keeping Moab's world-class trails rideable year-round.",
     avatarUrl: '',
     location: 'Moab, UT',
     coordinates: [38.5733, -109.5498],
@@ -3137,7 +3141,8 @@ const OTHER_PROFILES: Record<string, UserProfile> = {
   'other-creator-4': {
     userId: 'other-creator-4',
     displayName: 'Carolina Trail Crew',
-    bio: 'Volunteer organization dedicated to building and maintaining mountain bike trails across the Carolinas.',
+  userType: 'organization',
+        bio: 'Volunteer organization dedicated to building and maintaining mountain bike trails across the Carolinas.',
     avatarUrl: '',
     location: 'Charlotte, NC',
     coordinates: [35.2271, -80.8431],

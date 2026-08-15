@@ -18,6 +18,7 @@ export interface AuthState {
 export interface UserProfile {
   userId: string;
   displayName: string;
+  userType?: 'volunteer' | 'organization';
   bio: string;
   avatarUrl: string;
   location: string;

@@ -74,7 +74,7 @@ const AuthPage: React.FC = () => {
           register({ email, password, displayName, userType })
         ).unwrap();
         await dispatch(
-          createProfile({ userId: result.user.id, displayName })
+          createProfile({ userId: result.user.id, displayName, userType: result.user.userType })
         ).unwrap();
         dispatch(addToast({ message: 'Account created — check your email to verify', type: 'success' }));
       }
