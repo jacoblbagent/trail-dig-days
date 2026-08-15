@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Outlet } from 'react-router-dom';
-import { MapContainer, TileLayer, useMap, Marker } from 'react-leaflet';
+import { MapContainer, TileLayer, useMap, Marker, Tooltip } from 'react-leaflet';
 import L from 'leaflet';
 import { useAppSelector, useAppDispatch } from '../app/hooks';
 import { setSearchCenter } from '../features/events/eventsSlice';
@@ -62,7 +62,6 @@ const MapResizeWatcher: React.FC = () => {
 
 const MapLayout: React.FC = () => {
   const dispatch = useAppDispatch();
-  const theme = useAppSelector((s) => s.events.theme);
   const mapStyle = useAppSelector((s) => s.events.mapStyle);
   const searchCenter = useAppSelector((s) => s.events.searchCenter);
   const mapZoom = useAppSelector((s) => s.events.mapZoom);
@@ -163,10 +162,9 @@ const MapLayout: React.FC = () => {
               'topo': { url: 'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', attr: '&copy; <a href="https://opentopomap.org/copyright">OpenTopoMap</a>' },
               'satellite': { url: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', attr: '&copy; Esri, Maxar, Earthstar Geographics' },
             };
-            // Fallback: if dark theme and no explicit mapStyle, use carto-dark
-            const key = mapStyle === 'carto' && theme === 'dark' ? 'carto-dark' : mapStyle;
-            const tile = tileStyles[key] || tileStyles['carto'];
-            return <TileLayer key={key} url={tile.url} attribution={tile.attr} />;
+            // Always use the chosen style as-is — no theme fallback
+            const tile = tileStyles[mapStyle] || tileStyles['carto'];
+            return <TileLayer key={mapStyle} url={tile.url} attribution={tile.attr} />;
           })()}
           <MapMoveHandler />
           <MapRefSetter mapRef={mapRef} />
@@ -187,7 +185,9 @@ const MapLayout: React.FC = () => {
                   <circle cx="12" cy="12" r="4" fill="#fff"/>
                 </svg>`,
               })}
-            />
+            >
+              <Tooltip direction="top" offset={[0, -8]}>Me</Tooltip>
+            </Marker>
           )}
         </MapContainer>
       </div>
