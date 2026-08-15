@@ -5,6 +5,13 @@ import App from './App';
 import { ensureSeedData } from './app/seedData';
 import './styles.css';
 
+// Suppress Leaflet's deprecated MouseEvent.mozInputSource warning in Firefox
+const origWarn = console.warn;
+console.warn = (...args: any[]) => {
+  if (typeof args[0] === 'string' && args[0].includes('mozInputSource')) return;
+  origWarn.call(console, ...args);
+};
+
 // Seed mock data before Redux initializes
 ensureSeedData();
 
