@@ -241,6 +241,13 @@ const ProfilePage: React.FC = () => {
                 ) : profile.trailCrew}
               </p>
             )}
+            {hasSocial && (
+              <div className="social-links" style={{ margin: '4px 0' }}>
+                {Object.entries(profile.socialLinks).filter(([, v]) => v).map(([key, val]) => (
+                  <a key={key} href={val} target="_blank" rel="noreferrer">{key}</a>
+                ))}
+              </div>
+            )}
             <p className="profile-metrics">
               <span>{profile.digStats.totalDigs} Dig Days</span>
               <span className="sep">·</span>
@@ -304,17 +311,6 @@ const ProfilePage: React.FC = () => {
             <h3>My Gear</h3>
             <div className="tag-grid">
               {profile.gearList.map((g) => <span key={g} className="tag active">{g}</span>)}
-            </div>
-          </section>
-        )}
-
-        {hasSocial && (
-          <section className="profile-section">
-            <h3>Social & Links</h3>
-            <div className="social-links">
-              {Object.entries(profile.socialLinks).filter(([, v]) => v).map(([key, val]) => (
-                <a key={key} href={val} target="_blank" rel="noreferrer">{key}</a>
-              ))}
             </div>
           </section>
         )}
