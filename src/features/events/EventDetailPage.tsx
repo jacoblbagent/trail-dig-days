@@ -4,9 +4,10 @@ import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import MapExtras from '../map/MapExtras';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { registerForEvent, loadEventsFromStorage } from './eventsSlice';
+import { registerForEvent, loadEventsFromStorage, removeVolunteer, promoteFromWaitlist, addNotification } from './eventsSlice';
 import { addToast } from '../toast/toastSlice';
 import CommentSection from '../comments/CommentSection';
+import { v4 as uuidv4 } from 'uuid';
 
 const MapRefCapture: React.FC<{ mapRef: React.MutableRefObject<L.Map | null> }> = ({ mapRef }) => {
   const map = useMap();
@@ -24,11 +25,15 @@ const EventDetailPage: React.FC = () => {
   const referrerPath = useAppSelector((s) => s.events.referrerPath);
   const [refreshing, setRefreshing] = useState(false);
   const [showContent, setShowContent] = useState(false);
+  const [messageText, setMessageText] = useState('');
+  const [showMessageModal, setShowMessageModal] = useState(false);
+  const [sendingMessage, setSendingMessage] = useState(false);
 
   if (!event) return <div className="loading">Event not found.</div>;
 
   const isCreator = user ? event.creatorId === user.id : false;
   const isRegistered = user ? event.registeredVolunteers.includes(user.id) : false;
+  const isOnWaitlist = user ? event.waitlist.includes(user.id) : false;
   const isPast = new Date(event.date) < new Date(new Date().toDateString());
   const isFull = event.registeredVolunteers.length >= event.maxVolunteers;
   const volCount = event.registeredVolunteers.length;
@@ -38,11 +43,80 @@ const EventDetailPage: React.FC = () => {
   const handleRegister = async () => {
     if (!user) { navigate('/auth'); dispatch(addToast({ message: 'Please sign in to register for dig days', type: 'warning' })); return; }
     try {
-      await dispatch(registerForEvent({ eventId: event.id, userId: user.id })).unwrap();
-      dispatch(addToast({ message: isRegistered ? 'Unregistered' : 'Signed up!', type: 'success' }));
+      const result = await dispatch(registerForEvent({ eventId: event.id, userId: user.id })).unwrap();
+      const nowOnWaitlist = result.waitlist.includes(user.id);
+      dispatch(addToast({
+        message: isRegistered ? 'Unregistered' : nowOnWaitlist ? 'Added to waitlist' : 'Signed up!',
+        type: nowOnWaitlist ? 'warning' : 'success',
+      }));
     } catch (err: any) {
       dispatch(addToast({ message: err.message || 'Failed', type: 'warning' }));
     }
+  };
+
+  const handleRemoveVolunteer = async (userId: string) => {
+    try {
+      await dispatch(removeVolunteer({ eventId: event.id, userId })).unwrap();
+      dispatch(addToast({ message: 'Volunteer removed', type: 'info' }));
+    } catch (err: any) {
+      dispatch(addToast({ message: err.message || 'Failed to remove', type: 'warning' }));
+    }
+  };
+
+  const handlePromoteFromWaitlist = async (userId: string) => {
+    try {
+      await dispatch(promoteFromWaitlist({ eventId: event.id, userId })).unwrap();
+      dispatch(addToast({ message: 'Promoted from waitlist', type: 'success' }));
+    } catch (err: any) {
+      dispatch(addToast({ message: err.message || 'Failed to promote', type: 'warning' }));
+    }
+  };
+
+  const handleMessageVolunteers = async () => {
+    if (!messageText.trim() || !user) return;
+    setSendingMessage(true);
+    const msg = messageText.trim();
+    for (const vid of event.registeredVolunteers) {
+      if (vid === user.id) continue;
+      dispatch(addNotification({
+        id: uuidv4(),
+        eventId: event.id,
+        type: 'event',
+        message: `Message from ${user.displayName}: ${msg}`,
+        read: false,
+        createdAt: new Date().toISOString(),
+        fromUserId: user.id,
+      }));
+    }
+    await new Promise((r) => setTimeout(r, 100));
+    dispatch(addToast({ message: `Message sent to ${event.registeredVolunteers.filter((v) => v !== user.id).length} volunteer(s)`, type: 'success' }));
+    setMessageText('');
+    setShowMessageModal(false);
+    setSendingMessage(false);
+  };
+
+  const handleExportCSV = () => {
+    const rows: string[][] = [['Name', 'Email', 'Location', 'Skills', 'Gear', 'Digs', 'Hours']];
+    for (const vid of event.registeredVolunteers) {
+      const p = profiles[vid];
+      const name = p?.displayName || vid.slice(0, 8);
+      const email = vid === event.creatorId ? event.contactEmail : '';
+      const loc = p?.location || '';
+      const skills = p?.skills?.join('; ') || '';
+      const gear = p?.gearList?.join('; ') || '';
+      const digs = String(p?.digStats?.totalDigs ?? '');
+      const hours = String(p?.digStats?.totalHours ?? '');
+      rows.push([name, email, loc, skills, gear, digs, hours]);
+    }
+    const csv = rows.map((r) => r.map((c) => `"${c.replace(/"/g, '""')}"`).join(',')).join('\n');
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${event.title.replace(/[^a-zA-Z0-9]/g, '_')}_roster.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+    dispatch(addToast({ message: 'Roster exported as CSV', type: 'info' }));
   };
 
   const handleRefresh = async () => {
@@ -157,11 +231,22 @@ const EventDetailPage: React.FC = () => {
                 <button
                   disabled={isPast}
                   style={{ opacity: isPast ? 0.5 : 1, cursor: isPast ? 'not-allowed' : 'pointer' }}
-                  className={`btn btn-lg btn-block ${isRegistered ? 'btn-danger' : 'btn-primary'}`}
+                  className={`btn btn-lg btn-block ${isOnWaitlist ? 'btn-ghost' : isRegistered ? 'btn-danger' : 'btn-primary'}`}
                   onClick={handleRegister}
                 >
-                  {isPast ? 'Event has passed' : isRegistered ? ' Unregister' : " I'll be there"}
+                  {isPast ? 'Event has passed' : isOnWaitlist ? 'Leave waitlist' : isRegistered ? ' Unregister' : isFull ? 'Join waitlist' : " I'll be there"}
                 </button>
+              )}
+
+              {!isPast && isCreator && event.registeredVolunteers.length > 0 && (
+                <div className="creator-message-area">
+                  <button className="btn btn-ghost btn-block btn-sm" onClick={() => setShowMessageModal(true)}>
+                    Message Volunteers
+                  </button>
+                  <button className="btn btn-ghost btn-block btn-sm" onClick={handleExportCSV}>
+                    Export Roster (CSV)
+                  </button>
+                </div>
               )}
 
               <div className="contact-card">
@@ -205,7 +290,48 @@ const EventDetailPage: React.FC = () => {
                               {p?.displayName?.charAt(0) || vid.charAt(0)}
                             </div>
                           )}
-                          <span>{p?.displayName || vid.slice(0, 8)}</span>
+                          <span className="roster-name">{p?.displayName || vid.slice(0, 8)}</span>
+                          {isCreator && !isPast && vid !== user?.id && (
+                            <button
+                              className="roster-remove-btn"
+                              onClick={() => handleRemoveVolunteer(vid)}
+                              title="Remove volunteer"
+                            >
+                              ✕
+                            </button>
+                          )}
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </div>
+              )}
+
+              {isCreator && event.waitlist.length > 0 && (
+                <div className="waitlist-section">
+                  <h4>Waitlist ({event.waitlist.length})</h4>
+                  <ul className="roster-list">
+                    {event.waitlist.map((vid) => {
+                      const p = profiles[vid];
+                      return (
+                        <li key={vid} className="roster-item waitlist-item">
+                          {p?.avatarUrl ? (
+                            <img src={p.avatarUrl} alt="" className="roster-avatar" />
+                          ) : (
+                            <div className="roster-avatar roster-avatar-fallback">
+                              {p?.displayName?.charAt(0) || vid.charAt(0)}
+                            </div>
+                          )}
+                          <span className="roster-name">{p?.displayName || vid.slice(0, 8)}</span>
+                          {!isPast && (
+                            <button
+                              className="roster-promote-btn"
+                              onClick={() => handlePromoteFromWaitlist(vid)}
+                              title="Promote from waitlist"
+                            >
+                              ↑
+                            </button>
+                          )}
                         </li>
                       );
                     })}
@@ -270,6 +396,35 @@ const EventDetailPage: React.FC = () => {
         <CommentSection eventId={event.id} eventCreatorId={event.creatorId} />
 
       </div>
+
+      {/* Message Volunteers Modal */}
+      {showMessageModal && (
+        <div className="modal-backdrop" onClick={() => { if (!sendingMessage) setShowMessageModal(false); }}>
+          <div className="modal-dialog" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h3>Message Volunteers</h3>
+              <button className="modal-close" onClick={() => { if (!sendingMessage) setShowMessageModal(false); }}>✕</button>
+            </div>
+            <div className="modal-body">
+              <p className="muted">Sending to {event.registeredVolunteers.filter((v) => v !== user?.id).length} registered volunteer(s). The message will appear in their notifications.</p>
+              <textarea
+                className="modal-textarea"
+                placeholder="Write your message to volunteers..."
+                value={messageText}
+                onChange={(e) => setMessageText(e.target.value)}
+                rows={4}
+                disabled={sendingMessage}
+              />
+            </div>
+            <div className="modal-footer">
+              <button className="btn btn-ghost" onClick={() => setShowMessageModal(false)} disabled={sendingMessage}>Cancel</button>
+              <button className="btn btn-primary" onClick={handleMessageVolunteers} disabled={!messageText.trim() || sendingMessage}>
+                {sendingMessage ? 'Sending...' : 'Send Message'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -124,6 +124,7 @@ export interface DigEvent {
   difficulty: Difficulty;
   maxVolunteers: number;
   registeredVolunteers: string[]; // userId[]
+  waitlist: string[]; // userId[] — ordered, first = next to be promoted
   providedItems: ProvidedItem[];
   recommendedItems: RecommendedItem[];
   requirements: string[];

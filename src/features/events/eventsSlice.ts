@@ -39,6 +39,7 @@ const loadEvents = (): DigEvent[] => {
       recurrence: e.recurrence ?? 'none',
       recurrenceEnd: e.recurrenceEnd ?? '',
       recurrenceGroupId: e.recurrenceGroupId ?? '',
+      waitlist: e.waitlist ?? [],
     }));
   } catch {
     return [];
@@ -126,6 +127,7 @@ export const createEvent = createAsyncThunk<DigEvent, CreateEventPayload>(
       ...payload,
       status: 'planned',
       registeredVolunteers: [],
+      waitlist: [],
       recurrenceGroupId: payload.recurrence !== 'none' ? uuidv4() : '',
       createdAt: now,
       updatedAt: now,
@@ -169,14 +171,74 @@ export const registerForEvent = createAsyncThunk<
   const event = events.find((e) => e.id === eventId);
   if (!event) throw new Error('Event not found');
   if (new Date(event.date) < new Date(new Date().toDateString())) throw new Error('Event has already passed');
+
+  // Already registered → unregister, then promote from waitlist
   if (event.registeredVolunteers.includes(userId)) {
     event.registeredVolunteers = event.registeredVolunteers.filter((id) => id !== userId);
-  } else {
-    if (event.registeredVolunteers.length >= event.maxVolunteers) {
-      throw new Error('Event is full');
+    // Promote first person from waitlist
+    if (event.waitlist.length > 0) {
+      const promoted = event.waitlist.shift()!;
+      event.registeredVolunteers.push(promoted);
     }
-    event.registeredVolunteers.push(userId);
+    event.updatedAt = new Date().toISOString();
+    saveEvents(events);
+    return event;
   }
+
+  // On waitlist → remove from waitlist
+  if (event.waitlist.includes(userId)) {
+    event.waitlist = event.waitlist.filter((id) => id !== userId);
+    event.updatedAt = new Date().toISOString();
+    saveEvents(events);
+    return event;
+  }
+
+  // Event full → add to waitlist
+  if (event.registeredVolunteers.length >= event.maxVolunteers) {
+    if (!event.waitlist.includes(userId)) {
+      event.waitlist.push(userId);
+    }
+    event.updatedAt = new Date().toISOString();
+    saveEvents(events);
+    return event;
+  }
+
+  // Normal registration
+  event.registeredVolunteers.push(userId);
+  event.updatedAt = new Date().toISOString();
+  saveEvents(events);
+  return event;
+});
+
+export const removeVolunteer = createAsyncThunk<
+  DigEvent,
+  { eventId: string; userId: string }
+>('events/removeVolunteer', async ({ eventId, userId }) => {
+  await new Promise((r) => setTimeout(r, 200));
+  const events = loadEvents();
+  const event = events.find((e) => e.id === eventId);
+  if (!event) throw new Error('Event not found');
+  event.registeredVolunteers = event.registeredVolunteers.filter((id) => id !== userId);
+  // Promote first person from waitlist
+  if (event.waitlist.length > 0) {
+    const promoted = event.waitlist.shift()!;
+    event.registeredVolunteers.push(promoted);
+  }
+  event.updatedAt = new Date().toISOString();
+  saveEvents(events);
+  return event;
+});
+
+export const promoteFromWaitlist = createAsyncThunk<
+  DigEvent,
+  { eventId: string; userId: string }
+>('events/promoteFromWaitlist', async ({ eventId, userId }) => {
+  await new Promise((r) => setTimeout(r, 200));
+  const events = loadEvents();
+  const event = events.find((e) => e.id === eventId);
+  if (!event) throw new Error('Event not found');
+  event.waitlist = event.waitlist.filter((id) => id !== userId);
+  event.registeredVolunteers.push(userId);
   event.updatedAt = new Date().toISOString();
   saveEvents(events);
   return event;
@@ -272,6 +334,14 @@ const eventsSlice = createSlice({
         state.items = state.items.filter((e) => e.id !== action.payload);
       })
       .addCase(registerForEvent.fulfilled, (state, action) => {
+        const idx = state.items.findIndex((e) => e.id === action.payload.id);
+        if (idx !== -1) state.items[idx] = action.payload;
+      })
+      .addCase(removeVolunteer.fulfilled, (state, action) => {
+        const idx = state.items.findIndex((e) => e.id === action.payload.id);
+        if (idx !== -1) state.items[idx] = action.payload;
+      })
+      .addCase(promoteFromWaitlist.fulfilled, (state, action) => {
         const idx = state.items.findIndex((e) => e.id === action.payload.id);
         if (idx !== -1) state.items[idx] = action.payload;
       });
