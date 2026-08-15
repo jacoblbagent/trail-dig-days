@@ -41,6 +41,9 @@ const NavSearch: React.FC = () => {
     <div className={`nav-search-wrap${expanded ? ' expanded' : ''}`} onBlur={handleBlur}>
       {expanded ? (
         <>
+          {pendingSearch && (
+            <button className="nav-search-clear" onClick={clearSearch} aria-label="Clear search">✕</button>
+          )}
           <input
             className="nav-search-input"
             type="text"
@@ -51,9 +54,6 @@ const NavSearch: React.FC = () => {
             onKeyDown={handleKeyDown}
             autoFocus
           />
-          {pendingSearch && (
-            <button className="nav-search-clear" onClick={clearSearch} aria-label="Clear search">✕</button>
-          )}
           <button className="nav-search-btn" onClick={applySearch} disabled={!pendingSearch.trim()} aria-label="Search">Search</button>
         </>
       ) : (
