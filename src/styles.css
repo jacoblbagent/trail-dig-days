@@ -103,6 +103,9 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
 .btn-primary:hover { background: var(--green-800); color: #fff; }
 .btn-danger { background: var(--red-600); color: #fff; }
 .btn-danger:hover { background: var(--red-700); color: #fff; }
+.btn-danger:disabled { opacity: .5; cursor: default; }
+[data-theme="dark"] .btn-danger { background: var(--red-700); }
+[data-theme="dark"] .btn-danger:hover { background: var(--red-800); }
 .btn-ghost { background: transparent; color: var(--stone-600); border: 1px solid var(--stone-200); }
 .btn-ghost:hover { background: var(--stone-100); }
 .btn-sm { padding: 4px 12px; font-size: .875rem; }

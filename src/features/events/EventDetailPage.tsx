@@ -4,7 +4,7 @@ import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import MapExtras from '../map/MapExtras';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-import { registerForEvent, loadEventsFromStorage, removeVolunteer, promoteFromWaitlist, addNotification } from './eventsSlice';
+import { registerForEvent, loadEventsFromStorage, removeVolunteer, promoteFromWaitlist, updateEvent, addNotification } from './eventsSlice';
 import { addToast } from '../toast/toastSlice';
 import CommentSection from '../comments/CommentSection';
 import { v4 as uuidv4 } from 'uuid';
@@ -28,6 +28,9 @@ const EventDetailPage: React.FC = () => {
   const [messageText, setMessageText] = useState('');
   const [showMessageModal, setShowMessageModal] = useState(false);
   const [sendingMessage, setSendingMessage] = useState(false);
+  const [showCancelModal, setShowCancelModal] = useState(false);
+  const [cancelReason, setCancelReason] = useState('');
+  const [cancelling, setCancelling] = useState(false);
 
   if (!event) return <div className="loading">Event not found.</div>;
 
@@ -93,6 +96,35 @@ const EventDetailPage: React.FC = () => {
     setMessageText('');
     setShowMessageModal(false);
     setSendingMessage(false);
+  };
+
+  const handleCancelEvent = async () => {
+    if (!user || !cancelReason.trim()) return;
+    setCancelling(true);
+    // Notify all registered volunteers
+    const msg = `Event cancelled: ${cancelReason.trim()}`;
+    for (const vid of event.registeredVolunteers) {
+      if (vid === user.id) continue;
+      dispatch(addNotification({
+        id: uuidv4(),
+        eventId: event.id,
+        type: 'event',
+        message: msg,
+        read: false,
+        createdAt: new Date().toISOString(),
+        fromUserId: user.id,
+      }));
+    }
+    // Update event status
+    try {
+      await dispatch(updateEvent({ id: event.id, updates: { status: 'cancelled' } })).unwrap();
+      dispatch(addToast({ message: 'Event cancelled — volunteers notified', type: 'info' }));
+    } catch (err: any) {
+      dispatch(addToast({ message: err.message || 'Failed to cancel', type: 'warning' }));
+    }
+    setCancelling(false);
+    setShowCancelModal(false);
+    setCancelReason('');
   };
 
   const handleExportCSV = () => {
@@ -227,7 +259,7 @@ const EventDetailPage: React.FC = () => {
                 </p>
               </div>
 
-              {!isCreator && (
+              {!isCreator && event.status !== 'cancelled' && (
                 <button
                   disabled={isPast}
                   style={{ opacity: isPast ? 0.5 : 1, cursor: isPast ? 'not-allowed' : 'pointer' }}
@@ -238,7 +270,7 @@ const EventDetailPage: React.FC = () => {
                 </button>
               )}
 
-              {!isPast && isCreator && event.registeredVolunteers.length > 0 && (
+              {!isPast && isCreator && event.status !== 'cancelled' && event.registeredVolunteers.length > 0 && (
                 <div className="creator-message-area">
                   <button className="btn btn-ghost btn-block btn-sm" onClick={() => setShowMessageModal(true)}>
                     Message Volunteers
@@ -272,10 +304,15 @@ const EventDetailPage: React.FC = () => {
               {isCreator && (
                 <div className="creator-actions">
                   <Link to={`/events/${event.id}/edit`} className="btn btn-ghost btn-block">Edit Event</Link>
+                  {event.status !== 'cancelled' && (
+                    <button className="btn btn-danger btn-block" onClick={() => setShowCancelModal(true)}>
+                      Cancel Event
+                    </button>
+                  )}
                 </div>
               )}
 
-              {isCreator && event.registeredVolunteers.length > 0 && (
+              {isCreator && event.status !== 'cancelled' && event.registeredVolunteers.length > 0 && (
                 <div className="volunteer-roster">
                   <h4>Volunteers ({event.registeredVolunteers.length})</h4>
                   <ul className="roster-list">
@@ -307,7 +344,7 @@ const EventDetailPage: React.FC = () => {
                 </div>
               )}
 
-              {isCreator && event.waitlist.length > 0 && (
+              {isCreator && event.status !== 'cancelled' && event.waitlist.length > 0 && (
                 <div className="waitlist-section">
                   <h4>Waitlist ({event.waitlist.length})</h4>
                   <ul className="roster-list">
@@ -420,6 +457,36 @@ const EventDetailPage: React.FC = () => {
               <button className="btn btn-ghost" onClick={() => setShowMessageModal(false)} disabled={sendingMessage}>Cancel</button>
               <button className="btn btn-primary" onClick={handleMessageVolunteers} disabled={!messageText.trim() || sendingMessage}>
                 {sendingMessage ? 'Sending...' : 'Send Message'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Cancel Event Modal */}
+      {showCancelModal && (
+        <div className="modal-backdrop" onClick={() => { if (!cancelling) setShowCancelModal(false); }}>
+          <div className="modal-dialog" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h3>Cancel Event</h3>
+              <button className="modal-close" onClick={() => { if (!cancelling) setShowCancelModal(false); }}>✕</button>
+            </div>
+            <div className="modal-body">
+              <p className="muted">This will notify {event.registeredVolunteers.filter((v) => v !== user?.id).length} registered volunteer(s) and set the event status to cancelled.</p>
+              <p className="muted" style={{ marginBottom: 8 }}>Provide a reason for cancellation:</p>
+              <textarea
+                className="modal-textarea"
+                placeholder="e.g. Trail conditions unsafe, weather forecast, scheduling conflict..."
+                value={cancelReason}
+                onChange={(e) => setCancelReason(e.target.value)}
+                rows={3}
+                disabled={cancelling}
+              />
+            </div>
+            <div className="modal-footer">
+              <button className="btn btn-ghost" onClick={() => setShowCancelModal(false)} disabled={cancelling}>Keep Event</button>
+              <button className="btn btn-danger" onClick={handleCancelEvent} disabled={!cancelReason.trim() || cancelling}>
+                {cancelling ? 'Cancelling...' : 'Cancel Event'}
               </button>
             </div>
           </div>
