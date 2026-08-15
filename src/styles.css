@@ -666,7 +666,7 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
 }
 .map-style-toggle .map-style-label { font-weight: 600; }
 .map-style-toggle:hover { border-color: var(--green-600); }
-[data-theme="dark"] .map-style-toggle { background: var(--surface); border-color: #444; color: var(--stone-300); }
+[data-theme="dark"] .map-style-toggle { background: var(--stone-100); border-color: var(--stone-700); color: var(--stone-400); }
 .map-style-panel {
   position: absolute; bottom: 40px; left: 0;
   background: var(--surface); border: 1px solid var(--stone-200);
