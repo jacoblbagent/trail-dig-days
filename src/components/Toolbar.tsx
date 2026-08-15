@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useAppSelector, useAppDispatch } from '../app/hooks';
-import { setSearchRadius, setSearchCenter, setSelectedDay, setShowRecurring, setMapStyle } from '../features/events/eventsSlice';
+import { setSearchRadius, setSearchCenter, setSelectedDay, setShowRecurring } from '../features/events/eventsSlice';
 import SearchRadiusMap from '../features/calendar/SearchRadiusMap';
 import { expandRecurring } from '../utils/recurrence';
 
@@ -122,17 +122,16 @@ const FilterCalendar: React.FC = () => {
 
 const Toolbar: React.FC = () => {
   const dispatch = useAppDispatch();
-  const mapStyle = useAppSelector((s) => s.events.mapStyle);
   const searchCenter = useAppSelector((s) => s.events.searchCenter);
   const searchRadius = useAppSelector((s) => s.events.searchRadius);
   const showRecurring = useAppSelector((s) => s.events.showRecurring);
 
-  const [showPanel, setShowPanel] = useState<'location' | 'time' | 'recurring' | 'style' | null>(null);
+  const [showPanel, setShowPanel] = useState<'location' | 'time' | 'recurring' | null>(null);
   const [locTab, setLocTab] = useState<'country' | 'nearme'>('nearme');
   const [selectedState, setSelectedState] = useState('');
   const [radiusInput, setRadiusInput] = useState(() => String(searchRadius));
   const [pendingCenter, setPendingCenter] = useState<[number, number] | null>(null);
-  const togglePanel = (name: 'location' | 'time' | 'recurring' | 'style') => {
+  const togglePanel = (name: 'location' | 'time' | 'recurring') => {
     setShowPanel((prev) => (prev === name ? null : name));
   };
 
@@ -154,7 +153,6 @@ const Toolbar: React.FC = () => {
         <button className={`toolbar-btn${showPanel === 'location' ? ' active' : ''}`} onClick={() => togglePanel('location')} aria-label="Filter by location" aria-pressed={showPanel === 'location'}>Location</button>
         <button className={`toolbar-btn${showPanel === 'time' ? ' active' : ''}`} onClick={() => togglePanel('time')} aria-label="Filter by date" aria-pressed={showPanel === 'time'}>Date</button>
         <button className={`toolbar-btn${showPanel === 'recurring' ? ' active' : ''}`} onClick={() => togglePanel('recurring')} aria-label="Filter recurring events" aria-pressed={showPanel === 'recurring'}>Recurring?</button>
-        <button className={`toolbar-btn${showPanel === 'style' ? ' active' : ''}`} onClick={() => togglePanel('style')} aria-label="Map style" aria-pressed={showPanel === 'style'}>Style</button>
       </div>
 
       {showPanel && <div className="filter-backdrop" onClick={() => setShowPanel(null)} />}
@@ -212,24 +210,7 @@ const Toolbar: React.FC = () => {
             </label>
           </div>
         )}
-        {showPanel === 'style' && (
-          <div className="filter-panel filter-panel--style">
-            <div className="map-style-grid">
-              {[
-                { id: 'carto', label: 'Light', desc: 'Light street map' },
-                { id: 'carto-dark', label: 'Dark', desc: 'Dark street map' },
-                { id: 'osm', label: 'OpenStreetMap', desc: 'Standard OSM tiles' },
-                { id: 'topo', label: 'Topographic', desc: 'Contours & terrain' },
-                { id: 'satellite', label: 'Satellite', desc: 'Aerial imagery' },
-              ].map((s) => (
-                <button key={s.id} className={`map-style-btn${mapStyle === s.id ? ' active' : ''}`} onClick={() => { dispatch(setMapStyle(s.id)); setShowPanel(null); }}>
-                  <strong>{s.label}</strong>
-                  <span className="map-style-desc">{s.desc}</span>
-                </button>
-              ))}
-            </div>
-          </div>
-        )}
+
     </>
   );
 };

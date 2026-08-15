@@ -3,7 +3,7 @@ import { Outlet } from 'react-router-dom';
 import { MapContainer, TileLayer, useMap, Marker, Tooltip } from 'react-leaflet';
 import L from 'leaflet';
 import { useAppSelector, useAppDispatch } from '../app/hooks';
-import { setSearchCenter } from '../features/events/eventsSlice';
+import { setSearchCenter, setMapStyle } from '../features/events/eventsSlice';
 import MapMoveHandler from '../features/map/MapMoveHandler';
 import TileLoadIndicator from '../features/map/TileLoadIndicator';
 import PageMarkerContent from '../features/map/PageMarkerContent';
@@ -68,6 +68,7 @@ const MapLayout: React.FC = () => {
   const mapRef = useRef<L.Map | null>(null);
 
   const [userLocation, setUserLocation] = useState<[number, number] | null>(null);
+  const [showStyle, setShowStyle] = useState(false);
   const [isDetecting, setIsDetecting] = useState(false);
   const initRef = useRef(false);
 
@@ -190,6 +191,32 @@ const MapLayout: React.FC = () => {
             </Marker>
           )}
         </MapContainer>
+        <div className="map-style-ctrl">
+          <button className="map-style-toggle" onClick={() => setShowStyle(!showStyle)} title="Map style" aria-label="Map style">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="12" cy="12" r="3"/>
+              <path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
+            </svg>
+          </button>
+          {showStyle && (
+            <div className="map-style-panel">
+              <div className="map-style-grid">
+                {[
+                  { id: 'carto', label: 'Light', desc: 'Light street map' },
+                  { id: 'carto-dark', label: 'Dark', desc: 'Dark street map' },
+                  { id: 'osm', label: 'OpenStreetMap', desc: 'Standard OSM tiles' },
+                  { id: 'topo', label: 'Topographic', desc: 'Contours & terrain' },
+                  { id: 'satellite', label: 'Satellite', desc: 'Aerial imagery' },
+                ].map((s) => (
+                  <button key={s.id} className={`map-style-btn${mapStyle === s.id ? ' active' : ''}`} onClick={() => { dispatch(setMapStyle(s.id)); setShowStyle(false); }}>
+                    <strong>{s.label}</strong>
+                    <span className="map-style-desc">{s.desc}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
