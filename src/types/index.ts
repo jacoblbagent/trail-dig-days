@@ -11,6 +11,7 @@ export interface AuthState {
   user: User | null;
   isAuthenticated: boolean;
   loading: boolean;
+  pendingVerification: { email: string; verificationToken: string } | null;
 }
 
 // ─── User Profile (heavily customizable) ───

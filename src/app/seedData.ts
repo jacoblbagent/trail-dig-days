@@ -3275,7 +3275,7 @@ export const ensureSeedData = () => {
     const regUsers = JSON.parse(localStorage.getItem('trail-dig-users') || '[]');
     const hasVolunteer = regUsers.some((u: any) => u.email === 'demo@hiker.com');
     if (!hasVolunteer) {
-      regUsers.push({ ...DEMO_VOLUNTEER, password: 'demo1234' });
+      regUsers.push({ ...DEMO_VOLUNTEER, password: 'demo1234', verified: true });
       localStorage.setItem('trail-dig-users', JSON.stringify(regUsers));
     }
 
@@ -3296,7 +3296,7 @@ export const ensureSeedData = () => {
   localStorage.setItem(AUTH_KEY, JSON.stringify(DEMO_USER));
 
   // Seed registered users (so login works)
-  const users = [{ ...DEMO_USER, password: 'demo1234' }, { ...DEMO_VOLUNTEER, password: 'demo1234' }];
+  const users = [{ ...DEMO_USER, password: 'demo1234', verified: true }, { ...DEMO_VOLUNTEER, password: 'demo1234', verified: true }];
   localStorage.setItem('trail-dig-users', JSON.stringify(users));
 
   // Seed profile

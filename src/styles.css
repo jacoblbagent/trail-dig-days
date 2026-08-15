@@ -385,6 +385,26 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
 .auth-card form h2 { font-size: 1.2rem; margin-bottom: 16px; color: var(--stone-800); }
 .auth-card .btn-primary { width: 100%; justify-content: center; margin-top: 8px; }
 .auth-toggle { text-align: center; margin-top: 20px; font-size: .9rem; color: var(--stone-500); }
+.forgot-row { text-align: right; margin-top: -4px; margin-bottom: 8px; }
+.forgot-row .link-btn { font-size: .85rem; }
+
+/* ── Auth: Verify / Token Display ── */
+.verify-box { padding: 16px; border: 1px solid var(--stone-200); border-radius: var(--radius); background: var(--stone-50); }
+.verify-box .muted { margin-bottom: 8px; }
+.token-display { margin: 12px 0; padding: 12px; background: var(--surface); border: 1px dashed var(--stone-300); border-radius: var(--radius); }
+.token-label { font-size: .85rem; font-weight: 600; color: var(--stone-600); margin-bottom: 6px; }
+.token-code {
+  display: block; word-break: break-all; font-size: .8rem; padding: 8px 10px;
+  background: var(--bg); border: 1px solid var(--stone-200); border-radius: 4px;
+  color: var(--green-700); cursor: pointer; transition: background .15s;
+  font-family: 'Courier New', Courier, monospace; line-height: 1.4;
+}
+.token-code:hover { background: var(--green-50); border-color: var(--green-400); }
+.token-hint { font-size: .8rem; color: var(--stone-400); margin-top: 8px; }
+[data-theme="dark"] .verify-box { background: var(--stone-800); border-color: var(--stone-700); }
+[data-theme="dark"] .token-code { background: var(--stone-850); border-color: var(--stone-600); color: var(--green-400); }
+[data-theme="dark"] .token-code:hover { background: rgba(21, 128, 61, .15); border-color: var(--green-600); }
+[data-theme="dark"] .token-display { background: var(--stone-850); border-color: var(--stone-600); }
 
 .demo-section { margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--stone-150); text-align: center; }
 .demo-label { font-size: .75rem; text-transform: uppercase; letter-spacing: .5px; color: var(--stone-400); margin-bottom: 8px; }
