@@ -709,8 +709,7 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
 
 /* Leaflet dark mode overrides */
 [data-theme="dark"] .leaflet-container { background: #1c1917; }
-[data-theme="dark"] .leaflet-control-zoom a { background: var(--surface); color: var(--stone-400); border-color: #444; }
-[data-theme="dark"] .leaflet-control-zoom a:hover { color: var(--stone-200); }
+[data-theme="dark"] .leaflet-control-zoom a { border-color: #444; }
 .leaflet-control-zoom-in {
   width: 34px !important; height: 34px !important; line-height: 34px !important;
   border-radius: 4px 4px 0 0 !important;
