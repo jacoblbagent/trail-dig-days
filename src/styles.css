@@ -584,10 +584,6 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
 .list-card-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
 .list-card-header h3 { font-size: 1rem; color: var(--stone-800); }
 .recurring-badge { font-size: .7rem; color: var(--stone-500); border: 1px solid var(--stone-300); border-left: 3px solid var(--green-600); border-radius: 3px; padding: 1px 5px; white-space: nowrap; flex-shrink: 0; }
-.status-planned { background: var(--amber-600); }
-.status-confirmed { background: var(--green-700); }
-.status-cancelled { background: var(--red-600); }
-.status-completed { background: var(--blue-600); }
 .list-card-trail { font-size: .85rem; color: var(--stone-500); margin-top: 3px; }
 .list-card-row { display: flex; align-items: center; gap: 4px; font-size: .8rem; color: var(--stone-500); margin-top: 3px; }
 .list-card-row .list-card-location { color: var(--stone-500); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -945,8 +941,6 @@ input[type="time"]::-webkit-calendar-picker-indicator { filter: invert(0.55); cu
   cursor: pointer; transition: all .15s; flex-shrink: 0;
 }
 .share-btn:hover { border-color: var(--green-400); color: var(--green-700); }
-[data-theme="dark"] .share-btn { border-color: var(--stone-700); color: var(--stone-400); }
-[data-theme="dark"] .share-btn:hover { border-color: var(--green-600); color: var(--green-400); }
 .trail-name { color: var(--stone-500); font-size: 1rem; margin-top: 4px; }
 .private-badge {
   display: inline-block; font-size: .7rem; font-weight: 600; text-transform: uppercase;
@@ -1772,22 +1766,7 @@ input[type="time"]::-webkit-calendar-picker-indicator { filter: invert(0.55); cu
 }
 .list-card-badges { display: flex; align-items: center; gap: 4px; flex-shrink: 0; flex-wrap: wrap; justify-content: flex-end; }
 
-/* ── Status Badge ── */
-.status-badge {
-  display: inline-block; font-size: .65rem; font-weight: 600; text-transform: uppercase;
-  letter-spacing: .4px; padding: 2px 8px; border-radius: 4px;
-  vertical-align: middle; margin-left: 4px; color: #fff;
-}
-.status-planned { background: var(--amber-600); }
-.status-confirmed { background: var(--green-700); }
-.status-cancelled { background: var(--red-600); }
-.status-completed { background: var(--blue-600); }
 
-
-[data-theme="dark"] .status-planned { background: var(--amber-500); }
-[data-theme="dark"] .status-confirmed { background: var(--green-600); }
-[data-theme="dark"] .status-cancelled { background: var(--red-500); }
-[data-theme="dark"] .status-completed { background: var(--blue-500); }
 
 
 /* ── Skeleton Loaders ── */

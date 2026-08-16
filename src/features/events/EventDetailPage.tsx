@@ -202,7 +202,6 @@ const EventDetailPage: React.FC = () => {
               {event.isPrivate && <span className="private-badge">Private</span>}
               {isFull && <span className="full-badge">Full</span>}
             </h1>
-            <span className={`status-badge status-${event.status}`}>{event.status}</span>
             <button className="share-btn" onClick={handleShare} title="Copy event link to clipboard">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                 <circle cx="18" cy="5" r="3" /><circle cx="6" cy="12" r="3" /><circle cx="18" cy="19" r="3" />
