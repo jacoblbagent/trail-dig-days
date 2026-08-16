@@ -327,8 +327,7 @@ const MapPage: React.FC = () => {
                     <p>No results for &ldquo;{searchQuery}&rdquo;.</p>
                   ) : (
                     <>
-                      <p>No dig days in this area.</p>
-                      <p>Try panning or zooming the map to a different location, or <Link to="/events/create">create one</Link>!</p>
+                      <p>No dig days in this area. <Link to="/events/create">Create one</Link>!</p>
                     </>
                   )}
                 </div>
