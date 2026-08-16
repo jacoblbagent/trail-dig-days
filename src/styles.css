@@ -216,7 +216,7 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
 .nav-search-input {
   height: 28px; border: 1px solid var(--stone-200); border-radius: var(--radius) 0 0 var(--radius);
   padding: 0 8px; font-size: .82rem; outline: none; width: 160px;
-  background: var(--surface); color: var(--stone-800);
+  background: var(--stone-100); color: var(--stone-800);
 }
 .nav-search-input:focus { border-color: var(--green-600); }
 .nav-search-clear {
