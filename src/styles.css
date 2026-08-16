@@ -704,7 +704,7 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
   flex-shrink: 0;
 }
 .map-locate-btn:disabled { opacity: .5; cursor: default; }
-.map-locate-btn:hover { border-color: var(--green-600); color: var(--stone-800); }
+.map-locate-btn:hover { color: var(--stone-800); }
 [data-theme="dark"] .map-locate-btn { border-color: #444; }
 
 /* Leaflet dark mode overrides */
