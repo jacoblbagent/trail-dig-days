@@ -134,7 +134,7 @@ const Sidebar: React.FC = () => {
                       <div className="notif-header-actions">
                         {unreadCount > 0 && (
                           <button className="notif-mark-read-btn" onClick={() => dispatch(markAllNotificationsRead())} aria-label="Mark all notifications as read">
-                            Mark all read
+                            mark all as read
                           </button>
                         )}
                       </div>
