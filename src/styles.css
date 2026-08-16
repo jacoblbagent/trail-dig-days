@@ -660,7 +660,7 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
 }
 .map-style-toggle .map-style-label { font-weight: 600; }
 .map-style-toggle:hover { border-color: var(--green-600); }
-[data-theme="dark"] .map-style-toggle { background: var(--stone-100); border-color: var(--stone-700); color: var(--stone-400); }
+[data-theme="dark"] .map-style-toggle { border-color: var(--stone-700); }
 .map-style-panel {
   position: absolute; bottom: 40px; left: 0;
   background: var(--surface); border: 1px solid var(--stone-200);
@@ -705,7 +705,7 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
 }
 .map-locate-btn:disabled { opacity: .5; cursor: default; }
 .map-locate-btn:hover { border-color: var(--green-600); }
-[data-theme="dark"] .map-locate-btn { background: var(--surface); border-color: #444; color: var(--stone-400); }
+[data-theme="dark"] .map-locate-btn { border-color: #444; }
 
 /* Leaflet dark mode overrides */
 [data-theme="dark"] .leaflet-container { background: #1c1917; }
@@ -720,7 +720,7 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
   font-size: 1.1rem;
 }
 .leaflet-control-zoom-in:hover { border-color: var(--green-600); }
-[data-theme="dark"] .leaflet-control-zoom-in { background: var(--surface); border-color: #444; color: var(--stone-400); }
+[data-theme="dark"] .leaflet-control-zoom-in { border-color: #444; }
 .leaflet-control-zoom-out {
   width: 34px !important; height: 34px !important; line-height: 34px !important;
   border-radius: 0 0 4px 4px !important;
@@ -731,7 +731,7 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
   font-size: 1.1rem;
 }
 .leaflet-control-zoom-out:hover { border-color: var(--green-600); }
-[data-theme="dark"] .leaflet-control-zoom-out { background: var(--surface); border-color: #444; color: var(--stone-400); }
+[data-theme="dark"] .leaflet-control-zoom-out { border-color: #444; }
 .leaflet-control-zoom a { text-decoration: none; }
 /* User location dot pulse */
 
