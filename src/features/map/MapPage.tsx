@@ -2,7 +2,7 @@ import React, { useState, useMemo, useEffect, useRef, memo } from 'react';
 import { Link } from 'react-router-dom';
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
 import { collapseRecurring, expandRecurring } from '../../utils/recurrence';
-import { setSelectedDay } from '../events/eventsSlice';
+import { setSelectedDay, setShowRecurring } from '../events/eventsSlice';
 import { haversine } from './mapUtils';
 import type { DigEvent } from '../../types';
 
@@ -74,10 +74,12 @@ const MapPage: React.FC = () => {
   const [sortBy, setSortBy] = useState<'date' | 'distance' | 'spots'>('date');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
   const [showSortMenu, setShowSortMenu] = useState(false);
+  const [showFilters, setShowFilters] = useState(false);
   const [eventsCollapsed, setEventsCollapsed] = useState(false);
   const [rightWidth, setRightWidth] = useState(380);
   const rightWidthRef = useRef(380);
   const sortRef = useRef<HTMLDivElement>(null);
+  const filterRef = useRef<HTMLDivElement>(null);
 
   const RIGHT_SIDEBAR_MIN = 240;
   const RIGHT_SIDEBAR_MAX = 600;
@@ -116,17 +118,20 @@ const MapPage: React.FC = () => {
     return () => ro.disconnect();
   }, []);
 
-  // Close sort menu on click outside
+  // Close sort menu and filter menu on click outside
   useEffect(() => {
-    if (!showSortMenu) return;
+    if (!showSortMenu && !showFilters) return;
     const handler = (e: MouseEvent) => {
-      if (sortRef.current && !sortRef.current.contains(e.target as Node)) {
+      if (showSortMenu && sortRef.current && !sortRef.current.contains(e.target as Node)) {
         setShowSortMenu(false);
+      }
+      if (showFilters && filterRef.current && !filterRef.current.contains(e.target as Node)) {
+        setShowFilters(false);
       }
     };
     document.addEventListener('mousedown', handler);
     return () => document.removeEventListener('mousedown', handler);
-  }, [showSortMenu]);
+  }, [showSortMenu, showFilters]);
 
   const handleResizeStart = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -288,6 +293,31 @@ const MapPage: React.FC = () => {
                   </div>
                 )}
                 <span className="event-list-sort-arrow" onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}>{sortOrder === 'desc' ? '↓' : '↑'}</span>
+              </div>
+              <div className="event-list-filter" ref={filterRef}>
+                <button
+                  className={`event-list-filter-btn${showFilters ? ' active' : ''}`}
+                  onClick={() => setShowFilters(!showFilters)}
+                  aria-label="Toggle filters"
+                >
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <line x1="4" y1="6" x2="20" y2="6" />
+                    <line x1="8" y1="12" x2="20" y2="12" />
+                    <line x1="12" y1="18" x2="20" y2="18" />
+                  </svg>
+                </button>
+                {showFilters && (
+                  <div className="event-list-filter-menu">
+                    <label className="filter-menu-item">
+                      <input
+                        type="checkbox"
+                        checked={showRecurring}
+                        onChange={(e) => dispatch(setShowRecurring(e.target.checked))}
+                      />
+                      <span>Recurring only</span>
+                    </label>
+                  </div>
+                )}
               </div>
             </div>
             <div className="event-list">
