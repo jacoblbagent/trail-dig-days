@@ -718,7 +718,7 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
   box-shadow: 0 1px 3px rgba(0,0,0,.08);
   font-size: 1.1rem;
 }
-.leaflet-control-zoom-in:hover { border-color: var(--green-600); color: var(--stone-800); }
+.leaflet-control-zoom-in:hover { color: var(--stone-800); }
 [data-theme="dark"] .leaflet-control-zoom-in { border-color: #444; }
 .leaflet-control-zoom-out {
   width: 34px !important; height: 34px !important; line-height: 34px !important;
@@ -729,11 +729,11 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
   box-shadow: 0 1px 3px rgba(0,0,0,.08);
   font-size: 1.1rem;
 }
-.leaflet-control-zoom-out:hover { border-color: var(--green-600); color: var(--stone-800); }
+.leaflet-control-zoom-out:hover { color: var(--stone-800); }
 [data-theme="dark"] .leaflet-control-zoom-out { border-color: #444; }
 .leaflet-control-zoom a { text-decoration: none; }
 .leaflet-bar a { background: var(--surface); color: var(--stone-600); border-color: var(--stone-200); }
-.leaflet-bar a:hover { border-color: var(--green-600); color: var(--stone-800); }
+.leaflet-bar a:hover { color: var(--stone-800); }
 [data-theme="dark"] .leaflet-bar a { border-color: #444; }
 /* User location dot pulse */
 
