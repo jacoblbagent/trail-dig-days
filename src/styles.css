@@ -652,14 +652,14 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
 .map-style-toggle {
   height: 34px; border-radius: 4px;
   background: var(--surface); border: 1px solid var(--stone-200);
-  cursor: pointer; color: var(--stone-700);
+  cursor: pointer; color: var(--stone-600);
   display: flex; align-items: center; justify-content: center;
   box-shadow: 0 1px 3px rgba(0,0,0,.08);
   transition: border-color .15s;
   font-size: .8rem; padding: 0 10px; white-space: nowrap;
 }
 .map-style-toggle .map-style-label { font-weight: 600; }
-.map-style-toggle:hover { border-color: var(--green-600); }
+.map-style-toggle:hover { border-color: var(--green-600); color: var(--stone-800); }
 [data-theme="dark"] .map-style-toggle { border-color: var(--stone-700); }
 .map-style-panel {
   position: absolute; bottom: 40px; left: 0;
@@ -698,13 +698,13 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
 .map-locate-btn {
   width: 34px; height: 34px; border-radius: 4px;
   background: var(--surface); border: 1px solid var(--stone-200);
-  cursor: pointer; color: var(--stone-500);
+  cursor: pointer; color: var(--stone-600);
   display: flex; align-items: center; justify-content: center;
   box-shadow: 0 1px 3px rgba(0,0,0,.08);
   flex-shrink: 0;
 }
 .map-locate-btn:disabled { opacity: .5; cursor: default; }
-.map-locate-btn:hover { border-color: var(--green-600); }
+.map-locate-btn:hover { border-color: var(--green-600); color: var(--stone-800); }
 [data-theme="dark"] .map-locate-btn { border-color: #444; }
 
 /* Leaflet dark mode overrides */
@@ -715,22 +715,22 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
   width: 34px !important; height: 34px !important; line-height: 34px !important;
   border-radius: 4px 4px 0 0 !important;
   background: var(--surface); border: 1px solid var(--stone-200);
-  color: var(--stone-500);
+  color: var(--stone-600);
   box-shadow: 0 1px 3px rgba(0,0,0,.08);
   font-size: 1.1rem;
 }
-.leaflet-control-zoom-in:hover { border-color: var(--green-600); }
+.leaflet-control-zoom-in:hover { border-color: var(--green-600); color: var(--stone-800); }
 [data-theme="dark"] .leaflet-control-zoom-in { border-color: #444; }
 .leaflet-control-zoom-out {
   width: 34px !important; height: 34px !important; line-height: 34px !important;
   border-radius: 0 0 4px 4px !important;
   background: var(--surface); border: 1px solid var(--stone-200);
   border-bottom: 1px solid var(--stone-200) !important;
-  color: var(--stone-500);
+  color: var(--stone-600);
   box-shadow: 0 1px 3px rgba(0,0,0,.08);
   font-size: 1.1rem;
 }
-.leaflet-control-zoom-out:hover { border-color: var(--green-600); }
+.leaflet-control-zoom-out:hover { border-color: var(--green-600); color: var(--stone-800); }
 [data-theme="dark"] .leaflet-control-zoom-out { border-color: #444; }
 .leaflet-control-zoom a { text-decoration: none; }
 /* User location dot pulse */
