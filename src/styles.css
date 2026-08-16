@@ -732,6 +732,9 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
 .leaflet-control-zoom-out:hover { border-color: var(--green-600); color: var(--stone-800); }
 [data-theme="dark"] .leaflet-control-zoom-out { border-color: #444; }
 .leaflet-control-zoom a { text-decoration: none; }
+.leaflet-bar a { background: var(--surface); color: var(--stone-600); border-color: var(--stone-200); }
+.leaflet-bar a:hover { border-color: var(--green-600); color: var(--stone-800); }
+[data-theme="dark"] .leaflet-bar a { border-color: #444; }
 /* User location dot pulse */
 
 [data-theme="dark"] .leaflet-control-attribution { background: rgba(28,25,23,.8); color: #777; }
