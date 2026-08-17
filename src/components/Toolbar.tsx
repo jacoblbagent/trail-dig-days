@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useAppSelector, useAppDispatch } from '../app/hooks';
 import { setSearchRadius, setSearchCenter, setSelectedDay, setShowRecurring, setFilterPanel } from '../features/events/eventsSlice';
 import SearchRadiusMap from '../features/calendar/SearchRadiusMap';
@@ -126,6 +126,9 @@ const Toolbar: React.FC = () => {
   const searchRadius = useAppSelector((s) => s.events.searchRadius);
   const showRecurring = useAppSelector((s) => s.events.showRecurring);
 
+  const [showFilterMenu, setShowFilterMenu] = useState(false);
+  const filterMenuRef = useRef<HTMLDivElement>(null);
+
   const [locTab, setLocTab] = useState<'country' | 'nearme'>('nearme');
   const [selectedState, setSelectedState] = useState('');
   const [radiusInput, setRadiusInput] = useState(() => String(searchRadius));
@@ -145,9 +148,53 @@ const Toolbar: React.FC = () => {
 
   const closePanel = () => dispatch(setFilterPanel(null));
 
+  // Close filter menu on click outside
+  useEffect(() => {
+    if (!showFilterMenu) return;
+    const handler = (e: MouseEvent) => {
+      if (filterMenuRef.current && !filterMenuRef.current.contains(e.target as Node)) {
+        setShowFilterMenu(false);
+      }
+    };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, [showFilterMenu]);
+
   return (
     <>
       {filterPanel && <div className="filter-backdrop" onClick={closePanel} />}
+
+      <div className="map-toolbar">
+        <div className="toolbar-filter-wrap" ref={filterMenuRef}>
+          <button
+            className={`toolbar-filter-btn${showFilterMenu ? ' active' : ''}`}
+            onClick={() => setShowFilterMenu(!showFilterMenu)}
+            aria-label="Toggle filter menu"
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="4" y1="6" x2="20" y2="6" />
+              <line x1="8" y1="12" x2="20" y2="12" />
+              <line x1="12" y1="18" x2="20" y2="18" />
+            </svg>
+          </button>
+          {showFilterMenu && (
+            <div className="toolbar-filter-menu">
+              <button className={`filter-menu-trigger ${filterPanel === 'location' ? 'active' : ''}`} onClick={() => { dispatch(setFilterPanel(filterPanel === 'location' ? null : 'location')); setShowFilterMenu(false); }}>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                Location
+              </button>
+              <button className={`filter-menu-trigger ${filterPanel === 'time' ? 'active' : ''}`} onClick={() => { dispatch(setFilterPanel(filterPanel === 'time' ? null : 'time')); setShowFilterMenu(false); }}>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                Date
+              </button>
+              <button className={`filter-menu-trigger ${filterPanel === 'recurring' ? 'active' : ''}`} onClick={() => { dispatch(setFilterPanel(filterPanel === 'recurring' ? null : 'recurring')); setShowFilterMenu(false); }}>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"/></svg>
+                Recurring
+              </button>
+            </div>
+          )}
+        </div>
+      </div>
 
       {filterPanel === 'location' && (
         <div className="filter-panel filter-panel--location">

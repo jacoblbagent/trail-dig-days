@@ -2,7 +2,7 @@ import React, { useState, useMemo, useEffect, useRef, memo } from 'react';
 import { Link } from 'react-router-dom';
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
 import { collapseRecurring, expandRecurring } from '../../utils/recurrence';
-import { setSelectedDay, setFilterPanel } from '../events/eventsSlice';
+import { setSelectedDay } from '../events/eventsSlice';
 import { haversine } from './mapUtils';
 import type { DigEvent } from '../../types';
 
@@ -74,14 +74,10 @@ const MapPage: React.FC = () => {
   const [sortBy, setSortBy] = useState<'date' | 'distance' | 'spots'>('date');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
   const [showSortMenu, setShowSortMenu] = useState(false);
-  const [showFilters, setShowFilters] = useState(false);
   const [eventsCollapsed, setEventsCollapsed] = useState(false);
   const [rightWidth, setRightWidth] = useState(380);
   const rightWidthRef = useRef(380);
   const sortRef = useRef<HTMLDivElement>(null);
-  const filterRef = useRef<HTMLDivElement>(null);
-
-  const filterPanel = useAppSelector((s) => s.events.filterPanel);
 
   const RIGHT_SIDEBAR_MIN = 240;
   const RIGHT_SIDEBAR_MAX = 600;
@@ -120,20 +116,17 @@ const MapPage: React.FC = () => {
     return () => ro.disconnect();
   }, []);
 
-  // Close sort menu and filter menu on click outside
+  // Close sort menu on click outside
   useEffect(() => {
-    if (!showSortMenu && !showFilters) return;
+    if (!showSortMenu) return;
     const handler = (e: MouseEvent) => {
       if (showSortMenu && sortRef.current && !sortRef.current.contains(e.target as Node)) {
         setShowSortMenu(false);
       }
-      if (showFilters && filterRef.current && !filterRef.current.contains(e.target as Node)) {
-        setShowFilters(false);
-      }
     };
     document.addEventListener('mousedown', handler);
     return () => document.removeEventListener('mousedown', handler);
-  }, [showSortMenu, showFilters]);
+  }, [showSortMenu]);
 
   const handleResizeStart = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -295,35 +288,6 @@ const MapPage: React.FC = () => {
                   </div>
                 )}
                 <span className="event-list-sort-arrow" onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}>{sortOrder === 'desc' ? '↓' : '↑'}</span>
-              </div>
-              <div className="event-list-filter" ref={filterRef}>
-                <button
-                  className={`event-list-filter-btn${showFilters ? ' active' : ''}`}
-                  onClick={() => setShowFilters(!showFilters)}
-                  aria-label="Toggle filters"
-                >
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                    <line x1="4" y1="6" x2="20" y2="6" />
-                    <line x1="8" y1="12" x2="20" y2="12" />
-                    <line x1="12" y1="18" x2="20" y2="18" />
-                  </svg>
-                </button>
-                {showFilters && (
-                  <div className="event-list-filter-menu" ref={filterRef}>
-                    <button className={`filter-menu-trigger ${filterPanel === 'location' ? 'active' : ''}`} onClick={() => dispatch(setFilterPanel(filterPanel === 'location' ? null : 'location'))}>
-                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
-                      Location
-                    </button>
-                    <button className={`filter-menu-trigger ${filterPanel === 'time' ? 'active' : ''}`} onClick={() => dispatch(setFilterPanel(filterPanel === 'time' ? null : 'time'))}>
-                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-                      Date
-                    </button>
-                    <button className={`filter-menu-trigger ${filterPanel === 'recurring' ? 'active' : ''}`} onClick={() => dispatch(setFilterPanel(filterPanel === 'recurring' ? null : 'recurring'))}>
-                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 11-2.12-9.36L23 10"/></svg>
-                      Recurring
-                    </button>
-                  </div>
-                )}
               </div>
             </div>
             <div className="event-list">

@@ -717,6 +717,21 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
   color: var(--stone-600); cursor: pointer; letter-spacing: .01em;
   transition: background .15s, color .15s;
 }
+.toolbar-filter-wrap { position: relative; }
+.toolbar-filter-btn {
+  background: none; border: 1px solid transparent; border-radius: 3px; height: 30px; width: 30px;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--stone-500); cursor: pointer; transition: color .15s, border-color .15s;
+}
+.toolbar-filter-btn:hover { color: var(--stone-700); border-color: var(--stone-200); }
+.toolbar-filter-btn.active { color: var(--green-700); border-color: var(--green-600); background: var(--green-50); }
+[data-theme="dark"] .toolbar-filter-btn.active { color: var(--green-400); border-color: var(--green-700); background: var(--green-950); }
+.toolbar-filter-menu {
+  position: absolute; top: 100%; right: 0; z-index: 10; margin-top: 2px;
+  background: var(--surface); border: 1px solid var(--stone-200); border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-lg); padding: 4px; min-width: 140px;
+  display: flex; flex-direction: column; gap: 2px;
+}
 .toolbar-btn:hover { background: var(--stone-100); color: var(--stone-700); }
 .toolbar-btn.active { background: var(--green-100); color: var(--green-700); }
 
