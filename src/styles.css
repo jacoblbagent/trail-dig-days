@@ -157,6 +157,64 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
 .section-desc { color: var(--stone-400); font-size: .875rem; margin-bottom: 12px; }
 .input-sm { padding: 6px 10px; border: 1px solid var(--stone-200); border-radius: var(--radius); font-size: .875rem; }
 
+/* ── Floating Labels ── */
+.floating-group {
+  position: relative; margin-bottom: 10px;
+}
+.floating-group input,
+.floating-group textarea,
+.floating-group select {
+  width: 100%; border: 1px solid var(--stone-200); border-radius: var(--radius);
+  background: var(--surface); color: var(--stone-900); transition: border .15s;
+  font-size: .875rem; line-height: 1.4;
+}
+.floating-group input,
+.floating-group select {
+  padding: 18px 8px 4px 8px;
+}
+.floating-group textarea {
+  padding: 22px 8px 6px 8px; resize: vertical;
+}
+.floating-group label {
+  position: absolute; left: 9px; top: 50%;
+  transform: translateY(-50%);
+  font-size: .875rem; color: var(--stone-500);
+  pointer-events: none; transition: all .15s ease;
+  font-weight: 500; line-height: 1; z-index: 1;
+  background: var(--surface); padding: 0 4px 2px;
+}
+.floating-group textarea + label {
+  top: 11px; transform: none;
+}
+/* Float on focus or when input has content */
+.floating-group:focus-within label,
+.floating-group.has-value label,
+.floating-group input:not(:placeholder-shown) + label,
+.floating-group textarea:not(:placeholder-shown) + label {
+  top: 6px; transform: translateY(0);
+  font-size: .7rem; font-weight: 600;
+  color: var(--green-600);
+}
+/* Selects always have a value — keep label floated */
+.floating-group select + label {
+  top: 6px; transform: translateY(0);
+  font-size: .7rem; font-weight: 600;
+  color: var(--stone-500);
+}
+.floating-group:focus-within select + label {
+  color: var(--green-600);
+}
+.floating-group input:focus,
+.floating-group textarea:focus,
+.floating-group select:focus {
+  outline: none; border-color: var(--green-600);
+  box-shadow: 0 0 0 3px rgba(22, 163, 74, .12);
+}
+/* Inputs with visible placeholder text don't show the label until focused */
+.floating-group input::placeholder,
+.floating-group textarea::placeholder,
+.floating-group select::placeholder { color: var(--stone-400); }
+
 /* ── Tags / Chips ── */
 .tag-grid { display: flex; flex-wrap: wrap; gap: 6px; }
 .tag-grid .tag { border-radius: 3px; background: var(--stone-100); border: 1px solid var(--stone-200); color: var(--stone-500); cursor: default; }
@@ -564,14 +622,44 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
 [data-theme="dark"] .event-list-filter-btn.active { color: var(--green-400); }
 .event-list-filter-menu {
   position: absolute; top: 100%; right: 0; z-index: 10;
-  background: var(--surface); border: 1px solid var(--stone-200); border-radius: var(--radius-sm);
-  box-shadow: var(--shadow-lg); padding: 4px; min-width: 130px;
+  background: var(--surface); border: 1px solid var(--stone-200); border-radius: var(--radius);
+  box-shadow: var(--shadow-lg); padding: 12px; width: 320px;
+  display: flex; flex-direction: column; gap: 12px;
 }
+.filter-menu-section {}
+.filter-menu-section-label {
+  font-size: .7rem; font-weight: 600; text-transform: uppercase;
+  letter-spacing: .04em; color: var(--stone-400); margin-bottom: 6px;
+}
+.filter-menu-section .search-tabs { display: flex; gap: 2px; border-bottom: 1px solid var(--stone-200); margin-bottom: 8px; }
+.filter-menu-section .search-tab { flex: 1; padding: 6px 8px; border: none; background: none; cursor: pointer; font-size: .8rem; color: var(--stone-500); border-bottom: 2px solid transparent; transition: all .15s; }
+.filter-menu-section .search-tab:hover { color: var(--stone-700); }
+.filter-menu-section .search-tab.active { color: var(--green-700); border-bottom-color: var(--green-700); font-weight: 500; }
+.filter-menu-section .search-select { width: 100%; margin-bottom: 6px; padding: 6px 8px; border: 1px solid var(--stone-200); border-radius: var(--radius-sm); font-size: .8rem; background: var(--surface); color: var(--stone-900); }
+.filter-menu-section .radius-control { margin-bottom: 8px; }
+.filter-menu-section .radius-control label { font-size: .8rem; color: var(--stone-600); }
+.filter-menu-section .radius-control strong { color: var(--stone-800); }
+.filter-menu-section input[type="range"] { width: 100%; margin-top: 4px; accent-color: var(--green-700); }
+.filter-menu-section .btn-search { width: 100%; padding: 6px 12px; font-size: .8rem; }
+.filter-menu-section .filter-menu-item { padding: 4px 0; }
+.filter-menu-section .calendar-nav { display: flex; align-items: center; gap: 6px; margin-bottom: 6px; justify-content: center; }
+.filter-menu-section .calendar-nav strong { flex: 1; text-align: center; font-size: .85rem; color: var(--stone-700); }
+.filter-menu-section .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 1px; }
+.filter-menu-section .cal-day-header { font-size: .65rem; color: var(--stone-400); text-align: center; padding: 3px 0; }
+.filter-menu-section .cal-cell { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; border-radius: 4px; cursor: default; font-size: .75rem; }
+.filter-menu-section .cal-cell.cal-has-events { cursor: pointer; }
+.filter-menu-section .cal-cell.cal-has-events:hover { background: var(--stone-100); }
+.filter-menu-section .cal-today { background: var(--green-100); font-weight: 700; }
+.filter-menu-section .cal-cell.cal-empty { background: none; }
+.filter-menu-section .cal-selected { background: var(--green-600); color: #fff; font-weight: 600; }
+.filter-menu-section .cal-selected.cal-has-events:hover { background: var(--green-700); }
+.filter-menu-section .cal-day-num { line-height: 1; }
+.filter-menu-section .cal-dot { display: none; }
 .filter-menu-item {
-  display: flex; align-items: center; gap: 6px; padding: 6px 10px; font-size: .8rem;
+  display: flex; align-items: center; gap: 6px; font-size: .8rem;
   color: var(--stone-600); cursor: pointer; white-space: nowrap; border-radius: var(--radius-sm);
 }
-.filter-menu-item:hover { background: var(--stone-100); }
+.filter-menu-item:hover { background: none; }
 .filter-menu-item input[type="checkbox"] { accent-color: var(--green-700); margin: 0; }
 .event-list-sort-menu {
   position: absolute; top: 100%; right: 0; z-index: 10;

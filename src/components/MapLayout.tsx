@@ -8,7 +8,6 @@ import MapMoveHandler from '../features/map/MapMoveHandler';
 import TileLoadIndicator from '../features/map/TileLoadIndicator';
 import PageMarkerContent from '../features/map/PageMarkerContent';
 import MapExtras from '../features/map/MapExtras';
-import Toolbar from './Toolbar';
 
 const LOCATION_KEY = 'trail-dig-location';
 
@@ -131,7 +130,6 @@ const MapLayout: React.FC = () => {
 
   return (
     <div className="map-page">
-      <Toolbar />
       <Outlet />
 
       <div className="map-actions">

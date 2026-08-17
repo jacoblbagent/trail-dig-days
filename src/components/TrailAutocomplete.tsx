@@ -46,27 +46,27 @@ const TrailAutocomplete: React.FC<TrailAutocompleteProps> = ({
   return (
     <div className="trail-autocomplete" ref={ref}>
       <div className="form-row">
-        <div className="form-group flex-1">
-          <label>Trail Name *</label>
+        <div className="floating-group" style={{ flex: 1 }}>
           <input
             type="text"
             value={trailName}
             onChange={(e) => handleNameChange(e.target.value)}
             onFocus={() => setFocused('name')}
-            placeholder="Search or type a trail name…"
+            placeholder=" "
             required
           />
+          <label>Trail Name *</label>
         </div>
-        <div className="form-group flex-1">
-          <label>Trail System</label>
+        <div className="floating-group" style={{ flex: 1 }}>
           <input
             type="text"
             value={trailSystem}
             onChange={(e) => onTrailSystemChange(e.target.value)}
             onFocus={() => setFocused('system')}
-            placeholder="e.g. Pisgah National Forest"
+            placeholder=" "
             list="system-list"
           />
+          <label>Trail System</label>
           <datalist id="system-list">
             {systems.map((s) => (
               <option key={s} value={s} />

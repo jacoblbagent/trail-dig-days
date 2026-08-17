@@ -415,69 +415,70 @@ const CreateEventPage: React.FC = () => {
       <form onSubmit={handleSubmit} className="event-form">
         <span className="form-section-label">Details</span>
         <div className="form-section">
-          <div className="form-group">
+          <div className="floating-group">
+            <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} placeholder=" " required />
             <label>Event Title *</label>
-            <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="e.g. Upper Ridge Reroute Dig Day" required />
           </div>
-          <div className="form-group">
+          <div className="floating-group">
+            <textarea value={description} onChange={(e) => setDescription(e.target.value)} rows={4} placeholder=" " required />
             <label>Description *</label>
-            <textarea value={description} onChange={(e) => setDescription(e.target.value)} rows={4} placeholder="Describe the work to be done, the goals for the day, and what volunteers can expect." required />
           </div>
           <div className="form-row">
-            <div className="form-group">
-              <label>Physical Difficulty</label>
+            <div className="floating-group" style={{ flex: 1 }}>
               <select value={difficulty} onChange={(e) => setDifficulty(e.target.value as any)}>
                 {DIFFICULTY_OPTIONS.map((d) => (
                   <option key={d} value={d}>{d.charAt(0).toUpperCase() + d.slice(1)}</option>
                 ))}
               </select>
+              <label>Physical Difficulty</label>
             </div>
-            <div className="form-group">
-              <label>Max Volunteers</label>
+            <div className="floating-group" style={{ flex: 1 }}>
               <input type="number" min={1} max={200} value={maxVolunteers} onChange={(e) => setMaxVolunteers(parseInt(e.target.value) || 1)} />
+              <label>Max Volunteers</label>
             </div>
           </div>
-          <div className="form-group">
-            <label>Requirements (one per line)</label>
+          <div className="floating-group">
             <textarea
               value={requirements}
               onChange={(e) => setRequirements(e.target.value)}
               rows={4}
-              placeholder="Must be 18+&#10;Trail building experience preferred&#10;Closed-toe shoes required&#10;Must sign waiver"
+              placeholder=" "
             />
+            <label>Requirements (one per line)</label>
+            <p className="muted" style={{ fontSize: '.75rem', marginTop: 2 }}>e.g. Must be 18+, closed-toe shoes required</p>
           </div>
         </div>
 
         <span className="form-section-label">Schedule</span>
         <div className="form-section">
           <div className="form-row">
-            <div className="form-group flex-1">
-              <label>Date *</label>
+            <div className="floating-group" style={{ flex: 1 }}>
               <input type="date" value={date} onChange={(e) => setDate(e.target.value)} required />
+              <label>Date *</label>
             </div>
-            <div className="form-group flex-1">
-              <label>Start Time *</label>
+            <div className="floating-group" style={{ flex: 1 }}>
               <input type="time" value={startTime} onChange={(e) => setStartTime(e.target.value)} required />
+              <label>Start Time *</label>
             </div>
-            <div className="form-group flex-1">
-              <label>End Time *</label>
+            <div className="floating-group" style={{ flex: 1 }}>
               <input type="time" value={endTime} onChange={(e) => setEndTime(e.target.value)} required />
+              <label>End Time *</label>
             </div>
           </div>
           <div className="form-row">
-            <div className="form-group flex-1">
-              <label>Repeats</label>
+            <div className="floating-group" style={{ flex: 1 }}>
               <select value={recurrence} onChange={(e) => setRecurrence(e.target.value as typeof recurrence)}>
                 <option value="none">Does not repeat</option>
                 <option value="weekly">Weekly</option>
                 <option value="biweekly">Every 2 weeks</option>
                 <option value="monthly">Monthly</option>
               </select>
+              <label>Repeats</label>
             </div>
             {recurrence !== 'none' && (
-              <div className="form-group flex-1">
-                <label>Repeat until *</label>
+              <div className="floating-group" style={{ flex: 1 }}>
                 <input type="date" value={recurrenceEnd} onChange={(e) => setRecurrenceEnd(e.target.value)} />
+                <label>Repeat until *</label>
               </div>
             )}
           </div>
@@ -486,17 +487,17 @@ const CreateEventPage: React.FC = () => {
         <span className="form-section-label">Contact</span>
         <div className="form-section">
           <div className="form-row three">
-            <div className="form-group flex-1">
+            <div className="floating-group" style={{ flex: 1 }}>
+              <input type="text" value={contactName} onChange={(e) => setContactName(e.target.value)} placeholder=" " required />
               <label>Contact Name *</label>
-              <input type="text" value={contactName} onChange={(e) => setContactName(e.target.value)} placeholder="Your name" required />
             </div>
-            <div className="form-group flex-1">
+            <div className="floating-group" style={{ flex: 1 }}>
+              <input type="email" value={contactEmail} onChange={(e) => setContactEmail(e.target.value)} placeholder=" " required />
               <label>Contact Email *</label>
-              <input type="email" value={contactEmail} onChange={(e) => setContactEmail(e.target.value)} placeholder="you@example.com" required />
             </div>
-            <div className="form-group flex-1">
+            <div className="floating-group" style={{ flex: 1 }}>
+              <input type="tel" value={contactPhone} onChange={(e) => setContactPhone(e.target.value)} placeholder=" " />
               <label>Contact Phone</label>
-              <input type="tel" value={contactPhone} onChange={(e) => setContactPhone(e.target.value)} placeholder="(555) 123-4567" />
             </div>
           </div>
         </div>
@@ -531,9 +532,9 @@ const CreateEventPage: React.FC = () => {
 
         <span className="form-section-label">Location</span>
         <div className="form-section">
-          <div className="form-group">
+          <div className="floating-group">
+            <input type="text" value={locationName} onChange={(e) => setLocationName(e.target.value)} placeholder=" " required />
             <label>Address / Trailhead</label>
-            <input type="text" value={locationName} onChange={(e) => setLocationName(e.target.value)} placeholder="e.g. Phil's World Trailhead" required />
           </div>
           <div className="form-row">
             <TrailAutocomplete trailName={trailName} trailSystem={trailSystem} onTrailNameChange={setTrailName} onTrailSystemChange={setTrailSystem} />
@@ -566,15 +567,15 @@ const CreateEventPage: React.FC = () => {
             </button>
           </div>
           {showParking && (
-            <div className="form-group">
+            <div className="floating-group">
+              <textarea value={parkingNotes} onChange={(e) => setParkingNotes(e.target.value)} rows={2} placeholder=" " />
               <label>Parking Notes</label>
-              <textarea value={parkingNotes} onChange={(e) => setParkingNotes(e.target.value)} rows={2} placeholder="Where to park, carpool info, shuttle details…" />
             </div>
           )}
           {showWeather && (
-            <div className="form-group">
+            <div className="floating-group">
+              <textarea value={weatherNotes} onChange={(e) => setWeatherNotes(e.target.value)} rows={2} placeholder=" " />
               <label>Weather Notes</label>
-              <textarea value={weatherNotes} onChange={(e) => setWeatherNotes(e.target.value)} rows={2} placeholder="What happens if it rains, heat safety, etc." />
             </div>
           )}
         </div>
