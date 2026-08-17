@@ -162,6 +162,7 @@ export interface EventsState {
   referrerPath: string;
   selectedDay: string | null;
   showRecurring: boolean;
+  filterPanel: 'location' | 'time' | 'recurring' | null;
   followedOrgs: string[];
 }
 

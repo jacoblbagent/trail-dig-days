@@ -85,6 +85,7 @@ const initialState: EventsState = {
   referrerPath: '/',
   selectedDay: null as string | null,
   showRecurring: false,
+  filterPanel: null,
   followedOrgs: [],
 };
 
@@ -300,6 +301,9 @@ const eventsSlice = createSlice({
     setShowRecurring(state, action: PayloadAction<boolean>) {
       state.showRecurring = action.payload;
     },
+    setFilterPanel(state, action: PayloadAction<'location' | 'time' | 'recurring' | null>) {
+      state.filterPanel = action.payload;
+    },
     setSearchQuery(state, action: PayloadAction<string>) {
       state.searchQuery = action.payload;
     },
@@ -355,5 +359,5 @@ const eventsSlice = createSlice({
   },
 });
 
-export const { setSearchRadius, setSearchCenter, setMapViewport, setMapBounds, setTheme, setMapStyle, clearSearchCenter, setHoveredMarkerId, setSearchQuery, setNotificationsEnabled, setNotificationRadius, addNotification, markNotificationRead, markAllNotificationsRead, setReferrerPath, setSelectedDay, setShowRecurring, followOrg, unfollowOrg, loadEventsFromStorage } = eventsSlice.actions;
+export const { setSearchRadius, setSearchCenter, setMapViewport, setMapBounds, setTheme, setMapStyle, clearSearchCenter, setHoveredMarkerId, setSearchQuery, setNotificationsEnabled, setNotificationRadius, addNotification, markNotificationRead, markAllNotificationsRead, setReferrerPath, setSelectedDay, setShowRecurring, setFilterPanel, followOrg, unfollowOrg, loadEventsFromStorage } = eventsSlice.actions;
 export default eventsSlice.reducer;

@@ -622,10 +622,19 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
 [data-theme="dark"] .event-list-filter-btn.active { color: var(--green-400); }
 .event-list-filter-menu {
   position: absolute; top: 100%; right: 0; z-index: 10;
-  background: var(--surface); border: 1px solid var(--stone-200); border-radius: var(--radius);
-  box-shadow: var(--shadow-lg); padding: 12px; width: 320px;
-  display: flex; flex-direction: column; gap: 12px;
+  background: var(--surface); border: 1px solid var(--stone-200); border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-lg); padding: 4px; min-width: 140px;
+  display: flex; flex-direction: column; gap: 2px;
 }
+.filter-menu-trigger {
+  display: flex; align-items: center; gap: 6px; padding: 6px 10px; font-size: .8rem;
+  color: var(--stone-600); cursor: pointer; white-space: nowrap; border-radius: var(--radius-sm);
+  border: none; background: none; width: 100%;
+}
+.filter-menu-trigger:hover { background: var(--stone-100); }
+.filter-menu-trigger.active { color: var(--green-700); background: var(--green-50); }
+[data-theme="dark"] .filter-menu-trigger:hover { background: var(--stone-800); }
+[data-theme="dark"] .filter-menu-trigger.active { color: var(--green-400); background: var(--green-900); }
 .filter-menu-section {}
 .filter-menu-section-label {
   font-size: .7rem; font-weight: 600; text-transform: uppercase;
