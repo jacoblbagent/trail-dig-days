@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { v4 as uuidv4 } from 'uuid';
 import type { DigEvent, EventsState, ProvidedItem, RecommendedItem, RecurrenceType, NotificationItem } from '../../types';
+import { sanitizeEvent } from '../../utils/sanitize';
 
 const seedNotifications = (): NotificationItem[] => [
   { id: 'notif-1', eventId: 'seed-event-043', type: 'event', message: 'New dig day: Galbraith Mountain Dig Day', read: false, createdAt: '2026-08-07T10:00:00' },
@@ -119,13 +120,14 @@ export const createEvent = createAsyncThunk<DigEvent, CreateEventPayload>(
   async (payload) => {
     await new Promise((r) => setTimeout(r, 200));
     const now = new Date().toISOString();
+    const clean = sanitizeEvent(payload);
     const event: DigEvent = {
       id: uuidv4(),
-      ...payload,
+      ...clean,
       status: 'planned',
       registeredVolunteers: [],
       waitlist: [],
-      recurrenceGroupId: payload.recurrence !== 'none' ? uuidv4() : '',
+      recurrenceGroupId: clean.recurrence !== 'none' ? uuidv4() : '',
       createdAt: now,
       updatedAt: now,
     };
@@ -144,7 +146,8 @@ export const updateEvent = createAsyncThunk<
   const events = loadEvents();
   const idx = events.findIndex((e) => e.id === id);
   if (idx === -1) throw new Error('Event not found');
-  events[idx] = { ...events[idx], ...updates, updatedAt: new Date().toISOString() };
+  const cleanUpdates = sanitizeEvent(updates);
+  events[idx] = { ...events[idx], ...cleanUpdates, updatedAt: new Date().toISOString() };
   saveEvents(events);
   return events[idx];
 });

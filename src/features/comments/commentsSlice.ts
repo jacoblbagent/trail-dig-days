@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { v4 as uuidv4 } from 'uuid';
 import type { Comment, CommentsState } from '../../types';
+import { sanitizeMultiline } from '../../utils/sanitize';
 
 const STORAGE_KEY = 'trail-dig-comments';
 
@@ -30,7 +31,7 @@ export const addComment = createAsyncThunk<Comment, { eventId: string; userId: s
       eventId,
       userId,
       parentId: null,
-      text,
+      text: sanitizeMultiline(text),
       createdAt: new Date().toISOString(),
       votes: {},
     };
@@ -50,7 +51,7 @@ export const replyToComment = createAsyncThunk<Comment, { eventId: string; userI
       eventId,
       userId,
       parentId,
-      text,
+      text: sanitizeMultiline(text),
       createdAt: new Date().toISOString(),
       votes: {},
     };

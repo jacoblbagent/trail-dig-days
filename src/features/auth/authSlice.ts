@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { v4 as uuidv4 } from 'uuid';
 import type { User, AuthState } from '../../types';
+import { sanitizeText } from '../../utils/sanitize';
 
 const STORAGE_KEY = 'trail-dig-auth';
 const USERS_KEY = 'trail-dig-users';
@@ -68,9 +69,9 @@ export const register = createAsyncThunk<
 
   const stored: StoredUser = {
     id: uuidv4(),
-    email: payload.email,
+    email: sanitizeText(payload.email),
     password: payload.password,
-    displayName: payload.displayName,
+    displayName: sanitizeText(payload.displayName),
     createdAt: new Date().toISOString(),
     userType: payload.userType,
     verified: isDemo,

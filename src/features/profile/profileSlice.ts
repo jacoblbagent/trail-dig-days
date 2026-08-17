@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import type { ProfileState, UserProfile, CustomField } from '../../types';
+import { sanitizeProfile, sanitizeText } from '../../utils/sanitize';
 
 const STORAGE_KEY = 'trail-dig-profiles';
 
@@ -53,7 +54,7 @@ export const createProfile = createAsyncThunk<
   await new Promise((r) => setTimeout(r, 100));
   const profiles = loadProfiles();
   if (profiles[userId]) return profiles[userId];
-  const profile = defaultProfile(userId, displayName);
+  const profile = defaultProfile(userId, sanitizeText(displayName));
   if (userType) profile.userType = userType;
   profiles[userId] = profile;
   saveProfiles(profiles);
@@ -66,7 +67,7 @@ export const updateProfile = createAsyncThunk<
 >('profile/update', async ({ userId, updates }) => {
   await new Promise((r) => setTimeout(r, 100));
   const profiles = loadProfiles();
-  profiles[userId] = { ...profiles[userId], ...updates };
+  profiles[userId] = { ...profiles[userId], ...sanitizeProfile(updates) };
   saveProfiles(profiles);
   return profiles[userId];
 });
@@ -77,7 +78,7 @@ export const addCustomField = createAsyncThunk<
 >('profile/addCustomField', async ({ userId, field }) => {
   await new Promise((r) => setTimeout(r, 100));
   const profiles = loadProfiles();
-  profiles[userId].customFields.push(field);
+  profiles[userId].customFields.push(sanitizeProfile(field));
   saveProfiles(profiles);
   return profiles[userId];
 });
