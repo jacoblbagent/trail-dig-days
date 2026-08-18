@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Outlet } from 'react-router-dom';
-import { MapContainer, TileLayer, useMap, Marker, Tooltip } from 'react-leaflet';
+import { MapContainer, TileLayer, useMap, ZoomControl, Marker, Tooltip } from 'react-leaflet';
 import L from 'leaflet';
 import { useAppSelector, useAppDispatch } from '../app/hooks';
 import { setSearchCenter, setMapStyle } from '../features/events/eventsSlice';
@@ -73,7 +73,7 @@ const MapActionsControl: React.FC<{
     const Control = L.Control.extend({
       onAdd: () => el,
     });
-    const ctrl = new Control({ position: 'topleft' });
+    const ctrl = new Control({ position: 'bottomright' });
     ctrl.addTo(map);
     return () => { ctrl.remove(); };
   }, [map]);
@@ -106,7 +106,7 @@ const MapStyleControl: React.FC = () => {
     const el = ref.current;
     if (!el) return;
     const Control = L.Control.extend({ onAdd: () => el });
-    const ctrl = new Control({ position: 'bottomleft' });
+    const ctrl = new Control({ position: 'bottomright' });
     ctrl.addTo(map);
     return () => { ctrl.remove(); };
   }, [map]);
@@ -208,7 +208,8 @@ const MapLayout: React.FC = () => {
       <Outlet />
 
       <div className="map-container" style={{ order: 1 }}>
-        <MapContainer center={center} zoom={mapZoom} style={{ width: '100%', height: '100%' }} maxBounds={[[24, -125], [50, -66]]} maxBoundsViscosity={1}>
+        <MapContainer center={center} zoom={mapZoom} zoomControl={false} style={{ width: '100%', height: '100%' }} maxBounds={[[24, -125], [50, -66]]} maxBoundsViscosity={1}>
+          <ZoomControl position="bottomright" />
           {(() => {
             const tileStyles: Record<string, { url: string; attr: string }> = {
               'carto': { url: 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', attr: '&copy; <a href="https://carto.com/">CARTO</a>' },
