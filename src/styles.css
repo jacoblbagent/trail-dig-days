@@ -822,8 +822,8 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
 }
 .resizer-limits { position: relative; }
 .map-actions {
-  position: absolute; top: calc(44px + 10px); left: calc(12px + 34px + 6px); z-index: 1110;
   display: flex; flex-direction: row; align-items: center; gap: 4px;
+  border-top: 1px solid var(--stone-200); padding-top: 4px; margin-top: 4px;
 }
 .map-locate-btn {
   width: 34px; height: 34px; border-radius: 4px;
@@ -841,9 +841,17 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
 /* Leaflet dark mode overrides */
 [data-theme="dark"] .leaflet-container { background: #1c1917; }
 [data-theme="dark"] .leaflet-control-zoom a { border-color: #444; }
+
+/* Override Leaflet default touch bar border */
+.leaflet-touch .leaflet-bar { border: none; background-clip: unset; }
+
+/* Zoom control bar bottom border */
+.leaflet-control-zoom.leaflet-bar.leaflet-control { border-bottom: 1px solid var(--stone-200); }
+[data-theme="dark"] .leaflet-control-zoom.leaflet-bar.leaflet-control { border-bottom-color: #444; }
+
 .leaflet-control-zoom-in {
   width: 34px !important; height: 34px !important; line-height: 34px !important;
-  border-radius: 4px 4px 0 0 !important;
+  border-radius: 4px 4px 0 0 !important; border-bottom: none !important;
   background: var(--surface); border: 1px solid var(--stone-200);
   color: var(--stone-600);
   box-shadow: 0 1px 3px rgba(0,0,0,.08);
@@ -855,7 +863,7 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
   width: 34px !important; height: 34px !important; line-height: 34px !important;
   border-radius: 0 0 4px 4px !important;
   background: var(--surface); border: 1px solid var(--stone-200);
-  border-bottom: 1px solid var(--stone-200) !important;
+  border-top: none; border-bottom: 1px solid var(--stone-200);
   color: var(--stone-600);
   box-shadow: 0 1px 3px rgba(0,0,0,.08);
   font-size: 1.1rem;
