@@ -822,8 +822,8 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
 }
 .resizer-limits { position: relative; }
 .map-actions {
-  position: absolute; top: calc(44px + 10px); right: calc(var(--events-width, 0px) + 12px); z-index: 1110;
-  display: flex; flex-direction: column; align-items: flex-end; gap: 10px;
+  position: absolute; top: calc(44px + 10px); left: calc(12px + 34px + 6px); z-index: 1110;
+  display: flex; flex-direction: row; align-items: center; gap: 4px;
 }
 .map-locate-btn {
   width: 34px; height: 34px; border-radius: 4px;
@@ -895,16 +895,6 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
 @keyframes map-load-spin { to { transform: rotate(360deg); } }
 
 .map-locate-btn:hover { border-color: var(--green-600); }
-.map-redetect-btn {
-  font-size: .7rem; padding: 4px 8px; border-radius: 4px;
-  background: var(--surface); border: 1px solid var(--stone-200);
-  color: var(--stone-600); cursor: pointer;
-  box-shadow: 0 1px 3px rgba(0,0,0,.08);
-  flex-shrink: 0;
-}
-.map-redetect-btn:hover { border-color: var(--green-600); color: var(--stone-800); }
-.map-redetect-btn:disabled { opacity: .5; cursor: default; }
-[data-theme="dark"] .map-redetect-btn { border-color: #444; }
 .empty-state { text-align: center; padding: 40px 20px; color: var(--stone-400); }
 .map-popup { font-size: .875rem; }
 .leaflet-popup-close-button { padding: 2px 2px 0 0 !important; }
@@ -1538,7 +1528,7 @@ input[type="time"]::-webkit-calendar-picker-indicator { filter: invert(0.55); cu
 
   .filter-panel { right: 15px; }
   .map-toolbar { right: 0; }
-  .map-actions { right: 12px; }
+  .map-actions { left: 12px; }
 
   .events-toggle-bar { display: flex; align-items: center; justify-content: space-between; padding: 6px 16px; cursor: pointer; font-size: .85rem; font-weight: 500; color: var(--stone-600); background: var(--stone-50); border-bottom: 1px solid var(--stone-150); border-left: 5px solid var(--green-600); flex-shrink: 0; }
   .events-toggle-bar:hover { background: var(--stone-100); }

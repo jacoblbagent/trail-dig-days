@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Outlet } from 'react-router-dom';
 import { MapContainer, TileLayer, useMap, Marker, Tooltip } from 'react-leaflet';
 import L from 'leaflet';
@@ -94,26 +94,22 @@ const MapLayout: React.FC = () => {
     );
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const handleRedetect = useCallback(() => {
-    if (!('geolocation' in navigator)) return;
-    setIsDetecting(true);
-    navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        const loc: [number, number] = [pos.coords.latitude, pos.coords.longitude];
-        setUserLocation(loc);
-        saveLocation(loc);
-        dispatch(setSearchCenter(loc));
-        setIsDetecting(false);
-      },
-      () => { setIsDetecting(false); }
-    );
-  }, [dispatch]);
-
   const handleLocateClick = () => {
     if (userLocation && mapRef.current) {
       mapRef.current.flyTo(userLocation, 12, { duration: 1 });
     } else {
-      handleRedetect();
+      if (!('geolocation' in navigator)) return;
+      setIsDetecting(true);
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          const loc: [number, number] = [pos.coords.latitude, pos.coords.longitude];
+          setUserLocation(loc);
+          saveLocation(loc);
+          dispatch(setSearchCenter(loc));
+          setIsDetecting(false);
+        },
+        () => { setIsDetecting(false); }
+      );
     }
   };
 
@@ -146,11 +142,6 @@ const MapLayout: React.FC = () => {
             <path d="M12 2v4M12 18v4M2 12h4M18 12h4" />
           </svg>
         </button>
-        {userLocation && (
-          <button className="map-redetect-btn" onClick={handleRedetect} disabled={isDetecting} aria-label="Re-detect location">
-            {isDetecting ? 'Detecting…' : 'Re-detect'}
-          </button>
-        )}
       </div>
 
       <div className="map-container" style={{ order: 1 }}>
