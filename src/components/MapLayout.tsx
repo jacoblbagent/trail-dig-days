@@ -60,6 +60,84 @@ const MapResizeWatcher: React.FC = () => {
   return null;
 };
 
+const MapActionsControl: React.FC<{
+  onLocate: () => void;
+  isDetecting: boolean;
+}> = ({ onLocate, isDetecting }) => {
+  const map = useMap();
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const Control = L.Control.extend({
+      onAdd: () => el,
+    });
+    const ctrl = new Control({ position: 'topleft' });
+    ctrl.addTo(map);
+    return () => { ctrl.remove(); };
+  }, [map]);
+
+  return (
+    <div ref={ref} className="map-actions">
+      <button
+        className="map-locate-btn"
+        onClick={onLocate}
+        disabled={isDetecting}
+        title="Find my location" aria-label="Find my location"
+      >
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <circle cx="12" cy="12" r="3" />
+          <path d="M12 2v4M12 18v4M2 12h4M18 12h4" />
+        </svg>
+      </button>
+    </div>
+  );
+};
+
+const MapStyleControl: React.FC = () => {
+  const map = useMap();
+  const ref = useRef<HTMLDivElement>(null);
+  const dispatch = useAppDispatch();
+  const mapStyle = useAppSelector((s) => s.events.mapStyle);
+  const [showStyle, setShowStyle] = useState(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const Control = L.Control.extend({ onAdd: () => el });
+    const ctrl = new Control({ position: 'bottomleft' });
+    ctrl.addTo(map);
+    return () => { ctrl.remove(); };
+  }, [map]);
+
+  return (
+    <div ref={ref} className="map-style-ctrl">
+      <button className="map-style-toggle" onClick={() => setShowStyle(!showStyle)} title="Map style" aria-label="Map style">
+        <span className="map-style-label">Map: {{'carto':'Light','carto-dark':'Dark','osm':'OpenStreetMap','topo':'Topographic','satellite':'Satellite'}[mapStyle] || 'Light'}</span>
+      </button>
+      {showStyle && (
+        <div className="map-style-panel">
+          <div className="map-style-grid">
+            {[
+              { id: 'carto', label: 'Light', desc: 'Light street map' },
+              { id: 'carto-dark', label: 'Dark', desc: 'Dark street map' },
+              { id: 'osm', label: 'OpenStreetMap', desc: 'Standard OSM tiles' },
+              { id: 'topo', label: 'Topographic', desc: 'Contours & terrain' },
+              { id: 'satellite', label: 'Satellite', desc: 'Aerial imagery' },
+            ].map((s) => (
+              <button key={s.id} className={`map-style-btn${mapStyle === s.id ? ' active' : ''}`} onClick={() => { dispatch(setMapStyle(s.id)); setShowStyle(false); }}>
+                <strong>{s.label}</strong>
+                <span className="map-style-desc">{s.desc}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
 const MapLayout: React.FC = () => {
   const dispatch = useAppDispatch();
   const mapStyle = useAppSelector((s) => s.events.mapStyle);
@@ -68,7 +146,6 @@ const MapLayout: React.FC = () => {
   const mapRef = useRef<L.Map | null>(null);
 
   const [userLocation, setUserLocation] = useState<[number, number] | null>(null);
-  const [showStyle, setShowStyle] = useState(false);
   const [isDetecting, setIsDetecting] = useState(false);
   const initRef = useRef(false);
 
@@ -130,20 +207,6 @@ const MapLayout: React.FC = () => {
       <Toolbar />
       <Outlet />
 
-      <div className="map-actions">
-        <button
-          className="map-locate-btn"
-          onClick={handleLocateClick}
-          disabled={isDetecting}
-          title="Find my location" aria-label="Find my location"
-        >
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <circle cx="12" cy="12" r="3" />
-            <path d="M12 2v4M12 18v4M2 12h4M18 12h4" />
-          </svg>
-        </button>
-      </div>
-
       <div className="map-container" style={{ order: 1 }}>
         <MapContainer center={center} zoom={mapZoom} style={{ width: '100%', height: '100%' }} maxBounds={[[24, -125], [50, -66]]} maxBoundsViscosity={1}>
           {(() => {
@@ -165,6 +228,8 @@ const MapLayout: React.FC = () => {
           <TileLoadIndicator />
           <PageMarkerContent />
           <MapExtras />
+          <MapActionsControl onLocate={handleLocateClick} isDetecting={isDetecting} />
+          <MapStyleControl />
           {userLocation && (
             <Marker
               position={userLocation}
@@ -182,29 +247,6 @@ const MapLayout: React.FC = () => {
             </Marker>
           )}
         </MapContainer>
-        <div className="map-style-ctrl">
-          <button className="map-style-toggle" onClick={() => setShowStyle(!showStyle)} title="Map style" aria-label="Map style">
-            <span className="map-style-label">Map: {{'carto':'Light','carto-dark':'Dark','osm':'OpenStreetMap','topo':'Topographic','satellite':'Satellite'}[mapStyle] || 'Light'}</span>
-          </button>
-          {showStyle && (
-            <div className="map-style-panel">
-              <div className="map-style-grid">
-                {[
-                  { id: 'carto', label: 'Light', desc: 'Light street map' },
-                  { id: 'carto-dark', label: 'Dark', desc: 'Dark street map' },
-                  { id: 'osm', label: 'OpenStreetMap', desc: 'Standard OSM tiles' },
-                  { id: 'topo', label: 'Topographic', desc: 'Contours & terrain' },
-                  { id: 'satellite', label: 'Satellite', desc: 'Aerial imagery' },
-                ].map((s) => (
-                  <button key={s.id} className={`map-style-btn${mapStyle === s.id ? ' active' : ''}`} onClick={() => { dispatch(setMapStyle(s.id)); setShowStyle(false); }}>
-                    <strong>{s.label}</strong>
-                    <span className="map-style-desc">{s.desc}</span>
-                  </button>
-                ))}
-              </div>
-            </div>
-          )}
-        </div>
       </div>
     </div>
   );
