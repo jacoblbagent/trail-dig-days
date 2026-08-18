@@ -703,7 +703,6 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
 .list-card-row .list-card-location { color: var(--stone-500); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .list-card-row .list-card-date { color: var(--stone-400); white-space: nowrap; }
 .list-card-row .list-card-spots { margin-left: auto; color: var(--stone-400); white-space: nowrap; }
-.list-card-dist { font-size: .72rem; color: var(--stone-400); }
 .map-container { flex: 1; position: relative; overflow: hidden; z-index: 0; padding-top: 44px; }
 .map-toolbar {
   position: absolute; top: 0; left: 0; right: calc(var(--events-width, 0px) + 8px); height: 44px;
@@ -727,7 +726,7 @@ input::placeholder, textarea::placeholder, select::placeholder { color: var(--st
 .toolbar-filter-btn.active { color: var(--green-700); border-color: var(--green-600); background: var(--green-50); }
 [data-theme="dark"] .toolbar-filter-btn.active { color: var(--green-400); border-color: var(--green-700); background: var(--green-950); }
 .toolbar-filter-menu {
-  position: absolute; top: 100%; right: 0; z-index: 10; margin-top: 2px;
+  position: absolute; top: 100%; right: 0; z-index: 9999; margin-top: 2px;
   background: var(--surface); border: 1px solid var(--stone-200); border-radius: var(--radius-sm);
   box-shadow: var(--shadow-lg); padding: 4px; min-width: 140px;
   display: flex; flex-direction: column; gap: 2px;

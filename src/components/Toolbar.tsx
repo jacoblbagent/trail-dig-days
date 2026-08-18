@@ -168,7 +168,14 @@ const Toolbar: React.FC = () => {
         <div className="toolbar-filter-wrap" ref={filterMenuRef}>
           <button
             className={`toolbar-filter-btn${showFilterMenu ? ' active' : ''}`}
-            onClick={() => setShowFilterMenu(!showFilterMenu)}
+            onClick={() => {
+              if (filterPanel) {
+                dispatch(setFilterPanel(null));
+                setShowFilterMenu(true);
+              } else {
+                setShowFilterMenu(!showFilterMenu);
+              }
+            }}
             aria-label="Toggle filter menu"
           >
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
