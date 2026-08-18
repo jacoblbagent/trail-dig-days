@@ -209,7 +209,7 @@ const MapLayout: React.FC = () => {
 
       <div className="map-container" style={{ order: 1 }}>
         <MapContainer center={center} zoom={mapZoom} zoomControl={false} style={{ width: '100%', height: '100%' }} maxBounds={[[24, -125], [50, -66]]} maxBoundsViscosity={1}>
-          <ZoomControl position="bottomright" />
+          <MapStyleControl />
           {(() => {
             const tileStyles: Record<string, { url: string; attr: string }> = {
               'carto': { url: 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', attr: '&copy; <a href="https://carto.com/">CARTO</a>' },
@@ -230,7 +230,6 @@ const MapLayout: React.FC = () => {
           <PageMarkerContent />
           <MapExtras />
           <MapActionsControl onLocate={handleLocateClick} isDetecting={isDetecting} />
-          <MapStyleControl />
           {userLocation && (
             <Marker
               position={userLocation}
@@ -247,6 +246,7 @@ const MapLayout: React.FC = () => {
               <Tooltip direction="top" offset={[0, -8]}>Me</Tooltip>
             </Marker>
           )}
+          <ZoomControl position="bottomright" />
         </MapContainer>
       </div>
     </div>
